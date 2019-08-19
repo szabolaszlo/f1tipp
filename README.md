@@ -1,4 +1,10 @@
-# f1tipp_sf4
+# F1Tipp (Symfony 4)
+www.f1tipp.nhely.hu
+
+This project is a refactoring of original f1tipp. (https://github.com/szabolaszlo/f1tipp)
+
+The original project based on own framework, I decide to change it to symfony.
+So there is some legacy code from the original code, like src\LegacyService, but If I have time I will refactoring it one by one.
 
 # Docker
 ```
@@ -15,7 +21,7 @@ http://localhost:8001/#/
 http://localhost:8080/
 pointer to public directory in repository
 
-## Database
+# Database
 ### Create DataBase
 ```
 php bin/console doctrine:database:create
