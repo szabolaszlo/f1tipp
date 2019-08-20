@@ -2,9 +2,9 @@
 
 namespace App\Controller\Module\News;
 
-use App\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\Common\Collections\ArrayCollection;
-use Entity\UserSkippedNews;
+use App\Entity\UserSkippedNews;
 
 /**
  * Created by PhpStorm.
@@ -12,7 +12,7 @@ use Entity\UserSkippedNews;
  * Date: 2017. 03. 12.
  * Time: 10:56
  */
-class News extends Controller
+class News extends AbstractController
 {
     /**
      * @return mixed
@@ -25,7 +25,7 @@ class News extends Controller
         $userSkippedNews = ($user && $user->getSkippedNews()) ? $user->getSkippedNews() : new ArrayCollection();
 
         $informations = (array)$this->entityManager
-            ->getRepository('Entity\Information')
+            ->getRepository('App\Entity\Information')
             ->findBy(array('news' => true));
 
         foreach ($informations as $key => $information) {
@@ -46,7 +46,7 @@ class News extends Controller
         $informationId = (int)$this->request->getPost('information-id', 0);
 
         $information = $this->entityManager
-            ->getRepository('Entity\Information')
+            ->getRepository('App\Entity\Information')
             ->find($informationId);
 
         $user = $this->registry->getUserAuth()->getUserByToken($this->request->getPost('user-token', 0));

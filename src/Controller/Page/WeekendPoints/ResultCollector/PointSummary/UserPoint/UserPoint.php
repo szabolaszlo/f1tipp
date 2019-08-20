@@ -8,7 +8,7 @@
 
 namespace App\Controller\Page\WeekendPoints\ResultCollector\PointSummary\UserPoint;
 
-use Entity\User;
+use App\Entity\User;
 
 /**
  * Class UserPoint

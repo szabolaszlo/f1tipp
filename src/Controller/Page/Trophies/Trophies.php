@@ -9,16 +9,14 @@
 
 namespace App\Controller\Page\Trophies;
 
-use App\Controller\Controller;
-use Entity\User;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\User;
 use System\Cache\Cache;
-use System\Registry\IRegistry;
-
 /**
  * Class Results
  * @package App\Controller\Page\Results
  */
-class Trophies extends Controller
+class Trophies extends AbstractController
 {
     /**
      * @var Cache
@@ -34,16 +32,7 @@ class Trophies extends Controller
         'bronze' => 15
     );
 
-    /**
-     * Betting constructor.
-     * @param IRegistry $registry
-     */
-    public function __construct(IRegistry $registry)
-    {
-        parent::__construct($registry);
 
-        $this->cache = $this->registry->getCache();
-    }
 
     /**
      * @return mixed
@@ -58,7 +47,7 @@ class Trophies extends Controller
 
         $users = $this
             ->entityManager
-            ->getRepository('Entity\User')
+            ->getRepository('App\Entity\User')
             ->findBy(array(), array('name' => 'ASC'));
 
         $userTrophies = array();
@@ -101,6 +90,6 @@ class Trophies extends Controller
      */
     protected function getCacheId()
     {
-        return 'trophies_page.' . count($this->entityManager->getRepository('Entity\Result')->findAll());
+        return 'trophies_page.' . count($this->entityManager->getRepository('App\Entity\Result')->findAll());
     }
 }

@@ -8,17 +8,17 @@
 
 namespace App\Controller\Page\Actual;
 
-use App\Controller\Controller;
-use Entity\Event;
-use Entity\Result;
-use Entity\Setting;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Event;
+use App\Entity\Result;
+use App\Entity\Setting;
 use System\CountDownScript\CountDownScript;
 
 /**
  * Class Actual
  * @package App\Controller\Page\Actual
  */
-class Actual extends Controller
+class Actual extends AbstractController
 {
     const ACTUAL_IMAGE_RELATIVE_URL = '/src/view/image/aktual.jpg';
 
@@ -39,8 +39,8 @@ class Actual extends Controller
         }
 
         $events = array(
-            $this->entityManager->getRepository('Entity\Qualify')->getNextEvent(),
-            $this->entityManager->getRepository('Entity\Race')->getNextEvent()
+            $this->entityManager->getRepository('App\Entity\Qualify')->getNextEvent(),
+            $this->entityManager->getRepository('App\Entity\Race')->getNextEvent()
         );
 
         $user = $this->registry->getUserAuth()->getLoggedUser();

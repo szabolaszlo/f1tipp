@@ -8,18 +8,17 @@
 
 namespace App\Controller\Module\UserChampionship;
 
-use App\Controller\Controller;
-use Entity\User;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\User;
 use System\Cache\Cache;
 use System\Calculator\ICalculator;
 use System\Lock\Lock;
-use System\Registry\IRegistry;
 
 /**
  * Class UserChampionship
  * @package App\Controller\Module\UserChampionship
  */
-class UserChampionship extends Controller
+class UserChampionship extends AbstractController
 {
     /**
      * @var ICalculator
@@ -35,10 +34,8 @@ class UserChampionship extends Controller
      * Betting constructor.
      * @param IRegistry $registry
      */
-    public function __construct(IRegistry $registry)
+    public function __construct( )
     {
-        parent::__construct($registry);
-
         $this->calculator = $this->registry->getCalculator();
         $this->cache = $this->registry->getCache();
     }
@@ -67,10 +64,10 @@ class UserChampionship extends Controller
 
         $this->data['users'] = $this
             ->entityManager
-            ->getRepository('Entity\User')
+            ->getRepository('App\Entity\User')
             ->findBy(array(), array('name' => 'ASC'));
 
-        $this->data['resultsCount'] = count($this->entityManager->getRepository('Entity\Result')->findAll());
+        $this->data['resultsCount'] = count($this->entityManager->getRepository('App\Entity\Result')->findAll());
 
         if ($this->data['resultsCount']) {
             $sortMap = array();
@@ -116,7 +113,7 @@ class UserChampionship extends Controller
     {
         return
             'userChampionship.'
-            . count($this->entityManager->getRepository('Entity\Result')->findAll()) . '.'
+            . count($this->entityManager->getRepository('App\Entity\Result')->findAll()) . '.'
             . $this->data['visibility'];
     }
 }

@@ -8,16 +8,16 @@
 
 namespace App\Controller\Module\Trophies;
 
-use App\Controller\Controller;
-use Entity\Result;
-use Entity\Trophy;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Result;
+use App\Entity\Trophy;
 use System\Lock\Lock;
 
 /**
  * Class Trophies
  * @package App\Controller\Module\Trophies
  */
-class Trophies extends Controller
+class Trophies extends AbstractController
 {
     /**
      * @return mixed
@@ -43,7 +43,7 @@ class Trophies extends Controller
 
         $this->registry->getTrophyHandler()->collect();
 
-        $results = $this->entityManager->getRepository('Entity\Result')->findByType('race');
+        $results = $this->entityManager->getRepository('App\Entity\Result')->findByType('race');
 
         /** @var Result $result */
         $result = array_pop($results);
@@ -53,7 +53,7 @@ class Trophies extends Controller
             return false;
         }
 
-        $trophies = $this->entityManager->getRepository('Entity\Trophy')->findBy(
+        $trophies = $this->entityManager->getRepository('App\Entity\Trophy')->findBy(
             array('event' => $result->getEvent())
         );
 

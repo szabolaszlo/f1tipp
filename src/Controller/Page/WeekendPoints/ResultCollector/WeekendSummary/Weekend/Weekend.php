@@ -8,7 +8,7 @@
 
 namespace App\Controller\Page\WeekendPoints\ResultCollector\WeekendSummary\Weekend;
 
-use Entity\Race;
+use App\Entity\Race;
 
 /**
  * Class Weekend

@@ -9,13 +9,13 @@
 
 namespace App\Controller\Page\Statistics;
 
-use App\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * Class Statistics
  * @package App\Controller\Page\Statistics
  */
-class Statistics extends Controller
+class Statistics extends AbstractController
 {
     /**
      * @var ObjectSorter
@@ -41,8 +41,8 @@ class Statistics extends Controller
         $this->sorter = new ObjectSorter();
         $this->calculator = new StatisticsCalculator();
 
-        $bets = $this->entityManager->getRepository('Entity\Bet')->findAll();
-        $results = $this->entityManager->getRepository('Entity\Result')->findAll();
+        $bets = $this->entityManager->getRepository('App\Entity\Bet')->findAll();
+        $results = $this->entityManager->getRepository('App\Entity\Result')->findAll();
 
         $this->data['statistics']['bets'] = $this->getStatistics($bets);
         $this->data['statistics']['results'] = $this->getStatistics($results);
@@ -79,6 +79,6 @@ class Statistics extends Controller
      */
     protected function getCacheId()
     {
-        return 'statistics.' . count($this->entityManager->getRepository('Entity\Result')->findAll());
+        return 'statistics.' . count($this->entityManager->getRepository('App\Entity\Result')->findAll());
     }
 }

@@ -8,14 +8,14 @@
 
 namespace App\Controller\Page\Admin;
 
-use App\Controller\Controller;
-use Entity\Information;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Information;
 
 /**
  * Class InformationEditor
  * @package App\Controller\Page\Admin
  */
-class InformationEditor extends Controller
+class InformationEditor extends AbstractController
 {
     /**
      * @return mixed
@@ -28,7 +28,7 @@ class InformationEditor extends Controller
         }
 
         $this->data['informations'] = $this->entityManager
-            ->getRepository('Entity\Information')
+            ->getRepository('App\Entity\Information')
             ->findAll();
 
         $this->data['success'] = $this->session->get('success');
@@ -56,7 +56,7 @@ class InformationEditor extends Controller
         }
 
         $this->data['information'] = $this->entityManager
-            ->getRepository('Entity\Information')
+            ->getRepository('App\Entity\Information')
             ->find($informationId);
 
         if (!$this->data['information']) {
@@ -107,7 +107,7 @@ class InformationEditor extends Controller
 
         /** @var Information $information */
         $information = $this->entityManager
-            ->getRepository('Entity\Information')
+            ->getRepository('App\Entity\Information')
             ->find($informationId);
 
         if (!$this->registry->getUserAuth()->isAdmin() || !$information) {
@@ -130,7 +130,7 @@ class InformationEditor extends Controller
     {
         /** @var Information $information */
         $information = $this->entityManager
-            ->getRepository('Entity\Information')
+            ->getRepository('App\Entity\Information')
             ->find($informationId);
 
         if (!$information || !$informationId) {

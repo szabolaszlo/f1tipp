@@ -12,9 +12,9 @@ use App\Controller\Page\WeekendPoints\ResultCollector\CollectedPointConverter\Co
 use App\Controller\Page\WeekendPoints\ResultCollector\PointSummary\PointSummary;
 use App\Controller\Page\WeekendPoints\ResultCollector\WeekendSummary\WeekendSummary;
 use Doctrine\ORM\EntityManagerInterface;
-use Entity\Race;
-use Entity\Result;
-use Entity\User;
+use App\Entity\Race;
+use App\Entity\Result;
+use App\Entity\User;
 use System\Calculator\ICalculator;
 
 class ResultCollector
@@ -65,7 +65,7 @@ class ResultCollector
 
     public function collect()
     {
-        $results = $this->entityManager->getRepository('Entity\Result')->findByType('race');
+        $results = $this->entityManager->getRepository('App\Entity\Result')->findByType('race');
 
         /** @var Result $result */
         foreach ($results as $result) {

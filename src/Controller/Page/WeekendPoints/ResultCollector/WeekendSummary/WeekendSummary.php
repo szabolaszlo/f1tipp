@@ -11,8 +11,8 @@ namespace App\Controller\Page\WeekendPoints\ResultCollector\WeekendSummary;
 use App\Controller\Page\WeekendPoints\ResultCollector\WeekendSummary\Weekend\UserPoints\UserPoints;
 use App\Controller\Page\WeekendPoints\ResultCollector\WeekendSummary\Weekend\Weekend;
 use Doctrine\ORM\EntityManagerInterface;
-use Entity\Race;
-use Entity\User;
+use App\Entity\Race;
+use App\Entity\User;
 
 /**
  * Class WeekendSummary

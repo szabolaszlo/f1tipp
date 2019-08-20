@@ -8,14 +8,14 @@
 
 namespace App\Controller\Module\UserActivity;
 
-use App\Controller\Controller;
-use Entity\User;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\User;
 
 /**
  * Class UserActivity
  * @package App\Controller\Module\UserActivity
  */
-class UserActivity extends Controller
+class UserActivity extends AbstractController
 {
     protected $interval = 20; // Sec
 
@@ -43,7 +43,7 @@ class UserActivity extends Controller
 
     public function getOnlineUsersAction()
     {
-        $users = $this->entityManager->getRepository('Entity\User')->findAll();
+        $users = $this->entityManager->getRepository('App\Entity\User')->findAll();
 
         $userNames = array();
 

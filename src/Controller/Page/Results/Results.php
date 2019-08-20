@@ -8,16 +8,14 @@
  */
 namespace App\Controller\Page\Results;
 
-use App\Controller\Controller;
-use Entity\Result;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Result;
 use System\Cache\Cache;
-use System\Registry\IRegistry;
-
 /**
  * Class Results
  * @package App\Controller\Page\Results
  */
-class Results extends Controller
+class Results extends AbstractController
 {
     /**
      * @var Cache
@@ -28,10 +26,8 @@ class Results extends Controller
      * Betting constructor.
      * @param IRegistry $registry
      */
-    public function __construct(IRegistry $registry)
+    public function __construct( )
     {
-        parent::__construct($registry);
-
         $this->cache = $this->registry->getCache();
     }
 
@@ -48,7 +44,7 @@ class Results extends Controller
 
         $this->data['tables'] = array();
 
-        $results = $this->entityManager->getRepository('Entity\Result')->findAll();
+        $results = $this->entityManager->getRepository('App\Entity\Result')->findAll();
 
         /** @var Result $result */
         foreach ($results as $result) {
@@ -67,6 +63,6 @@ class Results extends Controller
      */
     protected function getCacheId()
     {
-        return 'results.' . count($this->entityManager->getRepository('Entity\Result')->findAll());
+        return 'results.' . count($this->entityManager->getRepository('App\Entity\Result')->findAll());
     }
 }

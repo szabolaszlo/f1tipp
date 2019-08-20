@@ -9,14 +9,14 @@
 
 namespace App\Controller\Page\Calendar;
 
-use App\Controller\Controller;
-use Entity\Repository\Event;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Repository\Event;
 
 /**
  * Class Calendar
  * @package App\Controller\Page\Calendar
  */
-class Calendar extends Controller
+class Calendar extends AbstractController
 {
     /**
      * @return mixed
@@ -24,7 +24,7 @@ class Calendar extends Controller
     public function indexAction()
     {
         /** @var Event $repository */
-        $repository = $this->entityManager->getRepository('Entity\Event');
+        $repository = $this->entityManager->getRepository('App\Entity\Event');
 
         $this->data['events'] = $repository->getRemainEvents();
 
@@ -39,7 +39,7 @@ class Calendar extends Controller
     public function qualifyAction()
     {
         /** @var Event $repository */
-        $repository = $this->entityManager->getRepository('Entity\Qualify');
+        $repository = $this->entityManager->getRepository('App\Entity\Qualify');
 
         $this->data['events'] = $repository->getRemainEvents();
 
@@ -54,7 +54,7 @@ class Calendar extends Controller
     public function raceAction()
     {
         /** @var Event $repository */
-        $repository = $this->entityManager->getRepository('Entity\Race');
+        $repository = $this->entityManager->getRepository('App\Entity\Race');
 
         $this->data['events'] = $repository->getRemainEvents();
 

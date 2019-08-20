@@ -9,13 +9,13 @@
 
 namespace App\Controller\Module\ResultsOfChampionship;
 
-use App\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * Class ResultsOfChampionship
  * @package App\Controller\Module\ResultsOfChampionship
  */
-class ResultsOfChampionship extends Controller
+class ResultsOfChampionship extends AbstractController
 {
     const DRIVER_JSON_PATH = "http://ergast.com/api/f1/current/driverStandings.json";
 
@@ -40,7 +40,7 @@ class ResultsOfChampionship extends Controller
         $eventOrder = $driverResponse['MRData']['StandingsTable']['StandingsLists'][0]['round'];
 
         $event = $this->entityManager
-            ->getRepository('Entity\Race')
+            ->getRepository('App\Entity\Race')
             ->findOneBy(array('eventOrder' => $eventOrder));
 
         $this->data['event'] = $event;

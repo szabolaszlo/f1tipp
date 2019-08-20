@@ -8,38 +8,27 @@
 
 namespace App\Controller\Page\Feed;
 
-use App\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Controller\Module\Feed\Feed as FeedModule;
 use App\Controller\Module\TopFeed\TopFeed;
-use Entity\Feed as FeedEntity;
-use Entity\Repository\Feed as FeedRepo;
+use App\Entity\Feed as FeedEntity;
+use App\Entity\Repository\Feed as FeedRepo;
 use System\Cache\Cache;
 use System\Feed\Handler;
 use System\Feed\Repository\MotorSportRepository;
 use System\Feed\Storage\Doctrine;
-use System\Registry\IRegistry;
 
 /**
  * Class Feed
  * @package App\Controller\Page\Feed
  */
-class Feed extends Controller
+class Feed extends AbstractController
 {
     /**
      * @var Cache
      */
     protected $cache;
 
-    /**
-     * Feed constructor.
-     * @param IRegistry $registry
-     */
-    public function __construct(IRegistry $registry)
-    {
-        parent::__construct($registry);
-
-        $this->cache = $this->registry->getCache();
-    }
 
     public function collectAction()
     {

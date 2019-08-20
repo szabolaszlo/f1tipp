@@ -8,19 +8,18 @@
 
 namespace App\Controller\Page\Admin;
 
-use App\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\Common\Collections\ArrayCollection;
-use Entity\Event;
-use Entity\Result;
-use Entity\ResultAttribute;
+use App\Entity\Event;
+use App\Entity\Result;
+use App\Entity\ResultAttribute;
 use System\FormHelper\FormHelper;
-use System\Registry\IRegistry;
 
 /**
  * Class Admin
  * @package App\Controller\Page\Admin
  */
-class ResultUpload extends Controller
+class ResultUpload extends AbstractController
 {
     /**
      * @var FormHelper
@@ -28,7 +27,7 @@ class ResultUpload extends Controller
     protected $formHelper;
 
     /**
-     * @var \Entity\Event
+     * @var \App\Entity\Event
      */
     protected $event;
 
@@ -41,9 +40,8 @@ class ResultUpload extends Controller
      * Betting constructor.
      * @param IRegistry $registry
      */
-    public function __construct(IRegistry $registry)
+    public function __construct()
     {
-        parent::__construct($registry);
 
         $this->data['formHelper'] = $this->registry->getFormHelper();
     }
@@ -70,7 +68,7 @@ class ResultUpload extends Controller
         $this->data['event'] = $event;
 
         $this->data['result'] = $this->entityManager
-            ->getRepository('Entity\Result')
+            ->getRepository('App\Entity\Result')
             ->findOneBy(array('event' => $eventId));
 
         $this->data['success'] = $this->session->get('success');
@@ -89,10 +87,10 @@ class ResultUpload extends Controller
     protected function getEvent($eventId)
     {
         /** @var Event $event */
-        $event = $this->entityManager->getRepository('Entity\Event')->find($eventId);
+        $event = $this->entityManager->getRepository('App\Entity\Event')->find($eventId);
 
         if (!$event) {
-            $event = $this->entityManager->getRepository('Entity\Event')->find($eventId - 1);
+            $event = $this->entityManager->getRepository('App\Entity\Event')->find($eventId - 1);
         }
 
         return $event;
@@ -103,7 +101,7 @@ class ResultUpload extends Controller
      */
     protected function getNextEventId()
     {
-        $results = $this->entityManager->getRepository('Entity\Result')->findBy(array(), array('id' => 'DESC'));
+        $results = $this->entityManager->getRepository('App\Entity\Result')->findBy(array(), array('id' => 'DESC'));
 
         /** @var Result $result */
         $result = reset($results);

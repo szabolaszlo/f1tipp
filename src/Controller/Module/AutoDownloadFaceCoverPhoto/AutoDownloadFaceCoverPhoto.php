@@ -2,14 +2,14 @@
 
 namespace App\Controller\Module\AutoDownloadFaceCoverPhoto;
 
-use App\Controller\Controller;
-use Entity\Setting;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Setting;
 
 /**
  * Class AutoDownloadFaceCoverPhoto
  * @package App\Controller\Module\AutoDownloadFaceCoverPhoto
  */
-class AutoDownloadFaceCoverPhoto extends Controller
+class AutoDownloadFaceCoverPhoto extends AbstractController
 {
     const URL = 'https://www.facebook.com/Boxutca/';
 

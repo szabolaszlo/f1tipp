@@ -8,16 +8,16 @@
 
 namespace App\Controller\Page\WeekendPoints;
 
-use App\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Controller\Page\WeekendPoints\ResultCollector\CollectedPointConverter\PointProvider\PointProvider;
 use App\Controller\Page\WeekendPoints\ResultCollector\ResultCollector;
-use Entity\Result;
+use App\Entity\Result;
 
 /**
  * Class WeekendPoints
  * @package App\Controller\Page\WeekendPoints
  */
-class WeekendPoints extends Controller
+class WeekendPoints extends AbstractController
 {
     /**
      * @return string

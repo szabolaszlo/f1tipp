@@ -8,14 +8,14 @@
 
 namespace App\Controller\Module\TableRefresh;
 
-use App\Controller\Controller;
-use Entity\Event;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Event;
 
 /**
  * Class TableRefresh
  * @package App\Controller\Module\TableRefresh
  */
-class TableRefresh extends Controller
+class TableRefresh extends AbstractController
 {
 
     public function isNeedRefreshEventTableAction()
@@ -25,10 +25,10 @@ class TableRefresh extends Controller
         $postedNumberOfBets = $this->request->getPost('numberOfBets', 0);
 
         /** @var Event $event */
-        $bets = $this->entityManager->getRepository('Entity\Bet')->findBy(array('event_id' => $eventId));
+        $bets = $this->entityManager->getRepository('App\Entity\Bet')->findBy(array('event_id' => $eventId));
 
-        $result = $this->entityManager->getRepository('Entity\Result')->findBy(array('event' => $eventId))
-            ? $this->entityManager->getRepository('Entity\Result')->findBy(array('event' => $eventId))
+        $result = $this->entityManager->getRepository('App\Entity\Result')->findBy(array('event' => $eventId))
+            ? $this->entityManager->getRepository('App\Entity\Result')->findBy(array('event' => $eventId))
             : array();
 
         if ((count($bets) + count($result)) > $postedNumberOfBets) {
@@ -40,7 +40,7 @@ class TableRefresh extends Controller
     {
         $resultsCount = (int)$this->request->getPost('resultsCount', 0);
 
-        if (count($this->entityManager->getRepository('Entity\Result')->findAll()) > $resultsCount) {
+        if (count($this->entityManager->getRepository('App\Entity\Result')->findAll()) > $resultsCount) {
             echo true;
         }
     }
@@ -49,7 +49,7 @@ class TableRefresh extends Controller
     {
         $trophyResultId = (int)$this->request->getPost('trophyResultId', 0);
 
-        if (count($this->entityManager->getRepository('Entity\Result')->findAll()) > $trophyResultId) {
+        if (count($this->entityManager->getRepository('App\Entity\Result')->findAll()) > $trophyResultId) {
             echo true;
         }
     }
@@ -60,7 +60,7 @@ class TableRefresh extends Controller
     public function getTableAction()
     {
         /** @var Event $event */
-        $event = $this->entityManager->getRepository('Entity\Event')->find($this->request->getPost('eventId'));
+        $event = $this->entityManager->getRepository('App\Entity\Event')->find($this->request->getPost('eventId'));
 
         $user = $this->registry->getUserAuth()->getLoggedUser();
 

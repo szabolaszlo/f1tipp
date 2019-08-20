@@ -8,8 +8,8 @@
 
 namespace App\Controller\Page\Statistics;
 
-use Entity\Bet;
-use Entity\Result;
+use App\Entity\Bet;
+use App\Entity\Result;
 
 /**
  * Class ObjectSorter

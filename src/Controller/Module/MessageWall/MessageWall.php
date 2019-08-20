@@ -8,14 +8,14 @@
 
 namespace App\Controller\Module\MessageWall;
 
-use App\Controller\Controller;
-use Entity\Message;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Message;
 
 /**
  * Class MessageWall
  * @package App\Controller\Module\MessageWall
  */
-class MessageWall extends Controller
+class MessageWall extends AbstractController
 {
     const MESSAGE_COUNT = 100;
 
@@ -28,7 +28,7 @@ class MessageWall extends Controller
         $this->session->set('token', $this->data['token']);
 
         $this->data['messages'] = $this->entityManager
-            ->getRepository('Entity\Message')
+            ->getRepository('App\Entity\Message')
             ->findBy(array(), array('id' => 'DESC'), self::MESSAGE_COUNT);
 
         $this->data['userToken'] = $this->registry->getUserAuth()->getActualToken();
@@ -60,7 +60,7 @@ class MessageWall extends Controller
     public function messagesAction()
     {
         $this->data['messages'] = $this->entityManager
-            ->getRepository('Entity\Message')
+            ->getRepository('App\Entity\Message')
             ->findBy(array(), array('id' => 'DESC'), self::MESSAGE_COUNT);
 
         $this->setTemplate('controller/module/message_wall/messages.tpl');

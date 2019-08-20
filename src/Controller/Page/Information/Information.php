@@ -9,14 +9,14 @@
 
 namespace App\Controller\Page\Information;
 
-use App\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\ORM\EntityRepository;
 
 /**
  * Class Information
  * @package App\Controller\Page\Information
  */
-class Information extends Controller
+class Information extends AbstractController
 {
     /**
      * @return mixed
@@ -32,7 +32,7 @@ class Information extends Controller
         }
 
         /** @var EntityRepository $repository */
-        $repository = $this->entityManager->getRepository('Entity\Information');
+        $repository = $this->entityManager->getRepository('App\Entity\Information');
 
         $this->data['information'] = $informationId
             ? $repository->find($informationId)

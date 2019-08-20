@@ -8,17 +8,17 @@
 
 namespace App\Controller\Module\CountDown;
 
-use App\Controller\Controller;
-use Entity\Qualify;
-use Entity\Race;
-use Entity\Repository\Event;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Qualify;
+use App\Entity\Race;
+use App\Entity\Repository\Event;
 use System\CountDownScript\CountDownScript;
 
 /**
  * Class CountDownScript
  * @package App\Controller\Module\CountDownScript
  */
-class CountDown extends Controller
+class CountDown extends AbstractController
 {
     /**
      * @return mixed
@@ -26,7 +26,7 @@ class CountDown extends Controller
     public function indexAction()
     {
         /** @var Event $repository */
-        $repository = $this->entityManager->getRepository('Entity\Qualify');
+        $repository = $this->entityManager->getRepository('App\Entity\Qualify');
 
         /** @var Qualify $qualify */
         $qualify = $repository->getNextEvent();
@@ -34,7 +34,7 @@ class CountDown extends Controller
         $countDownQualify = new CountDownScript($qualify->getType(), $qualify->getDateTime(), $this->renderer);
 
         /** @var Event $repository */
-        $repository = $this->entityManager->getRepository('Entity\Race');
+        $repository = $this->entityManager->getRepository('App\Entity\Race');
 
         /** @var Race $race */
         $race = $repository->getNextEvent();

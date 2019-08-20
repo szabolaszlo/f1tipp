@@ -8,13 +8,13 @@
 
 namespace App\Controller\Page\Error;
 
-use App\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * Class Error
  * @package App\Controller\Page
  */
-class Error extends Controller
+class Error extends AbstractController
 {
     /**
      * @return mixed

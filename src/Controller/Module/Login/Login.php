@@ -10,8 +10,8 @@
 namespace App\Controller\Module\Login;
 
 use Application\HttpProtocol\IServer;
-use App\Controller\Controller;
-use Entity\User;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\User;
 use System\Registry\IRegistry;
 use System\UserAuthentication\Authentication;
 
@@ -19,7 +19,7 @@ use System\UserAuthentication\Authentication;
  * Class Login
  * @package App\Controller\Module\Login
  */
-class Login extends Controller
+class Login extends AbstractController
 {
     /**
      * @var Authentication
@@ -35,9 +35,8 @@ class Login extends Controller
      * Login constructor.
      * @param IRegistry $registry
      */
-    public function __construct(IRegistry $registry)
+    public function __construct()
     {
-        parent::__construct($registry);
 
         $this->authentication = $this->registry->getUserAuth();
         $this->server = $this->registry->getServer();
@@ -96,7 +95,7 @@ class Login extends Controller
     {
         /** @var User $user */
         $user = $this->entityManager
-            ->getRepository('Entity\User')
+            ->getRepository('App\Entity\User')
             ->findOneBy(array('name' => $this->request->getPost('user-name')));
 
         if (!$user) {

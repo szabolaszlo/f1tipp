@@ -8,16 +8,15 @@
 
 namespace App\Controller\Module\TopFeed;
 
-use App\Controller\Controller;
-use Entity\Feed as FeedEntity;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Feed as FeedEntity;
 use System\Cache\Cache;
-use System\Registry\IRegistry;
 
 /**
  * Class TopFeed
  * @package App\Controller\Module\Feed
  */
-class TopFeed extends Controller
+class TopFeed extends AbstractController
 {
     const CACHE_ID = 'topFeed';
 
@@ -26,16 +25,7 @@ class TopFeed extends Controller
      */
     protected $cache;
 
-    /**
-     * Feed constructor.
-     * @param IRegistry $registry
-     */
-    public function __construct(IRegistry $registry)
-    {
-        parent::__construct($registry);
 
-        $this->cache = $this->registry->getCache();
-    }
 
     /**
      * @return string

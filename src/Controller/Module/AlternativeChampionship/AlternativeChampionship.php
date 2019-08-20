@@ -9,7 +9,6 @@
 namespace App\Controller\Module\AlternativeChampionship;
 
 use App\Controller\Page\WeekendPoints\WeekendPoints;
-use System\Registry\IRegistry;
 
 /**
  * Class AlternativeChampionship
@@ -17,10 +16,8 @@ use System\Registry\IRegistry;
  */
 class AlternativeChampionship extends WeekendPoints
 {
-    public function __construct(IRegistry $registry)
+    public function __construct()
     {
-        parent::__construct($registry);
-
         $this->data['detailsLink'] = '/?page=weekendPoints/index';
     }
 }

@@ -8,14 +8,13 @@
 
 namespace App\Controller\Page\Admin;
 
-use App\Controller\Controller;
-use System\Registry\IRegistry;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * Class ClearCache
  * @package App\Controller\Page\Admin
  */
-class ClearCache extends Controller
+class ClearCache extends AbstractController
 {
     /**
      * @var string
@@ -38,9 +37,8 @@ class ClearCache extends Controller
      * ClearCache constructor.
      * @param IRegistry $registry
      */
-    public function __construct(IRegistry $registry)
+    public function __construct( )
     {
-        parent::__construct($registry);
 
         $this->cacheDir = $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR;
     }

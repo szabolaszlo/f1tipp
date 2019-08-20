@@ -8,19 +8,19 @@
 
 namespace App\Controller\Page\Admin;
 
-use App\Controller\Controller;
-use Entity\Bet;
-use Entity\Event;
-use Entity\Qualify;
-use Entity\Race;
-use Entity\Result;
-use Entity\Trophy;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Bet;
+use App\Entity\Event;
+use App\Entity\Qualify;
+use App\Entity\Race;
+use App\Entity\Result;
+use App\Entity\Trophy;
 
 /**
  * Class ResetSeason
  * @package App\Controller\Page\Admin
  */
-class ResetSeason extends Controller
+class ResetSeason extends AbstractController
 {
     public function resetAction()
     {

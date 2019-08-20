@@ -9,22 +9,21 @@
 
 namespace App\Controller\Page\Betting;
 
-use App\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\Common\Collections\ArrayCollection;
-use Entity\Bet;
-use Entity\BetAttribute;
-use Entity\Qualify;
-use Entity\Race;
-use Entity\Repository\Event;
-use Entity\User;
+use App\Entity\Bet;
+use App\Entity\BetAttribute;
+use App\Entity\Qualify;
+use App\Entity\Race;
+use App\Entity\Repository\Event;
+use App\Entity\User;
 use System\FormHelper\FormHelper;
-use System\Registry\IRegistry;
 
 /**
  * Class Betting
  * @package App\Controller\Page\Betting
  */
-class Betting extends Controller
+class Betting extends AbstractController
 {
     /**
      * @var Qualify
@@ -57,7 +56,7 @@ class Betting extends Controller
     protected $user;
 
     /**
-     * @var \Entity\Event
+     * @var \App\Entity\Event
      */
     protected $event;
 
@@ -80,9 +79,8 @@ class Betting extends Controller
      * Betting constructor.
      * @param IRegistry $registry
      */
-    public function __construct(IRegistry $registry)
+    public function __construct( )
     {
-        parent::__construct($registry);
 
         //User
         $this->data['user'] = $this->user = $this->registry->getUserAuth()->getLoggedUser();
@@ -92,7 +90,7 @@ class Betting extends Controller
 
         //Qualify
         /** @var Event $repository */
-        $repository = $this->entityManager->getRepository('Entity\Qualify');
+        $repository = $this->entityManager->getRepository('App\Entity\Qualify');
         $this->qualify = $repository->getNextEvent();
 
         //QualifyAttributes
@@ -100,11 +98,11 @@ class Betting extends Controller
 
         //QualifyBet
         $this->qualifyBet = $this->entityManager
-            ->getRepository('Entity\Bet')
+            ->getRepository('App\Entity\Bet')
             ->findOneBy(array('user_id' => $this->user, 'event_id' => $this->qualify));
 
         //Race
-        $repository = $this->entityManager->getRepository('Entity\Race');
+        $repository = $this->entityManager->getRepository('App\Entity\Race');
         $this->race = $repository->getNextEvent();
 
         //RaceAttributes
@@ -112,7 +110,7 @@ class Betting extends Controller
 
         //RaceBet
         $this->raceBet = $this->entityManager
-            ->getRepository('Entity\Bet')
+            ->getRepository('App\Entity\Bet')
             ->findOneBy(array('user_id' => $this->user, 'event_id' => $this->race));
 
         //FormHelper
@@ -214,7 +212,7 @@ class Betting extends Controller
      */
     protected function validate()
     {
-        $this->event = $this->entityManager->getRepository('Entity\Event')->find($this->request->getPost('event-id'));
+        $this->event = $this->entityManager->getRepository('App\Entity\Event')->find($this->request->getPost('event-id'));
         $this->user = $this->registry->getUserAuth()->getUserByToken($this->request->getPost('user-token'));
 
         $justInTime = (bool)($this->now < $this->event->getDateTime());

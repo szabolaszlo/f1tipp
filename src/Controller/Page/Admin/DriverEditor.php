@@ -8,14 +8,14 @@
 
 namespace App\Controller\Page\Admin;
 
-use App\Controller\Controller;
-use Entity\Driver;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Entity\Driver;
 
 /**
  * Class DriverEditor
  * @package App\Controller\Page\Admin
  */
-class DriverEditor extends Controller
+class DriverEditor extends AbstractController
 {
     const DRIVER_JSON_PATH = "http://ergast.com/api/f1/current/driverStandings.json";
 
@@ -30,11 +30,11 @@ class DriverEditor extends Controller
         }
 
         $this->data['drivers'] = $this->entityManager
-            ->getRepository('Entity\Driver')
+            ->getRepository('App\Entity\Driver')
             ->findBy(array(), array('point' => 'DESC'));
 
         $this->data['enabledDrivers'] = count($this->entityManager
-            ->getRepository('Entity\Driver')
+            ->getRepository('App\Entity\Driver')
             ->findBy(array('status' => true)));
 
         $this->data['success'] = $this->session->get('success');
@@ -58,7 +58,7 @@ class DriverEditor extends Controller
 
             foreach ($drivers as $driver) {
                 $driverId = (int)$driver['id'];
-                $driverEntity = $this->entityManager->getRepository('Entity\Driver')->find($driverId);
+                $driverEntity = $this->entityManager->getRepository('App\Entity\Driver')->find($driverId);
 
                 if (!$driverEntity) {
                     $driverEntity = new Driver();
@@ -115,7 +115,7 @@ class DriverEditor extends Controller
             $driverShort = $standing['Driver']['code'];
 
             $driverEntity = $this->entityManager
-                ->getRepository('Entity\Driver')
+                ->getRepository('App\Entity\Driver')
                 ->findOneBy(array('short' => $driverShort));
 
             if ($driverEntity) {

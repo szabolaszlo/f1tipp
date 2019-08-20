@@ -10,7 +10,7 @@ namespace App\Controller\Page\WeekendPoints\ResultCollector\PointSummary;
 
 use App\Controller\Page\WeekendPoints\ResultCollector\PointSummary\UserPoint\UserPoint;
 use Doctrine\ORM\EntityManagerInterface;
-use Entity\User;
+use App\Entity\User;
 
 /**
  * Class PointSummary
