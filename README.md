@@ -6,6 +6,10 @@ This project is a refactoring of original f1tipp. (https://github.com/szabolaszl
 The original project based on own framework, I decide to change it to symfony.
 So there is some legacy code from the original code, like src\LegacyService, but If I have time I will refactoring it one by one.
 
+Used technologies:
+- Symfony 4.3 https://symfony.com/doc/current/setup.html
+- WebPack https://symfony.com/doc/current/frontend.html
+
 # Docker
 ```
 docker-compose up -d
