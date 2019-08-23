@@ -12,6 +12,7 @@
       <trans-unit id="nav_results_trophies"><source>nav_results_trophies</source><target>Kupák</target></trans-unit>
       <trans-unit id="nav_results_calendar"><source>nav_results_calendar</source><target>Naptár</target></trans-unit>
       <trans-unit id="nav_rules"><source>nav_rules</source><target>Szabályzat</target></trans-unit>
+      <trans-unit id="nav_calendar"><source>nav_calendar</source><target>Naptár</target></trans-unit>
       <trans-unit id="nav_actual"><source>nav_actual</source><target>Aktuális</target></trans-unit>
       <trans-unit id="nav_admin"><source>nav_admin</source><target>Admin</target></trans-unit>
       <trans-unit id="nav_admin_result"><source>nav_admin_result</source><target>Eredmény Feltöltés</target></trans-unit>

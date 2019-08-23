@@ -1,3 +1,4 @@
+{% set current_path = app.request.get('_route') %}
 <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -9,48 +10,54 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/"><img src="{{domain}}/src/view/image/logo.png" height="51" alt=""></a>
+            <a class="navbar-brand" href="/"><img src="{{ asset('build/images/logo.png') }}" height="51" alt=""></a>
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="f1tipp-navbar-collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li>{{modules.login|raw}}</li>
+                {#                <li>{{modules.login|raw}}</li>#}
             </ul>
             <ul class="nav navbar-nav navbar-left">
-                <li {{page.id == 'betting' ? 'class="active"' : ''}}>
-                    <a href="?page=betting/index">{{language.get('nav_bet')}}</a>
+                <li {{ current_path == 'betting' ? 'class="active"' : '' }}>
+                    <a href="?page=betting/index">{{ 'nav_bet'|trans }}</a>
                 </li>
-                <li {{page.id == 'actual' ? 'class="active"' : ''}}>
-                    <a href="?page=actual/index">{{language.get('nav_actual')}}</a>
+                <li {{ current_path == 'actual' ? 'class="active"' : '' }}>
+                    <a href="?page=actual/index">{{ 'nav_actual'|trans }}</a>
                 </li>
-                <li class="dropdown {{page.id == 'results' or page.id == 'trophies' ? 'active ' : ''}}">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="">{{language.get('nav_results')}}<span class="caret"></span></a>
+                <li class="dropdown {{ current_path == 'results' or current_path == 'trophies' ? 'active ' : '' }}">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="">{{ 'nav_results'|trans }}<span
+                                class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="?page=results/index">{{language.get('nav_results_points')}}</a></li>
-                        <li><a href="?page=trophies/index">{{language.get('nav_results_trophies')}}</a></li>
-                        <li><a href="?page=weekendPoints/index">{{language.get('nav_results_alternative')}}</a></li>
+                        <li><a href="?page=results/index">{{ 'nav_results_points'|trans }}</a></li>
+                        <li><a href="?page=trophies/index">{{ 'nav_results_trophies'|trans }}</a></li>
+                        <li><a href="?page=weekendPoints/index">{{ 'nav_results_alternative'|trans }}</a></li>
                     </ul>
                 </li>
-                <li {{page.id == 'calendar' ? 'class="active"' : ''}}>
-                    <a href="?page=calendar/index">{{language.get('nav_calendar')}}</a>
+                <li {{ current_path == 'calendar' ? 'class="active"' : '' }}>
+                    <a href="?page=calendar/index">{{ 'nav_calendar'|trans }}</a>
                 </li>
                 <li>
-                    <a href="?page=information/index&information_title=szabalyzat">{{language.get('nav_rules')}}</a>
+                    <a href="?page=information/index&information_title=szabalyzat">{{ 'nav_rules'|trans }}</a>
                 </li>
-                <li {{page.id == 'statistics' ? 'class="active"' : ''}}>
-                    <a href="?page=statistics/index">{{language.get('nav_statistics')}}</a>
+                <li {{ current_path == 'statistics' ? 'class="active"' : '' }}>
+                    <a href="?page=statistics/index">{{ 'nav_statistics'|trans }}</a>
                 </li>
-                {% if isAdmin %}
-                <li class="dropdown {{page.id == 'admin' ? 'active ' : ''}}">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="">{{language.get('nav_admin')}}<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="?page=admin/result_upload/index">{{language.get('nav_admin_result')}}</a></li>
-                        <li><a href="?page=admin/information_editor/index">{{language.get('nav_admin_information_editor')}}</a></li>
-                        <li><a href="?page=admin/driver_editor/index">{{language.get('admin_driver_editor')}}</a></li>
-                        <li><a href="?page=admin/clear_cache/index">{{language.get('nav_admin_cache')}}</a></li>
-                    </ul>
-                </li>
-                {% endif %}
+{#                {% if isAdmin %}#}
+{#                    <li class="dropdown {{ current_path == 'admin' ? 'active ' : '' }}">#}
+{#                        <a class="dropdown-toggle" data-toggle="dropdown" href="">{{ 'nav_admin'|trans }}<span#}
+{#                                    class="caret"></span></a>#}
+{#                        <ul class="dropdown-menu">#}
+{#                            <li><a href="?page=admin/result_upload/index">{{ 'nav_admin_result'|trans }}</a>#}
+{#                            </li>#}
+{#                            <li>#}
+{#                                <a href="?page=admin/information_editor/index">{{ 'nav_admin_information_editor'|trans }}</a>#}
+{#                            </li>#}
+{#                            <li><a href="?page=admin/driver_editor/index">{{ 'admin_driver_editor'|trans }}</a>#}
+{#                            </li>#}
+{#                            <li><a href="?page=admin/clear_cache/index">{{ 'nav_admin_cache'|trans }}</a></li>#}
+{#                        </ul>#}
+{#                    </li>#}
+{#                {% endif %}#}
             </ul>
         </div>
         <!-- /.navbar-collapse -->

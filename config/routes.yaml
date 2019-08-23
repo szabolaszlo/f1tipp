@@ -1,3 +1,4 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+controllers_routing:
+  # loads routes from the YAML, XML or PHP files found in that directory
+  resource: 'routes'
+  type:     directory

@@ -7,19 +7,17 @@
  * Time: 22:31
  */
 
-namespace App\Controller\Module\Login;
+namespace App\Controller\Module;
 
-use Application\HttpProtocol\IServer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\User;
-use System\Registry\IRegistry;
 use System\UserAuthentication\Authentication;
 
 /**
  * Class Login
  * @package App\Controller\Module\Login
  */
-class Login extends AbstractController
+class LoginController extends AbstractController
 {
     /**
      * @var Authentication

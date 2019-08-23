@@ -1,0 +1,4 @@
+actual:
+  path: /
+  defaults: { _controller: App\Controller\Page\ActualController::indexAction}
+  methods:  [GET]

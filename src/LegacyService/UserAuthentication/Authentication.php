@@ -8,7 +8,6 @@
 
 namespace App\LegacyService\UserAuthentication;
 
-use Application\HttpProtocol\ICookie;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\User;
 use App\Entity\UserAuthentication;
