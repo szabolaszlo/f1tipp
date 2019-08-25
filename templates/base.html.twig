@@ -1,23 +1,11 @@
-{#<!DOCTYPE html>#}
-{#<html>#}
-{#    <head>#}
-{#        <meta charset="UTF-8">#}
-{#        <title>{% block title %}Welcome!{% endblock %}</title>#}
-{#        {% block stylesheets %}{% endblock %}#}
-{#    </head>#}
-{#    <body>#}
-{#        {% block body %}{% endblock %}#}
-{#        {% block javascripts %}{% endblock %}#}
-{#    </body>#}
-{#</html>#}
 <!DOCTYPE html>
 <html lang="hu">
 
-{% include('application/head.html.twig') %}
+{% include('head.html.twig') %}
 
 <body>
 
-{% include('application/navigation.html.twig') %}
+{% include('navigation.html.twig') %}
 
 <!-- Page Content -->
 <div class="container">
@@ -26,7 +14,7 @@
 
         <!-- Content Column -->
         <div class="col-md-8">
-            {#            {{ page.content }}#}
+            {% block body %}{% endblock %}
             <div class="visible-lg visible-md visible-sm">
                 {#                {{ modules.feed }}#}
             </div>
@@ -67,7 +55,6 @@
 
 </div>
 <!-- /.container -->
-{% block body %}{% endblock %}
 {% block javascripts %}
     {{ encore_entry_script_tags('app') }}
 {% endblock %}

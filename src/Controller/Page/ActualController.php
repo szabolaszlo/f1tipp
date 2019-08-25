@@ -8,6 +8,7 @@
 
 namespace App\Controller\Page;
 
+use App\LegacyService\UserAuthentication\Authentication;
 use Exception;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -27,10 +28,11 @@ class ActualController extends AbstractController
 
     /**
      * @Route(path="/", name="home", methods={"GET"})
+     * @param Authentication $authentication
      * @return Response
      * @throws Exception
      */
-    public function indexAction()
+    public function indexAction(Authentication $authentication)
     {
 //        $data['faceCoverImage'] = $this->entityManager
 //            ->getRepository(Setting::class)
@@ -43,25 +45,25 @@ class ActualController extends AbstractController
 //            );
 //        }
 
-//        $events = array(
-//            $this->getDoctrine()->getRepository('App\Entity\Qualify')->getNextEvent(),
-//            $this->getDoctrine()->getRepository('App\Entity\Race')->getNextEvent()
-//        );
+        $events = array(
+            $this->getDoctrine()->getRepository('App\Entity\Qualify')->getNextEvent(),
+            $this->getDoctrine()->getRepository('App\Entity\Race')->getNextEvent()
+        );
 
-//        $user = $this->registry->getUserAuth()->getLoggedUser();
+        $user = $authentication->getLoggedUser();
 
         $data['tables'] = array();
 
         $now = new \DateTime();
 
         /** @var Event $event */
-//        foreach ($events as $event) {
-//            $id = abs($now->getTimestamp() - $event->getDateTime()->getTimeStamp());
-//
-//            $titleEvents[$id] = $event;
+        foreach ($events as $event) {
+            $id = abs($now->getTimestamp() - $event->getDateTime()->getTimeStamp());
 
+            $titleEvents[$id] = $event;
+//
 //            $data['tables'][$id] = $this->registry->getResultTable()->getTable($user, $event);
-//        }
+        }
 
 //        ksort($data['tables']);
 //
