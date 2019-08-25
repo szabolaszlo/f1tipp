@@ -9,9 +9,14 @@
 
 namespace App\Controller\Module;
 
+use App\LegacyService\UserAuthentication\Authentication;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\User;
-use System\UserAuthentication\Authentication;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class Login
@@ -20,103 +25,97 @@ use System\UserAuthentication\Authentication;
 class LoginController extends AbstractController
 {
     /**
-     * @var Authentication
+     * @Route(path="login/index", methods={"GET"})
+     * @param SessionInterface $session
+     * @param Authentication $authentication
+     * @return string|Response
      */
-    protected $authentication;
-
-    /**
-     * @var IServer
-     */
-    protected $server;
-
-    /**
-     * Login constructor.
-     * @param IRegistry $registry
-     */
-    public function __construct()
-    {
-
-        $this->authentication = $this->registry->getUserAuth();
-        $this->server = $this->registry->getServer();
-
-        $this->data['actualPage'] = 'page=' . $this->registry->getRequest()->getQuery('page', 'actual/index');
-    }
-
-    /**
-     * @return mixed
-     */
-    public function indexAction()
+    public function indexAction(SessionInterface $session, Authentication $authentication)
     {
         /** @var User $loggedUser */
-        $loggedUser = $this->authentication->getLoggedUser();
+        $loggedUser = $authentication->getLoggedUser();
 
         if ($loggedUser) {
-            $this->authentication->updateExpire();
+            $authentication->updateExpire();
             return $this->loggedAction($loggedUser);
         }
-        return $this->loginAction();
+        return $this->loginAction($session);
     }
 
     /**
-     * @return string
+     * @Route(path="login/login", methods={"GET"})
+     * @param SessionInterface $session
+     * @return Response
      */
-    public function loginAction()
+    public function loginAction(SessionInterface $session)
     {
-        $this->data['error'] = array(
-            'error_user' => $this->session->get('error_user'),
-            'error_password' => $this->session->get('error_password')
+        $data['error'] = array(
+            'error_user' => $session->get('error_user'),
+            'error_password' => $session->get('error_password')
         );
 
-        $this->data['userName'] = $this->session->get('user_name');
+        $data['userName'] = $session->get('user_name');
 
-        $this->session->remove('error_user');
-        $this->session->remove('error_password');
-        $this->session->remove('user_name');
+        $session->remove('error_user');
+        $session->remove('error_password');
+        $session->remove('user_name');
 
-        return $this->render();
+        return $this->render('controller/module/login.html.twig', $data);
     }
 
     /**
+     * @Route(path="login/logged", methods={"GET"})
      * @param User $loggedUser
      * @return string
      */
     public function loggedAction(User $loggedUser)
     {
-        $this->data['name'] = $loggedUser->getName();
+        $data['name'] = $loggedUser->getName();
 
-        $this->setTemplate('controller/module/login/logged.tpl');
-
-        return $this->render();
+        return $this->render('controller/module/logged.html.twig', $data);
     }
 
-    public function tryLoginAction()
+    /**
+     * @Route(path="login/try_login", methods={"POST"})
+     * @param Request $request
+     * @param SessionInterface $session
+     * @param Authentication $authentication
+     * @return RedirectResponse
+     */
+    public function tryLoginAction(Request $request, SessionInterface $session, Authentication $authentication)
     {
         /** @var User $user */
-        $user = $this->entityManager
+        $user = $this->getDoctrine()
             ->getRepository('App\Entity\User')
-            ->findOneBy(array('name' => $this->request->getPost('user-name')));
+            ->findOneBy(array('name' => $request->get('user-name')));
 
         if (!$user) {
-            $this->session->set('error_user', true);
-            $this->server->redirect('module=login/login&' . $this->data['actualPage']);
+            $session->set('error_user', true);
+            return $this->redirectToRoute($request->get('actualPage', 'home'));
         }
 
         $storedPassword = $user->getPassword();
 
-        if (!password_verify($this->request->getPost('password'), $storedPassword)) {
-            $this->session->set('user_name', $user->getName());
-            $this->session->set('error_password', true);
-            $this->server->redirect('module=login/login&' . $this->data['actualPage']);
+        if (!password_verify($request->get('password'), $storedPassword)) {
+            $session->set('user_name', $user->getName());
+            $session->set('error_password', true);
+            return $this->redirectToRoute($request->get('actualPage', 'home'));
         }
 
-        $this->authentication->setUserToLogged($user);
+        $authentication->setUserToLogged($user);
 
-        $this->server->redirect($this->data['actualPage']);
+        return $this->redirectToRoute($request->get('actualPage', 'home'));
     }
 
-    public function logoutAction()
+    /**
+     * @Route(path="login/logout", methods={"GET"})
+     * @param Request $request
+     * @param Authentication $authentication
+     * @return RedirectResponse
+     */
+    public function logoutAction(Request $request, Authentication $authentication)
     {
-        $this->authentication->destroyToken();
-        $this->server->redirect($this->data['actualPage']);
+        $authentication->destroyToken();
+        return $this->redirectToRoute($request->get('actualPage', 'home'));
     }
 }

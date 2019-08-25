@@ -11,6 +11,10 @@ namespace App\LegacyService\UserAuthentication;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\User;
 use App\Entity\UserAuthentication;
+use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class Authentication
@@ -31,9 +35,9 @@ class Authentication
     protected $userAuthEnt;
 
     /**
-     * @var ICookie
+     * @var ParameterBag
      */
-    protected $cookie;
+    protected $cookies;
 
     /**
      * @var User
@@ -41,15 +45,21 @@ class Authentication
     protected $loggedUser;
 
     /**
+     * @var Response
+     */
+    protected $response;
+
+    /**
      * Authentication constructor.
      * @param EntityManagerInterface $entityManager
-     * @param ICookie $cookie
+     * @param RequestStack $requestStack
      */
-    public function __construct(EntityManagerInterface $entityManager, ICookie $cookie)
+    public function __construct(EntityManagerInterface $entityManager, RequestStack $requestStack)
     {
         $this->entityManager = $entityManager;
-        $this->cookie = $cookie;
+        $this->cookies = $requestStack->getMasterRequest()->cookies;
         $this->userAuthEnt = $this->entityManager->getRepository('App\Entity\UserAuthentication');
+        $this->response = new Response();
     }
 
     /**
@@ -58,7 +68,7 @@ class Authentication
     public function getLoggedUser()
     {
         if (!$this->loggedUser) {
-            $userToken = $this->cookie->get(self::TOKEN_NAME);
+            $userToken = $this->cookies->get(self::TOKEN_NAME);
 
             /** @var UserAuthentication $existUserAuth */
             $existUserAuth = $this->userAuthEnt->findOneBy(array('token' => $userToken));
@@ -75,7 +85,7 @@ class Authentication
      */
     public function getUserByToken($token)
     {
-        if ($token === $this->cookie->get(self::TOKEN_NAME)) {
+        if ($token === $this->cookies->get(self::TOKEN_NAME)) {
             return $this->getLoggedUser();
         }
 
@@ -98,13 +108,13 @@ class Authentication
 
         $this->loggedUser = $user;
 
-        $this->cookie->set(self::TOKEN_NAME, $newToken);
+        setcookie(self::TOKEN_NAME, $newToken);
     }
 
     public function destroyToken()
     {
-        $userToken = $this->cookie->get(self::TOKEN_NAME);
-        $this->cookie->remove(self::TOKEN_NAME);
+        $userToken = $this->cookies->get(self::TOKEN_NAME);
+        $this->cookies->remove(self::TOKEN_NAME);
 
         /** @var UserAuthentication $existUserAuth */
         $existUserAuth = $this->userAuthEnt->findOneBy(array('token' => $userToken));
@@ -117,8 +127,9 @@ class Authentication
 
     public function updateExpire()
     {
-        $userToken = $this->cookie->get(self::TOKEN_NAME);
-        $this->cookie->set(self::TOKEN_NAME, $userToken, strtotime('+14 days'));
+        $userToken = $this->cookies->get(self::TOKEN_NAME);
+
+        setcookie(self::TOKEN_NAME, $userToken, strtotime('+14 days'));
 
         /** @var UserAuthentication $existUserAuth */
         $existUserAuth = $this->userAuthEnt->findOneBy(array('token' => $userToken));
@@ -138,7 +149,7 @@ class Authentication
      */
     public function getActualToken()
     {
-        return $this->cookie->get(self::TOKEN_NAME);
+        return $this->cookies->get(self::TOKEN_NAME);
     }
 
     /**

@@ -8,6 +8,9 @@
 
 namespace App\Controller\Page;
 
+use Exception;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\Event;
 use App\Entity\Result;
@@ -23,8 +26,9 @@ class ActualController extends AbstractController
     const ACTUAL_IMAGE_RELATIVE_URL = '/src/view/image/aktual.jpg';
 
     /**
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @throws \Exception
+     * @Route(path="/", name="home", methods={"GET"})
+     * @return Response
+     * @throws Exception
      */
     public function indexAction()
     {
