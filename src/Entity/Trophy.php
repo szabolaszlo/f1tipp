@@ -37,7 +37,7 @@ class Trophy
     protected $event;
     
     /**
-     * @ORM\Column(name="type", type="string", columnDefinition="ENUM('gold', 'silver', 'bronze')")
+     * @ORM\Column(name="type", type="string")
      */
     protected $type;
 

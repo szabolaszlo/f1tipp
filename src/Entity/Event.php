@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="App\Repository\Event")
  * @ORM\Table(name="`event`")
  * @ORM\InheritanceType("SINGLE_TABLE")
- * @ORM\DiscriminatorColumn(name="event_type", type="string", columnDefinition="ENUM('race', 'qualify', 'event')"))
+ * @ORM\DiscriminatorColumn(name="event_type", type="string"))
  * @ORM\DiscriminatorMap({"event" = "Event", "race" = "Race", "qualify" = "Qualify"})
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
