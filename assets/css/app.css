@@ -1,12 +1,5 @@
 @import "~bootstrap/dist/css/bootstrap.min.css";
 
-body {
-    padding-top: 70px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
-    background-image: url('/assets/images/background.jpg?v=1502020232');
-    background-size: contain;
-    background-attachment: fixed;
-}
-
 footer {
     margin: 50px 0;
 }
