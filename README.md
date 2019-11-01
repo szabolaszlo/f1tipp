@@ -16,13 +16,13 @@ docker-compose up -d
 ```
 ## PHPMyAdmin
 http://localhost:8080/
-root - rooot
+root - root
 
 ## Maildev
 http://localhost:8001/#/
 
 ## Localhost
-http://localhost:8080/
+http://localhost/
 pointer to public directory in repository
 
 # Database
