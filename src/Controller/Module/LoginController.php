@@ -9,14 +9,11 @@
 
 namespace App\Controller\Module;
 
-use App\LegacyService\UserAuthentication\Authentication;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\User;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 /**
  * Class Login
@@ -25,97 +22,32 @@ use Symfony\Component\Routing\Annotation\Route;
 class LoginController extends AbstractController
 {
     /**
-     * @Route(path="login/index", methods={"GET"})
-     * @param SessionInterface $session
-     * @param Authentication $authentication
+     * @Route("/login", name="app_login")
+     * @param AuthenticationUtils $authenticationUtils
      * @return string|Response
      */
-    public function indexAction(SessionInterface $session, Authentication $authentication)
+    public function indexAction(AuthenticationUtils $authenticationUtils)
     {
         /** @var User $loggedUser */
-        $loggedUser = $authentication->getLoggedUser();
+        $loggedUser = $this->getUser();
 
         if ($loggedUser) {
-            $authentication->updateExpire();
-            return $this->loggedAction($loggedUser);
+            return $this->render('controller/module/logged.html.twig', ['name' => $loggedUser->getName()]);
         }
-        return $this->loginAction($session);
-    }
 
-    /**
-     * @Route(path="login/login", methods={"GET"})
-     * @param SessionInterface $session
-     * @return Response
-     */
-    public function loginAction(SessionInterface $session)
-    {
-        $data['error'] = array(
-            'error_user' => $session->get('error_user'),
-            'error_password' => $session->get('error_password')
-        );
+        $data['error'] = $authenticationUtils->getLastAuthenticationError();
 
-        $data['userName'] = $session->get('user_name');
-
-        $session->remove('error_user');
-        $session->remove('error_password');
-        $session->remove('user_name');
+        $data['last_username'] = $authenticationUtils->getLastUsername();
 
         return $this->render('controller/module/login.html.twig', $data);
     }
 
     /**
-     * @Route(path="login/logged", methods={"GET"})
-     * @param User $loggedUser
-     * @return string
+     * @Route("logout", name="app_logout")
+     * @throws \Exception
      */
-    public function loggedAction(User $loggedUser)
+    public function logout()
     {
-        $data['name'] = $loggedUser->getName();
-
-        return $this->render('controller/module/logged.html.twig', $data);
-    }
-
-    /**
-     * @Route(path="login/try_login", methods={"POST"})
-     * @param Request $request
-     * @param SessionInterface $session
-     * @param Authentication $authentication
-     * @return RedirectResponse
-     */
-    public function tryLoginAction(Request $request, SessionInterface $session, Authentication $authentication)
-    {
-        /** @var User $user */
-        $user = $this->getDoctrine()
-            ->getRepository('App\Entity\User')
-            ->findOneBy(array('name' => $request->get('user-name')));
-
-        if (!$user) {
-            $session->set('error_user', true);
-            return $this->redirectToRoute($request->get('actualPage', 'home'));
-        }
-
-        $storedPassword = $user->getPassword();
-
-        if (!password_verify($request->get('password'), $storedPassword)) {
-            $session->set('user_name', $user->getName());
-            $session->set('error_password', true);
-            return $this->redirectToRoute($request->get('actualPage', 'home'));
-        }
-
-        $authentication->setUserToLogged($user);
-
-        return $this->redirectToRoute($request->get('actualPage', 'home'));
-    }
-
-    /**
-     * @Route(path="login/logout", methods={"GET"})
-     * @param Request $request
-     * @param Authentication $authentication
-     * @return RedirectResponse
-     */
-    public function logoutAction(Request $request, Authentication $authentication)
-    {
-        $authentication->destroyToken();
-        return $this->redirectToRoute($request->get('actualPage', 'home'));
+        throw new \Exception('This method can be blank - it will be intercepted by the logout key on your firewall');
     }
 }

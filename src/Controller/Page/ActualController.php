@@ -28,11 +28,10 @@ class ActualController extends AbstractController
 
     /**
      * @Route(path="/", name="home", methods={"GET"})
-     * @param Authentication $authentication
      * @return Response
      * @throws Exception
      */
-    public function indexAction(Authentication $authentication)
+    public function indexAction()
     {
 //        $data['faceCoverImage'] = $this->entityManager
 //            ->getRepository(Setting::class)
@@ -50,7 +49,7 @@ class ActualController extends AbstractController
             $this->getDoctrine()->getRepository('App\Entity\Race')->getNextEvent()
         );
 
-        $user = $authentication->getLoggedUser();
+        $user = $this->getUser();
 
         $data['tables'] = array();
 

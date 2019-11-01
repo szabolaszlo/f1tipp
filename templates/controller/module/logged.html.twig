@@ -1,5 +1,4 @@
-<form id="signin" class="navbar-form navbar-right" role="form" method="post"
-      action="?module=login/logout&{{ actualPage }}">
+<form id="signin" class="navbar-form navbar-right" role="form" method="GET" action="{{ path('app_logout') }}">
     <input class="form-control" id="disabledInput" type="hidden" value="{{ name }}" disabled>
     <button class="btn btn-new color-one">
         <i class="glyphicon glyphicon-user color-one"></i>
