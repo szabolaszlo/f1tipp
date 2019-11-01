@@ -24,7 +24,7 @@
                     <a href="?page=betting/index">{{ 'nav_bet'|trans }}</a>
                 </li>
                 <li {{ current_path == 'home' ? 'class="active"' : '' }}>
-                    <a href="?page=actual/index">{{ 'nav_actual'|trans }}</a>
+                    <a href="{{ path('home') }}">{{ 'nav_actual'|trans }}</a>
                 </li>
                 <li class="dropdown {{ current_path == 'results' or current_path == 'trophies' ? 'active ' : '' }}">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="">{{ 'nav_results'|trans }}<span
@@ -35,8 +35,8 @@
                         <li><a href="?page=weekendPoints/index">{{ 'nav_results_alternative'|trans }}</a></li>
                     </ul>
                 </li>
-                <li {{ current_path == 'calendar' ? 'class="active"' : '' }}>
-                    <a href="?page=calendar/index">{{ 'nav_calendar'|trans }}</a>
+                <li {{ 'calendar'  in current_path  ? 'class="active"' : '' }}>
+                    <a href="{{ path('calendar') }}">{{ 'nav_calendar'|trans }}</a>
                 </li>
                 <li>
                     <a href="?page=information/index&information_title=szabalyzat">{{ 'nav_rules'|trans }}</a>

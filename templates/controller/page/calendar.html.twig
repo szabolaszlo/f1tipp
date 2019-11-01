@@ -1,34 +1,41 @@
-<div class="panel panel-default">
-    <div class="panel-heading text-center">
-        <strong>{{ language.get('nav_calendar') }}</strong>
-    </div>
-    <div style="text-align: center; margin-top: 15px;">
-        <a href="?page=calendar/qualify" class="btn btn-new {{ type == 'Qualify' ? 'active' : '' }}" role="button">
-            {{ language.get('general_qualifies') }}
-        </a>
-        <a href="?page=calendar/race" class="btn btn-new {{ type == 'Race' ? 'active' : '' }}" role="button">
-            {{ language.get('general_races') }}
-        </a>
-        <a href="?page=calendar/index" class="btn btn-new {{ type == 'Event' ? 'active' : '' }}" role="button">
-            {{ language.get('general_all') }}
-        </a>
-    </div>
-    <table class="table table-responsive table-striped">
-        <thead>
-        <tr>
-            <th><strong class="color-two">{{ language.get('calendar_type') }}</strong></th>
-            <th><strong class="color-two">{{ language.get('calendar_event') }}</strong></th>
-            <th><strong class="color-two">{{ language.get('calendar_time') }}</strong></th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for event in events %}
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="panel panel-default">
+        <div class="panel-heading text-center">
+            <strong>{{ 'nav_calendar'|trans }}</strong>
+        </div>
+        <div style="text-align: center; margin-top: 15px;">
+            <a href="{{ path('calendar_qualify') }}" class="btn btn-new {{ type == 'Qualify' ? 'active' : '' }}"
+               role="button">
+                {{ 'general_qualifies'|trans }}
+            </a>
+            <a href="{{ path('calendar_race') }}" class="btn btn-new {{ type == 'Race' ? 'active' : '' }}"
+               role="button">
+                {{ 'general_races'|trans }}
+            </a>
+            <a href="{{ path('calendar') }}" class="btn btn-new {{ type == 'Event' ? 'active' : '' }}" role="button">
+                {{ 'general_all'|trans }}
+            </a>
+        </div>
+        <table class="table table-responsive table-striped">
+            <thead>
             <tr>
-                <td><strong class="color-two">{{ event.getType() == 'race' ? language.get('general_race') : language.get('general_qualify') }}</strong></td>
-                <td><strong class="color-one">{{ event.getName() }}</strong></td>
-                <td><strong class="color-one">{{ event.getDateTime()|date("Y. M. d. - H:i") }}</strong></td>
+                <th><strong class="color-two">{{ 'calendar_type'|trans }}</strong></th>
+                <th><strong class="color-two">{{ 'calendar_event'|trans }}</strong></th>
+                <th><strong class="color-two">{{ 'calendar_time'|trans }}</strong></th>
             </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+            {% for event in events %}
+                <tr>
+                    <td>
+                        <strong class="color-two">{{ event.getType() == 'race' ? 'general_race'|trans : 'general_qualify'|trans }}</strong>
+                    </td>
+                    <td><strong class="color-one">{{ event.getName() }}</strong></td>
+                    <td><strong class="color-one">{{ event.getDateTime()|date("Y. M. d. - H:i") }}</strong></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

@@ -1,16 +1,10 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: Carlos
- * Date: 2016. 12. 19.
- * Time: 22:10
- */
-
 namespace App\Controller\Page\Calendar;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Entity\Repository\Event;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class Calendar
@@ -19,47 +13,38 @@ use App\Entity\Repository\Event;
 class Calendar extends AbstractController
 {
     /**
-     * @return mixed
+     * @Route("/calendar", name="calendar")
+     * @return Response
      */
     public function indexAction()
     {
-        /** @var Event $repository */
-        $repository = $this->entityManager->getRepository('App\Entity\Event');
-
-        $this->data['events'] = $repository->getRemainEvents();
-
-        $this->data['type'] = 'Event';
-
-        return $this->render();
+        return $this->render("controller/page/calendar.html.twig", [
+            'events' => $this->getDoctrine()->getRepository('App:Event')->getRemainEvents(),
+            'type' => 'Event'
+        ]);
     }
 
     /**
-     * @return string
+     * @Route("/calendar/qualify", name="calendar_qualify")
+     * @return Response
      */
     public function qualifyAction()
     {
-        /** @var Event $repository */
-        $repository = $this->entityManager->getRepository('App\Entity\Qualify');
-
-        $this->data['events'] = $repository->getRemainEvents();
-
-        $this->data['type'] = 'Qualify';
-
-        return $this->render();
+        return $this->render("controller/page/calendar.html.twig", [
+            'events' => $this->getDoctrine()->getRepository('App:Qualify')->getRemainEvents(),
+            'type' => 'Qualify'
+        ]);
     }
 
     /**
-     * @return string
+     * @Route("/calendar/race", name="calendar_race")
+     * @return Response
      */
     public function raceAction()
     {
-        /** @var Event $repository */
-        $repository = $this->entityManager->getRepository('App\Entity\Race');
-
-        $this->data['events'] = $repository->getRemainEvents();
-
-        $this->data['type'] = 'Race';
-
-        return $this->render();
+        return $this->render("controller/page/calendar.html.twig", [
+            'events' => $this->getDoctrine()->getRepository('App:Race')->getRemainEvents(),
+            'type' => 'Race'
+        ]);
     }
 }
