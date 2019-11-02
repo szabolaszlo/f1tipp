@@ -1,30 +1,24 @@
-{% set visibilityIcon = visibility == 'none' ? 'glyphicon-plus-sign' : 'glyphicon-minus-sign' %}
-<div class="panel panel-default remove-able-{{ id }}">
+<div class="panel panel-default">
     <div class="panel-heading text-center">
         {% block heading_title %}
-            <strong>{{ language.get(id ~ '_title') }}</strong>
-        {% endblock %}
-        {% block button_group %}
-            <div class="btn-group pull-right" style="margin-top: -2px">
-                <a id="{{ id }}" class="text-right glyphicon {{ visibilityIcon }} toggle" aria-hidden=true></a>
-                <span style="margin-left: .5em"></span>
-                <a id="{{ id }}" class="text-right glyphicon glyphicon-remove-sign remove" aria-hidden=true></a>
-            </div>
+            <strong>{{ (id ~ '_title')|trans }}</strong>
         {% endblock %}
         {% block button_details %}
-            {% if detailsLink %}
-            <div class="btn-group pull-left" style="margin-top: -2px">
-                <a id="{{ id }}"
-                   href="{{ detailsLink }}"
-                   title="{{ language.get('module_details') }}"
-                   class="text-right glyphicon glyphicon-info-sign"
-                   aria-hidden=true>
-                </a>
-            </div>
+            {% if details_link %}
+                <div class="btn-group pull-left" style="margin-top: -2px">
+                    <a id="{{ id }}"
+                       href="{{ details_link }}"
+                       title="{{ 'module_details'|trans }}"
+                       class="text-right glyphicon glyphicon-info-sign"
+                       aria-hidden=true>
+                    </a>
+                </div>
             {% endif %}
         {% endblock %}
     </div>
-    <div class="toggle-able-{{ id }}" style="display: {{ visibility ? visibility : 'block' }};">
+    <div>
         {% block body_content %}{% endblock %}
     </div>
 </div>
+{% block javascripts %}
+{% endblock %}

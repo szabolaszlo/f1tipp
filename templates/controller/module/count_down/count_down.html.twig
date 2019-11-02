@@ -1,4 +1,4 @@
-{% extends 'controller/module/base_module.tpl' %}
+{% extends 'controller/module/base_module.html.twig' %}
 
 {% block heading_title %}
     <strong>{{ events|first.name }}</strong>
@@ -9,14 +9,47 @@
         <table class="table small table-striped" style="margin-bottom: 0;">
             {% for event in events %}
                 <tr class="text-center">
-                    <td><strong>{{ language.get('general_' ~ event.id) }}</strong></td>
+                    <td><strong>{{ ('general_' ~ event.id)|trans }}</strong></td>
                     <td><strong>{{ event.date }}</strong></td>
                     <td><strong><span id="{{ event.id }}_counter" class="color-one"></span></strong></td>
                 </tr>
             {% endfor %}
         </table>
     </div>
+{% endblock %}
+{% block javascripts %}
     {% for event in events %}
-        {{ event.countDown|raw }}
+        <script type="text/javascript">
+            var {{ event.id }}_days = {{ event.remain_time.days }};
+            var {{ event.id }}_hours = {{ event.remain_time.h }};
+            var {{ event.id }}_minutes = {{ event.remain_time.i }};
+            var {{ event.id }}_seconds = {{ event.remain_time.s }};
+            var {{ event.id }}_invert = {{ event.remain_time.invert }};
+
+            function setCountDown_{{ event.id }}() {
+                {{ event.id }}_seconds--;
+                if ({{ event.id }}_seconds < 0) {
+                    {{ event.id }}_minutes--;
+                    {{ event.id }}_seconds = 59;
+                }
+                if ({{ event.id }}_minutes < 0) {
+                    {{ event.id }}_hours--;
+                    {{ event.id }}_minutes = 59;
+                }
+                if ({{ event.id }}_hours < 0) {
+                    {{ event.id }}_days--;
+                    {{ event.id }}_hours = 23;
+                }
+                if ({{ event.id }}_days >= 0 && {{ event.id }}_invert != 1) {
+                    document.getElementById("{{ event.id }}_counter").innerHTML =
+                            {{ event.id }}_days + "n " + {{ event.id }}_hours + "ó " + {{ event.id }}_minutes + "p " + {{ event.id }}_seconds + "mp";
+                } else {
+                    document.getElementById("{{ event.id }}_counter").innerHTML = "Lejárt a Tippelési időszak!";
+                }
+                setTimeout("setCountDown_{{ event.id }}()", 1000);
+            }
+
+            setCountDown_{{ event.id }}();
+        </script>
     {% endfor %}
 {% endblock %}

@@ -22,7 +22,8 @@
 
         <!-- Sidebar Widgets Column -->
         <div class="col-md-4">
-            {#            {{ modules.countDown }}#}
+            {{ render(controller('App\\Controller\\Module\\CountDownController::indexAction')) }}
+
             <div id="trophies-result-table">
                 {#                {{ modules.trophies }}#}
             </div>
