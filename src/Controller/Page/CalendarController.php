@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Controller\Page\Calendar;
+namespace App\Controller\Page;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class Calendar
- * @package App\Controller\Page\Calendar
+ * Class CalendarController
+ * @package App\Controller\Page
  */
-class Calendar extends AbstractController
+class CalendarController extends AbstractController
 {
     /**
      * @Route("/calendar", name="calendar")
