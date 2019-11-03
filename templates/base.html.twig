@@ -25,7 +25,7 @@
             {{ render(controller('App\\Controller\\Module\\CountDownController::indexAction')) }}
 
             <div id="trophies-result-table">
-                {#                {{ modules.trophies }}#}
+                {{ render(controller('App\\Controller\\Module\\TrophiesController::indexAction')) }}
             </div>
             <div id="user-championship-result-table">
                 {#                {{ modules.userChampionship }}#}

@@ -1,17 +1,19 @@
+{% extends ('base.html.twig') %}
+{% block body %}
 <div class="panel panel-default">
     <div class="panel-heading text-center">
-        <strong>{{ language.get('trophy_trophies') }}</strong>
+        <strong>{{ 'trophy_trophies'|trans }}</strong>
     </div>
     <table class="table table-striped">
         <thead>
         <tr>
-            <th><strong class="color-two">{{ language.get(id ~ '_name') }}</strong></th>
-            <th><strong class="color-two">{{ language.get(id ~ '_trophies') }}</strong></th>
-            <th><strong class="color-two">{{ language.get(id ~ '_virtual_point') }}</strong></th>
+            <th><strong class="color-two">{{ (id ~ '_name')|trans }}</strong></th>
+            <th><strong class="color-two">{{ (id ~ '_trophies')|trans }}</strong></th>
+            <th><strong class="color-two">{{ (id ~ '_virtual_point')|trans }}</strong></th>
         </tr>
         </thead>
         <tbody>
-        {% for userName, userTrophy in userTrophies %}
+        {% for userName, userTrophy in user_trophies %}
             <tr>
                 <td>
                     <strong class="color-one">{{ userName }}</strong>
@@ -19,8 +21,8 @@
                 <td>
                     {% for trophyKey, trophy in userTrophy %}
                         {% for trophyy in trophy %}
-                            <span title="{{ language.get('trophy_type_' ~ trophyKey) }}">
-                                    <img src="{{ domain }}/src/view/image/trophy_{{ trophyKey }}.png?v=1502019288"
+                            <span title="{{ ('trophy_type_' ~ trophyKey)|trans }}">
+                                    <img src="{{ asset('build/images/trophy_' ~  trophyKey ~ '.png') }}"
                                          height="18">
                                 </span>
                         {% endfor %}
@@ -34,15 +36,15 @@
         {% endfor %}
         <tr>
             <td colspan="3" class="text-center" style="padding: 15px;">
-                <strong class="color-two">{{ language.get(id ~ '_description') }}</strong>
+                <strong class="color-two">{{ (id ~ '_description')|trans }}</strong>
             </td>
         </tr>
         <tr>
             <td colspan="3" class="text-center" style="padding: 15px;">
-                {% for trophyType, trophyPoint in trophyAttributes %}
+                {% for trophyType, trophyPoint in trophy_attributes %}
                     <span style="padding-left: 15px;padding-right: 15px">
-                        <span title="{{ language.get('trophy_type_' ~ trophyType) }}">
-                                    <img src="{{ domain }}/src/view/image/trophy_{{ trophyType }}.png?v=1502019288"
+                        <span title="{{ ('trophy_type_' ~ trophyType)|trans }}">
+                                    <img src="{{ asset('build/images/trophy_' ~  trophyType ~ '.png') }}"
                                          height="18">
                         </span><strong> = {{ trophyPoint }}</strong>
                             </span>
@@ -52,3 +54,4 @@
         </tbody>
     </table>
 </div>
+{% endblock %}
