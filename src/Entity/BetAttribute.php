@@ -41,7 +41,7 @@ class BetAttribute
     protected $value;
 
     /**
-     * @var int
+     * @ORM\Column(name="`point`", type="integer", length=2, nullable=true)
      */
     protected $point = 0;
 
