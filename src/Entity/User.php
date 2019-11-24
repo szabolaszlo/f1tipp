@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -77,17 +76,11 @@ class User implements UserInterface
     protected $pointDifference = '';
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\UserEventResult", mappedBy="user", orphanRemoval=true)
-     */
-    private $userEventResults;
-
-    /**
      * User constructor.
      */
     public function __construct()
     {
         $this->skippedNews = new ArrayCollection();
-        $this->userEventResults = new ArrayCollection();
     }
 
     /**
@@ -285,36 +278,5 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
-    }
-
-    /**
-     * @return Collection|UserEventResult[]
-     */
-    public function getUserEventResults(): Collection
-    {
-        return $this->userEventResults;
-    }
-
-    public function addUserEventResult(UserEventResult $userEventResult): self
-    {
-        if (!$this->userEventResults->contains($userEventResult)) {
-            $this->userEventResults[] = $userEventResult;
-            $userEventResult->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUserEventResult(UserEventResult $userEventResult): self
-    {
-        if ($this->userEventResults->contains($userEventResult)) {
-            $this->userEventResults->removeElement($userEventResult);
-            // set the owning side to null (unless already changed)
-            if ($userEventResult->getUser() === $this) {
-                $userEventResult->setUser(null);
-            }
-        }
-
-        return $this;
     }
 }

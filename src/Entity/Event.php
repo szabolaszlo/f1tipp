@@ -2,8 +2,6 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -37,16 +35,6 @@ class Event
      * @ORM\Column(name="date_time", type="datetime", nullable=false)
      */
     protected $date_time;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\UserEventResult", mappedBy="event", orphanRemoval=true)
-     */
-    private $userEventResults;
-
-    public function __construct()
-    {
-        $this->userEventResults = new ArrayCollection();
-    }
 
     /**
      * @return mixed
@@ -120,36 +108,5 @@ class Event
     public function getType()
     {
         return lcfirst(substr(strrchr(get_class($this), "\\"), 1));
-    }
-
-    /**
-     * @return Collection|UserEventResult[]
-     */
-    public function getUserEventResults(): Collection
-    {
-        return $this->userEventResults;
-    }
-
-    public function addUserEventResult(UserEventResult $userEventResult): self
-    {
-        if (!$this->userEventResults->contains($userEventResult)) {
-            $this->userEventResults[] = $userEventResult;
-            $userEventResult->setEvent($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUserEventResult(UserEventResult $userEventResult): self
-    {
-        if ($this->userEventResults->contains($userEventResult)) {
-            $this->userEventResults->removeElement($userEventResult);
-            // set the owning side to null (unless already changed)
-            if ($userEventResult->getEvent() === $this) {
-                $userEventResult->setEvent(null);
-            }
-        }
-
-        return $this;
     }
 }
