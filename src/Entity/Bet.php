@@ -12,7 +12,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\Bet")
  * @ORM\Table(name="`bet`")
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
@@ -46,6 +46,11 @@ class Bet
      * @var int
      */
     protected $point = 0;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $pointSummary;
 
     /**
      * Result constructor.
@@ -123,7 +128,7 @@ class Bet
                 return $attribute->getValue();
             }
         }
-        
+
         return false;
     }
 
@@ -158,5 +163,17 @@ class Bet
     public function setPoint($point)
     {
         $this->point = $point;
+    }
+
+    public function getPointSummary(): ?int
+    {
+        return $this->pointSummary;
+    }
+
+    public function setPointSummary(?int $pointSummary): self
+    {
+        $this->pointSummary = $pointSummary;
+
+        return $this;
     }
 }

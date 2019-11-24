@@ -6,16 +6,16 @@
  * Time: 22:41
  */
 
-namespace App\LegacyService\Rule\RuleType;
+namespace App\Rule\RuleType;
 
-use App\LegacyService\Rule\Attribute\Attribute;
-use App\LegacyService\Rule\Attribute\AttributeFactory;
+use App\Rule\Attribute\Attribute;
+use App\Rule\Attribute\AttributeFactory;
 
 /**
  * Class ARule
- * @package App\LegacyService\Rule
+ * @package App\Rule
  */
-abstract class ARuleType implements IRuleType
+abstract class ARule implements IRule
 {
     /**
      * @var array(id, type, highPoint, lowPoint)
@@ -28,18 +28,17 @@ abstract class ARuleType implements IRuleType
     protected $attributes = array();
 
     /**
-     * @var AttributeFactory
+     * @var string
      */
-    protected $attributeFactory;
+    protected $type = '';
 
     /**
      * ARule constructor.
+     * @param AttributeFactory $attributeFactory
      */
-    public function __construct()
+    public function __construct(AttributeFactory $attributeFactory)
     {
-        $this->attributeFactory = new AttributeFactory();
-
-        $this->attributes = $this->attributeFactory->createAttributes($this->betAbleAttributes);
+        $this->attributes = $attributeFactory->createAttributes($this->betAbleAttributes);
     }
 
     /**
@@ -59,5 +58,13 @@ abstract class ARuleType implements IRuleType
     public function getAllAttribute()
     {
         return $this->attributes;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->type;
     }
 }

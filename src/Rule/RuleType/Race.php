@@ -7,14 +7,19 @@
  * Time: 21:32
  */
 
-namespace App\LegacyService\Rule\RuleType;
+namespace App\Rule\RuleType;
 
 /**
  * Class Qualify
- * @package App\LegacyService\Rule
+ * @package App\Rule
  */
-class Race extends ARuleType
+class Race extends ARule
 {
+    /**
+     * @var string
+     */
+    protected $type = 'race';
+
     /**
      * @var array
      */

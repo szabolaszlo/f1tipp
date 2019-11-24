@@ -46,7 +46,7 @@ class BetAttribute
     protected $point = 0;
 
     /**
-     * @var string
+     * @ORM\Column(name="`class`", type="string", length=20, nullable=true)
      */
     protected $class = '';
 

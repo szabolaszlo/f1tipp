@@ -5,16 +5,21 @@
  * Date: 2016. 12. 20.
  * Time: 22:44
  */
-namespace App\LegacyService\Rule\RuleType;
+namespace App\Rule\RuleType;
 
-use App\LegacyService\Rule\Attribute\Attribute;
+use App\Rule\Attribute\Attribute;
 
 /**
  * Class Qualify
- * @package App\LegacyService\Rule
+ * @package App\Rule
  */
-interface IRuleType
+interface IRule
 {
+    /**
+     * @return string
+     */
+    public function getType();
+
     /**
      * @param $attributeId
      * @return Attribute

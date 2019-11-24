@@ -2,6 +2,8 @@
 
 namespace App\Calculator\Type;
 
+use App\Entity\Event;
+
 /**
  * Interface ICalculator
  * @package App\Calculator\Type
@@ -14,9 +16,10 @@ interface ICalculator
     public function getType();
 
     /**
-     * @return boolean
+     * @param Event $firstNotCalculatedEvent
+     * @return bool
      */
-    public function isNeedCalculate();
+    public function isNeedCalculate(Event $firstNotCalculatedEvent);
 
     public function calculate();
 }

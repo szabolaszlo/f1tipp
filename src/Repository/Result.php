@@ -8,6 +8,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Event;
 use Doctrine\ORM\EntityRepository;
 use App\Entity\Result as ResultEnt;
 
@@ -37,5 +38,31 @@ class Result extends EntityRepository
         }
 
         return $results;
+    }
+
+    /**
+     * @return Event
+     */
+    public function getFirstNotCalculatedEvent()
+    {
+        $firstNotCalculatedResult = $this->findOneBy(
+            ['isCalculated' => false],
+            ['event' => 'asc']
+        );
+
+        if ($firstNotCalculatedResult instanceof ResultEnt) {
+            return $firstNotCalculatedResult->getEvent();
+        }
+
+        return new Event();
+    }
+
+    /**
+     * @param Event $event
+     * @return ResultEnt|null
+     */
+    public function getResultByEvent(Event $event)
+    {
+        return $this->findOneBy(['event' => $event]);
     }
 }

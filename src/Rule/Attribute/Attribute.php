@@ -7,11 +7,11 @@
  * Time: 22:05
  */
 
-namespace App\LegacyService\Rule\Attribute;
+namespace App\Rule\Attribute;
 
 /**
  * Class Attribute
- * @package App\LegacyService\Rule\Attribute
+ * @package App\Rule\Attribute
  */
 class Attribute
 {

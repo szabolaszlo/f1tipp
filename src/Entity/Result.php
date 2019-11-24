@@ -30,11 +30,16 @@ class Result
      * @ORM\JoinColumn(name="event", referencedColumnName="id")
      */
     protected $event;
-
+    
     /**
      * @ORM\OneToMany(targetEntity="ResultAttribute", mappedBy="result", cascade={"persist","remove"})
      */
     protected $attributes;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isCalculated;
 
     /**
      * Result constructor.
@@ -131,5 +136,17 @@ class Result
         }
 
         return false;
+    }
+
+    public function getIsCalculated(): ?bool
+    {
+        return $this->isCalculated;
+    }
+
+    public function setIsCalculated(bool $isCalculated): self
+    {
+        $this->isCalculated = $isCalculated;
+
+        return $this;
     }
 }
