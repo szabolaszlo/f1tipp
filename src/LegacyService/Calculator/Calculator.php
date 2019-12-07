@@ -153,7 +153,7 @@ class Calculator implements ICalculator
     public function calculateUserPointsByCompleteWeekend(Race $race)
     {
         $qualify = $this->entityManager->getRepository('App\Entity\Qualify')
-            ->findOneBy(array('eventOrder' => $race->getEventOrder()));
+            ->findOneBy(array('eventOrder' => $race->getWeekendOrder()));
 
         $results = array(
             $this->entityManager->getRepository('App\Entity\Result')->findOneBy(array('event' => $qualify)),

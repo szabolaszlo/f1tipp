@@ -22,9 +22,9 @@ class Event
     protected $id;
 
     /**
-     * @ORM\Column(name="event_order", type="integer", length=2, nullable=false)
+     * @ORM\Column(name="weekend_order", type="integer", length=2, nullable=false)
      */
-    protected $eventOrder;
+    protected $weekendOrder;
 
     /**
      * @ORM\Column(name="name", type="string", length=45, nullable=false)
@@ -55,17 +55,17 @@ class Event
     /**
      * @return mixed
      */
-    public function getEventOrder()
+    public function getWeekendOrder()
     {
-        return $this->eventOrder;
+        return $this->weekendOrder;
     }
 
     /**
-     * @param mixed $eventOrder
+     * @param mixed $weekendOrder
      */
-    public function setEventOrder($eventOrder)
+    public function setWeekendOrder($weekendOrder)
     {
-        $this->eventOrder = $eventOrder;
+        $this->weekendOrder = $weekendOrder;
     }
 
     /**
@@ -101,12 +101,10 @@ class Event
     }
 
     /**
-     * Sorry this WTF,
-     * but Doctrine can't able to access the discriminator column
-     * @return string ('qualify'|'race')
+     * @return string
      */
     public function getType()
     {
-        return lcfirst(substr(strrchr(get_class($this), "\\"), 1));
+        return 'event';
     }
 }

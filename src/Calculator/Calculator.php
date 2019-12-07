@@ -4,6 +4,8 @@ namespace App\Calculator;
 
 use App\Calculator\Type\ICalculator;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 
 /**
  * Class Calculator
@@ -32,13 +34,15 @@ class Calculator
         $this->em = $em;
     }
 
+    /**
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
     public function calculate()
     {
-        $firstNotCalculatedEvent = $this->em->getRepository("App:Result")->getFirstNotCalculatedEvent();
-
         /** @var ICalculator $calculator */
         foreach ($this->calculatorRegistry->getCalculators() as $calculator) {
-            if ($calculator->isNeedCalculate($firstNotCalculatedEvent)) {
+            if ($calculator->isNeedCalculate()) {
                 $calculator->calculate();
             }
         }

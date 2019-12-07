@@ -29,6 +29,15 @@ class Race extends Event
     {
         $this->trophies = new ArrayCollection();
     }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return 'race';
+    }
+
     /**
      * @return mixed
      */

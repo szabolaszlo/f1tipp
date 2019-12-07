@@ -16,5 +16,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Qualify extends Event
 {
-
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return 'qualify';
+    }
 }

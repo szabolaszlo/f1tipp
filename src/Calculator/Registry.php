@@ -17,10 +17,15 @@ class Registry
 
     /**
      * @param ICalculator $calculator
+     * @throws \Exception
      */
     public function addCalculator(ICalculator $calculator)
     {
-        $this->calculators[$calculator->getType()] = $calculator;
+        if(isset($this->calculators[$calculator->getSortOrder()])){
+            throw new \Exception("The Calculators must have to different order");
+        }
+
+        $this->calculators[$calculator->getSortOrder()] = $calculator;
     }
 
     /**

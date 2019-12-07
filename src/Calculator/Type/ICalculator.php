@@ -11,15 +11,14 @@ use App\Entity\Event;
 interface ICalculator
 {
     /**
-     * @return string
+     * @return int
      */
-    public function getType();
+    public function getSortOrder();
 
     /**
-     * @param Event $firstNotCalculatedEvent
      * @return bool
      */
-    public function isNeedCalculate(Event $firstNotCalculatedEvent);
+    public function isNeedCalculate();
 
     public function calculate();
 }

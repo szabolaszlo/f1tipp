@@ -6,8 +6,10 @@
  * Date: 2016. 12. 20.
  * Time: 18:15
  */
+
 namespace App\Repository;
 
+use App\Entity\Event as EventEnt;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -80,5 +82,16 @@ class Event extends EntityRepository
             );
         }
         return $remainEvents;
+    }
+
+    /**
+     * @param EventEnt $event
+     * @return array
+     */
+    public function getWeekendEvents(EventEnt $event)
+    {
+        return $this->findBy(
+            ['weekendOrder' => $event->getWeekendOrder()]
+        );
     }
 }

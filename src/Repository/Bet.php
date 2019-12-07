@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -17,5 +18,18 @@ class Bet extends EntityRepository
     public function getBetsByEvent($event)
     {
         return $this->findBy(['event_id' => $event]);
+    }
+
+    /**
+     * @param User $user
+     * @param array $events
+     * @return array
+     */
+    public function getBetByUserAndEvents(User $user, array $events)
+    {
+        return $this->findBy([
+            'user_id' => $user,
+            'event_id' => $events
+        ]);
     }
 }

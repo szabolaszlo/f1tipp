@@ -8,7 +8,7 @@
 
 namespace App\Controller\Page;
 
-use App\LegacyService\UserAuthentication\Authentication;
+use App\Calculator\Calculator;
 use Exception;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -31,7 +31,7 @@ class ActualController extends AbstractController
      * @return Response
      * @throws Exception
      */
-    public function indexAction()
+    public function indexAction(Calculator $calculator)
     {
 //        $data['faceCoverImage'] = $this->entityManager
 //            ->getRepository(Setting::class)
@@ -49,6 +49,7 @@ class ActualController extends AbstractController
             $this->getDoctrine()->getRepository('App\Entity\Race')->getNextEvent()
         );
 
+        $calculator->calculate();
         $user = $this->getUser();
 
         $data['tables'] = array();
