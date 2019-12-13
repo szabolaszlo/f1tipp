@@ -3,7 +3,6 @@
 namespace App\Calculator\Type;
 
 use App\Entity\Bet;
-use App\Entity\Event;
 use App\Entity\Race;
 use App\Entity\Trophy;
 use App\Entity\User;
@@ -26,9 +25,9 @@ class TrophyCalculator implements ICalculator
     protected $em;
 
     /**
-     * @var Event
+     * @var
      */
-    protected $firstNotCalculatedEvent;
+    protected $calculatedRacesWithoutTrophies;
 
     /**
      * TrophyCalculator constructor.
@@ -52,23 +51,34 @@ class TrophyCalculator implements ICalculator
      */
     public function isNeedCalculate()
     {
-        $this->firstNotCalculatedEvent = $firstNotCalculatedEvent;
-        return (bool)($firstNotCalculatedEvent->getType() === 'race');
-    }
-
-    public function calculate()
-    {
-        $users = $this->collectUsersWeekendPoints();
-        $podium = $this->getPodiumUsers($users);
-        $this->setTrophiesByPodium($this->firstNotCalculatedEvent, $podium);
+        $this->calculatedRacesWithoutTrophies = $this->em
+            ->getRepository('App:Result')
+            ->getCalculatedRacesWithoutTrophies();
+        return (bool)(count($this->calculatedRacesWithoutTrophies));
     }
 
     /**
+     * @throws ORMException
+     */
+    public function calculate()
+    {
+        /** @var Race $race */
+        foreach ($this->calculatedRacesWithoutTrophies as $race){
+            $users = $this->collectUsersWeekendPoints($race);
+            $podium = $this->getPodiumUsers($users);
+            $this->setTrophiesByPodium($race, $podium);
+        }
+
+        $this->em->flush();
+    }
+
+    /**
+     * @param Race $race
      * @return User[]|array|object[]
      */
-    protected function collectUsersWeekendPoints()
+    protected function collectUsersWeekendPoints(Race $race)
     {
-        $weekendEvents = $this->em->getRepository("App:Event")->getWeekendEvents($this->firstNotCalculatedEvent);
+        $weekendEvents = $this->em->getRepository("App:Event")->getWeekendEvents($race);
         $users = $this->em->getRepository('App\Entity\User')->findAll();
 
         foreach ($users as $user) {
@@ -77,7 +87,7 @@ class TrophyCalculator implements ICalculator
 
             /** @var Bet $bet */
             foreach ($bets as $bet) {
-                $userPoints += $bet->getPoint();
+                $userPoints += $bet->getPointSummary();
             }
             $user->setPoint($userPoints);
         }
@@ -103,7 +113,6 @@ class TrophyCalculator implements ICalculator
             $userPoints[$user->getId()] = $user->getPoint();
         }
 
-        var_dump($userPoints);die();
         foreach ($podium as $key => $value) {
             $podium[$key] = array_flip(array_keys($userPoints, max($userPoints)));
             foreach ($podium[$key] as $userId => $pValue) {

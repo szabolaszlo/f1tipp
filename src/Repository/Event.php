@@ -41,7 +41,7 @@ class Event extends EntityRepository
             ->getResult();
 
         if (empty($nextEvent) || !$nextEvent) {
-            $nextEvent = parent::findBy(array(), array('eventOrder' => 'DESC'), 1);
+            $nextEvent = parent::findBy(array(), array('weekendOrder' => 'DESC'), 1);
         }
 
         $nextEvent = reset($nextEvent);

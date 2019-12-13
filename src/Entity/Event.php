@@ -24,7 +24,7 @@ class Event
     /**
      * @ORM\Column(name="weekend_order", type="integer", length=2, nullable=false)
      */
-    protected $weekendOrder;
+    protected $weekendOrder = 1;
 
     /**
      * @ORM\Column(name="name", type="string", length=45, nullable=false)

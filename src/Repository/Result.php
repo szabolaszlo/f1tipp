@@ -9,8 +9,10 @@
 namespace App\Repository;
 
 use App\Entity\Event;
+use App\Entity\Race;
 use Doctrine\ORM\EntityRepository;
 use App\Entity\Result as ResultEnt;
+use Doctrine\ORM\Query\Expr\Join;
 
 /**
  * Class Result
@@ -41,20 +43,38 @@ class Result extends EntityRepository
     }
 
     /**
-     * @return Event
+     * @return mixed
      */
-    public function getFirstNotCalculatedEvent()
+    public function getCalculatedRacesWithoutTrophies()
     {
-        $firstNotCalculatedResult = $this->findOneBy(
-            ['isCalculated' => false],
-            ['event' => 'asc']
-        );
+        $result = $this->createQueryBuilder('result')
+            ->select('race')
+            ->innerJoin('App:Race', 'race', Join::WITH, 'result.event = race.id')
+            ->where('result.isCalculated = 1')
+            ->getQuery()
+            ->getResult();
 
-        if ($firstNotCalculatedResult instanceof ResultEnt) {
-            return $firstNotCalculatedResult->getEvent();
+        /** @var Race $race */
+        foreach ($result as $key => $race) {
+            if (empty($race->getTrophies())) {
+                unset($result[$key]);
+            }
         }
 
-        return new Event();
+        return $result;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNotCalculatedEvents()
+    {
+        return $this->createQueryBuilder('result')
+            ->select('event')
+            ->innerJoin('App:Event', 'event', Join::WITH, 'result.event = event.id')
+            ->where('result.isCalculated != 1')
+            ->getQuery()
+            ->getResult();
     }
 
     /**

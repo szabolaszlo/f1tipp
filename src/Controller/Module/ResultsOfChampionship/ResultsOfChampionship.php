@@ -37,11 +37,11 @@ class ResultsOfChampionship extends AbstractController
 
         $constructResponse = json_decode(file_get_contents(self::CONSTRUCT_JSON_PATH), true);
 
-        $eventOrder = $driverResponse['MRData']['StandingsTable']['StandingsLists'][0]['round'];
+        $weekendOrder = $driverResponse['MRData']['StandingsTable']['StandingsLists'][0]['round'];
 
         $event = $this->entityManager
             ->getRepository('App\Entity\Race')
-            ->findOneBy(array('eventOrder' => $eventOrder));
+            ->findOneBy(array('weekendOrder' => $weekendOrder));
 
         $this->data['event'] = $event;
 

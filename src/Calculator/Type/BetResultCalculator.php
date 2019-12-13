@@ -34,7 +34,7 @@ class BetResultCalculator implements ICalculator
     /**
      * @var Event
      */
-    protected $firstNotCalculatedEvent;
+    protected $notCalculatedEvents;
 
     /**
      * BetResultCalculator constructor.
@@ -60,7 +60,8 @@ class BetResultCalculator implements ICalculator
      */
     public function isNeedCalculate()
     {
-        return (bool)($this->em->getRepository("App:Result")->getFirstNotCalculatedEvent()->getId());
+        $this->notCalculatedEvents = $this->em->getRepository("App:Result")->getNotCalculatedEvents();
+        return (bool)(count($this->notCalculatedEvents));
     }
 
     /**
@@ -68,12 +69,9 @@ class BetResultCalculator implements ICalculator
      */
     public function calculate()
     {
-        $firstNotCalculatedEvent = $this->em->getRepository("App:Result")->getFirstNotCalculatedEvent();
-
-        while ($firstNotCalculatedEvent->getId()) {
-
-            $bets = $this->em->getRepository('App:Bet')->getBetsByEvent($this->firstNotCalculatedEvent);
-            $result = $this->em->getRepository('App:Result')->getResultByEvent($firstNotCalculatedEvent);
+        foreach ($this->notCalculatedEvents as $event) {
+            $bets = $this->em->getRepository('App:Bet')->getBetsByEvent($event);
+            $result = $this->em->getRepository('App:Result')->getResultByEvent($event);
 
             /** @var Bet $bet */
             foreach ($bets as $bet) {
@@ -84,11 +82,9 @@ class BetResultCalculator implements ICalculator
 
             $result->setIsCalculated(true);
             $this->em->persist($result);
-            $this->em->flush();
-
-            $firstNotCalculatedEvent = $this->em->getRepository('App:Result')->getFirstNotCalculatedEvent();
-
         }
+
+        $this->em->flush();
     }
 
     /**
