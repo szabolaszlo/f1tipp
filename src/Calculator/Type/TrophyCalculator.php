@@ -6,37 +6,22 @@ use App\Entity\Bet;
 use App\Entity\Race;
 use App\Entity\Trophy;
 use App\Entity\User;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
 
 /**
  * Class TrophyCalculator
  * @package App\Calculator\Type
  */
-class TrophyCalculator implements ICalculator
+class TrophyCalculator extends ACalculator
 {
     const PODIUM_FIRST = 'gold';
     const PODIUM_SECOND = 'silver';
     const PODIUM_THIRD = 'bronze';
 
     /**
-     * @var EntityManager
-     */
-    protected $em;
-
-    /**
      * @var
      */
     protected $calculatedRacesWithoutTrophies;
-
-    /**
-     * TrophyCalculator constructor.
-     * @param EntityManager $em
-     */
-    public function __construct(EntityManager $em)
-    {
-        $this->em = $em;
-    }
 
     /**
      * @return string

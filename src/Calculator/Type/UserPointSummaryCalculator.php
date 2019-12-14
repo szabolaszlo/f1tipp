@@ -4,7 +4,6 @@ namespace App\Calculator\Type;
 
 use App\Entity\Bet;
 use App\Entity\User;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 
@@ -12,22 +11,8 @@ use Doctrine\ORM\ORMException;
  * Class UserPointSummaryCalculator
  * @package App\Calculator\Type
  */
-class UserPointSummaryCalculator implements ICalculator
+class UserPointSummaryCalculator extends ACalculator
 {
-    /**
-     * @var EntityManager
-     */
-    protected $em;
-
-    /**
-     * UserPointSummaryCalculator constructor.
-     * @param EntityManager $em
-     */
-    public function __construct(EntityManager $em)
-    {
-        $this->em = $em;
-    }
-
     /**
      * @return int
      */

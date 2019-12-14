@@ -79,8 +79,8 @@
       <trans-unit id="result_bets"><source>result_bets</source><target>Tippek: </target></trans-unit>
       <trans-unit id="result_no_betting_users"><source>result_no_betting_users</source><target>Tippnélküliek: </target></trans-unit>
       <trans-unit id="userChampionship_title"><source>userChampionship_title</source><target>EGYÉNI PONTVERSENY</target></trans-unit>
-      <trans-unit id="userChampionship_best_of_race"><source>userChampionship_best_of_race</source><target>Futamok Legjobbja:</target></trans-unit>
-      <trans-unit id="userChampionship_best_of_qualify"><source>userChampionship_best_of_qualify</source><target>Időmérők Legjobbja:</target></trans-unit>
+      <trans-unit id="userChampionship_best_of_race_bets"><source>userChampionship_best_of_race_bets</source><target>Futamok Legjobbjai (TOP 3):</target></trans-unit>
+      <trans-unit id="userChampionship_best_of_qualify_bets"><source>userChampionship_best_of_qualify_bets</source><target>Időmérők Legjobbjai (TOP 3):</target></trans-unit>
       <trans-unit id="userChampionship_no_results"><source>userChampionship_no_results</source><target>Még nincsenek eredmények, nézz vissza az első időmérő után!</target></trans-unit>
       <trans-unit id="resultsOfChampionship_title"><source>resultsOfChampionship_title</source><target>VB ÁLLÁS</target></trans-unit>
       <trans-unit id="resultsOfChampionship_construct"><source>resultsOfChampionship_construct</source><target>Csapat</target></trans-unit>

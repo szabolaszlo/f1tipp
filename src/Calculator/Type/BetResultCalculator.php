@@ -15,16 +15,11 @@ use Doctrine\ORM\ORMException;
  * Class BetResultCalculator
  * @package App\Calculator\Type
  */
-class BetResultCalculator implements ICalculator
+class BetResultCalculator extends ACalculator
 {
     const HIGH_CLASS = 'bet-high';
 
     const LOW_CLASS = 'bet-low';
-
-    /**
-     * @var EntityManager
-     */
-    protected $em;
 
     /**
      * @var RuleRegistry
@@ -43,8 +38,8 @@ class BetResultCalculator implements ICalculator
      */
     public function __construct(EntityManager $em, RuleRegistry $ruleRegistry)
     {
-        $this->em = $em;
         $this->ruleRegistry = $ruleRegistry;
+        parent::__construct($em);
     }
 
     /**

@@ -2,8 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\Race;
 use App\Entity\User;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 
 /**
  * Class Bet
@@ -40,5 +42,31 @@ class Bet extends EntityRepository
             'user_id' => $user,
             'event_id' => $events
         ]);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTopRaceBets()
+    {
+        return $this->createQueryBuilder('bet')
+            ->innerJoin('App:Race', 'race', Join::WITH, 'bet.event_id = race.id')
+            ->orderBy('bet.pointSummary', 'DESC')
+            ->getQuery()
+            ->setMaxResults(3)
+            ->getResult();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTopQualifyBets()
+    {
+        return $this->createQueryBuilder('bet')
+            ->innerJoin('App:Qualify', 'qualify', Join::WITH, 'bet.event_id = qualify.id')
+            ->orderBy('bet.pointSummary', 'DESC')
+            ->getQuery()
+            ->setMaxResults(3)
+            ->getResult();
     }
 }
