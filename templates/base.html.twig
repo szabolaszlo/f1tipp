@@ -37,7 +37,7 @@
             {#            {% if page.id != 'actual' %}#}
             {#                {{ modules.messageWall }}#}
             {#            {% endif %}#}
-            {#            {{ modules.resultsOfChampionship }}#}
+            {{ render(controller('App\\Controller\\Module\\ResultsOfChampionship::indexAction')) }}
             {#            {{ modules.userActivity }}#}
             {#            {{ modules.tableRefresh }}#}
         </div>

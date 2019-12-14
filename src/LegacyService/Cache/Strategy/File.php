@@ -9,6 +9,8 @@
 
 namespace App\LegacyService\Cache\Strategy;
 
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+
 /**
  * Class File
  * @package App\LegacyService\Cache\Strategy
@@ -22,6 +24,7 @@ class File implements IStrategy
      */
     public function __construct()
     {
+        $fileSystem = new FilesystemAdapter();
         $this->cacheDir = $_SERVER['DOCUMENT_ROOT'] . '/cache/app';
 
         if (!is_dir($this->cacheDir)) {

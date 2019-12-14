@@ -1,16 +1,16 @@
-{% extends 'controller/module/base_module.tpl' %}
+{% extends 'controller/module/base_module.html.twig' %}
 {% block heading_title %}
     {% set title = event.getName|length > 20 ? event.getName|split(' - ').0 : event.getName %}
-    <strong >{{ title }} - {{ language.get(id ~ '_title') }}</strong>
+    <strong >{{ title }} - {{ (id ~ '_title')|trans }}</strong>
 {% endblock %}
 {% block body_content %}
     <div class="panel-body center-block">
         <div class="table-responsive table-striped center-block">
             <table class="table table-striped">
                 <thead>
-                <th>{{ language.get(id ~ '_driver') }}</th>
-                <th>{{ language.get(id ~ '_point') }}</th>
-                <th>{{ language.get(id ~ '_wins') }}</th>
+                <th>{{ (id ~ '_driver')|trans }}</th>
+                <th>{{ (id ~ '_point')|trans }}</th>
+                <th>{{ (id ~ '_wins')|trans }}</th>
                 </thead>
                 <tbody>
                 {% for driver in driverStandings %}
@@ -24,9 +24,9 @@
             </table>
             <table class="table table-striped">
                 <thead>
-                <th>{{ language.get(id ~ '_construct') }}</th>
-                <th>{{ language.get(id ~ '_point') }}</th>
-                <th>{{ language.get(id ~ '_wins') }}</th>
+                <th>{{ (id ~ '_construct')|trans }}</th>
+                <th>{{ (id ~ '_point')|trans }}</th>
+                <th>{{ (id ~ '_wins')|trans }}</th>
                 </thead>
                 <tbody>
                 {% for construct in constructStandings %}
