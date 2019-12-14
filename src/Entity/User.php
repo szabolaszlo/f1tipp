@@ -66,14 +66,19 @@ class User implements UserInterface
     protected $isAdmin;
 
     /**
+     * @ORM\Column(name="point_summary", type="integer", length=11, nullable=false)
+     */
+    protected $pointSummary = 0;
+
+    /**
      * @var int
      */
     protected $point = 0;
 
     /**
-     * @var string
+     * @ORM\Column(name="point_difference", type="integer", length=11, nullable=true)
      */
-    protected $pointDifference = '';
+    protected $pointDifference = null;
 
     /**
      * User constructor.
@@ -278,5 +283,21 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPointSummary(): int
+    {
+        return $this->pointSummary;
+    }
+
+    /**
+     * @param int $pointSummary
+     */
+    public function setPointSummary(int $pointSummary): void
+    {
+        $this->pointSummary = $pointSummary;
     }
 }

@@ -39,7 +39,7 @@ class Race extends Event
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getTrophies()
     {

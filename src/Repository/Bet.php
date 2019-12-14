@@ -21,6 +21,15 @@ class Bet extends EntityRepository
     }
 
     /**
+     * @param $user
+     * @return array
+     */
+    public function getBetsByUser($user)
+    {
+        return $this->findBy(['user_id' => $user]);
+    }
+
+    /**
      * @param User $user
      * @param array $events
      * @return array

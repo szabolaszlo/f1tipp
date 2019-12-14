@@ -56,7 +56,7 @@ class Result extends EntityRepository
 
         /** @var Race $race */
         foreach ($result as $key => $race) {
-            if (empty($race->getTrophies())) {
+            if (!$race->getTrophies()->isEmpty()) {
                 unset($result[$key]);
             }
         }

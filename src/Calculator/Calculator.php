@@ -4,8 +4,6 @@ namespace App\Calculator;
 
 use App\Calculator\Type\ICalculator;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
 
 /**
  * Class Calculator
@@ -34,10 +32,6 @@ class Calculator
         $this->em = $em;
     }
 
-    /**
-     * @throws ORMException
-     * @throws OptimisticLockException
-     */
     public function calculate()
     {
         /** @var ICalculator $calculator */
