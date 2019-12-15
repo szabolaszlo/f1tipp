@@ -20,7 +20,8 @@
         {% endif %}
         {#    {{ titleEvent.countDown|raw }}#}
     </div>
-    {#{{ modules.topFeed|raw }}#}
+    {{ render(controller('App\\Controller\\Module\\TopFeedController::indexAction')) }}
+
     {#{{ modules.messageWall|raw }}#}
     {#{{ modules.news|raw }}#}
     {% for key, table in tables %}

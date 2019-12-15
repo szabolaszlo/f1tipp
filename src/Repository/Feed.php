@@ -12,13 +12,13 @@ use Doctrine\ORM\EntityRepository;
 use App\Entity\Feed as FeedEntity;
 
 /**
- * Class Feed
+ * Class FeedController
  * @package App\Repository
  */
 class Feed extends EntityRepository
 {
     /**
-     * @return array|mixed
+     * @throws \Exception
      */
     public function deleteOldFeeds()
     {

@@ -5,12 +5,19 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-<!--        <service class="App\LegacyService\UserAuthentication\Authentication"-->
-<!--                 id="App\LegacyService\UserAuthentication\Authentication">-->
-<!--            <argument id="doctrine" type="service"/>-->
-<!--            <argument id="request_stack" type="service"/>-->
-<!--            <argument id="request_stack" type="service"/>-->
-<!--        </service>-->
+        <service class="App\LegacyService\Feed\Storage\Doctrine" id="app.legacy_service.feed.storage.doctrine">
+            <argument id="doctrine.orm.entity_manager" type="service"/>
+        </service>
+
+        <service class="App\LegacyService\Feed\Repository\MotorSportRepository"
+                 id="app.legacy_service.feed.repository.motor_sport_repository"/>
+
+        <service class="App\LegacyService\Feed\Handler" id="app.legacy_service.feed.handler" public="true">
+            <argument type="collection">
+                <argument id="app.legacy_service.feed.repository.motor_sport_repository" type="service"/>
+            </argument>
+            <argument id="app.legacy_service.feed.storage.doctrine" type="service"/>
+        </service>
 
     </services>
 

@@ -10,7 +10,7 @@ namespace App\LegacyService\Feed\Repository;
 
 /**
  * Class MotorSportRepository
- * @package App\LegacyService\Feed\Repository
+ * @package App\LegacyService\FeedController\Repository
  */
 interface IRepository
 {

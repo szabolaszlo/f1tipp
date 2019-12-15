@@ -14,7 +14,7 @@ use App\LegacyService\Feed\Item\Item;
 
 /**
  * Class Doctrine
- * @package App\LegacyService\Feed\Storage
+ * @package App\LegacyService\FeedController\Storage
  */
 class Doctrine implements IStorage
 {

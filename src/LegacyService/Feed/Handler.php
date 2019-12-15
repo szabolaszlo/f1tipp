@@ -13,7 +13,7 @@ use App\LegacyService\Feed\Storage\IStorage;
 
 /**
  * Class Handler
- * @package App\LegacyService\Feed
+ * @package App\LegacyService\FeedController
  */
 class Handler
 {

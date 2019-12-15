@@ -10,7 +10,7 @@ namespace App\LegacyService\Feed\Collector;
 
 /**
  * Class XMLCollector
- * @package App\LegacyService\Feed\Collector
+ * @package App\LegacyService\FeedController\Collector
  */
 class XMLCollector implements ICollector
 {

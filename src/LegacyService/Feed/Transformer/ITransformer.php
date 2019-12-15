@@ -11,7 +11,7 @@ namespace App\LegacyService\Feed\Transformer;
 
 /**
  * Class XMLToArray
- * @package App\LegacyService\Feed\Transformer
+ * @package App\LegacyService\FeedController\Transformer
  */
 interface ITransformer
 {

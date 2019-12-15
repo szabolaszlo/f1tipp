@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Cron;
 
 use Doctrine\ORM\OptimisticLockException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,26 +16,25 @@ class FaceCoverPhotoSearchController extends AbstractController
     const URL = 'https://www.facebook.com/Boxutca/';
 
     /**
-     * @Route("search_cover_photo", name="search_cover_photo", methods={"GET"})
+     * @Route("cron/search_cover_photo", name="cron_search_cover_photo", methods={"GET"})
      * @return Response
      * @throws OptimisticLockException
      */
     public function searchAction()
     {
         $sourceCode = $this->getWebPage(self::URL);
-
+        $img = '';
         preg_match_all('/"coverPhotoData":{.*?{.*?{.*?},"uri":"(.*?)"/m', $sourceCode['content'], $matches, PREG_SET_ORDER, 0);
         foreach ($matches as $match) {
-            if(isset($match[1])){
+            if (isset($match[1])) {
                 $img = str_replace('/', '', $match[1]);
-                echo $img . PHP_EOL;
                 $this->getDoctrine()
                     ->getRepository('App:Setting')
                     ->setKeyValue('faceCoverImage', $img);
             }
         }
 
-        return new Response('OK', 200);
+        return new Response($img, 200);
     }
 
     /**

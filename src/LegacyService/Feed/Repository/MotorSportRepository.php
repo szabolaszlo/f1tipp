@@ -16,7 +16,7 @@ use App\LegacyService\Feed\Transformer\XMLToArray;
 
 /**
  * Class MotorSportRepository
- * @package App\LegacyService\Feed\Repository
+ * @package App\LegacyService\FeedController\Repository
  */
 class MotorSportRepository implements IRepository
 {
