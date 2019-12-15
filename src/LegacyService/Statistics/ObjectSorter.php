@@ -6,14 +6,14 @@
  * Time: 19:10
  */
 
-namespace App\Controller\Page\Statistics;
+namespace App\LegacyService\Statistics;
 
 use App\Entity\Bet;
 use App\Entity\Result;
 
 /**
  * Class ObjectSorter
- * @package App\Controller\Page\Statistics
+ * @package App\Controller\Page\StatisticsController
  */
 class ObjectSorter
 {

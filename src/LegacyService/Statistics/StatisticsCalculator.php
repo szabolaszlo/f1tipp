@@ -6,20 +6,21 @@
  * Time: 13:06
  */
 
-namespace App\Controller\Page\Statistics;
+namespace App\LegacyService\Statistics;
 
 use App\Entity\Bet;
 use App\Entity\Result;
 
 /**
  * Class StatisticsCalculator
- * @package App\Controller\Page\Statistics
+ * @package App\Controller\Page\StatisticsController
  */
 class StatisticsCalculator
 {
     /**
      * @param array $objects
      * @return array
+     * @throws \Exception
      */
     public function getStatistics($objects = array())
     {
