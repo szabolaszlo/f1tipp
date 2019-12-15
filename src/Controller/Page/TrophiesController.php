@@ -23,7 +23,7 @@ class TrophiesController extends AbstractController
     );
 
     /**
-     * @Route("/trophies", name="trophies")
+     * @Route("/trophies", name="trophies", methods={"GET"})
      * @return string|Response
      */
     public function indexAction()

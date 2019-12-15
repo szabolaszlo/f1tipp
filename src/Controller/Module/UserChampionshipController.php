@@ -5,10 +5,10 @@ namespace App\Controller\Module;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
- * Class UserChampionship
- * @package App\Controller\Module\UserChampionship
+ * Class UserChampionshipController
+ * @package App\Controller\Module\UserChampionshipController
  */
-class UserChampionship extends AbstractController
+class UserChampionshipController extends AbstractController
 {
     /**
      * @return mixed

@@ -1,26 +1,26 @@
 <?php
 
-namespace App\Controller\Module\AutoDownloadFaceCoverPhoto;
+namespace App\Controller;
 
+use Doctrine\ORM\OptimisticLockException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Entity\Setting;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class AutoDownloadFaceCoverPhoto
- * @package App\Controller\Module\AutoDownloadFaceCoverPhoto
+ * Class FaceCoverPhotoSearchController
+ * @package App\Controller\Module\FaceCoverPhotoSearchController
  */
-class AutoDownloadFaceCoverPhoto extends AbstractController
+class FaceCoverPhotoSearchController extends AbstractController
 {
     const URL = 'https://www.facebook.com/Boxutca/';
 
-    public function indexAction()
-    {
-    }
-
     /**
-     * @return string|void
+     * @Route("search_cover_photo", name="search_cover_photo", methods={"GET"})
+     * @return Response
+     * @throws OptimisticLockException
      */
-    public function findAction()
+    public function searchAction()
     {
         $sourceCode = $this->getWebPage(self::URL);
 
@@ -29,15 +29,14 @@ class AutoDownloadFaceCoverPhoto extends AbstractController
             if(isset($match[1])){
                 $img = str_replace('/', '', $match[1]);
                 echo $img . PHP_EOL;
-                $this->entityManager
-                    ->getRepository(Setting::class)
+                $this->getDoctrine()
+                    ->getRepository('App:Setting')
                     ->setKeyValue('faceCoverImage', $img);
             }
         }
-        echo 'OK';
-        exit;
-    }
 
+        return new Response('OK', 200);
+    }
 
     /**
      * Get a web file (HTML, XHTML, XML, image, etc.) from a URL.  Return an

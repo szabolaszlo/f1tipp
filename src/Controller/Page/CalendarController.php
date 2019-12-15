@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 class CalendarController extends AbstractController
 {
     /**
-     * @Route("/calendar", name="calendar")
+     * @Route("/calendar", name="calendar", methods={"GET"})
      * @return Response
      */
     public function indexAction()
@@ -25,7 +25,7 @@ class CalendarController extends AbstractController
     }
 
     /**
-     * @Route("/calendar/qualify", name="calendar_qualify")
+     * @Route("/calendar/qualify", name="calendar_qualify", methods={"GET"})
      * @return Response
      */
     public function qualifyAction()
@@ -37,7 +37,7 @@ class CalendarController extends AbstractController
     }
 
     /**
-     * @Route("/calendar/race", name="calendar_race")
+     * @Route("/calendar/race", name="calendar_race", methods={"GET"})
      * @return Response
      */
     public function raceAction()

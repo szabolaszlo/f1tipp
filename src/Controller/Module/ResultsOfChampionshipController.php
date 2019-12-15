@@ -16,10 +16,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class ResultsOfChampionship
- * @package App\Controller\Module\ResultsOfChampionship
+ * Class ResultsOfChampionshipController
+ * @package App\Controller\Module\ResultsOfChampionshipController
  */
-class ResultsOfChampionship extends AbstractController
+class ResultsOfChampionshipController extends AbstractController
 {
     const DRIVER_JSON_PATH = "http://ergast.com/api/f1/current/driverStandings.json";
 
@@ -49,7 +49,7 @@ class ResultsOfChampionship extends AbstractController
     }
 
     /**
-     * @Route("championship_result_cache_warmer", name="championship_result_cache_warmer")
+     * @Route("championship_result_cache_warmer", name="championship_result_cache_warmer", methods={"GET"})
      * @return Response
      * @throws InvalidArgumentException
      */

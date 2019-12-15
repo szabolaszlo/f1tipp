@@ -16,6 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\Event;
 use App\Entity\Result;
 use App\Entity\Setting;
+
 //use System\CountDownScript\CountDownScript;
 
 /**
@@ -33,16 +34,13 @@ class ActualController extends AbstractController
      */
     public function indexAction(Calculator $calculator)
     {
-//        $data['faceCoverImage'] = $this->entityManager
-//            ->getRepository(Setting::class)
-//            ->getValueByKey('faceCoverImage');
-//
-//        if (!$data['faceCoverImage']) {
-        $data['image'] = self::ACTUAL_IMAGE_RELATIVE_URL;
-//            $data['imageModifyTime'] = filemtime(
-//                $this->registry->getServer()->getDocumentRoot() . $data['image']
-//            );
-//        }
+        $data['faceCoverImage'] = $this->getDoctrine()
+            ->getRepository('App:Setting')
+            ->getValueByKey('faceCoverImage');
+
+        if (!$data['faceCoverImage']) {
+            $data['image'] = self::ACTUAL_IMAGE_RELATIVE_URL;
+        }
 
         $events = array(
             $this->getDoctrine()->getRepository('App\Entity\Qualify')->getNextEvent(),

@@ -28,7 +28,7 @@
                 {{ render(controller('App\\Controller\\Module\\TrophiesController::indexAction')) }}
             </div>
             <div id="user-championship-result-table">
-                {{ render(controller('App\\Controller\\Module\\UserChampionship::indexAction')) }}
+                {{ render(controller('App\\Controller\\Module\\UserChampionshipController::indexAction')) }}
             </div>
             {#            {{ modules.alternativeChampionship }}#}
             <div class="visible-xs">
@@ -37,7 +37,7 @@
             {#            {% if page.id != 'actual' %}#}
             {#                {{ modules.messageWall }}#}
             {#            {% endif %}#}
-            {{ render(controller('App\\Controller\\Module\\ResultsOfChampionship::indexAction')) }}
+            {{ render(controller('App\\Controller\\Module\\ResultsOfChampionshipController::indexAction')) }}
             {#            {{ modules.userActivity }}#}
             {#            {{ modules.tableRefresh }}#}
         </div>
