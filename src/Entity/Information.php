@@ -8,6 +8,7 @@
 
 namespace App\Entity;
 
+use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -38,6 +39,12 @@ class Information
      * @ORM\Column(name="news", type="boolean", nullable=true)
      */
     protected $news;
+
+    /**
+     * @Gedmo\Slug(fields={"title"})
+     * @ORM\Column(length=45)
+     */
+    protected $slug;
 
     /**
      * @return mixed
@@ -101,5 +108,21 @@ class Information
     public function setNews($news)
     {
         $this->news = $news;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param mixed $slug
+     */
+    public function setSlug($slug): void
+    {
+        $this->slug = $slug;
     }
 }

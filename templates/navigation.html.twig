@@ -38,11 +38,11 @@
                 <li {{ 'calendar'  in current_path  ? 'class="active"' : '' }}>
                     <a href="{{ path('calendar') }}">{{ 'nav_calendar'|trans }}</a>
                 </li>
-                <li>
-                    <a href="?page=information/index&information_title=szabalyzat">{{ 'nav_rules'|trans }}</a>
+                <li {{ 'information_show'  in current_path  ? 'class="active"' : '' }}>
+                    <a href="{{ path('information_show', {'slug':'szabalyzat'}) }}">{{ 'nav_rules'|trans }}</a>
                 </li>
                 <li {{ current_path == 'statistics' ? 'class="active"' : '' }}>
-                    <a href={{ path('statistics') }}>{{ 'nav_statistics'|trans }}</a>
+                    <a href="{{ path('statistics') }}">{{ 'nav_statistics'|trans }}</a>
                 </li>
                 {#                {% if isAdmin %}#}
                 {#                    <li class="dropdown {{ current_path == 'admin' ? 'active ' : '' }}">#}
