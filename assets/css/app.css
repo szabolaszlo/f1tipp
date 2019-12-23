@@ -374,6 +374,11 @@ a:hover.glyphicon {
     background-color: #303030;
 }
 
+.form-group {
+    padding: 2px;
+}
+
+
 .form-control:disabled {
     font-weight: bold;
     color: white;

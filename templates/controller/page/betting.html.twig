@@ -15,7 +15,7 @@
 
     <div class="row">
         {% for event in events %}
-        <div class="col-lg-6">
+        <div class="col-sm-6" style="margin-bottom: 10px">
             <div class="panel panel-default text-center">
                 <div class="panel-heading text-center">
                     <strong>{{ event.event.getName() }}
@@ -27,7 +27,8 @@
         </div>
         {% endfor %}
     </div>
-    {#
+{% endblock %}
+{% block javascripts %}
     <script type="text/javascript">
         $(document).ready(function () {
             {% for event in events %}
@@ -35,5 +36,4 @@
             {% endfor %}
         });
     </script>
-    #}
 {% endblock %}
