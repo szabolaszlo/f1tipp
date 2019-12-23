@@ -19,6 +19,10 @@
             <argument id="app.legacy_service.feed.storage.doctrine" type="service"/>
         </service>
 
+        <service class="App\Builder\BetBuilder" id="App\Builder\BetBuilder">
+            <argument id="App\Rule\RuleRegistry" type="service"/>
+        </service>
+
     </services>
 
 </container>

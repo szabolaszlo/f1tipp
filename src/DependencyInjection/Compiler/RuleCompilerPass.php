@@ -19,7 +19,7 @@ class RuleCompilerPass implements CompilerPassInterface
     {
         $loaderIds = $container->findTaggedServiceIds('app.rule_type');
 
-        $chainLoader = $container->getDefinition('app.rule.rule_registry');
+        $chainLoader = $container->getDefinition('App\Rule\RuleRegistry');
 
         foreach ($loaderIds as $id => $loader) {
             $chainLoader->addMethodCall('addRule', array(new Reference($id)));

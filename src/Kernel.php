@@ -34,7 +34,6 @@ class Kernel extends BaseKernel
     {
         $container->addCompilerPass(new CalculatorCompilerPass());
         $container->addCompilerPass(new RuleCompilerPass());
-        parent::build($container);
     }
 
     public function getProjectDir(): string

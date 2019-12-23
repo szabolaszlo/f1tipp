@@ -8,7 +8,7 @@
 
         <service class="App\Rule\Attribute\AttributeFactory" id="app.rule.attribute.attribute_factory"/>
 
-        <service class="App\Rule\RuleRegistry" id="app.rule.rule_registry"/>
+        <service class="App\Rule\RuleRegistry" id="App\Rule\RuleRegistry"/>
 
         <service class="App\Rule\RuleType\Qualify" id="app.rule.rule_type.qualify">
             <argument id="app.rule.attribute.attribute_factory" type="service"/>

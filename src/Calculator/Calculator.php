@@ -3,7 +3,7 @@
 namespace App\Calculator;
 
 use App\Calculator\Type\ICalculator;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Class Calculator
@@ -17,16 +17,16 @@ class Calculator
     protected $calculatorRegistry;
 
     /**
-     * @var EntityManager
+     * @var EntityManagerInterface
      */
     protected $em;
 
     /**
      * Calculator constructor.
      * @param Registry $calculatorRegistry
-     * @param EntityManager $em
+     * @param EntityManagerInterface $em
      */
-    public function __construct(Registry $calculatorRegistry, EntityManager $em)
+    public function __construct(Registry $calculatorRegistry, EntityManagerInterface $em)
     {
         $this->calculatorRegistry = $calculatorRegistry;
         $this->em = $em;

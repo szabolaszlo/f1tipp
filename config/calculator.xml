@@ -18,7 +18,7 @@
 
         <service class="App\Calculator\Type\BetResultCalculator" id="app.calculator.type.bet_result_calculator"
                  parent="app.calculator.type.acalculator">
-            <argument id="app.rule.rule_registry" type="service"/>
+            <argument id="App\Rule\RuleRegistry" type="service"/>
             <tag name="app.calculator_type"/>
         </service>
 
