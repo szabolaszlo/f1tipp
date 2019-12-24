@@ -14,6 +14,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class BetAttributesType extends AbstractType
 {
@@ -28,14 +29,21 @@ class BetAttributesType extends AbstractType
     protected $em;
 
     /**
-     * RaceBettingType constructor.
+     * @var TranslatorInterface
+     */
+    protected $translator;
+
+    /**
+     * BetAttributesType constructor.
      * @param RuleRegistry $ruleRegistry
      * @param EntityManagerInterface $em
+     * @param TranslatorInterface $translator
      */
-    public function __construct(RuleRegistry $ruleRegistry, EntityManagerInterface $em)
+    public function __construct(RuleRegistry $ruleRegistry, EntityManagerInterface $em, TranslatorInterface $translator)
     {
         $this->ruleRegistry = $ruleRegistry;
         $this->em = $em;
+        $this->translator = $translator;
     }
 
     /**
@@ -60,7 +68,10 @@ class BetAttributesType extends AbstractType
                         $betAttribute->getBet()->getEvent()->getType(),
                         $form->get('key')->getData()),
                     'label' => 'betting_' . $form->get('key')->getData(),
-                    'attr' => ['class' => 'event-' . $betAttribute->getBet()->getEvent()->getId()]
+                    'attr' => [
+                        'class' => 'event-' . $betAttribute->getBet()->getEvent()->getId(),
+                        'disabled' => $betAttribute->getId() ? true : false
+                    ]
                 ]);
             }
         });
@@ -72,9 +83,11 @@ class BetAttributesType extends AbstractType
 
         $ruleAttribute = $rule->getAttributeById($key);
 
+        $choices = [$this->translator->trans('betting_default_option') => 'empty'];
+
         //TODO Make some provider or something instead of this wtf
         if ($ruleAttribute->getType() == 'driver') {
-            return $this->em->getRepository('App:Driver')->getDriverChoices();
+            return array_merge($choices, $this->em->getRepository('App:Driver')->getDriverChoices());
         }
 
         return [

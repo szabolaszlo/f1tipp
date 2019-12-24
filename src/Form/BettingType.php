@@ -14,9 +14,11 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class BettingType
@@ -30,13 +32,21 @@ class BettingType extends AbstractType
     protected $em;
 
     /**
-     * RaceBettingType constructor.
-     * @param EntityManagerInterface $em
+     * @var TranslatorInterface
      */
-    public function __construct(EntityManagerInterface $em)
+    protected $translator;
+
+    /**
+     * BettingType constructor.
+     * @param EntityManagerInterface $em
+     * @param TranslatorInterface $translator
+     */
+    public function __construct(EntityManagerInterface $em, TranslatorInterface $translator)
     {
         $this->em = $em;
+        $this->translator = $translator;
     }
+
 
     /**
      * @param FormBuilderInterface $builder
@@ -78,12 +88,20 @@ class BettingType extends AbstractType
         $builder->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) {
             $form = $event->getForm();
             $bet = $event->getData();
-            if ($bet instanceof Bet) {
-                $form->add('submit', SubmitType::class, [
-                    'attr' => [
-                        'class' => 'btn-new event-submit-' . $bet->getEvent()->getId()
-                    ]
-                ]);
+
+            if ($bet instanceof Bet && !$bet->getId()) {
+                $now = new \DateTime();
+                if ($now < $bet->getEvent()->getDateTime()) {
+                    $form->add('submit', SubmitType::class, [
+                        'attr' => [
+                            'class' => 'btn-new event-submit-' . $bet->getEvent()->getId(),
+                        ],
+                        'label' => 'betting_submit_' . $bet->getEvent()->getType()
+                    ]);
+                } else {
+                    $form->remove('attributes');
+                    $form->addError(new FormError($this->translator->trans('betting_time_out')));
+                }
             }
         });
     }
@@ -100,6 +118,7 @@ class BettingType extends AbstractType
             'csrf_field_name' => '_token',
             // important part; unique key
             'csrf_token_id' => 'form_intention',
+            'allow_extra_fields' => true
         ]);
     }
 }

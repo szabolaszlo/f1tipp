@@ -1,28 +1,17 @@
 <?php
 
-/**
- * Created by PhpStorm.
- * User: Carlos
- * Date: 2016. 12. 20.
- * Time: 21:18
- */
-
 namespace App\Controller\Page;
 
 use App\Builder\BetBuilder;
 use App\Form\BettingType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Doctrine\Common\Collections\ArrayCollection;
-use App\Entity\Bet;
-use App\Entity\BetAttribute;
-use App\Entity\Qualify;
-use App\Entity\Race;
-use App\Entity\Repository\Event;
-use App\Entity\User;
+use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use System\FormHelper\FormHelper;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class Betting
@@ -31,123 +20,39 @@ use System\FormHelper\FormHelper;
 class Betting extends AbstractController
 {
     /**
-     * @var Qualify
-     */
-    protected $qualify;
-
-    /**
-     * @var array
-     */
-    protected $qualifyAttributes = array();
-
-    /**
-     * @var Race
-     */
-    protected $race;
-
-    /**
-     * @var array
-     */
-    protected $raceAttributes = array();
-
-    /**
-     * @var FormHelper
-     */
-    protected $formHelper;
-
-    /**
-     * @var User
-     */
-    protected $user;
-
-    /**
-     * @var \App\Entity\Event
-     */
-    protected $event;
-
-    /**
-     * @var Bet
-     */
-    protected $qualifyBet;
-
-    /**
-     * @var Bet
-     */
-    protected $raceBet;
-
-    /**
-     * @var \DateTime
-     */
-    protected $now;
-
-    /**
-     * Betting constructor.
-     * @param IRegistry $registry
-     */
-    public function __construct()
-    {
-        /*
-                //User
-                $this->data['user'] = $this->user = $this->registry->getUserAuth()->getLoggedUser();
-
-                //UserToken
-                $this->data['userToken'] = $this->registry->getUserAuth()->getActualToken();
-
-                //Qualify
-                $repository = $this->entityManager->getRepository('App\Entity\Qualify');
-                $this->qualify = $repository->getNextEvent();
-
-                //QualifyAttributes
-                $this->qualifyAttributes = $this->registry->getRule()->getRuleType('qualify')->getAllAttribute();
-
-                //QualifyBet
-                $this->qualifyBet = $this->entityManager
-                    ->getRepository('App\Entity\Bet')
-                    ->findOneBy(array('user_id' => $this->user, 'event_id' => $this->qualify));
-
-                //Race
-                $repository = $this->entityManager->getRepository('App\Entity\Race');
-                $this->race = $repository->getNextEvent();
-
-                //RaceAttributes
-                $this->raceAttributes = $this->registry->getRule()->getRuleType('race')->getAllAttribute();
-
-                //RaceBet
-                $this->raceBet = $this->entityManager
-                    ->getRepository('App\Entity\Bet')
-                    ->findOneBy(array('user_id' => $this->user, 'event_id' => $this->race));
-
-                //FormHelper
-                $this->formHelper = $this->registry->getFormHelper();
-
-                //Now
-                $this->now = new \DateTime();
-                */
-    }
-
-    /**
      * @Route("/betting", name="betting", methods={"GET", "POST"})
      *
      * @param Request $request
      * @param BetBuilder $betBuilder
+     * @param TranslatorInterface $translator
      * @return Response
+     * @throws \Exception
      */
-    public function indexAction(Request $request, BetBuilder $betBuilder)
+    public function indexAction(Request $request, BetBuilder $betBuilder, TranslatorInterface $translator)
     {
         $user = $this->getUser();
+
+        if (!$user) {
+            throw new UnauthorizedHttpException('');
+        }
 
         $qualify = $this->getDoctrine()->getRepository('App:Qualify')->getNextEvent();
         $race = $this->getDoctrine()->getRepository('App:Race')->getNextEvent();
 
-        $userBet = $this->getDoctrine()->getRepository('App:Bet')->getBetByUserAndEvent(
+        $userQualifyBet = $this->getDoctrine()->getRepository('App:Bet')->getBetByUserAndEvent(
             $user,
             $qualify
         );
 
-        $qualifyDefaultBet = $userBet ?? $betBuilder->buildForEvent($qualify);
+        $userRaceBet = $this->getDoctrine()->getRepository('App:Bet')->getBetByUserAndEvent(
+            $user,
+            $race
+        );
+
+        $qualifyDefaultBet = $userQualifyBet ?? $betBuilder->buildForEvent($qualify);
         $qualifyDefaultBet->setUser($this->getUser());
 
-        $raceDefaultBet = $betBuilder->buildForEvent($race);
+        $raceDefaultBet = $userRaceBet ?? $betBuilder->buildForEvent($race);
         $raceDefaultBet->setUser($this->getUser());
 
         $events = [
@@ -156,7 +61,6 @@ class Betting extends AbstractController
                 'form' => $this->get('form.factory')->createNamed(
                     $qualifyDefaultBet->getEvent()->getType() . 'betting_form',
                     BettingType::class, $qualifyDefaultBet),
-                //    'inTime' => (bool)($this->now < $this->qualify->getDateTime())
             ],
             $this->getTimeDiff($race->getDateTime()) => [
                 'event' => $race,
@@ -169,21 +73,29 @@ class Betting extends AbstractController
         ksort($events);
 
         foreach ($events as &$event) {
+            /** @var Form $form */
             $form = $event['form'];
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
                 $this->get("security.csrf.token_manager")->refreshToken("form_intention");
-                // $form->getData() holds the submitted values
-                // but, the original `$task` variable has also been updated
                 $bet = $form->getData();
+                $now = new \DateTime();
 
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->persist($bet);
-                $entityManager->flush();
+                // check bet is before deadline and form has no hacked event or user
+                if ($now < $bet->getEvent()->getDateTime()
+                    && $event['event']->getId() == $bet->getEvent()->getId()
+                    && $bet->getUser()->getId() == $user->getId()
+                ) {
+                    $entityManager = $this->getDoctrine()->getManager();
+                    $entityManager->persist($bet);
+                    $entityManager->flush();
 
-                $this->addFlash('success', 'betting_success');
+                    $this->addFlash($form->getName(), 'betting_success');
 
-                return $this->redirectToRoute('betting');
+                    return $this->redirectToRoute('betting');
+                } else {
+                    $form->addError(new FormError($translator->trans('betting_time_out')));
+                }
             }
             $event['form'] = $form->createView();
         }
@@ -194,70 +106,5 @@ class Betting extends AbstractController
     protected function getTimeDiff(\DateTime $time)
     {
         return abs(time() - $time->getTimestamp());
-    }
-
-    public function saveAction()
-    {
-        if (!$this->request->isPost()) {
-            $this->redirectWithError();
-        }
-
-        if (!$this->validate()) {
-            $this->redirectWithError();
-        }
-
-        $this->saveEntities();
-
-        $this->session->set('success', $this->registry->getLanguage()->get('betting_success'));
-        $this->registry->getServer()->redirect('page=betting/index');
-    }
-
-    protected function saveEntities()
-    {
-        $betAttributes = new ArrayCollection();
-        $postedBetAttributes = $this->request->getPost('bet_attr', array());
-
-        $bet = new Bet();
-        $bet->setEvent($this->event);
-        $bet->setUser($this->user);
-
-        foreach ($postedBetAttributes as $key => $value) {
-            $attribute = new BetAttribute();
-            $attribute->setBet($bet);
-            $attribute->setKey($key);
-            $attribute->setValue($value);
-
-            $betAttributes->add($attribute);
-        }
-
-        $bet->setAttributes($betAttributes);
-
-        $this->entityManager->persist($bet);
-        $this->entityManager->flush();
-    }
-
-    protected function redirectWithError()
-    {
-        $this->session->set('error', $this->registry->getLanguage()->get('betting_error'));
-        $this->registry->getServer()->redirect('page=betting/index');
-    }
-
-    /**
-     * @return bool
-     */
-    protected function validate()
-    {
-        $this->event = $this->entityManager->getRepository('App\Entity\Event')->find($this->request->getPost('event-id'));
-        $this->user = $this->registry->getUserAuth()->getUserByToken($this->request->getPost('user-token'));
-
-        $justInTime = (bool)($this->now < $this->event->getDateTime());
-
-        if ($this->request->getPost('token', 'notEqual') != $this->session->get('BettingToken')) {
-            $this->registry->getServer()->redirect('page=betting/index');
-        }
-
-        $this->session->remove('BettingToken');
-
-        return (bool)($this->event && $this->user && $justInTime);
     }
 }

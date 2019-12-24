@@ -26,7 +26,7 @@ require('bootstrap');
             for (i = 0; i < selects.length; i++) {
                 for (j = 0; j < selects.length; j++) {
                     if (i !== j) {
-                        if (selects[i] === selects[j] && selects[i] !== "") {
+                        if (selects[i] === selects[j] && selects[i] !== "empty") {
                             duplicate = selects[i];
                         }
                     }
@@ -39,7 +39,7 @@ require('bootstrap');
                 } else {
                     $(this).css('border', '1px solid #ccc');
                 }
-                if ($(this).val() == "") {
+                if ($(this).val() == "empty") {
                     nullRecords = true;
                 }
             });

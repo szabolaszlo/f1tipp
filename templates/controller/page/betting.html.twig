@@ -8,7 +8,7 @@
                         <strong>{{ event.event.getName() }}
                             - {{ ('general_' ~ event.event.getType)|trans }}</strong>
                     </div>
-                    {% for message in app.flashes('success') %}
+                    {% for message in app.flashes(event.form.vars.id) %}
                         <div class="alert alert-success">
                             {{ message|trans }}
                         </div>
@@ -23,6 +23,10 @@
         $(document).ready(function () {
             {% for event in events %}
             window.bundleObj.checkFakeBet('.event-{{ event.event.getId() }}', '.event-submit-{{ event.event.getId() }}');
+            $('.event-submit-{{ event.event.getId() }}').click(function () {
+                $(this).html('<img src="{{ asset('build/images/15.gif') }}">');
+            });
+            $('.event-{{ event.event.getId() }}').trigger('change');
             {% endfor %}
         });
     </script>
