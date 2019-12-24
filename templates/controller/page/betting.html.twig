@@ -1,38 +1,28 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-    {#{% if error %}
-        <div class="alert alert-danger">
-            <strong>{{ error }}</strong>
-        </div>
-    {% endif %}
-
-    {% if success %}
-        <div class="alert alert-success">
-            <strong>{{ success }}</strong>
-        </div>
-    {% endif %}
-    #}
-
     <div class="row">
         {% for event in events %}
-        <div class="col-sm-6" style="margin-bottom: 10px">
-            <div class="panel panel-default text-center">
-                <div class="panel-heading text-center">
-                    <strong>{{ event.event.getName() }}
-                        - {{ ('general_' ~ event.event.getType)|trans }}</strong>
+            <div class="col-sm-6" style="margin-bottom: 10px">
+                <div class="panel panel-default text-center">
+                    <div class="panel-heading text-center">
+                        <strong>{{ event.event.getName() }}
+                            - {{ ('general_' ~ event.event.getType)|trans }}</strong>
+                    </div>
+                    {% for message in app.flashes('success') %}
+                        <div class="alert alert-success">
+                            {{ message|trans }}
+                        </div>
+                    {% endfor %}
+                    {% form_theme event.form 'bootstrap_3_layout.html.twig' %}
+                    {{ form(event.form) }}
                 </div>
-                {% form_theme event.form 'bootstrap_3_layout.html.twig' %}
-                {{ form(event.form) }}
             </div>
-        </div>
         {% endfor %}
     </div>
-{% endblock %}
-{% block javascripts %}
     <script type="text/javascript">
         $(document).ready(function () {
             {% for event in events %}
-            checkFakeBet('.event-{{ event.event.getId() }}', '#event-bet-submit-{{ event.event.getId() }}');
+            window.bundleObj.checkFakeBet('.event-{{ event.event.getId() }}', '.event-submit-{{ event.event.getId() }}');
             {% endfor %}
         });
     </script>

@@ -28,4 +28,7 @@
             background-attachment: fixed;
         }
     </style>
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+    {% endblock %}
 </head>

@@ -3,15 +3,19 @@
 namespace App\Form;
 
 use App\Entity\Bet;
+use App\Entity\BetAttribute;
 use App\Entity\Event;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -48,9 +52,6 @@ class BettingType extends AbstractType
             'entry_options' => ['label' => false],
             'label' => false
         ]);
-        $builder->add('submit', SubmitType::class, [
-            'attr' => ['class' => 'btn btn-new']
-        ]);
 
         $builder->get('user')->addModelTransformer(new CallbackTransformer(
             function (User $user) {
@@ -73,6 +74,18 @@ class BettingType extends AbstractType
                 return $this->em->getRepository('App:Event')->find($eventId);
             }
         ));
+
+        $builder->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) {
+            $form = $event->getForm();
+            $bet = $event->getData();
+            if ($bet instanceof Bet) {
+                $form->add('submit', SubmitType::class, [
+                    'attr' => [
+                        'class' => 'btn-new event-submit-' . $bet->getEvent()->getId()
+                    ]
+                ]);
+            }
+        });
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -80,9 +93,13 @@ class BettingType extends AbstractType
         $resolver->setDefaults([
             'attr' => [
                 'class' => 'form form-inline',
-                'padding' => '10px'
+                'padding' => '10px',
             ],
             'data_class' => Bet::class,
+            'csrf_protection' => true,
+            'csrf_field_name' => '_token',
+            // important part; unique key
+            'csrf_token_id' => 'form_intention',
         ]);
     }
 }

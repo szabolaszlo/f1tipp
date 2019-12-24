@@ -31,6 +31,14 @@ class Bet extends EntityRepository
         return $this->findBy(['user_id' => $user]);
     }
 
+    public function getBetByUserAndEvent($user, $event)
+    {
+        return $this->findOneBy([
+            'user_id' => $user,
+            'event_id' => $event
+        ]);
+    }
+
     /**
      * @param User $user
      * @param array $events

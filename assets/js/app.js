@@ -8,47 +8,59 @@
 // any CSS you require will output into a single css file (app.css in this case)
 require('../css/app.css');
 const $ = require('jquery');
+global.$ = global.jQuery = $;
 require('bootstrap');
 
-function checkFakeBet(selectClass, submitId) {
-    $(selectClass).change(function () {
-        var duplicate = '';
-        var nullRecords = false;
+(function (global) {
+    function checkFakeBet(selectClass, submitId) {
 
-        var selects = [];
-        $(selectClass).each(function () {
-            selects.push($(this).val());
-        });
+        $(selectClass).change(function () {
+            var duplicate = '';
+            var nullRecords = false;
 
-        for (i = 0; i < selects.length; i++) {
-            for (j = 0; j < selects.length; j++) {
-                if (i !== j) {
-                    if (selects[i] === selects[j] && selects[i] !== "") {
-                        duplicate = selects[i];
+            var selects = [];
+            $(selectClass).each(function () {
+                selects.push($(this).val());
+            });
+
+            for (i = 0; i < selects.length; i++) {
+                for (j = 0; j < selects.length; j++) {
+                    if (i !== j) {
+                        if (selects[i] === selects[j] && selects[i] !== "") {
+                            duplicate = selects[i];
+                        }
                     }
                 }
             }
-        }
 
-        $(selectClass).each(function () {
-            if ($(this).val() == duplicate && duplicate !== "") {
-                $(this).css('border', '3px solid red');
+            $(selectClass).each(function () {
+                if ($(this).val() == duplicate && duplicate !== "") {
+                    $(this).css('border', '3px solid red');
+                } else {
+                    $(this).css('border', '1px solid #ccc');
+                }
+                if ($(this).val() == "") {
+                    nullRecords = true;
+                }
+            });
+
+            if (duplicate == '' && !nullRecords) {
+                $(submitId).each(function () {
+                    $(this).prop('disabled', false)
+                });
             } else {
-                $(this).css('border', '1px solid #ccc');
-            }
-            if ($(this).val() == "") {
-                nullRecords = true;
+                $(submitId).each(function () {
+                    $(this).prop('disabled', true)
+                });
             }
         });
+    }
 
-        if (duplicate == '' && !nullRecords) {
-            $(submitId).prop('disabled', false);
-        } else {
-            $(submitId).prop('disabled', true);
-        }
+    global.bundleObj = {
+        checkFakeBet: checkFakeBet,
+    }
+})(window)
 
-    });
-}
 function refreshOnlineUsers() {
     $.get('/set_online_user');
     $.getJSON("/get_online_user", function (data) {

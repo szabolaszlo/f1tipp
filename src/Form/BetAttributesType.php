@@ -60,7 +60,7 @@ class BetAttributesType extends AbstractType
                         $betAttribute->getBet()->getEvent()->getType(),
                         $form->get('key')->getData()),
                     'label' => 'betting_' . $form->get('key')->getData(),
-                    'attr' => ['class' => 'form-control']
+                    'attr' => ['class' => 'event-' . $betAttribute->getBet()->getEvent()->getId()]
                 ]);
             }
         });
@@ -86,7 +86,7 @@ class BetAttributesType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => BetAttribute::class,
+            'data_class' => BetAttribute::class
         ]);
     }
 }

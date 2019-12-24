@@ -134,62 +134,54 @@ class Betting extends AbstractController
      */
     public function indexAction(Request $request, BetBuilder $betBuilder)
     {
-
-        /*
-        $this->data['error'] = $this->session->get('error');
-        $this->session->remove('error');
-
-        $this->data['success'] = $this->session->get('success');
-        $this->session->remove('success');
-
-        $this->data['token'] = md5(time());
-        $this->session->set('BettingToken', $this->data['token']);
-
-*/
-
+        $user = $this->getUser();
 
         $qualify = $this->getDoctrine()->getRepository('App:Qualify')->getNextEvent();
         $race = $this->getDoctrine()->getRepository('App:Race')->getNextEvent();
 
-        $bet = $betBuilder->buildForEvent($race);
-        $bet->setUser($this->getUser());
+        $userBet = $this->getDoctrine()->getRepository('App:Bet')->getBetByUserAndEvent(
+            $user,
+            $qualify
+        );
+
+        $qualifyDefaultBet = $userBet ?? $betBuilder->buildForEvent($qualify);
+        $qualifyDefaultBet->setUser($this->getUser());
+
+        $raceDefaultBet = $betBuilder->buildForEvent($race);
+        $raceDefaultBet->setUser($this->getUser());
 
         $events = [
             $this->getTimeDiff($qualify->getDateTime()) => [
                 'event' => $qualify,
-                'form' => $this->createForm(BettingType::class, $bet)
-                //    'eventAttributes' => $this->qualifyAttributes,
-                //    'bet' => $this->qualifyBet,
+                'form' => $this->get('form.factory')->createNamed(
+                    $qualifyDefaultBet->getEvent()->getType() . 'betting_form',
+                    BettingType::class, $qualifyDefaultBet),
                 //    'inTime' => (bool)($this->now < $this->qualify->getDateTime())
             ],
-            //      $this->getTimeDiff($race->getDateTime()) => [
-            //        'event' => $race,
-            //      'form' => $this->createForm(RaceBettingType::class, new Bet())
-            //     'eventAttributes' => $this->raceAttributes,
-            //     'bet' => $this->raceBet,
-            //     'inTime' => (bool)($this->now < $this->race->getDateTime())
-            // ]
+            $this->getTimeDiff($race->getDateTime()) => [
+                'event' => $race,
+                'form' => $this->get('form.factory')->createNamed(
+                    $raceDefaultBet->getEvent()->getType() . 'betting_form',
+                    BettingType::class, $raceDefaultBet),
+            ]
         ];
 
         ksort($events);
 
         foreach ($events as &$event) {
             $form = $event['form'];
-        //    var_dump($request->get('betting'));
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
+                $this->get("security.csrf.token_manager")->refreshToken("form_intention");
                 // $form->getData() holds the submitted values
                 // but, the original `$task` variable has also been updated
                 $bet = $form->getData();
 
-                // ... perform some action, such as saving the task to the database
-                // for example, if Task is a Doctrine entity, save it!
-                var_dump($bet);
-                die();
-
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($bet);
                 $entityManager->flush();
+
+                $this->addFlash('success', 'betting_success');
 
                 return $this->redirectToRoute('betting');
             }
