@@ -34,11 +34,7 @@
             <div class="visible-xs">
                 {{ render(controller('App\\Controller\\Module\\FeedController::indexAction')) }}
             </div>
-            {#            {% if page.id != 'actual' %}#}
-            {#                {{ modules.messageWall }}#}
-            {#            {% endif %}#}
             {{ render(controller('App\\Controller\\Module\\ResultsOfChampionshipController::indexAction')) }}
-            {#            {{ modules.userActivity }}#}
             {#            {{ modules.tableRefresh }}#}
         </div>
     </div>

@@ -1,14 +1,11 @@
-<form id="message-send" class="form-inline" method="post" action="?module=message_wall/save&ajax=true">
-    <input type="text" class="form-group smile-replaceable form-input" name="message" placeholder="{{ placeholder }}"
+<form id="message-send" class="form-inline">
+    <input id="message-input" type="text" class="form-group smile-replaceable form-input" name="message"
            style="width: 65%">
     <button id="message-submit" type="submit"
-            class="btn btn-new form-group">{{ language.get(id ~ '_submit') }}
+            class="btn btn-new form-group">{{ (id ~ '_submit')|trans }}
     </button>
-    <img id="loading" src="/src/view/image/ajax-loader.gif" height="34" style="display: none;">
-    <input type="hidden" name="user-token" value="{{ userToken }}">
-    <input type="hidden" name="token" value="{{ token }}">
 </form>
-<script>
+<script type="text/javascript">
     var f1tippSmileys = {
         'o/': '👋',
         '</3': '💔',
@@ -157,18 +154,28 @@
         '>_>^': '😤'
     };
     $(document).ready(function () {
-        $('#message-submit').click(function () {
-            $('#loading').show();
-            $('#message-submit').hide();
-        });
+        $('#message-send').submit(function (e) {
 
-        $('#message-send').ajaxForm(function () {
-            $('#messages-list').load('?module=message_wall/messages&ajax=true');
-            $('#messages-send-form-div').load('?module=message_wall/form&ajax=true');
+            e.preventDefault();
+
+            $.ajax({
+                type: "POST",
+                url: '/messages/save',
+                dataType: "json",
+                data: $(this).serialize(),
+                beforeSend: function () {
+                    $("#message-submit").html('<img src="{{ asset('build/images/15.gif') }}" height="20" width="60">');
+                },
+                complete: function () {
+                    $('#messages-list').load('/messages/list');
+                    $("#message-input").val('');
+                    $("#message-submit").html('{{ (id ~ '_submit')|trans }}');
+                }
+            })
         });
 
         setInterval(function () {
-            $('#messages-list').load('?module=message_wall/messages&ajax=true');
+            $('#messages-list').load('/messages/list');
         }, 15000);
 
         $('.smile-replaceable').keyup(function () {

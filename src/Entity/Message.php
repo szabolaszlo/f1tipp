@@ -11,7 +11,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\Message")
  * @ORM\Table(name="`message_wall`")
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */

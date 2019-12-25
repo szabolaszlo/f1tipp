@@ -20,11 +20,10 @@
         {% else %}
             <img class="img-responsive" src="{{ image }}" alt="">
         {% endif %}
-        {#    {{ titleEvent.countDown|raw }}#}
     </div>
     {{ render(controller('App\\Controller\\Module\\TopFeedController::indexAction')) }}
 
-    {#{{ modules.messageWall|raw }}#}
+    {{ render(controller('App\\Controller\\Module\\MessageWall::indexAction')) }}
     {#{{ modules.news|raw }}#}
     {% for key, table in tables %}
         {% if loop.first %}

@@ -29,7 +29,6 @@ class TopFeedController extends AbstractController
         $feed = is_array($feeds) && isset($feeds[0]) ? $feeds[0] : array();
 
         return $this->render('controller/module/top_feed/top_feed.html.twig', [
-            'details_link' => '',
             'id' => 'topFeed',
             'feed' => $feed
         ]);

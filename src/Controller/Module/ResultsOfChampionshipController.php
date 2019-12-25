@@ -43,7 +43,6 @@ class ResultsOfChampionshipController extends AbstractController
         $data = (array)$cachedItem->get();
 
         $data['id'] = 'resultsOfChampionship';
-        $data['details_link'] = '';
 
         return $this->render('controller/module/results_of_championship/results_of_championship.html.twig', $data);
     }
