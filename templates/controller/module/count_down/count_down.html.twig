@@ -19,6 +19,7 @@
 {% endblock %}
 {% block javascripts %}
     {% for event in events %}
+        {#TODO Refact this duplication#}
         <script type="text/javascript">
             var {{ event.id }}_days = {{ event.remain_time.days }};
             var {{ event.id }}_hours = {{ event.remain_time.h }};

@@ -34,3 +34,9 @@ php bin/console doctrine:database:create
 ```
 php bin/console doctrine:database:create
 ```
+
+# Project Production Details
+
+## Cron
+- `/cron/search_cover_photo` This cron is try to check new cover image from facebook/boxutca. Recommend refresh hourly.
+- `/cron/collect_feeds` This cron is try to refresh news with motorsport.com feed. Recommend refersh every 5 minutes.

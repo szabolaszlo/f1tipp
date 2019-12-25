@@ -65,18 +65,16 @@ class ActualController extends AbstractController
 
 //        ksort($data['tables']);
 //
-//        ksort($titleEvents);
+        ksort($titleEvents);
 //
-//        $titleEvent = reset($titleEvents);
+        $titleEvent = reset($titleEvents);
 
-//        $countDownTitleEvent = new CountDownScript('title_' . $titleEvent->getType(), $titleEvent->getDateTime(), $this->renderer);
-
-//        $data['titleEvent'] = array(
-//            'id' => 'title_' . $titleEvent->getType(),
-//            'name' => $titleEvent->getName(),
-//            'date' => $titleEvent->getDateTime()->format('M.d H:i'),
-//            'countDown' => $countDownTitleEvent->render()
-//        );
+        $data['titleEvent'] = array(
+            'id' => 'title_' . $titleEvent->getType(),
+            'name' => $titleEvent->getName(),
+            'date' => $titleEvent->getDateTime()->format('M.d H:i'),
+            'remain_time' => $now->diff($titleEvent->getDateTime())
+        );
 
         return $this->render('controller/page/actual.html.twig', $data);
     }
