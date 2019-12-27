@@ -1,4 +1,5 @@
 <?php
+
 namespace App\EventSubscriber;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -21,7 +22,9 @@ class RequestSubscriber implements EventSubscriberInterface
     public function onKernelRequest(RequestEvent $event): void
     {
         $request = $event->getRequest();
-        if (!$event->isMasterRequest() || $request->isXmlHttpRequest()) {
+        if (!$event->isMasterRequest()
+            || $request->isXmlHttpRequest()
+            || strpos($request->getRequestUri(), '_fragment') !== false) {
             return;
         }
 

@@ -11,6 +11,8 @@ const $ = require('jquery');
 global.$ = global.jQuery = $;
 require('bootstrap');
 
+import '../../node_modules/Hinclude/hinclude.js';
+
 (function (global) {
     function checkFakeBet(selectClass, submitId) {
 

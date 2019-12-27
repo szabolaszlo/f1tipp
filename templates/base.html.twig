@@ -16,7 +16,7 @@
         <div class="col-md-8">
             {% block body %}{% endblock %}
             <div class="visible-lg visible-md visible-sm">
-                {{ render(controller('App\\Controller\\Module\\FeedController::indexAction')) }}
+                {{ render_hinclude(controller('App\\Controller\\Module\\FeedController::indexAction'), {default: 'Loading ..'}) }}
             </div>
         </div>
 
@@ -32,9 +32,9 @@
             </div>
             {#            {{ modules.alternativeChampionship }}#}
             <div class="visible-xs">
-                {{ render(controller('App\\Controller\\Module\\FeedController::indexAction')) }}
+                {{ render_hinclude(controller('App\\Controller\\Module\\FeedController::indexAction'), {default: 'Loading ..'}) }}
             </div>
-            {{ render(controller('App\\Controller\\Module\\ResultsOfChampionshipController::indexAction')) }}
+            {{ render_hinclude(controller('App\\Controller\\Module\\ResultsOfChampionshipController::indexAction'), {default: 'Loading ..'}) }}
             {#            {{ modules.tableRefresh }}#}
         </div>
     </div>
