@@ -1,6 +1,6 @@
-{% extends 'system/resulttable/type/full.tpl' %}
+{% extends 'full.html.twig' %}
 {% block heading_title %}
-    <strong>{{ event.getName() }} - {{ language.get('general_' ~ event.getType) }}</strong>
+    <strong>{{ event.getName() }} - {{ ('general_' ~ event.getType)|trans }}</strong>
 {% endblock %}
 {% block body_content %}
     <div class="table-responsive">
@@ -8,9 +8,9 @@
             {% set betAttributes = bets|first.getAttributes() %}
             <thead>
             <tr>
-                <th><strong class="color-two">{{ language.get('result_name') }}</strong></th>
+                <th><strong class="color-two">{{ 'result_name'|trans }}</strong></th>
                 {% for betAttribute in betAttributes %}
-                    <th class="text-center"><strong class="color-two">{{ language.get('result_' ~ betAttribute.getKey()) }}</strong></th>
+                    <th class="text-center"><strong class="color-two">{{ ('result_' ~ betAttribute.getKey())|trans }}</strong></th>
                 {% endfor %}
             </tr>
             </thead>

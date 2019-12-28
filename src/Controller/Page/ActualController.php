@@ -54,6 +54,9 @@ class ActualController extends AbstractController
 
         $now = new \DateTime();
 
+        $data['user'] = $this->getUser();
+        $data['test_event'] = $this->getDoctrine()->getRepository('App:Event')->find(10);
+
         /** @var Event $event */
         foreach ($events as $event) {
             $id = abs($now->getTimestamp() - $event->getDateTime()->getTimeStamp());

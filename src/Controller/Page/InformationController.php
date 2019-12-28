@@ -10,6 +10,7 @@
 namespace App\Controller\Page;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -27,6 +28,29 @@ class InformationController extends AbstractController
      */
     public function showAction($slug)
     {
+        return $this->render('controller/page/information.html.twig', [
+            'information' => $this->getInformation($slug),
+        ]);
+    }
+
+    /**
+     * @Route("/information_content/{slug}", name="information_content_show", methods={"GET"})
+     * @param $slug
+     * @return Response
+     */
+    public function showOnlyContentAction($slug)
+    {
+        return $this->render('controller/page/information_content.html.twig', [
+            'information' => $this->getInformation($slug),
+        ]);
+    }
+
+    /**
+     * @param $slug
+     * @return object|null
+     */
+    protected function getInformation($slug)
+    {
         $information = $this->getDoctrine()
             ->getRepository('App:Information')
             ->findOneBy(['slug' => $slug]);
@@ -35,6 +59,6 @@ class InformationController extends AbstractController
             throw new NotFoundHttpException();
         }
 
-        return $this->render('controller/page/information.html.twig', ['information' => $information]);
+        return $information;
     }
 }

@@ -1,13 +1,13 @@
-{% extends 'system/resulttable/type/full.tpl' %}
+{% extends 'full.html.twig' %}
 {% block heading_title %}
-    <strong>{{ event.getName() }} - {{ language.get('general_' ~ event.getType) }}</strong>
+    <strong>{{ event.getName() }} - {{ ('general_' ~ event.getType)|trans }}</strong>
 {% endblock %}
 {% block body_content %}
     <div class="table-responsive">
         <table class="table table-striped" style="padding: 15px">
             <tr style="margin: 15px">
                 <strong class="color-two">
-                    {{ bets|length ? language.get('result_betting_user') : language.get('result_betting_nobody') }}
+                    {{ bets|length ? 'result_betting_user'|trans : 'result_betting_nobody'|trans }}
                 </strong>
                 {% if bets|length %}
                     {% for bet in bets %}

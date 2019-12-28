@@ -20,5 +20,10 @@ interface ITableType
      * @param Event $event
      * @return string
      */
-    public function getTable(Event $event);
+    public function renderTable(Event $event);
+
+    /**
+     * @return string
+     */
+    public function getType();
 }

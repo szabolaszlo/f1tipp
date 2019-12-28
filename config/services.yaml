@@ -26,8 +26,11 @@ services:
     App\Controller\:
         resource: '../src/Controller'
         exclude: '../src/Controller/Page/WeekendPoints'
-
         tags: ['controller.service_arguments']
+
+    App\LegacyService\ResultTable\Type\:
+        resource: '../src/LegacyService/ResultTable/Type'
+        tags: ['app.table_type']
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

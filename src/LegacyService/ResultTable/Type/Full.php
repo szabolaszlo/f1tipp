@@ -8,11 +8,10 @@
 
 namespace App\LegacyService\ResultTable\Type;
 
-use App\Entity\Bet;
 use App\Entity\Event;
-use App\LegacyService\Calculator\ICalculator;
-use App\LegacyService\Registry\IRegistry;
-use App\LegacyService\ResultTable\Decorator\IDecorator;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 /**
  * Class Full
@@ -21,67 +20,34 @@ use App\LegacyService\ResultTable\Decorator\IDecorator;
 class Full extends ATableType
 {
     /**
-     * @var ICalculator
+     * @var string
      */
-    protected $calculator;
+    protected $type = 'full';
 
     /**
-     * @var IDecorator
+     * @var string
      */
-    protected $decorator;
-    
-    /**
-     * Full constructor.
-     * @param IRegistry $registry
-     * @param ICalculator $calculator
-     * @param IDecorator $decorator
-     */
-    public function __construct(IRegistry $registry, ICalculator $calculator, IDecorator $decorator)
-    {
-        parent::__construct($registry);
-        
-        $this->registry = $registry;
-        $this->calculator = $calculator;
-        $this->decorator = $decorator;
+    protected $template = 'result_table/type/full.html.twig';
 
-        $this->entityManager = $this->registry->getEntityManager();
-        $this->renderer = $this->registry->getRenderer();
-        $this->data['language'] = $this->registry->getLanguage();
-    }
-    
     /**
      * @param Event $event
      * @return string
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function getTable(Event $event)
+    public function renderTable(Event $event)
     {
-        $this->data['result'] = $this->entityManager
-            ->getRepository('App\Entity\Result')
-            ->findOneBy(array('event' => $event));
+        $data['result'] = $this->em->getRepository('App:Result')->getResultByEvent($event);
 
-        $bets = $this->entityManager
-            ->getRepository('App\Entity\Bet')
-            ->findBy(array('event_id' => $event));
+        $data['bets'] = $this->em->getRepository('App:Bet')->getBetsByEventOrderByPoints($event);
 
-        $sortMap = array();
-
-        /** @var Bet $bet */
-        foreach ($bets as $bet) {
-            $this->calculator->calculateBetPoints($bet, $this->data['result']);
-            $this->decorator->decorate($bet);
-            $sortMap[] = $bet->getPoint();
-        }
-
-        array_multisort($sortMap, SORT_DESC, $bets, SORT_DESC);
-
-        $this->data['bets'] = $bets;
-
-        $this->data['usersCount'] = count(
-            $this->entityManager->getRepository('App\Entity\User')->findAll()
+        $data['usersCount'] = count(
+            $this->em->getRepository('App\Entity\User')->findAll()
         );
 
-        $this->data['noBettingUsers'] = $this->getNoBettingUsers($bets);
+        $data['noBettingUsers'] = $this->getNoBettingUsers($data['bets']);
 
-        return $this->render();
+        return $this->renderer->render($this->template, $data);
     }
 }

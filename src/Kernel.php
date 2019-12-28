@@ -3,6 +3,7 @@
 namespace App;
 
 use App\DependencyInjection\Compiler\CalculatorCompilerPass;
+use App\DependencyInjection\Compiler\ResultTableCompilerPass;
 use App\DependencyInjection\Compiler\RuleCompilerPass;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -34,6 +35,7 @@ class Kernel extends BaseKernel
     {
         $container->addCompilerPass(new CalculatorCompilerPass());
         $container->addCompilerPass(new RuleCompilerPass());
+        $container->addCompilerPass(new ResultTableCompilerPass());
     }
 
     public function getProjectDir(): string

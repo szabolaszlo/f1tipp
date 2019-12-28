@@ -14,5 +14,13 @@ namespace App\LegacyService\ResultTable\Type;
  */
 class OnlyUsers extends ATableType
 {
-    
+    /**
+     * @var string
+     */
+    protected $type = 'only_users';
+
+    /**
+     * @var string
+     */
+    protected $template = 'result_table/type/only_users.html.twig';
 }

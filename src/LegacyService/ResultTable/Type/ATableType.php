@@ -12,8 +12,10 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Bet;
 use App\Entity\Event;
 use App\Entity\User;
-use App\LegacyService\Language\Language;
-use App\LegacyService\Registry\IRegistry;
+use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 /**
  * Class ATableType
@@ -22,24 +24,14 @@ use App\LegacyService\Registry\IRegistry;
 abstract class ATableType implements ITableType
 {
     /**
-     * @var IRegistry
-     */
-    protected $registry;
-
-    /**
      * @var EntityManagerInterface
      */
-    protected $entityManager;
+    protected $em;
 
     /**
-     * @var \Twig_Environment
+     * @var Environment
      */
     protected $renderer;
-
-    /**
-     * @var Language
-     */
-    protected $language;
 
     /**
      * @var array
@@ -47,46 +39,54 @@ abstract class ATableType implements ITableType
     protected $data = array();
 
     /**
-     * OnlyUsers constructor.
-     * @param IRegistry $registry
+     * @var string
      */
-    public function __construct(IRegistry $registry)
-    {
-        $this->registry = $registry;
+    protected $type = 'abstract_type';
 
-        $this->entityManager = $this->registry->getEntityManager();
-        $this->renderer = $this->registry->getRenderer();
-        $this->data['language'] = $this->registry->getLanguage();
+    /**
+     * @var string
+     */
+    protected $template = 'result_table/type/abstract.html.twig';
+
+    /**
+     * ATableType constructor.
+     * @param EntityManagerInterface $em
+     * @param Environment $renderer
+     */
+    public function __construct(EntityManagerInterface $em, Environment $renderer)
+    {
+        $this->em = $em;
+        $this->renderer = $renderer;
     }
-    
+
+    /**
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
     /**
      * @param Event $event
      * @return string
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function getTable(Event $event)
+    public function renderTable(Event $event)
     {
-        $this->data['bets']  = $this->entityManager
-            ->getRepository('App\Entity\Bet')
-            ->findBy(array('event_id' => $event));
+        $data['bets'] = $this->em->getRepository('App:Bet')->getBetsByEvent($event);
 
-        $this->data['event'] = $event;
+        $data['event'] = $event;
 
-        $this->data['usersCount'] = count(
-            $this->entityManager->getRepository('App\Entity\User')->findAll()
+        $data['usersCount'] = count(
+            $this->em->getRepository('App\Entity\User')->findAll()
         );
 
-        $this->data['noBettingUsers'] = $this->getNoBettingUsers($this->data['bets']);
+        $data['noBettingUsers'] = $this->getNoBettingUsers($data['bets']);
 
-        return $this->render();
-    }
-
-    /**
-     * @return string
-     */
-    protected function render()
-    {
-        $templatePath = strtolower(get_class($this)) . '.tpl';
-        return $this->renderer->render($templatePath, $this->data);
+        return $this->renderer->render($this->template, $data);
     }
 
     /**
@@ -95,7 +95,7 @@ abstract class ATableType implements ITableType
      */
     protected function getNoBettingUsers(array $bets)
     {
-        $users = $this->entityManager->getRepository('App\Entity\User')->findAll();
+        $users = $this->em->getRepository('App\Entity\User')->findAll();
         $userNames = array();
 
         /** @var User $user */

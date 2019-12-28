@@ -52,6 +52,14 @@ class Bet extends EntityRepository
         ]);
     }
 
+    public function getBetsByEventOrderByPoints($event)
+    {
+        return $this->findBy(
+            ['event_id' => $event],
+            ['pointSummary' => 'DESC']
+        );
+    }
+
     /**
      * @return mixed
      */

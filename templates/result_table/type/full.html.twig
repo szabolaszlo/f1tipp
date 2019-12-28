@@ -2,7 +2,7 @@
 {% set bet_counter %}
     {% if (usersCount/2 < bets|length) %}
         <div class="pull-right" style="margin-right: 10px">
-            {{ language.get('result_bets') ~ bets|length ~ '/' ~ usersCount }}
+            {{ ('result_bets')|trans ~ bets|length ~ '/' ~ usersCount }}
         </div>
     {% endif %}
 {% endset %}
@@ -10,7 +10,7 @@
     <div class="panel-heading text-center">
         <div class="row">
             {% block heading_title %}
-                {% set titletext = language.get('general_' ~ result.getEvent().getType) %}
+                {% set titletext = ('general_' ~ result.getEvent().getType)|trans %}
                 <strong>{{ result.getEvent().getName() ~ ' - ' ~ titletext }}</strong>
             {% endblock %}
             {% if not no_betting_users %}
@@ -20,7 +20,7 @@
         {% if no_betting_users %}
             <div class="row">
                 <div class="pull-left" style="margin-left: 10px">
-                    {{ language.get('result_no_betting_users') ~ noBettingUsers|join(', ') }}
+                    {{ ('result_no_betting_users')|trans ~ noBettingUsers|join(', ') }}
                 </div>
                 {{ bet_counter }}
             </div>
@@ -31,10 +31,11 @@
             <table class="table result-striped">
                 <thead>
                 <tr>
-                    <th><strong class="color-two">{{ language.get('result_name') }}</strong></th>
-                    <th class="text-center"><strong class="color-two">{{ language.get('result_point') }}</strong></th>
+                    <th><strong class="color-two">{{ 'result_name'|trans }}</strong></th>
+                    <th class="text-center"><strong class="color-two">{{ 'result_point'|trans }}</strong></th>
                     {% for resultAttribute in result.getAttributes() %}
-                        <th class="text-center"><strong class="color-two">{{ language.get('result_' ~ resultAttribute.getKey()) }}</strong></th>
+                        <th class="text-center"><strong
+                                    class="color-two">{{ ('result_' ~ resultAttribute.getKey())|trans }}</strong></th>
                     {% endfor %}
                 </tr>
                 </thead>
@@ -42,7 +43,7 @@
                 {% for bet in bets %}
                     <tr>
                         <td class="text-left"><strong class="color-one">{{ bet.getUser().getName() }}</strong></td>
-                        <td class="text-center"><strong class="color-one">{{ bet.getPoint() }}</strong></td>
+                        <td class="text-center"><strong class="color-one">{{ bet.getPointSummary() }}</strong></td>
                         {% for betAttribute in bet.getAttributes() %}
                             <td class="text-center {{ betAttribute.getClass() ? betAttribute.getClass() : 'bet-empty' }}">
                                 <span class="{{ betAttribute.getClass() ? betAttribute.getClass() ~ '-font' : 'bet-empty-font' }}">{{ betAttribute.getValue() }}</span>
@@ -51,7 +52,7 @@
                     </tr>
                 {% endfor %}
                 <tr class="result-table-result-row">
-                    <td><strong class="color-two">{{ language.get('general_result') }}</strong></td>
+                    <td><strong class="color-two">{{ 'general_result'|trans }}</strong></td>
                     <td></td>
                     {% for resultAttribute in result.getAttributes() %}
                         <td class="text-center"><strong class="color-two">{{ resultAttribute.getValue() }}</strong></td>

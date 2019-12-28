@@ -79,7 +79,7 @@ class Result extends EntityRepository
 
     /**
      * @param Event $event
-     * @return ResultEnt|null
+     * @return object
      */
     public function getResultByEvent(Event $event)
     {

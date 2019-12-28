@@ -11,7 +11,6 @@ namespace App\LegacyService\ResultTable;
 
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Event;
-use App\LegacyService\Registry\IRegistry;
 use App\LegacyService\ResultTable\Type\ITableType;
 
 /**
@@ -20,73 +19,56 @@ use App\LegacyService\ResultTable\Type\ITableType;
  */
 class ResultTable
 {
-    /**
-     * @var array
-     */
-    protected $tableTypes = array();
 
     /**
-     * @var IRegistry
+     * @var ResultTableRegistry
      */
-    protected $registry;
+    protected $tableRegistry;
 
     /**
      * @var EntityManagerInterface
      */
-    protected $entityManager;
+    protected $em;
 
     /**
      * ResultTable constructor.
-     * @param IRegistry $registry
-     * @param array $tableTypes
+     * @param ResultTableRegistry $tableRegistry
+     * @param EntityManagerInterface $em
      */
-    public function __construct(IRegistry $registry, array $tableTypes)
+    public function __construct(ResultTableRegistry $tableRegistry, EntityManagerInterface $em)
     {
-        $this->registry = $registry;
-        $this->entityManager = $this->registry->getEntityManager();
-        $this->tableTypes = $tableTypes;
-    }
-
-    /**
-     * @param $type
-     * @param Event $event
-     * @return string
-     */
-    public function getTableByType($type, Event $event)
-    {
-        /** @var ITableType $tableType */
-        $tableType = $this->tableTypes[$type];
-
-        return $tableType->getTable($event);
+        $this->tableRegistry = $tableRegistry;
+        $this->em = $em;
     }
 
     /**
      * @param $user
      * @param Event $event
-     * @return string
+     * @param null $type
+     * @return ITableType
+     * @throws \Exception
      */
-    public function getTable($user, Event $event)
+    public function getTable($user, Event $event, $type = null)
     {
-        $type = 'only_users';
+        if ($type === null) {
 
-        $result = $this->entityManager
-            ->getRepository('App\Entity\Result')
-            ->findOneBy(array('event' => $event));
+            $type = 'only_users';
 
-        $userBet = $user
-            ? $this->entityManager
-                ->getRepository('App\Entity\Bet')
-                ->findOneBy(array('user_id' => $user, 'event_id' => $event))
-            : false;
+            $result = $this->em->getRepository('App:Result')->getResultByEvent($event);
 
-        if ($userBet) {
-            $type = 'only_bets';
+            $userBet = $user
+                ? $this->em->getRepository('App:Bet')->getBetByUserAndEvent($user, $event)
+                : false;
+
+            if ($userBet) {
+                $type = 'only_bets';
+            }
+
+            if ($result) {
+                $type = 'full';
+            }
         }
 
-        if ($result) {
-            $type = 'full';
-        }
-
-        return $this->getTableByType($type, $event);
+        return $this->tableRegistry->getTableByType($type);
     }
 }
