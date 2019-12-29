@@ -22,14 +22,6 @@ class UserPointSummaryCalculator extends ACalculator
     }
 
     /**
-     * @return bool
-     */
-    public function isNeedCalculate()
-    {
-        return true;
-    }
-
-    /**
      * @throws ORMException
      * @throws OptimisticLockException
      */
@@ -40,6 +32,7 @@ class UserPointSummaryCalculator extends ACalculator
 
         foreach ($users as $user) {
             $userPoints = 0;
+            //TODO Change this foreach, mysql SUM
             $bets = $this->em->getRepository('App:Bet')->getBetsByUser($user);
             /** @var Bet $bet */
             foreach ($bets as $bet) {

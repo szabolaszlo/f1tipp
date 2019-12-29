@@ -8,7 +8,7 @@ use App\Entity\Event;
 use App\Entity\Result;
 use App\Rule\Attribute\Attribute;
 use App\Rule\RuleRegistry;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMException;
 
 /**
@@ -33,10 +33,10 @@ class BetResultCalculator extends ACalculator
 
     /**
      * BetResultCalculator constructor.
-     * @param EntityManager $em
+     * @param EntityManagerInterface $em
      * @param RuleRegistry $ruleRegistry
      */
-    public function __construct(EntityManager $em, RuleRegistry $ruleRegistry)
+    public function __construct(EntityManagerInterface $em, RuleRegistry $ruleRegistry)
     {
         $this->ruleRegistry = $ruleRegistry;
         parent::__construct($em);

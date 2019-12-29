@@ -6,11 +6,11 @@
  * Time: 17:29
  */
 
-namespace App\Controller\Page\WeekendPoints\ResultCollector\CollectedPointConverter\PointProvider;
+namespace App\Calculator\Provider;
 
 /**
  * Class PointProvider
- * @package App\Controller\Page\WeekendPoints\ResultCollector\CollectedPointConverter\PointProvider
+ * @package App\Calculator\Provider
  */
 class PointProvider
 {

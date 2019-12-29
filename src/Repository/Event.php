@@ -11,6 +11,7 @@ namespace App\Repository;
 
 use App\Entity\Event as EventEnt;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 
 /**
  * Class Qualify
@@ -93,5 +94,18 @@ class Event extends EntityRepository
         return $this->findBy(
             ['weekendOrder' => $event->getWeekendOrder()]
         );
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAlternativeChampionshipRaces()
+    {
+        return $this->createQueryBuilder('race')
+            ->select('race')
+            ->innerJoin('App:AlternativeChampionship', 'ac', Join::WITH, 'ac.race = race.id')
+            ->orderBy('race.weekendOrder', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
 }

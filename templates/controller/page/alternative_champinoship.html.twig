@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="panel panel-default">
+        <div class="panel-heading text-center">
+            <strong>{{ (id~'_title')|trans }}</strong>
+        </div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th><strong class="color-two">{{ (id ~ '_name')|trans }}</strong></th>
+                <th><strong class="color-two">{{ (id ~ '_points')|trans }}</strong></th>
+                <th><strong class="color-two">{{ (id ~ '_lag')|trans }}</strong></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>
+                        <strong class="color-one">{{ user.getName }}</strong>
+                    </td>
+                    <td>
+                        <strong class="color-one">{{ user.alternativePointSummary }}</strong>
+                    </td>
+                    <td>
+                        <span class="small color-two">{{ user.alternativePointDifference() ? '+ ' ~ user.alternativePointDifference() : '' }}</span>
+                    </td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="3" class="text-center" style="padding: 15px;">
+                    <strong class="color-two">{{ (id ~ '_description')|trans }}</strong>
+                    <br><br><strong class="color-two">{{ (id ~ '_goal')|trans }}</strong>
+                    <br><br><strong class="color-three">{{ (id ~ '_test')|trans }}</strong>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="panel panel-default">
+            <div class="panel-heading text-center">
+                <strong>{{ (id ~ '_point_calculating')|trans }}</strong>
+            </div>
+            <table class="table table-striped table-responsive">
+                <thead>
+                <tr>
+                    <th><strong class="color-two">{{ (id ~ '_place')|trans }}</strong></th>
+                    {% for place, point in pointProvider.getPlacePoints %}
+                        <th class="text-center"><strong class="color-two">{{ place }}.</strong></th>
+                    {% endfor %}
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <strong class="color-one">{{ (id ~ '_converted_points')|trans }}</strong>
+                    </td>
+                    {% for place, point in pointProvider.getPlacePoints %}
+                        <td class="text-center"><strong class="color-one">{{ point }}</strong></td>
+                    {% endfor %}
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        {% for race in races %}
+            <div class="table-responsive">
+                <div class="panel panel-default">
+                    <div class="panel-heading text-center">
+                        <strong>{{ race.getName }}</strong>
+                    </div>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th><strong class="color-two">{{ (id ~ '_name')|trans }}</strong></th>
+                            <th><strong class="color-two">{{ (id ~ '_collected_points')|trans }}</strong></th>
+                            <th><strong class="color-two">{{ (id ~ '_converted_points')|trans }}</strong></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for ac in race.alternativeChampionships %}
+                            <tr>
+                                <td>
+                                    <strong>{{ ac.getUser.getName }}</strong>
+                                </td>
+                                <td>
+                                    <strong>{{ ac.getCollectedPoints }}</strong>
+                                </td>
+                                <td>
+                                    <strong class="color-one">{{ ac.getPoints }}</strong>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

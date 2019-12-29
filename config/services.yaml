@@ -5,7 +5,6 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 imports:
     - { resource: legacy_services.xml }
-    - { resource: calculator.xml }
     - { resource: rule.xml }
 parameters:
 
@@ -19,7 +18,7 @@ services:
     # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/*'
-        exclude: '../src/{Calculator,DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
@@ -28,9 +27,14 @@ services:
         exclude: '../src/Controller/Page/WeekendPoints'
         tags: ['controller.service_arguments']
 
+    # CompilerPass dependent services
     App\LegacyService\ResultTable\Type\:
         resource: '../src/LegacyService/ResultTable/Type'
         tags: ['app.table_type']
+
+    App\Calculator\Type\:
+        resource: '../src/Calculator/Type'
+        tags: ['app.calculator_type']
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

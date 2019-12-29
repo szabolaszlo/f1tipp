@@ -21,7 +21,6 @@
             <img class="img-responsive" src="{{ image }}" alt="">
         {% endif %}
     </div>
-    {{ result_table(app.user, test_event) }}
     {{ render(controller('App\\Controller\\Module\\TopFeedController::indexAction')) }}
 
     {{ render(controller('App\\Controller\\Module\\MessageWall::indexAction')) }}

@@ -67,6 +67,28 @@ class Result extends EntityRepository
     /**
      * @return mixed
      */
+    public function getCalculatedRacesWithoutAlternativeChampionship()
+    {
+        $result = $this->createQueryBuilder('result')
+            ->select('race')
+            ->innerJoin('App:Race', 'race', Join::WITH, 'result.event = race.id')
+            ->where('result.isCalculated = 1')
+            ->getQuery()
+            ->getResult();
+
+        /** @var Race $race */
+        foreach ($result as $key => $race) {
+            if (!$race->getAlternativeChampionships()->isEmpty()) {
+                unset($result[$key]);
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getNotCalculatedEvents()
     {
         return $this->createQueryBuilder('result')

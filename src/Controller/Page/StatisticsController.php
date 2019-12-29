@@ -50,6 +50,7 @@ class StatisticsController extends AbstractController
         $bets = $this->getDoctrine()->getRepository('App:Bet')->findAll();
         $results = $this->getDoctrine()->getRepository('App:Result')->findAll();
 
+        //TODO Separate this to cache object
         $cacheKey = 'statistics' . count($results);
 
         $cache = new FilesystemAdapter();

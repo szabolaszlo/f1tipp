@@ -34,6 +34,7 @@ class ResultsController extends AbstractController
     {
         $results = $this->getDoctrine()->getRepository('App:Result')->findAll();
 
+        //TODO Separate this to cache object
         $cacheKey = 'results' . count($results);
 
         $cache = new FilesystemAdapter();

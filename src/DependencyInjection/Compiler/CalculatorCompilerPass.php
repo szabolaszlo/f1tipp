@@ -19,7 +19,7 @@ class CalculatorCompilerPass implements CompilerPassInterface
     {
         $loaderIds = $container->findTaggedServiceIds('app.calculator_type');
 
-        $chainLoader = $container->getDefinition('app.calculator.registry');
+        $chainLoader = $container->getDefinition('App\Calculator\Registry');
 
         foreach ($loaderIds as $id => $loader) {
             $chainLoader->addMethodCall('addCalculator', array(new Reference($id)));

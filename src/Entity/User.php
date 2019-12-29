@@ -81,6 +81,16 @@ class User implements UserInterface
     protected $pointDifference = null;
 
     /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $alternativePointSummary;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $alternativePointDifference;
+
+    /**
      * User constructor.
      */
     public function __construct()
@@ -299,5 +309,29 @@ class User implements UserInterface
     public function setPointSummary(int $pointSummary): void
     {
         $this->pointSummary = $pointSummary;
+    }
+
+    public function getAlternativePointSummary(): ?int
+    {
+        return $this->alternativePointSummary;
+    }
+
+    public function setAlternativePointSummary(?int $alternativePointSummary): self
+    {
+        $this->alternativePointSummary = $alternativePointSummary;
+
+        return $this;
+    }
+
+    public function getAlternativePointDifference(): ?int
+    {
+        return $this->alternativePointDifference;
+    }
+
+    public function setAlternativePointDifference(?int $alternativePointDifference): self
+    {
+        $this->alternativePointDifference = $alternativePointDifference;
+
+        return $this;
     }
 }

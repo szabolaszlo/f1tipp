@@ -9,6 +9,7 @@
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -23,11 +24,18 @@ class Race extends Event
     protected $trophies;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\AlternativeChampionship", mappedBy="race", orphanRemoval=true)
+     * @ORM\OrderBy({"points" = "DESC"})
+     */
+    private $alternativeChampionships;
+
+    /**
      * Race constructor.
      */
     public function __construct()
     {
         $this->trophies = new ArrayCollection();
+        $this->alternativeChampionships = new ArrayCollection();
     }
 
     /**
@@ -52,5 +60,36 @@ class Race extends Event
     public function setTrophies($trophies)
     {
         $this->trophies = $trophies;
+    }
+
+    /**
+     * @return Collection|AlternativeChampionship[]
+     */
+    public function getAlternativeChampionships(): Collection
+    {
+        return $this->alternativeChampionships;
+    }
+
+    public function addAlternativeChampionship(AlternativeChampionship $alternativeChampionship): self
+    {
+        if (!$this->alternativeChampionships->contains($alternativeChampionship)) {
+            $this->alternativeChampionships[] = $alternativeChampionship;
+            $alternativeChampionship->setRace($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAlternativeChampionship(AlternativeChampionship $alternativeChampionship): self
+    {
+        if ($this->alternativeChampionships->contains($alternativeChampionship)) {
+            $this->alternativeChampionships->removeElement($alternativeChampionship);
+            // set the owning side to null (unless already changed)
+            if ($alternativeChampionship->getRace() === $this) {
+                $alternativeChampionship->setRace(null);
+            }
+        }
+
+        return $this;
     }
 }

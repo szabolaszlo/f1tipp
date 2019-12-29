@@ -2,7 +2,6 @@
 
 namespace App\Repository;
 
-use App\Entity\Trophy;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -15,6 +14,10 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class UserRepository extends ServiceEntityRepository
 {
+    /**
+     * UserRepository constructor.
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
@@ -26,5 +29,16 @@ class UserRepository extends ServiceEntityRepository
     public function getUsersPointsSummaryDesc()
     {
         return $this->findBy([], ['pointSummary' => 'DESC', 'name' => 'ASC']);
+    }
+
+    /**
+     * @return User[]
+     */
+    public function getAlternativeChampionshipUsers()
+    {
+        return $this->findBy(
+            ['id' => [1, 2, 3, 6, 7]],
+            ['alternativePointSummary' => 'DESC']
+        );
     }
 }
