@@ -24,7 +24,6 @@ services:
     # as action arguments even if you don't extend any base controller class
     App\Controller\:
         resource: '../src/Controller'
-        exclude: '../src/Controller/Page/WeekendPoints'
         tags: ['controller.service_arguments']
 
     # CompilerPass dependent services
