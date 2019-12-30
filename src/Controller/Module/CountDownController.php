@@ -25,6 +25,8 @@ class CountDownController extends AbstractController
      */
     public function indexAction()
     {
+        //TODO Move this to Lazy Twig Extension (every subrequest has 20ms cost)
+
         /** @var Qualify $qualify */
         $qualify = $this->getDoctrine()->getRepository('App:Qualify')->getNextEvent();
 

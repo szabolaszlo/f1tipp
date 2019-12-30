@@ -22,5 +22,5 @@ class OnlyUsers extends ATableType
     /**
      * @var string
      */
-    protected $template = 'result_table/type/only_users.html.twig';
+    protected $template = 'extension/result_table/type/only_users.html.twig';
 }

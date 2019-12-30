@@ -27,7 +27,7 @@ class Full extends ATableType
     /**
      * @var string
      */
-    protected $template = 'result_table/type/full.html.twig';
+    protected $template = 'extension/result_table/type/full.html.twig';
 
     /**
      * @param Event $event

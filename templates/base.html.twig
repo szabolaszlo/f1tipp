@@ -30,7 +30,7 @@
             <div id="user-championship-result-table">
                 {{ render(controller('App\\Controller\\Module\\UserChampionshipController::indexAction')) }}
             </div>
-            {#            {{ modules.alternativeChampionship }}#}
+            {{ alternative_championship_module() }}
             <div class="visible-xs">
                 {{ render_hinclude(controller('App\\Controller\\Module\\FeedController::indexAction'), {default: 'Loading ..'}) }}
             </div>

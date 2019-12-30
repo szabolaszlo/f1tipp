@@ -22,6 +22,7 @@ class TopFeedController extends AbstractController
      */
     public function indexAction()
     {
+        //TODO Move this to Lazy Twig Extension (every subrequest has 20ms cost)
         $feeds = $this->getDoctrine()
             ->getRepository('App:Feed')
             ->findBy(array(), array('id' => 'DESC'), 1);

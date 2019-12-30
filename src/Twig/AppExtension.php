@@ -21,6 +21,10 @@ class AppExtension extends AbstractExtension
             new TwigFunction(
                 'result_table',
                 [ResultTableRuntimeExtension::class, 'renderResultTable'],
+                ['is_safe' => ['html']]),
+            new TwigFunction(
+                'alternative_championship_module',
+                [AlternativeChampionshipRuntimeExtension::class, 'renderAlternativeChampionship'],
                 ['is_safe' => ['html']])
         ];
     }

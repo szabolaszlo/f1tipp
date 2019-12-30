@@ -1,0 +1,20 @@
+{% extends 'controller/module/base_module.html.twig' %}
+{% block body_content %}
+    <table class="table table-striped">
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>
+                    <strong class="color-one">{{ user.getName }}</strong>
+                </td>
+                <td>
+                    <strong class="color-one">{{ user.alternativePointSummary }}</strong>
+                </td>
+                <td>
+                    <span class="small color-two">{{ user.alternativePointDifference() ? '+ ' ~ user.alternativePointDifference() : '' }}</span>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

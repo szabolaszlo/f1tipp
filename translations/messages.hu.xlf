@@ -130,7 +130,6 @@
       <trans-unit id="results_qualify_stat"><source>results_qualify_stat</source><target>Időmérő Eredmények Statisztikája</target></trans-unit>
       <trans-unit id="results_race_stat"><source>results_race_stat</source><target>Futam Eredmények Statisztikája</target></trans-unit>
       <trans-unit id="alternativeChampionship_title"><source>alternativeChampionship_title</source><target>Alternatív Pontverseny</target></trans-unit>
-      <trans-unit id="alternative_Championship_title"><source>alternative_Championship_title</source><target>ALTERNATÍV PONTVERSENY</target></trans-unit>
       <trans-unit id="alternativeChampionship_name"><source>alternativeChampionship_name</source><target>Név</target></trans-unit>
       <trans-unit id="alternativeChampionship_points"><source>alternativeChampionship_points</source><target>F1 Pont</target></trans-unit>
       <trans-unit id="alternativeChampionship_collected_points"><source>alternativeChampionship_collected_points</source><target>Pont</target></trans-unit>
@@ -140,10 +139,10 @@
       <trans-unit id="alternativeChampionship_test"><source>alternativeChampionship_test</source><target>Egyenlőre CSAK TESZT jelleggel üzemel az alternatív pontozás majd meglátjuk hogyan fog tetszeni.</target></trans-unit>
       <trans-unit id="alternativeChampionship_lag"><source>alternativeChampionship_lag</source><target>Lemaradás</target></trans-unit>
       <trans-unit id="alternativeChampionship_no_results"><source>alternativeChampionship_no_results</source><target>Még nincsenek eredmények, nézz vissza az első futam után!</target></trans-unit>
-      <trans-unit id="alternative_Championship_no_results"><source>alternative_Championship_no_results</source><target>Még nincsenek eredmények, nézz vissza az első futam után!</target></trans-unit>
       <trans-unit id="alternativeChampionship_place"><source>alternativeChampionship_place</source><target>Helyezés</target></trans-unit>
       <trans-unit id="alternativeChampionship_point_calculating"><source>alternativeChampionship_point_calculating</source><target>Pontszámítás</target></trans-unit>
-
+      <trans-unit id="alternative_championship_extension_title"><source>alternative_championship_extension_title</source><target>ALTERNATÍV PONTVERSENY</target></trans-unit>
+      <trans-unit id="alternative_championship_extension_no_results"><source>alternative_championship_extension_no_results</source><target>Még nincsenek eredmények, nézz vissza az első futam után!</target></trans-unit>
   </body>
     </file>
 </xliff>

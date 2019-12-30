@@ -22,5 +22,5 @@ class OnlyBets extends ATableType
     /**
      * @var string
      */
-    protected $template = 'result_table/type/only_bets.html.twig';
+    protected $template = 'extension/result_table/type/only_bets.html.twig';
 }

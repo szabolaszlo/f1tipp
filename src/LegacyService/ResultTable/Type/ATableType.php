@@ -46,7 +46,7 @@ abstract class ATableType implements ITableType
     /**
      * @var string
      */
-    protected $template = 'result_table/type/abstract.html.twig';
+    protected $template = 'extension/result_table/type/abstract.html.twig';
 
     /**
      * ATableType constructor.

@@ -26,7 +26,7 @@ class UserChampionshipController extends AbstractController
                     'qualify_bets' => $this->getDoctrine()->getRepository('App:Bet')->getTopQualifyBets(),
                     'race_bets' => $this->getDoctrine()->getRepository('App:Bet')->getTopRaceBets()
                 ],
-                'details_link' => '/trophies',
+                'details_link' => $this->generateUrl('results'),
                 'id' => 'userChampionship'
             ]
         );
