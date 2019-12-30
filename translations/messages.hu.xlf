@@ -113,6 +113,14 @@
       <trans-unit id="admin_cache_app"><source>admin_cache_app</source><target>App Cache Törlés</target></trans-unit>
       <trans-unit id="admin_cache_clear_success"><source>admin_cache_clear_success</source><target>Sikeres Cache Törlés</target></trans-unit>
       <trans-unit id="admin_cache_all"><source>admin_cache_all</source><target>Full Cache Törlés</target></trans-unit>
+      <trans-unit id="admin_events"><source>admin_events</source><target>Események</target></trans-unit>
+      <trans-unit id="admin_event_weekend_order"><source>admin_event_weekend_order</source><target>Hanyadik F1 Hétvége</target></trans-unit>
+      <trans-unit id="admin_event_date"><source>admin_event_date</source><target>Dátum</target></trans-unit>
+      <trans-unit id="admin_event_type"><source>admin_event_type</source><target>Típus</target></trans-unit>
+      <trans-unit id="admin_event_name"><source>admin_event_name</source><target>Helyszín</target></trans-unit>
+      <trans-unit id="admin_messages"><source>admin_messages</source><target>Üzenőfal</target></trans-unit>
+      <trans-unit id="admin_driver"><source>admin_driver</source><target>Pilóták</target></trans-unit>
+      <trans-unit id="admin_information"><source>admin_information</source><target>Szöveges Tartalmak</target></trans-unit>
       <trans-unit id="messageWall_title"><source>messageWall_title</source><target>ÜZENŐFAL</target></trans-unit>
       <trans-unit id="messageWall_submit"><source>messageWall_submit</source><target>Beleugatok</target></trans-unit>
       <trans-unit id="messageWall_not_logged_in"><source>messageWall_not_logged_in</source><target>Nem vagy bejelentkezve!</target></trans-unit>
@@ -143,6 +151,7 @@
       <trans-unit id="alternativeChampionship_point_calculating"><source>alternativeChampionship_point_calculating</source><target>Pontszámítás</target></trans-unit>
       <trans-unit id="alternative_championship_extension_title"><source>alternative_championship_extension_title</source><target>ALTERNATÍV PONTVERSENY</target></trans-unit>
       <trans-unit id="alternative_championship_extension_no_results"><source>alternative_championship_extension_no_results</source><target>Még nincsenek eredmények, nézz vissza az első futam után!</target></trans-unit>
+      <trans-unit id="admin.menu.message"><source>admin.menu.message</source><target>Még nincsenek eredmények, nézz vissza az első futam után!</target></trans-unit>
   </body>
     </file>
 </xliff>
