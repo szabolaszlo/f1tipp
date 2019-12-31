@@ -24,6 +24,16 @@ Encore
         //pattern: /\.(png|jpg|jpeg)$/
     })
 
+    .copyFiles([
+        {from: './node_modules/ckeditor-full/', to: 'ckeditor/[path][name].[ext]', pattern: /\.(js|css)$/, includeSubdirectories: false},
+        {from: './node_modules/ckeditor-full/adapters', to: 'ckeditor/adapters/[path][name].[ext]'},
+        {from: './node_modules/ckeditor-full/lang', to: 'ckeditor/lang/[path][name].[ext]'},
+        {from: './node_modules/ckeditor-full/plugins', to: 'ckeditor/plugins/[path][name].[ext]'},
+        {from: './node_modules/ckeditor-full/skins', to: 'ckeditor/skins/[path][name].[ext]'}
+    ])
+    // Uncomment the following line if you are using Webpack Encore <= 0.24
+    // .addLoader({test: /\.json$/i, include: [require('path').resolve(__dirname, 'node_modules/ckeditor')], loader: 'raw-loader', type: 'javascript/auto'})
+
     // public path used by the web server to access the output path
     .setPublicPath('/build')
     // only needed for CDN's or sub-directory deploy

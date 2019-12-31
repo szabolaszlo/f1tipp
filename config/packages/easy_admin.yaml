@@ -1,6 +1,9 @@
 easy_admin:
   site_name: 'F1Tipp Admin'
   design:
+    form_theme: # Both themes are needed for ckeditor integration
+      - "@EasyAdmin/form/bootstrap_4.html.twig"
+      - "@FOSCKEditor/Form/ckeditor_widget.html.twig"
     menu:
       - { entity: 'Event', icon: 'calendar' }
       - { entity: 'Message', icon: 'envelope' }
@@ -38,6 +41,8 @@ easy_admin:
       translation_domain: 'messages'
       label: 'admin_information'
       class: App\Entity\Information
+      form:
+        fields: ['title', {property: 'content', type: 'fos_ckeditor'}, 'slug', 'news']
 
   user:
     name_property_path: name
