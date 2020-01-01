@@ -37,6 +37,9 @@ easy_admin:
       list:
         sort: 'point'
         max_results: 50
+        filters: ['status']
+      templates:
+        list: 'admin/driver_list.html.twig'
     Information:
       translation_domain: 'messages'
       label: 'admin_information'
