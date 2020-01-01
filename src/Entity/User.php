@@ -61,11 +61,6 @@ class User implements UserInterface
     protected $timestamp;
 
     /**
-     * @ORM\Column(name="admin", type="boolean", length=1, nullable=true)
-     */
-    protected $isAdmin;
-
-    /**
      * @ORM\Column(name="point_summary", type="integer", length=11, nullable=false)
      */
     protected $pointSummary = 0;
@@ -89,14 +84,6 @@ class User implements UserInterface
      * @ORM\Column(type="integer", nullable=true)
      */
     private $alternativePointDifference;
-
-    /**
-     * User constructor.
-     */
-    public function __construct()
-    {
-        $this->skippedNews = new ArrayCollection();
-    }
 
     /**
      * @return mixed
@@ -137,7 +124,7 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->username;
+        return (string)$this->username;
     }
 
     public function setUsername(string $username): self
@@ -171,7 +158,7 @@ class User implements UserInterface
      */
     public function getPassword(): string
     {
-        return (string) $this->password;
+        return (string)$this->password;
     }
 
     /**
@@ -234,11 +221,11 @@ class User implements UserInterface
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
     public function isAdmin()
     {
-        return $this->isAdmin;
+        return (bool)in_array('ROLE_ADMIN', (array)$this->roles);
     }
 
     /**
@@ -262,20 +249,6 @@ class User implements UserInterface
         }
 
         return array_replace(array_flip(array('gold', 'silver', 'bronze')), $trophies);
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getSkippedNews()
-    {
-        $skippedInformation = new ArrayCollection();
-
-        /** @var UserSkippedNews $skipped */
-        foreach ($this->skippedNews as $skipped) {
-            $skippedInformation->add($skipped->getInformation());
-        }
-        return $skippedInformation;
     }
 
     /**

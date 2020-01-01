@@ -45,22 +45,11 @@
                 <li {{ current_path == 'statistics' ? 'class="active"' : '' }}>
                     <a href="{{ path('statistics') }}">{{ 'nav_statistics'|trans }}</a>
                 </li>
-                {#                {% if isAdmin %}#}
-                {#                    <li class="dropdown {{ current_path == 'admin' ? 'active ' : '' }}">#}
-                {#                        <a class="dropdown-toggle" data-toggle="dropdown" href="">{{ 'nav_admin'|trans }}<span#}
-                {#                                    class="caret"></span></a>#}
-                {#                        <ul class="dropdown-menu">#}
-                {#                            <li><a href="?page=admin/result_upload/index">{{ 'nav_admin_result'|trans }}</a>#}
-                {#                            </li>#}
-                {#                            <li>#}
-                {#                                <a href="?page=admin/information_editor/index">{{ 'nav_admin_information_editor'|trans }}</a>#}
-                {#                            </li>#}
-                {#                            <li><a href="?page=admin/driver_editor/index">{{ 'admin_driver_editor'|trans }}</a>#}
-                {#                            </li>#}
-                {#                            <li><a href="?page=admin/clear_cache/index">{{ 'nav_admin_cache'|trans }}</a></li>#}
-                {#                        </ul>#}
-                {#                    </li>#}
-                {#                {% endif %}#}
+                {% if app.user and app.user.isAdmin %}
+                    <li>
+                        <a href="{{ path('easyadmin') }}">{{ 'nav_admin'|trans }}</a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
         <!-- /.navbar-collapse -->
