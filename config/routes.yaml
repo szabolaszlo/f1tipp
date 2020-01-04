@@ -1,4 +1,4 @@
-controllers_routing:
+#controllers_routing:
   # loads routes from the YAML, XML or PHP files found in that directory
-  resource: '../src/Controller'
-  type:     annotation
+  #resource: '../src/Controller/Page'
+  #type:     annotation

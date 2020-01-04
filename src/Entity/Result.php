@@ -39,7 +39,7 @@ class Result
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isCalculated;
+    private $isCalculated = 0;
 
     /**
      * Result constructor.

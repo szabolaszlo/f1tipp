@@ -10,6 +10,7 @@
 namespace App\Repository;
 
 use App\Entity\Event as EventEnt;
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 
@@ -107,5 +108,28 @@ class Event extends EntityRepository
             ->orderBy('race.weekendOrder', 'DESC')
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNextEventForResult()
+    {
+        $lastResultedEvent = $this->createQueryBuilder('event')
+            ->select('event')
+            ->innerJoin('App:Result', 'result', Join::WITH, 'result.event = event.id')
+            ->orderBy('event.date_time', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult(AbstractQuery::HYDRATE_OBJECT);
+
+        return $this->createQueryBuilder('event')
+            ->select('event')
+            ->where('event.date_time > :last_resulted_event_date')
+            ->setParameter('last_resulted_event_date', $lastResultedEvent->getDateTime())
+            ->orderBy('event.date_time', 'ASC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult(AbstractQuery::HYDRATE_OBJECT);
     }
 }

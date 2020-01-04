@@ -5,6 +5,7 @@ easy_admin:
       - "@EasyAdmin/form/bootstrap_4.html.twig"
       - "@FOSCKEditor/Form/ckeditor_widget.html.twig"
     menu:
+      - { entity: 'Result', icon: 'flag-checkered' }
       - { entity: 'Event', icon: 'calendar' }
       - { entity: 'Message', icon: 'envelope' }
       - { entity: 'Driver', icon: 'car' }
@@ -22,6 +23,8 @@ easy_admin:
           - { property: 'date_time', label: 'admin_event_date'}
           - { property: 'type', label: 'admin_event_type'}
         max_results: 50
+      templates:
+        field_text: 'admin/event_field_text.html.twig'
     Message:
       translation_domain: 'messages'
       label: 'admin_messages'
@@ -46,6 +49,18 @@ easy_admin:
       class: App\Entity\Information
       form:
         fields: ['title', {property: 'content', type: 'fos_ckeditor'}, 'slug', 'news']
-
+    Result:
+      translation_domain: 'messages'
+      label: 'admin_result'
+      class: App\Entity\Result
+      list:
+        fields:
+          - {property: 'event.name', label: 'admin_event_name'}
+          - {property: 'event.date_time', type: 'datetime', label: 'admin_event_date'}
+          - {property: 'event.type', label: 'admin_event_type'}
+      templates:
+        new: 'admin/result_new.html.twig'
+        edit: 'admin/result_edit.html.twig'
+        field_text: 'admin/event_field_text.html.twig'
   user:
     name_property_path: name

@@ -1,0 +1,10 @@
+{% extends '@!EasyAdmin/default/edit.html.twig' %}
+{% block entity_form %}
+    {% form_theme form 'form_table_layout.html.twig' %}
+    {{ form(form) }}
+{% endblock entity_form %}
+{% block content_title %}
+    {% apply spaceless %}
+        {{ form.vars.value.event.name }} {{ form.vars.value.event.type|trans|capitalize  }} {{ 'action.edit'|trans }}
+    {% endapply %}
+{% endblock %}
