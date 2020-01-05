@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\AlternativeChampionship;
+use App\Entity\Event;
 use App\Entity\Race;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -43,5 +44,24 @@ class AlternativeChampionshipRepository extends ServiceEntityRepository
     public function getBetsByUser($user)
     {
         return $this->findBy(['user' => $user]);
+    }
+
+    /**
+     * @param $events
+     * @return Event
+     */
+    public function removeAlterChampsByEvents($events)
+    {
+        $eventIds = [];
+        foreach ($events as $event) {
+            $eventIds[] = $event->getId();
+        }
+
+        return $this->createQueryBuilder('alternative_championship')
+            ->delete('App:AlternativeChampionship', 'ac')
+            ->where('ac.race IN (:e)')
+            ->setParameter('e', $eventIds)
+            ->getQuery()
+            ->execute();
     }
 }

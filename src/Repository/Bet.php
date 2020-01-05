@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Race;
+use App\Entity\Event;
 use App\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
@@ -84,5 +84,20 @@ class Bet extends EntityRepository
             ->getQuery()
             ->setMaxResults(3)
             ->getResult();
+    }
+
+    /**
+     * @param Event $event
+     * @return mixed
+     */
+    public function clearBetPointsByEvent(Event $event)
+    {
+        return $this->createQueryBuilder('bet')
+            ->update('App:Bet', 'b')
+            ->set('b.pointSummary', 'NULL')
+            ->where('b.event_id = :e')
+            ->setParameter('e', $event->getId())
+            ->getQuery()
+            ->execute();
     }
 }

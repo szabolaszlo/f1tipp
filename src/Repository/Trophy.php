@@ -3,25 +3,26 @@
 namespace App\Repository;
 
 use App\Entity\Event;
-use App\Entity\Race;
-use App\Entity\Trophy as TrophyEnt;
 use Doctrine\ORM\EntityRepository;
 
 class Trophy extends EntityRepository
 {
     /**
+     * @param $events
      * @return Event
      */
-    public function getLastCalculatedTrophyEvent()
+    public function removeTrophiesByEvents($events)
     {
-        $lastCalculatedTrophyEvent = $this->findOneBy(
-            ['event' => 'desc']
-        );
-
-        if ($lastCalculatedTrophyEvent instanceof TrophyEnt) {
-            return $lastCalculatedTrophyEvent->getEvent();
+        $eventIds = [];
+        foreach ($events as $event) {
+            $eventIds[] = $event->getId();
         }
 
-        return new Race();
+        return $this->createQueryBuilder('trophy')
+            ->delete('App:Trophy', 't')
+            ->where('t.event IN (:e)')
+            ->setParameter('e', $eventIds)
+            ->getQuery()
+            ->execute();
     }
 }

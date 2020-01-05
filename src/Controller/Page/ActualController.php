@@ -47,7 +47,6 @@ class ActualController extends AbstractController
             $this->getDoctrine()->getRepository('App\Entity\Race')->getNextEvent()
         );
 
-        $calculator->calculate();
         $user = $this->getUser();
 
         $data['tables'] = array();
