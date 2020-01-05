@@ -11,7 +11,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\BetAttribute")
  * @ORM\Table(name="`bet_attribute`")
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */

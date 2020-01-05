@@ -1,6 +1,6 @@
 {% extends 'controller/module/base_module.html.twig' %}
 {% block heading_title %}
-    {% set event_title = event.name|length > 20 ? title|split(' - ').0 : event.name %}
+    {% set event_title = event.name|length > 20 ? event.name|split(' - ').0 : event.name %}
     <strong>{{ event_title }} - {{ 'trophy_trophies'|trans }}</strong>
 {% endblock %}
 {% block body_content %}

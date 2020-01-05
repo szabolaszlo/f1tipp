@@ -21,7 +21,7 @@ class Registry
      */
     public function addCalculator(ICalculator $calculator)
     {
-        if(isset($this->calculators[$calculator->getSortOrder()])){
+        if (isset($this->calculators[$calculator->getSortOrder()])) {
             throw new \Exception("The Calculators must have to different order");
         }
 
@@ -33,6 +33,7 @@ class Registry
      */
     public function getCalculators()
     {
+        ksort($this->calculators);
         return $this->calculators;
     }
 }

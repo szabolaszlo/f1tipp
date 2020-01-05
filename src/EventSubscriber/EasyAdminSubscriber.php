@@ -5,6 +5,7 @@ namespace App\EventSubscriber;
 use App\Calculator\Calculator;
 use App\Entity\Result;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 
@@ -39,8 +40,8 @@ class EasyAdminSubscriber implements EventSubscriberInterface
     {
         return array(
             'easy_admin.post_persist' => array('calculateResults'),
-            'easy_admin.post_update' => array('calculateResults'),
-            'easy_admin.post_remove' => array('calculateResults'),
+            'easy_admin.post_update' => array('reCalculateResults'),
+            'easy_admin.post_remove' => array('reCalculateResults'),
         );
     }
 
@@ -54,16 +55,34 @@ class EasyAdminSubscriber implements EventSubscriberInterface
         if (!($entity instanceof Result)) {
             return;
         }
+        $this->calculator->calculate();
+    }
+
+    /**
+     * @param GenericEvent $event
+     */
+    public function reCalculateResults(GenericEvent $event)
+    {
+        $entity = $event->getSubject();
+
+        if (!($entity instanceof Result)) {
+            return;
+        }
         $event = $entity->getEvent();
 
         $this->em->getRepository('App:Bet')->clearBetPointsByEvent($event);
+        $this->em->getRepository('App:BetAttribute')->clearBetAttributePointsByEvent($event);
         $weekendEvents = $this->em->getRepository('App:Event')->getWeekendEvents($event);
         $this->em->getRepository('App:Trophy')->removeTrophiesByEvents($weekendEvents);
         $this->em->getRepository('App:AlternativeChampionship')->removeAlterChampsByEvents($weekendEvents);
 
-        //TODO: Clear cache
         $this->em->flush();
 
         $this->calculator->calculate();
+
+        $cache = new FilesystemAdapter();
+        $cache->clear();
+        $cache->commit();
+
     }
 }

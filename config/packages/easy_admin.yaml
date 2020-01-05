@@ -11,6 +11,19 @@ easy_admin:
       - { entity: 'Driver', icon: 'car' }
       - { entity: 'Information', icon: 'newspaper' }
   entities:
+    Result:
+      translation_domain: 'messages'
+      label: 'admin_result'
+      class: App\Entity\Result
+      list:
+        fields:
+          - {property: 'event.name', label: 'admin_event_name'}
+          - {property: 'event.date_time', type: 'datetime', label: 'admin_event_date'}
+          - {property: 'event.type', label: 'admin_event_type'}
+      templates:
+        new: 'admin/result_new.html.twig'
+        edit: 'admin/result_edit.html.twig'
+        field_text: 'admin/event_field_text.html.twig'
     Event:
       translation_domain: 'messages'
       label: 'admin_events'
@@ -49,18 +62,5 @@ easy_admin:
       class: App\Entity\Information
       form:
         fields: ['title', {property: 'content', type: 'fos_ckeditor'}, 'slug', 'news']
-    Result:
-      translation_domain: 'messages'
-      label: 'admin_result'
-      class: App\Entity\Result
-      list:
-        fields:
-          - {property: 'event.name', label: 'admin_event_name'}
-          - {property: 'event.date_time', type: 'datetime', label: 'admin_event_date'}
-          - {property: 'event.type', label: 'admin_event_type'}
-      templates:
-        new: 'admin/result_new.html.twig'
-        edit: 'admin/result_edit.html.twig'
-        field_text: 'admin/event_field_text.html.twig'
   user:
     name_property_path: name
