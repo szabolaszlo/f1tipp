@@ -47,25 +47,13 @@ class ActualController extends AbstractController
             $this->getDoctrine()->getRepository('App\Entity\Race')->getNextEvent()
         );
 
-        $user = $this->getUser();
-
-        $data['tables'] = array();
-
         $now = new \DateTime();
-
         /** @var Event $event */
         foreach ($events as $event) {
             $id = abs($now->getTimestamp() - $event->getDateTime()->getTimeStamp());
-
             $titleEvents[$id] = $event;
-//
-//            $data['tables'][$id] = $this->registry->getResultTable()->getTable($user, $event);
         }
-
-//        ksort($data['tables']);
-//
         ksort($titleEvents);
-//
         $titleEvent = reset($titleEvents);
 
         $data['titleEvent'] = array(

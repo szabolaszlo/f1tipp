@@ -1,0 +1,9 @@
+{% for key, table in tables %}
+    {% if loop.first %}
+        <div id="refreshing-able-table">
+            {{ table|raw }}
+        </div>
+    {% else %}
+        {{ table|raw }}
+    {% endif %}
+{% endfor %}

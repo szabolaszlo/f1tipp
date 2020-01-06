@@ -60,7 +60,9 @@ class ResultTable
                 ? $this->em->getRepository('App:Bet')->getBetByUserAndEvent($user, $event)
                 : false;
 
-            if ($userBet) {
+            $now = new \DateTime();
+
+            if ($userBet || $now > $event->getDateTime()) {
                 $type = 'only_bets';
             }
 

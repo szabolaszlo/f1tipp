@@ -1,4 +1,4 @@
-{% extends 'full.html.twig' %}
+{% extends 'extension/result_table/type/full.html.twig' %}
 {% block heading_title %}
     <strong>{{ event.getName() }} - {{ ('general_' ~ event.getType)|trans }}</strong>
 {% endblock %}
