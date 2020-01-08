@@ -11,6 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class AlternativeChampionshipModuleController extends AbstractController
 {
+    //TODO: Design like Result of Championship
     /**
      * @Route("/module/alter_champs", name="module_alter_champs", methods={"GET"})
      */
