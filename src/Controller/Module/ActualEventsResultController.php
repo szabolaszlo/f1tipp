@@ -6,6 +6,7 @@ use App\Entity\Event;
 use App\LegacyService\ResultTable\ResultTable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class ActualEventsResultController
@@ -14,6 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 class ActualEventsResultController extends AbstractController
 {
     /**
+     * @Route("/module/actual_events_result", name="actual_events_result", methods={"GET"})
      * @param ResultTable $resultTable
      * @return Response
      * @throws \Exception

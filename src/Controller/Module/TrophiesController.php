@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\Result;
 use App\Entity\Trophy;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class TrophiesController
@@ -20,6 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 class TrophiesController extends AbstractController
 {
     /**
+     * @Route("/module/trophies", name="module_trophies", methods={"GET"})
      * @return Response
      */
     public function indexAction()

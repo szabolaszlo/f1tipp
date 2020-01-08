@@ -23,8 +23,12 @@
     </div>
     {{ render(controller('App\\Controller\\Module\\TopFeedController::indexAction')) }}
     {{ render(controller('App\\Controller\\Module\\MessageWall::indexAction')) }}
-    {{ render(controller('App\\Controller\\Module\\ActualEventsResultController::indexAction')) }}
-
+    <div class="reload-able-module"
+         data-module-route="actual_events_result"
+         data-module-entities='{"0": "bets","1": "results"}'
+         data-module-count="0">
+        {{ render(controller('App\\Controller\\Module\\ActualEventsResultController::indexAction')) }}
+    </div>
     {#TODO Refact this duplication#}
     <script type="text/javascript">
         var {{ titleEvent.id }}_days = {{ titleEvent.remain_time.days }};
