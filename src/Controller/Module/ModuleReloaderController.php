@@ -21,7 +21,8 @@ class ModuleReloaderController extends AbstractController
         return $this->json([
             'results' => count($this->getDoctrine()->getRepository('App:Result')->findAll()),
             'bets' => count($this->getDoctrine()->getRepository('App:Bet')->findAll()),
-            'trophies' => count($this->getDoctrine()->getRepository('App:Trophy')->findAll())
+            'trophies' => count($this->getDoctrine()->getRepository('App:Trophy')->findAll()),
+            'alter_champs' => count($this->getDoctrine()->getRepository('App:AlternativeChampionship')->findAll())
         ], 200);
 
     }

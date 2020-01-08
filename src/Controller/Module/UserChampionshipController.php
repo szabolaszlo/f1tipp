@@ -3,6 +3,7 @@
 namespace App\Controller\Module;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class UserChampionshipController
@@ -11,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class UserChampionshipController extends AbstractController
 {
     /**
+     * @Route("/module/user_championship", name="module_user_championship", methods={"GET"})
      * @return mixed
      */
     public function indexAction()

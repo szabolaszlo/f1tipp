@@ -24,18 +24,28 @@
         <div class="col-md-4">
             {{ render(controller('App\\Controller\\Module\\CountDownController::indexAction')) }}
 
-            <div id="trophies-result-table">
+            <div class="reload-able-module"
+                 data-module-route="trophies"
+                 data-module-entities='{"0": "trophies"}'
+                 data-module-count="0">
                 {{ render(controller('App\\Controller\\Module\\TrophiesController::indexAction')) }}
             </div>
-            <div id="user-championship-result-table">
+            <div class="reload-able-module"
+                 data-module-route="user_championship"
+                 data-module-entities='{"0": "results"}'
+                 data-module-count="0">
                 {{ render(controller('App\\Controller\\Module\\UserChampionshipController::indexAction')) }}
             </div>
-            {{ alternative_championship_module() }}
+            <div class="reload-able-module"
+                 data-module-route="alter_champs"
+                 data-module-entities='{"0": "alter_champs"}'
+                 data-module-count="0">
+                {{ render(controller('App\\Controller\\Module\\AlternativeChampionshipModuleController::indexAction')) }}
+            </div>
             <div class="visible-xs">
                 {{ render_hinclude(controller('App\\Controller\\Module\\FeedController::indexAction'), {default: 'Loading ..'}) }}
             </div>
             {{ render_hinclude(controller('App\\Controller\\Module\\ResultsOfChampionshipController::indexAction'), {default: 'Loading ..'}) }}
-            {#            {{ modules.tableRefresh }}#}
         </div>
     </div>
     <hr>
