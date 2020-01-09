@@ -5,6 +5,10 @@
 
 <body>
 
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}
+
 {% include('navigation.html.twig') %}
 
 <!-- Page Content -->

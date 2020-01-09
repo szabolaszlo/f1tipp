@@ -29,6 +29,10 @@
          data-module-count="0">
         {{ render(controller('App\\Controller\\Module\\ActualEventsResultController::indexAction')) }}
     </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('module_reload') }}
     {#TODO Refact this duplication#}
     <script type="text/javascript">
         var {{ titleEvent.id }}_days = {{ titleEvent.remain_time.days }};
@@ -60,6 +64,8 @@
             setTimeout("setCountDown_{{ titleEvent.id }}()", 1000);
         }
 
-        setCountDown_{{ titleEvent.id }}();
+        $(document).ready(function () {
+            setCountDown_{{ titleEvent.id }}();
+        });
     </script>
 {% endblock %}
