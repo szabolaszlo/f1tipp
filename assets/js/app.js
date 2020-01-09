@@ -14,7 +14,6 @@ require('bootstrap');
 import '../../node_modules/Hinclude/hinclude.js';
 
 function refreshOnlineUsers() {
-    $.get('/set_online_user');
     $.getJSON("/get_online_user", function (data) {
         $('.user-activity').each(function () {
             $(this).empty();

@@ -20,10 +20,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserActivityController extends AbstractController
 {
     /**
-     * @Route("set_online_user", name="set_online_user", methods={"GET"})
+     * @Route("get_online_user", name="get_online_user", methods={"GET"})
      * @return JsonResponse
      */
-    public function setUserOnlineAction()
+    public function getOnlineUsersAction()
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -35,15 +35,6 @@ class UserActivityController extends AbstractController
             $this->getDoctrine()->getManager()->flush();
         }
 
-        return $this->json('OK', 200);
-    }
-
-    /**
-     * @Route("get_online_user", name="get_online_user", methods={"GET"})
-     * @return JsonResponse
-     */
-    public function getOnlineUsersAction()
-    {
         $users = $this->getDoctrine()->getRepository('App:User')->findAll();
 
         $userNames = array();
