@@ -8,12 +8,17 @@ function reloadModules() {
                     count += data[entity];
                 });
                 if (parseInt($(this).attr('data-module-count')) !== 0
-                    && parseInt($(this).attr('data-module-count')) < count) {
-                    $(this).fadeTo(500, 0.2, function () {
-                        $(this).load('/module/' + $(this).attr('data-module-route'), function () {
-                            $(this).fadeTo(900, 1);
+                    && parseInt($(this).attr('data-module-count')) !== count) {
+                    let noAnimation = !!parseInt($(this).attr('data-module-no-animation'));
+                    if (noAnimation) {
+                        $(this).load('/module/' + $(this).attr('data-module-route'));
+                    } else {
+                        $(this).fadeTo(500, 0.2, function () {
+                            $(this).load('/module/' + $(this).attr('data-module-route'), function () {
+                                $(this).fadeTo(900, 1);
+                            });
                         });
-                    });
+                    }
                 }
                 $(this).attr('data-module-count', count);
             } catch (e) {

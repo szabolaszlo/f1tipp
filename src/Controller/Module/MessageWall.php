@@ -34,7 +34,7 @@ class MessageWall extends AbstractController
     }
 
     /**
-     * @Route("/messages/list", name="message_list", methods={"GET"})
+     * @Route("/module/messages/list", name="message_list", methods={"GET"})
      * @return string
      */
     public function messagesAction()
@@ -45,7 +45,7 @@ class MessageWall extends AbstractController
     }
 
     /**
-     * @Route("/messages/save", name="message_save", methods={"POST"})
+     * @Route("/module/messages/save", name="message_save", methods={"POST"})
      * @param Request $request
      * @return string
      * @throws \Exception

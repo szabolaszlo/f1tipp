@@ -22,6 +22,7 @@ class ModuleReloaderController extends AbstractController
             'results' => count($this->getDoctrine()->getRepository('App:Result')->findAll()),
             'bets' => count($this->getDoctrine()->getRepository('App:Bet')->findAll()),
             'trophies' => count($this->getDoctrine()->getRepository('App:Trophy')->findAll()),
+            'messages' => count($this->getDoctrine()->getRepository('App:Message')->findAll()),
             'alter_champs' => count($this->getDoctrine()->getRepository('App:AlternativeChampionship')->findAll())
         ], 200);
 
