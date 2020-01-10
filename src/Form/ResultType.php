@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Builder\ResultBuilder;
 use App\Entity\Result;
+use App\Form\Constraint\UniqueBetAttributes;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
@@ -65,7 +66,8 @@ class ResultType extends AbstractType
             'entry_type' => ResultAttributesType::class,
             'allow_add' => false,
             'entry_options' => ['label' => false],
-            'label' => false
+            'label' => false,
+            'constraints' => new UniqueBetAttributes()
         ]);
 
         $builder->get('event')->addModelTransformer(new CallbackTransformer(

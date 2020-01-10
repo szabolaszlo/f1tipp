@@ -47,7 +47,6 @@
       <trans-unit id="calendar_time"><source>calendar_time</source><target>Idő</target></trans-unit>
       <trans-unit id="betting_no_login"><source>betting_no_login</source><target>Kérlek jelentkezz be, ha tippelni szeretnél!</target></trans-unit>
       <trans-unit id="betting_time_out"><source>betting_time_out</source><target>Sajnos lejárt a tippelési időszak, legközelebb legyél gyorsabb!</target></trans-unit>
-      <trans-unit id="betting_error"><source>betting_error</source><target>Érvénytelen adatok, kérlek próbáld újra! Előfordulhat, hogy lejárt a bejelentezésed / tippelési időszak!</target></trans-unit>
       <trans-unit id="betting_success"><source>betting_success</source><target>Tipped sikeresen rögzítve!</target></trans-unit>
       <trans-unit id="betting_default_option"><source>betting_default_option</source><target>Tippelj, Mákolj!</target></trans-unit>
       <trans-unit id="betting_submit_qualify"><source>betting_submit_qualify</source><target>Időmérő Tipp Rögzítése</target></trans-unit>

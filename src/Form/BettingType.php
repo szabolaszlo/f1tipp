@@ -3,13 +3,12 @@
 namespace App\Form;
 
 use App\Entity\Bet;
-use App\Entity\BetAttribute;
 use App\Entity\Event;
 use App\Entity\User;
+use App\Form\Constraint\UniqueBetAttributes;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -60,7 +59,8 @@ class BettingType extends AbstractType
             'entry_type' => BetAttributesType::class,
             'allow_add' => true,
             'entry_options' => ['label' => false],
-            'label' => false
+            'label' => false,
+            'constraints'=> new UniqueBetAttributes()
         ]);
 
         $builder->get('user')->addModelTransformer(new CallbackTransformer(
