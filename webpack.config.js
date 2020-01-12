@@ -29,7 +29,10 @@ Encore
         {from: './node_modules/ckeditor-full/adapters', to: 'ckeditor/adapters/[path][name].[ext]'},
         {from: './node_modules/ckeditor-full/lang', to: 'ckeditor/lang/[path][name].[ext]'},
         {from: './node_modules/ckeditor-full/plugins', to: 'ckeditor/plugins/[path][name].[ext]'},
-        {from: './node_modules/ckeditor-full/skins', to: 'ckeditor/skins/[path][name].[ext]'}
+        {from: './node_modules/ckeditor-full/skins', to: 'ckeditor/skins/[path][name].[ext]'},
+        {from: './node_modules/select2-bootstrap-theme/dist', to: 'select2-bootstrap-theme/[path][name].[ext]'},
+        {from: './node_modules/select2/dist', to: 'select2/[path][name].[ext]'},
+        {from: './node_modules/select2/dist', to: 'select2/[path][name].[ext]'}
     ])
     // Uncomment the following line if you are using Webpack Encore <= 0.24
     // .addLoader({test: /\.json$/i, include: [require('path').resolve(__dirname, 'node_modules/ckeditor')], loader: 'raw-loader', type: 'javascript/auto'})
@@ -52,6 +55,7 @@ Encore
     .addEntry('betting', './assets/js/betting.js')
     .addEntry('module_reload', './assets/js/module_reload.js')
     .addEntry('messages', './assets/js/messages.js')
+    .addEntry('select2import', './assets/js/select2import.js')
     //.addEntry('page1', './assets/js/page1.js')
     //.addEntry('page2', './assets/js/page2.js')
 

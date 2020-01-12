@@ -22,9 +22,9 @@
 
             $(selectClass).each(function () {
                 if ($(this).val() == duplicate && duplicate !== "") {
-                    $(this).css('border', '3px solid red');
+                    $(this).parent().css('background-color', 'rgba(255, 25, 25, .5)');
                 } else {
-                    $(this).css('border', '1px solid #ccc');
+                    $(this).parent().css('background-color', 'transparent');
                 }
                 if ($(this).val() == "empty") {
                     nullRecords = true;

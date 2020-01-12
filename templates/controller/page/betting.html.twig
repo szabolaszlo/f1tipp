@@ -1,4 +1,10 @@
 {% extends 'base.html.twig' %}
+{% block stylesheets %}
+    <link href="{{ asset('build/select2-bootstrap-theme/select2-bootstrap.min.css') }}" rel="stylesheet"/>
+    <link href="{{ asset('build/select2/css/select2.min.css') }}" rel="stylesheet"/>
+    {{ parent() }}
+{% endblock %}
+
 {% block body %}
     <div class="row">
         {% for event in events %}
@@ -20,9 +26,11 @@
         {% endfor %}
     </div>
 {% endblock %}
+
 {% block javascripts %}
     {{ parent() }}
     {{ encore_entry_script_tags('betting') }}
+    {{ encore_entry_script_tags('select2import') }}
     <script type="text/javascript">
         $(document).ready(function () {
             {% for event in events %}
@@ -32,6 +40,10 @@
             });
             $('.event-{{ event.event.getId() }}').trigger('change');
             {% endfor %}
+            $('.select2').select2({
+                containerCssClass: "custom-select2",
+                theme: "bootstrap"
+            });
         });
     </script>
 {% endblock %}
