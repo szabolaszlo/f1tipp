@@ -69,6 +69,7 @@ class ResultAttributesType extends AbstractType
                     'choices' => $this->getChoices(
                         $resultAttribute->getResult()->getEvent()->getType(),
                         $form->get('key')->getData()),
+                    'attr' => ['data-widget' => "select2"],
                     'label' => 'result_' . $form->get('key')->getData(),
                 ]);
             }
