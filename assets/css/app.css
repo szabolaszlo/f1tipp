@@ -375,7 +375,7 @@ a:hover.glyphicon {
 }
 
 .form-group {
-    padding: 2px;
+    padding: 4px;
 }
 
 
@@ -397,6 +397,7 @@ a.feed_source {
     font-weight: bold;
     color: yellow;
     padding: 0;
+    text-align: left;
 }
 
 .select2-container--bootstrap .select2-selection--single {

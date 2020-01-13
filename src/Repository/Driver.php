@@ -24,7 +24,7 @@ class Driver extends EntityRepository
 
         /** @var \App\Entity\Driver $driver */
         foreach ($drivers as $driver) {
-            $choices[$driver->getName()] = $driver->getShort();
+            $choices['[' . $driver->getShort() . '] - ' . $driver->getName()] = $driver->getShort();
         }
 
         return $choices;
