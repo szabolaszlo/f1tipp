@@ -22,6 +22,14 @@ class AdminController extends EasyAdminController
         return $this->get('form.factory')->createNamedBuilder(mb_strtolower($this->entity['name']), ResultType::class)->getForm();
     }
 
+    protected function updateEntity($entity)
+    {
+        $this->em->persist($entity);
+        $this->em->flush();
+
+        $this->addFlash('success', 'admin_success_message');
+    }
+
     protected function persistResultEntity($entity, $newForm)
     {
         $result = $newForm->getData();

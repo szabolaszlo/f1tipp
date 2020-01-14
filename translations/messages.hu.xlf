@@ -122,6 +122,7 @@
       <trans-unit id="admin_event_type"><source>admin_event_type</source><target>Típus</target></trans-unit>
       <trans-unit id="admin_event_name"><source>admin_event_name</source><target>Helyszín</target></trans-unit>
       <trans-unit id="admin_messages"><source>admin_messages</source><target>Üzenőfal</target></trans-unit>
+      <trans-unit id="admin_success_message"><source>admin_success_message</source><target>Sikeres Módosítás</target></trans-unit>
       <trans-unit id="admin_driver"><source>admin_driver</source><target>Pilóták</target></trans-unit>
       <trans-unit id="admin_information"><source>admin_information</source><target>Szöveges Tartalmak</target></trans-unit>
       <trans-unit id="messageWall_title"><source>messageWall_title</source><target>ÜZENŐFAL</target></trans-unit>
