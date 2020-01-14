@@ -9,9 +9,9 @@
 
 namespace App\Controller\Module;
 
+use App\Cache\FileCache;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -25,22 +25,20 @@ class ResultsOfChampionshipController extends AbstractController
 
     const CONSTRUCT_JSON_PATH = "http://ergast.com/api/f1/current/constructorStandings.json";
 
+    const RESULTS_CACHE_KEY = 'result_of_championship';
+
     /**
+     * @param FileCache $cache
      * @return Response
      * @throws InvalidArgumentException
      */
-    public function indexAction()
+    public function indexAction(FileCache $cache)
     {
-        $cache = new FilesystemAdapter();
+        $data = $cache->get(self::RESULTS_CACHE_KEY);
 
-        $cachedItem = $cache->getItem('result_of_championship');
-
-        if (!$cachedItem->isHit()) {
-            $this->getResults();
-            $cachedItem = $cache->getItem('result_of_championship');
+        if (empty($data)) {
+            $data = $this->getResults($cache);
         }
-
-        $data = (array)$cachedItem->get();
 
         $data['id'] = 'resultsOfChampionship';
 
@@ -49,19 +47,22 @@ class ResultsOfChampionshipController extends AbstractController
 
     /**
      * @Route("championship_result_cache_warmer", name="championship_result_cache_warmer", methods={"GET"})
+     * @param FileCache $cache
      * @return Response
      * @throws InvalidArgumentException
      */
-    public function getResultsAction()
+    public function getResultsAction(FileCache $cache)
     {
-        $this->getResults();
+        $this->getResults($cache);
         return new Response('OK', 200);
     }
 
     /**
+     * @param FileCache $cache
+     * @return mixed
      * @throws InvalidArgumentException
      */
-    protected function getResults()
+    protected function getResults(FileCache $cache)
     {
         $driverResponse = json_decode(file_get_contents(self::DRIVER_JSON_PATH), true);
 
@@ -81,9 +82,8 @@ class ResultsOfChampionshipController extends AbstractController
         $data['constructStandings'] =
             $constructResponse['MRData']['StandingsTable']['StandingsLists'][0]['ConstructorStandings'];
 
-        $cache = new FilesystemAdapter();
-        $result = $cache->getItem('result_of_championship');
-        $result->set($data);
-        $cache->save($result);
+        $cache->save(self::RESULTS_CACHE_KEY, $data);
+
+        return $data;
     }
 }

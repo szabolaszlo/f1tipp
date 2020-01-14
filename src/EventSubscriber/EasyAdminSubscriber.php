@@ -2,10 +2,10 @@
 
 namespace App\EventSubscriber;
 
+use App\Cache\FileCache;
 use App\Calculator\Calculator;
 use App\Entity\Result;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 
@@ -26,14 +26,21 @@ class EasyAdminSubscriber implements EventSubscriberInterface
     protected $em;
 
     /**
+     * @var FileCache
+     */
+    protected $fileCache;
+
+    /**
      * EasyAdminSubscriber constructor.
      * @param Calculator $calculator
      * @param EntityManagerInterface $em
+     * @param FileCache $fileCache
      */
-    public function __construct(Calculator $calculator, EntityManagerInterface $em)
+    public function __construct(Calculator $calculator, EntityManagerInterface $em, FileCache $fileCache)
     {
         $this->calculator = $calculator;
         $this->em = $em;
+        $this->fileCache = $fileCache;
     }
 
     public static function getSubscribedEvents()
@@ -80,9 +87,6 @@ class EasyAdminSubscriber implements EventSubscriberInterface
 
         $this->calculator->calculate();
 
-        $cache = new FilesystemAdapter();
-        $cache->clear();
-        $cache->commit();
-
+        $this->fileCache->clearAll();
     }
 }

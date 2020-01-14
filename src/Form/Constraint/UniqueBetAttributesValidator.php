@@ -3,7 +3,6 @@
 namespace App\Form\Constraint;
 
 use App\Entity\BetAttribute;
-use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -18,7 +17,7 @@ class UniqueBetAttributesValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint)
     {
-        if ($value instanceof ArrayCollection) {
+        if (is_iterable($value)) {
             $bet = [];
             /** @var BetAttribute $betAttribute */
             foreach ($value as $betAttribute) {

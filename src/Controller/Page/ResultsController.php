@@ -9,11 +9,10 @@
 
 namespace App\Controller\Page;
 
+use App\Cache\FileCache;
 use App\LegacyService\ResultTable\ResultTable;
-use Exception;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -26,34 +25,27 @@ class ResultsController extends AbstractController
     /**
      * @Route(path="/results", name="results", methods={"GET"})
      * @param ResultTable $resultTable
+     * @param FileCache $cache
      * @return Response
-     * @throws Exception
      * @throws InvalidArgumentException
      */
-    public function indexAction(ResultTable $resultTable)
+    public function indexAction(ResultTable $resultTable, FileCache $cache)
     {
         $results = $this->getDoctrine()->getRepository('App:Result')->findAll();
 
-        //TODO Separate this to cache object
         $cacheKey = 'results' . count($results);
 
-        $cache = new FilesystemAdapter();
+        $tables = $cache->get($cacheKey);
 
-        $cachedItem = $cache->getItem($cacheKey);
-
-        if (!$cachedItem->isHit()) {
-            $tables = (array)$cachedItem->get();
-
+        if (empty($tables)) {
             foreach ($results as $result) {
                 $tables[] = $resultTable
                     ->getTable($this->getUser(), $result->getEvent(), 'full')
                     ->renderTable($result->getEvent());
             }
-
-            $cachedItem->set($tables);
-            $cache->save($cachedItem);
+            $cache->save($cacheKey, $tables);
         }
 
-        return $this->render('controller/page/results.html.twig', ['tables' => $cachedItem->get()]);
+        return $this->render('controller/page/results.html.twig', ['tables' => $tables]);
     }
 }

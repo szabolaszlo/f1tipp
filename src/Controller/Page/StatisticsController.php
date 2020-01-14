@@ -9,12 +9,12 @@
 
 namespace App\Controller\Page;
 
+use App\Cache\FileCache;
 use App\LegacyService\Statistics\ObjectSorter;
 use App\LegacyService\Statistics\StatisticsCalculator;
 use Exception;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -38,11 +38,11 @@ class StatisticsController extends AbstractController
      * @Route("/statistics", name="statistics", methods={"GET"})
      * @param ObjectSorter $sorter
      * @param StatisticsCalculator $calculator
+     * @param FileCache $cache
      * @return Response
-     * @throws Exception
      * @throws InvalidArgumentException
      */
-    public function indexAction(ObjectSorter $sorter, StatisticsCalculator $calculator)
+    public function indexAction(ObjectSorter $sorter, StatisticsCalculator $calculator, FileCache $cache)
     {
         $this->sorter = $sorter;
         $this->calculator = $calculator;
@@ -50,24 +50,16 @@ class StatisticsController extends AbstractController
         $bets = $this->getDoctrine()->getRepository('App:Bet')->findAll();
         $results = $this->getDoctrine()->getRepository('App:Result')->findAll();
 
-        //TODO Separate this to cache object
         $cacheKey = 'statistics' . count($results);
+        $data = $cache->get($cacheKey);
 
-        $cache = new FilesystemAdapter();
-
-        $cachedItem = $cache->getItem($cacheKey);
-
-        if (!$cachedItem->isHit()) {
-            $data = (array)$cachedItem->get();
-
+        if (empty($data)) {
             $data['statistics']['bets'] = $this->getStatistics($bets);
             $data['statistics']['results'] = $this->getStatistics($results);
-
-            $cachedItem->set($data);
-            $cache->save($cachedItem);
+            $cache->save($cacheKey, $data);
         }
 
-        return $this->render('controller/page/statistics.html.twig', $cachedItem->get());
+        return $this->render('controller/page/statistics.html.twig', $data);
     }
 
     /**
