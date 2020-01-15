@@ -91,9 +91,12 @@
       <trans-unit id="admin_result_upload_success"><source>admin_result_upload_success</source><target>Sikeres eredmény feltöltés !</target></trans-unit>
       <trans-unit id="admin_no_permisson_or_data_error"><source>admin_no_permisson_or_data_error</source><target>Nincs jogosultságod az oldalhoz!</target></trans-unit>
       <trans-unit id="admin_result"><source>admin_result</source><target>Eredmények</target></trans-unit>
+      <trans-unit id="admin_result_upload"><source>admin_result_upload</source><target>Eredmény Feltöltés</target></trans-unit>
       <trans-unit id="admin_result_upload_submit_qualify"><source>admin_result_upload_submit_qualify</source><target>Időmérő Eredmény Rögzítése</target></trans-unit>
       <trans-unit id="admin_result_upload_submit_race"><source>admin_result_upload_submit_race</source><target>Futam Eredmény Rögzítése</target></trans-unit>
       <trans-unit id="admin_result_upload_default_option"><source>admin_result_upload_default_option</source><target>Add meg az eredményt</target></trans-unit>
+      <trans-unit id="admin_maintenance"><source>admin_maintenance</source><target>Karbantartás</target></trans-unit>
+      <trans-unit id="admin_maintenance_recalculete_points"><source>admin_maintenance_recalculate_points</source><target>Pontok Újraszámolása</target></trans-unit>
       <trans-unit id="upload"><source>upload</source><target>Feltöltés</target></trans-unit>
       <trans-unit id="admin_information_editor_information_title"><source>admin_information_editor_information_title</source><target>Szöveges tartalom címe:</target></trans-unit>
       <trans-unit id="admin_information_editor_information_content"><source>admin_information_editor_information_content</source><target>Szöveges tartalom szerkesztése:</target></trans-unit>

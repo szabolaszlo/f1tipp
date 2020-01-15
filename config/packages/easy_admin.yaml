@@ -10,12 +10,19 @@ easy_admin:
       - { entity: 'Message', icon: 'envelope' }
       - { entity: 'Driver', icon: 'car' }
       - { entity: 'Information', icon: 'newspaper' }
+      - label: 'admin_maintenance'
+        icon: 'tools'
+        children:
+         # - { label: 'admin_maintenance_recalculate_points', icon: 'calculator', route: 'home' }
   entities:
     Result:
       translation_domain: 'messages'
       label: 'admin_result'
       class: App\Entity\Result
+      action:
       list:
+        actions:
+          - { name: 'new', icon: 'upload', label: 'admin_result_upload' }
         fields:
           - {property: 'event.name', label: 'admin_event_name'}
           - {property: 'event.date_time', type: 'datetime', label: 'admin_event_date'}
@@ -60,6 +67,8 @@ easy_admin:
       translation_domain: 'messages'
       label: 'admin_information'
       class: App\Entity\Information
+      list:
+        fields: ['title', 'slug']
       form:
         fields: ['title', {property: 'content', type: 'fos_ckeditor'}, 'slug', 'news']
   user:
