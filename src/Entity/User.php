@@ -20,6 +20,7 @@ class User implements UserInterface
      */
     protected $id;
 
+    //TODO: Duplicate name because legacy stuffs, fix it!
     /**
      * @ORM\Column(name="name", type="string", length=45, nullable=false)
      */
@@ -41,24 +42,19 @@ class User implements UserInterface
     protected $password;
 
     /**
-     * @ORM\OneToMany(targetEntity="UserAuthentication", mappedBy="user", cascade={"persist","remove"})
-     */
-    protected $auth;
-
-    /**
      * @ORM\OneToMany(targetEntity="Trophy", mappedBy="user", cascade={"persist","remove"})
      */
     protected $trophies;
 
     /**
-     * @ORM\OneToMany(targetEntity="UserSkippedNews", mappedBy="user", cascade={"persist","remove"})
-     */
-    protected $skippedNews;
-
-    /**
-     * @ORM\Column(name="timestamp", type="integer", length=11, nullable=false)
+     * @ORM\Column(name="timestamp", type="integer", length=11, nullable=true)
      */
     protected $timestamp;
+
+    /**
+     * @ORM\Column(name="is_alter_champs", type="boolean", nullable=true, options={"default":0})
+     */
+    protected $isAlterChamps;
 
     /**
      * @ORM\Column(name="point_summary", type="integer", length=11, nullable=false)
@@ -306,5 +302,21 @@ class User implements UserInterface
         $this->alternativePointDifference = $alternativePointDifference;
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIsAlterChamps()
+    {
+        return $this->isAlterChamps;
+    }
+
+    /**
+     * @param mixed $isAlterChamps
+     */
+    public function setIsAlterChamps($isAlterChamps): void
+    {
+        $this->isAlterChamps = $isAlterChamps;
     }
 }

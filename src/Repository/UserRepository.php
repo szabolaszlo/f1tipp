@@ -37,7 +37,7 @@ class UserRepository extends ServiceEntityRepository
     public function getAlternativeChampionshipUsers()
     {
         return $this->findBy(
-            ['id' => [1, 2, 3, 6, 7]],
+            ['isAlterChamps' => true],
             ['alternativePointSummary' => 'DESC']
         );
     }

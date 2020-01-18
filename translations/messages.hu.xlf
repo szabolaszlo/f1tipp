@@ -100,6 +100,7 @@
       <trans-unit id="admin_maintenance_recalculete_points_success"><source>admin_maintenance_recalculete_points_success</source><target>Sikeresen újraszámolva a pontok</target></trans-unit>
       <trans-unit id="admin_maintenance_clear_cache_success"><source>admin_maintenance_clear_cache_success</source><target>Sikeres cache törlés</target></trans-unit>
       <trans-unit id="admin_maintenance_cache_clear"><source>admin_maintenance_cache_clear</source><target>Cache Törlés</target></trans-unit>
+      <trans-unit id="admin_menu_users"><source>admin_menu_users</source><target>Felhasználók</target></trans-unit>
       <trans-unit id="upload"><source>upload</source><target>Feltöltés</target></trans-unit>
       <trans-unit id="admin_information_editor_information_title"><source>admin_information_editor_information_title</source><target>Szöveges tartalom címe:</target></trans-unit>
       <trans-unit id="admin_information_editor_information_content"><source>admin_information_editor_information_content</source><target>Szöveges tartalom szerkesztése:</target></trans-unit>

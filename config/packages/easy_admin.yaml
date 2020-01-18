@@ -7,6 +7,7 @@ easy_admin:
     menu:
       - { entity: 'Result', icon: 'flag-checkered' }
       - { entity: 'Event', icon: 'calendar' }
+      - { entity: 'User', icon: 'users' }
       - { entity: 'Message', icon: 'envelope' }
       - { entity: 'Driver', icon: 'car' }
       - { entity: 'Information', icon: 'newspaper' }
@@ -54,6 +55,14 @@ easy_admin:
         fields: ['id', 'user.name', 'content', {property: 'dateTime', type: 'datetime' }]
         batch_actions: ['delete']
         actions: ['-edit', '-new']
+    User:
+      translation_domain: 'messages'
+      label: 'admin_menu_users'
+      class: App\Entity\User
+      list:
+        fields: ['username', 'roles', 'isAlterChamps']
+      form:
+        fields: ['name', 'username', 'roles', 'password', 'isAlterChamps']
     Driver:
       translation_domain: 'messages'
       label: 'admin_driver'
