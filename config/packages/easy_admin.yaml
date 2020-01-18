@@ -13,7 +13,7 @@ easy_admin:
       - label: 'admin_maintenance'
         icon: 'tools'
         children:
-         # - { label: 'admin_maintenance_recalculate_points', icon: 'calculator', route: 'home' }
+          - { label: 'admin_maintenance_recalculate_points', icon: 'calculator', route: 're_calculate_points' }
   entities:
     Result:
       translation_domain: 'messages'
