@@ -14,6 +14,7 @@ easy_admin:
         icon: 'tools'
         children:
           - { label: 'admin_maintenance_recalculate_points', icon: 'calculator', route: 're_calculate_points' }
+          - { label: 'admin_maintenance_cache_clear', icon: 'trash', route: 'cache_clear' }
   entities:
     Result:
       translation_domain: 'messages'
