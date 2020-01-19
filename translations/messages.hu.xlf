@@ -98,6 +98,8 @@
       <trans-unit id="admin_maintenance"><source>admin_maintenance</source><target>Karbantartás</target></trans-unit>
       <trans-unit id="admin_maintenance_recalculete_points"><source>admin_maintenance_recalculate_points</source><target>Pontok Újraszámolása</target></trans-unit>
       <trans-unit id="admin_maintenance_recalculete_points_success"><source>admin_maintenance_recalculete_points_success</source><target>Sikeresen újraszámolva a pontok</target></trans-unit>
+      <trans-unit id="admin_maintenance_reset_season"><source>admin_maintenance_reset_season</source><target>Évad Reset</target></trans-unit>
+      <trans-unit id="admin_maintenance_reset_season_success"><source>admin_maintenance_reset_season_success</source><target>Sikeresen nullázva az évad!</target></trans-unit>
       <trans-unit id="admin_maintenance_clear_cache_success"><source>admin_maintenance_clear_cache_success</source><target>Sikeres cache törlés</target></trans-unit>
       <trans-unit id="admin_maintenance_cache_clear"><source>admin_maintenance_cache_clear</source><target>Cache Törlés</target></trans-unit>
       <trans-unit id="admin_menu_users"><source>admin_menu_users</source><target>Felhasználók</target></trans-unit>
@@ -157,7 +159,7 @@
       <trans-unit id="alternativeChampionship_goal"><source>alternativeChampionship_goal</source><target>Ezzel a pontrendszerrel talán megszűnnének a helyben toporgások, illetve talán jobban tudnánk egymást oda vissza előzni.</target></trans-unit>
       <trans-unit id="alternativeChampionship_test"><source>alternativeChampionship_test</source><target>Egyenlőre CSAK TESZT jelleggel üzemel az alternatív pontozás majd meglátjuk hogyan fog tetszeni.</target></trans-unit>
       <trans-unit id="alternativeChampionship_lag"><source>alternativeChampionship_lag</source><target>Lemaradás</target></trans-unit>
-      <trans-unit id="alternativeChampionship_no_results"><source>alternativeChampionship_no_results</source><target>Még nincsenek eredmények, nézz vissza az első futam után!</target></trans-unit>
+      <trans-unit id="no_results_yet"><source>no_results_yet</source><target>Még nincsenek eredmények, nézz vissza az első futam után!</target></trans-unit>
       <trans-unit id="alternativeChampionship_place"><source>alternativeChampionship_place</source><target>Helyezés</target></trans-unit>
       <trans-unit id="alternativeChampionship_point_calculating"><source>alternativeChampionship_point_calculating</source><target>Pontszámítás</target></trans-unit>
       <trans-unit id="alternative_championship_extension_title"><source>alternative_championship_extension_title</source><target>ALTERNATÍV PONTVERSENY</target></trans-unit>

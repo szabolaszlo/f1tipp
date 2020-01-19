@@ -38,7 +38,7 @@ class FileCache
         $cachedItem = $this->fileSystemAdapter->getItem($key);
 
         if (!$cachedItem->isHit()) {
-            return null;
+            return [];
         }
 
         $cachedValue = $cachedItem->get();
@@ -49,7 +49,7 @@ class FileCache
             return @unserialize($unCompressedValue);
         }
 
-        return null;
+        return [];
     }
 
     /**

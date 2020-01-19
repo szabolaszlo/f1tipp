@@ -5,6 +5,7 @@
             <strong>{{ (id~'_title')|trans }}</strong>
         </div>
         <table class="table table-striped">
+            {% if users|first.alternativePointSummary %}
             <thead>
             <tr>
                 <th><strong class="color-two">{{ (id ~ '_name')|trans }}</strong></th>
@@ -26,6 +27,9 @@
                     </td>
                 </tr>
             {% endfor %}
+            {% else %}
+                {% include('controller/module/no_results.html.twig') %}
+            {% endif %}
             <tr>
                 <td colspan="3" class="text-center" style="padding: 15px;">
                     <strong class="color-two">{{ (id ~ '_description')|trans }}</strong>

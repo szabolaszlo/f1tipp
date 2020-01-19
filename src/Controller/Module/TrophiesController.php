@@ -28,25 +28,31 @@ class TrophiesController extends AbstractController
     {
         $races = $this->getDoctrine()->getRepository('App:Result')->findByType('race');
 
-        /** @var Result $result */
-        $result = end($races);
-
-        $trophies = $this->getDoctrine()->getRepository('App:Trophy')->findBy(
-            array('event' => $result->getEvent())
-        );
-
         $podiumTrophies = [];
 
-        /** @var Trophy $trophy */
-        foreach ($trophies as $trophy) {
-            $podiumTrophies[$trophy->getType()][] = $trophy;
+        $event = false;
+
+        if (!empty($races)) {
+            /** @var Result $result */
+            $result = end($races);
+
+            $event = $result->getEvent();
+
+            $trophies = $this->getDoctrine()->getRepository('App:Trophy')->findBy(
+                array('event' => $event)
+            );
+
+            /** @var Trophy $trophy */
+            foreach ($trophies as $trophy) {
+                $podiumTrophies[$trophy->getType()][] = $trophy;
+            }
         }
 
         return $this->render(
-            'controller/module/trophies/trophies.html.twig',
+            'controller/module/trophies.html.twig',
             [
                 'podium_trophies' => $podiumTrophies,
-                'event' => $result->getEvent(),
+                'event' => $event,
                 'details_link' => '/trophies',
                 'id' => 'trophies_module'
             ]
