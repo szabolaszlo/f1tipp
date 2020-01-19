@@ -42,7 +42,7 @@ class ResultsOfChampionshipController extends AbstractController
 
         $data['id'] = 'resultsOfChampionship';
 
-        return $this->render('controller/module/results_of_championship/results_of_championship.html.twig', $data);
+        return $this->render('controller/module/results_of_championship.html.twig', $data);
     }
 
     /**

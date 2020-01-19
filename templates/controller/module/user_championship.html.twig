@@ -34,12 +34,12 @@
                 {% endfor %}
                 </tbody>
             </table>
-            <table class="table table-condensed">
+            <table class="table table-striped border-primary">
                 <tbody>
                 {% for key, record in records %}
                     {% if record is not empty %}
                         <tr>
-                            <td class="text-center bg-one" colspan="3"
+                            <td class="text-center" colspan="3"
                                 style="border-top: 1px; border-top-color: white;">
                                 <strong class="color-two">{{ (id ~ '_best_of_' ~ key)|trans }}</strong>
                             </td>

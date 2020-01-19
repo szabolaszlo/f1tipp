@@ -1,13 +1,14 @@
 {% extends 'controller/module/base_module.html.twig' %}
 {% block heading_title %}
     {% set title = event.getName|length > 20 ? event.getName|split(' - ').0 : event.getName %}
-    <strong >{{ title }} - {{ (id ~ '_title')|trans }}</strong>
+    <strong>{{ title }} - {{ (id ~ '_title')|trans }}</strong>
 {% endblock %}
 {% block body_content %}
     <div class="panel-body center-block">
         <div class="table-responsive table-striped center-block">
             <table class="table table-striped">
                 <thead>
+                <th></th>
                 <th>{{ (id ~ '_driver')|trans }}</th>
                 <th>{{ (id ~ '_point')|trans }}</th>
                 <th>{{ (id ~ '_wins')|trans }}</th>
@@ -15,15 +16,17 @@
                 <tbody>
                 {% for driver in driverStandings %}
                     <tr>
-                        <td>{{ driver.Driver.givenName }} {{ driver.Driver.familyName }}</td>
-                        <td>{{ driver.points }}</td>
-                        <td>{{ driver.wins }}</td>
+                        <td></td>
+                        <td><strong>{{ driver.Driver.givenName }} {{ driver.Driver.familyName }}</strong></td>
+                        <td><strong class="color-one">{{ driver.points }}</strong></td>
+                        <td><strong class="color-two">{{ driver.wins }}</strong></td>
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
             <table class="table table-striped">
                 <thead>
+                <th></th>
                 <th>{{ (id ~ '_construct')|trans }}</th>
                 <th>{{ (id ~ '_point')|trans }}</th>
                 <th>{{ (id ~ '_wins')|trans }}</th>
@@ -31,9 +34,10 @@
                 <tbody>
                 {% for construct in constructStandings %}
                     <tr>
-                        <td>{{ construct.Constructor.name }}</td>
-                        <td>{{ construct.points }}</td>
-                        <td>{{ construct.wins }}</td>
+                        <td></td>
+                        <td><strong>{{ construct.Constructor.name }}</strong></td>
+                        <td><strong class="color-one">{{ construct.points }}</strong></td>
+                        <td><strong class="color-two">{{ construct.wins }}</strong></td>
                     </tr>
                 {% endfor %}
                 </tbody>
