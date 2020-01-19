@@ -237,14 +237,18 @@ class User implements UserInterface
      */
     public function getPodiumTrophies()
     {
-        $trophies = array();
+        $trophies = [
+            'gold' => null,
+            'silver' => null,
+            'bronze' => null
+        ];
 
         /** @var Trophy $trophy */
         foreach ($this->trophies as $trophy) {
             $trophies[$trophy->getType()][] = $trophy;
         }
 
-        return array_replace(array_flip(array('gold', 'silver', 'bronze')), $trophies);
+        return $trophies;
     }
 
     /**

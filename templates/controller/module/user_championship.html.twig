@@ -16,8 +16,7 @@
                         <td><strong>{{ user.getName() }}</strong></td>
                         <td>
                             {% for type, trophies in podiumTrophies %}
-                                {% set trophy = trophies|first %}
-                                {% if type %}
+                                {% if trophies is not empty %}
                                     <span title="{{ ('trophy_type_' ~ type)|trans }}">
                                         <img src="{{ asset('build/images/trophy_' ~ type ~ '.png') }}" height="18">
                                       </span>

@@ -18,7 +18,7 @@ class UserChampionshipController extends AbstractController
     public function indexAction()
     {
         return $this->render(
-            'controller/module/user_championship/user_championship.html.twig',
+            'controller/module/user_championship.html.twig',
             [
                 'users' => $this
                     ->getDoctrine()
