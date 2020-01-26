@@ -123,6 +123,10 @@ class Event extends EntityRepository
             ->getQuery()
             ->getOneOrNullResult(AbstractQuery::HYDRATE_OBJECT);
 
+        if (!$lastResultedEvent) {
+            return $this->getNextEvent();
+        }
+
         return $this->createQueryBuilder('event')
             ->select('event')
             ->where('event.date_time > :last_resulted_event_date')
