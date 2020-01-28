@@ -124,7 +124,7 @@ class Event extends EntityRepository
             ->getOneOrNullResult(AbstractQuery::HYDRATE_OBJECT);
 
         if (!$lastResultedEvent) {
-            return $this->getNextEvent();
+            return $this->findOneBy(['id' => 1]);
         }
 
         return $this->createQueryBuilder('event')

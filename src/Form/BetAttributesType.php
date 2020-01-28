@@ -83,7 +83,7 @@ class BetAttributesType extends AbstractType
 
         $ruleAttribute = $rule->getAttributeById($key);
 
-        $choices = [$this->translator->trans('betting_default_option') => 'empty'];
+        $choices = [''=>''];
 
         //TODO Make some provider or something instead of this wtf
         if ($ruleAttribute->getType() == 'driver') {

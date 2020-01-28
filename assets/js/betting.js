@@ -13,7 +13,7 @@
             for (let i = 0; i < selects.length; i++) {
                 for (let j = 0; j < selects.length; j++) {
                     if (i !== j) {
-                        if (selects[i] === selects[j] && selects[i] !== "empty") {
+                        if (selects[i] === selects[j] && selects[i] !== "") {
                             duplicate = selects[i];
                         }
                     }
@@ -26,7 +26,7 @@
                 } else {
                     $(this).parent().css('background-color', 'transparent');
                 }
-                if ($(this).val() == "empty") {
+                if ($(this).val() == "") {
                     nullRecords = true;
                 }
             });
