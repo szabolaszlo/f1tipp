@@ -55,6 +55,15 @@ class Event extends EntityRepository
         return $nextEvent;
     }
 
+    public function clearResultCaches()
+    {
+        $resultCache = $this->_em->getConfiguration()->getResultCacheImpl();
+        $cacheKey = $this->_entityName . 'NextEvent';
+        $resultCache->delete($cacheKey);
+        $cacheKey = $this->_entityName . 'Remain';
+        $resultCache->delete($cacheKey);
+    }
+
     /**
      * @return array|mixed
      */

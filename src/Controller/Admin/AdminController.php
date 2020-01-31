@@ -37,4 +37,14 @@ class AdminController extends EasyAdminController
         $this->getDoctrine()->getManager()->flush();
         $this->addFlash('success', 'admin_result_upload_success');
     }
+
+    protected function persistEventEntity($entity, $newForm)
+    {
+        $this->getDoctrine()->getManager()->persist($entity);
+        $this->getDoctrine()->getManager()->flush();
+        $entity->clearResultCaches();
+        $this->addFlash('success', 'admin_result_upload_success');
+    }
+
+
 }

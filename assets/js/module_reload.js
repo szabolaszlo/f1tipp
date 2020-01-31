@@ -7,8 +7,7 @@ function reloadModules() {
                 $.each(entities, function (index, entity) {
                     count += data[entity];
                 });
-                if (parseInt($(this).attr('data-module-count')) !== 0
-                    && parseInt($(this).attr('data-module-count')) !== count) {
+                if (parseInt($(this).attr('data-module-count')) !== count) {
                     let noAnimation = !!parseInt($(this).attr('data-module-no-animation'));
                     if (noAnimation) {
                         $(this).load('/module/' + $(this).attr('data-module-route'));
