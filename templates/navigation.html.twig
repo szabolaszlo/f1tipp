@@ -45,7 +45,7 @@
                 <li {{ current_path == 'statistics' ? 'class="active"' : '' }}>
                     <a href="{{ path('statistics') }}">{{ 'nav_statistics'|trans }}</a>
                 </li>
-                {% if app.user and app.user.isAdmin %}
+                {% if app.user and is_granted('ROLE_ADMIN') %}
                     <li>
                         <a href="{{ path('easyadmin') }}">{{ 'nav_admin'|trans }}</a>
                     </li>

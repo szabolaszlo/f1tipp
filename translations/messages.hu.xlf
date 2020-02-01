@@ -104,6 +104,7 @@
       <trans-unit id="admin_maintenance_cache_clear"><source>admin_maintenance_cache_clear</source><target>Cache Törlés</target></trans-unit>
       <trans-unit id="admin_menu_users"><source>admin_menu_users</source><target>Felhasználók</target></trans-unit>
       <trans-unit id="upload"><source>upload</source><target>Feltöltés</target></trans-unit>
+      <trans-unit id="back_to_home"><source>back_to_home</source><target>Vissza a Weboldalra</target></trans-unit>
       <trans-unit id="admin_information_editor_information_title"><source>admin_information_editor_information_title</source><target>Szöveges tartalom címe:</target></trans-unit>
       <trans-unit id="admin_information_editor_information_content"><source>admin_information_editor_information_content</source><target>Szöveges tartalom szerkesztése:</target></trans-unit>
       <trans-unit id="admin_information_editor_save"><source>admin_information_editor_save</source><target>Mentés</target></trans-unit>

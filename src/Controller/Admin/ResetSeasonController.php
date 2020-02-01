@@ -17,7 +17,7 @@ class ResetSeasonController extends AbstractController
 {
     /**
      * @Route(path = "/admin/maintenance/reset_season", name = "reset_season")
-     * @Security("has_role('ROLE_ADMIN')")
+     * @Security("has_role('ROLE_SUPER_ADMIN')")
      * @param FileCache $fileCache
      * @return RedirectResponse
      * @throws \Exception

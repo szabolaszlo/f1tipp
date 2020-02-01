@@ -11,10 +11,13 @@ easy_admin:
       - { entity: 'Message', icon: 'envelope' }
       - { entity: 'Driver', icon: 'car' }
       - { entity: 'Information', icon: 'newspaper' }
+      - label: 'back_to_home'
+        route: 'home'
+        icon: 'globe-americas'
       - label: 'admin_maintenance'
         icon: 'tools'
         children:
-          - { label: 'admin_maintenance_recalculate_points', icon: 'calculator', route: 're_calculate_points' }
+          - { label: 'admin_maintenance_recalculate_points', icon: 'calculator', route: 're_calculate_points', item_permission: ['ROLE_SUPER_ADMIN'] }
           - { label: 'admin_maintenance_cache_clear', icon: 'trash', route: 'cache_clear' }
           - { label: 'admin_maintenance_reset_season', icon: 'trash', route: 'reset_season' }
   entities:
@@ -46,6 +49,11 @@ easy_admin:
           - { property: 'date_time', label: 'admin_event_date'}
           - { property: 'type', label: 'admin_event_type'}
         max_results: 50
+        item_permission: ['ROLE_SUPER_ADMIN']
+      edit:
+        item_permission: ['ROLE_SUPER_ADMIN']
+      new:
+        item_permission: ['ROLE_SUPER_ADMIN']
       templates:
         field_text: 'admin/event_field_text.html.twig'
     Message:
@@ -56,12 +64,22 @@ easy_admin:
         fields: ['id', 'user.name', 'content', {property: 'dateTime', type: 'datetime' }]
         batch_actions: ['delete']
         actions: ['-edit', '-new']
+        item_permission: ['ROLE_SUPER_ADMIN']
+      edit:
+        item_permission: ['ROLE_SUPER_ADMIN']
+      new:
+        item_permission: ['ROLE_SUPER_ADMIN']
     User:
       translation_domain: 'messages'
       label: 'admin_menu_users'
       class: App\Entity\User
       list:
         fields: ['username', 'roles', 'isAlterChamps']
+        item_permission: ['ROLE_SUPER_ADMIN']
+      edit:
+        item_permission: ['ROLE_SUPER_ADMIN']
+      new:
+        item_permission: ['ROLE_SUPER_ADMIN']
       form:
         fields: ['name', 'username', 'roles', 'password', 'isAlterChamps']
     Driver:
@@ -72,6 +90,11 @@ easy_admin:
         sort: 'point'
         max_results: 50
         filters: ['status']
+        item_permission: ['ROLE_SUPER_ADMIN']
+      edit:
+        item_permission: ['ROLE_SUPER_ADMIN']
+      new:
+        item_permission: ['ROLE_SUPER_ADMIN']
       templates:
         list: 'admin/driver_list.html.twig'
     Information:
@@ -80,7 +103,12 @@ easy_admin:
       class: App\Entity\Information
       list:
         fields: ['title', 'slug']
+        item_permission: ['ROLE_SUPER_ADMIN']
       form:
         fields: ['title', {property: 'content', type: 'fos_ckeditor'}, 'slug', 'news']
+      edit:
+        item_permission: ['ROLE_SUPER_ADMIN']
+      new:
+        item_permission: ['ROLE_SUPER_ADMIN']
   user:
     name_property_path: name

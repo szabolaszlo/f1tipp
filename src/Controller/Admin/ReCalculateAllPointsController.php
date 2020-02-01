@@ -23,7 +23,7 @@ class ReCalculateAllPointsController extends AbstractController
 
     /**
      * @Route(path = "/admin/maintenance/re_calculate_points", name = "re_calculate_points")
-     * @Security("has_role('ROLE_ADMIN')")
+     * @Security("has_role('ROLE_SUPER_ADMIN')")
      * @param Calculator $calculator
      * @param FileCache $fileCache
      * @return RedirectResponse
