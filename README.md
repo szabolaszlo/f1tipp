@@ -39,4 +39,5 @@ php bin/console doctrine:database:create
 
 ## Cron
 - `/cron/search_cover_photo` This cron is try to check new cover image from facebook/boxutca. Recommend refresh hourly.
-- `/cron/collect_feeds` This cron is try to refresh news with motorsport.com feed. Recommend refersh every 5 minutes.
+- `/cron/collect_feeds` This cron is try to refresh news with motorsport.com feed. Recommend refersh every 15 minutes.
+- `/cron/championship_result_cache_warmer` This cron is try to refresh results of championship. Recommend refersh every 15 minutes.

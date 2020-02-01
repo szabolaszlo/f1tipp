@@ -46,7 +46,7 @@ class ResultsOfChampionshipController extends AbstractController
     }
 
     /**
-     * @Route("championship_result_cache_warmer", name="championship_result_cache_warmer", methods={"GET"})
+     * @Route("cron/championship_result_cache_warmer", name="championship_result_cache_warmer", methods={"GET"})
      * @param FileCache $cache
      * @return Response
      * @throws InvalidArgumentException
