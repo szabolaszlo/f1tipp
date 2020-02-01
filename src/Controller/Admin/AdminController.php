@@ -38,13 +38,24 @@ class AdminController extends EasyAdminController
         $this->addFlash('success', 'admin_result_upload_success');
     }
 
-    protected function persistEventEntity($entity, $newForm)
+    protected function updateEventEntity($entity, $newForm)
     {
         $this->getDoctrine()->getManager()->persist($entity);
         $this->getDoctrine()->getManager()->flush();
-        $entity->clearResultCaches();
+
+        $resultCache = $this->getDoctrine()->getManager()->getConfiguration()->getResultCacheImpl();
+        $cacheKey = $this->get_class_name(get_class($entity)) . 'NextEvent';
+        $resultCache->delete($cacheKey);
+        $cacheKey = $this->get_class_name(get_class($entity)) . 'Remain';
+        $resultCache->delete($cacheKey);
+
         $this->addFlash('success', 'admin_result_upload_success');
     }
 
+    function get_class_name($classname)
+    {
+        if ($pos = strrpos($classname, '\\')) return substr($classname, $pos + 1);
+        return $pos;
+    }
 
 }
