@@ -44,9 +44,9 @@ class AdminController extends EasyAdminController
         $this->getDoctrine()->getManager()->flush();
 
         $resultCache = $this->getDoctrine()->getManager()->getConfiguration()->getResultCacheImpl();
-        $cacheKey = $this->get_class_name(get_class($entity)) . 'NextEvent';
+        $cacheKey = get_class($entity) . 'NextEvent';
         $resultCache->delete($cacheKey);
-        $cacheKey = $this->get_class_name(get_class($entity)) . 'Remain';
+        $cacheKey = get_class($entity) . 'Remain';
         $resultCache->delete($cacheKey);
 
         $this->addFlash('success', 'admin_result_upload_success');
