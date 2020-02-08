@@ -78,7 +78,8 @@ class MotorSportRepository implements IRepository
 
             $itemObj->setId(strtotime($item[self::PUBLISH_DATE]));
             $itemObj->setTitle($item[self::TITLE]);
-            $itemObj->setDescription($item[self::DESCRIPTION]);
+            $cropDescription = preg_replace('/<br><br>Még több F1 hír:.*\.\.\./', '...', $item[self::DESCRIPTION]);
+            $itemObj->setDescription($cropDescription);
             $itemObj->setLink($item[self::LINK]);
             $itemObj->setPublishDate($item[self::PUBLISH_DATE]);
             $itemObj->setImage($item['enclosure']['@attributes']['url']);
