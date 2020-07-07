@@ -43,11 +43,11 @@ class ReCalculateAllPointsController extends AbstractController
         $stmt->execute();
         $stmt->closeCursor();
 
-        $fs = new Filesystem();
-        $fs->remove($this->getParameter('kernel.cache_dir') . '/doctrine');
-        $fs->remove($this->getParameter('kernel.cache_dir') . '/twig');
-        $fs->remove($this->getParameter('kernel.cache_dir') . '/pools');
-        $fs->remove($this->getParameter('kernel.cache_dir') . '/profiler');
+    //    $fs = new Filesystem();
+    //    $fs->remove($this->getParameter('kernel.cache_dir') . '/doctrine');
+    //    $fs->remove($this->getParameter('kernel.cache_dir') . '/twig');
+    //    $fs->remove($this->getParameter('kernel.cache_dir') . '/pools');
+    //    $fs->remove($this->getParameter('kernel.cache_dir') . '/profiler');
 
         $calculator->calculate();
 
