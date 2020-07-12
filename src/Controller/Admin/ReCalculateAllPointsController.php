@@ -22,6 +22,21 @@ class ReCalculateAllPointsController extends AbstractController
     //TODO Add some Loading animation becouse it is a heavy controller
 
     /**
+     * @var Filesystem
+     */
+    protected $fileSystem = null;
+
+    /**
+     * @var string[]
+     */
+    protected $cacheDirs = [
+        'doctrine',
+        'twig',
+        'pool',
+        'profiler'
+    ];
+
+    /**
      * @Route(path = "/admin/maintenance/re_calculate_points", name = "re_calculate_points")
      * @Security("has_role('ROLE_SUPER_ADMIN')")
      * @param Calculator $calculator
@@ -43,18 +58,49 @@ class ReCalculateAllPointsController extends AbstractController
         $stmt->execute();
         $stmt->closeCursor();
 
-    //    $fs = new Filesystem();
-    //    $fs->remove($this->getParameter('kernel.cache_dir') . '/doctrine');
-    //    $fs->remove($this->getParameter('kernel.cache_dir') . '/twig');
-    //    $fs->remove($this->getParameter('kernel.cache_dir') . '/pools');
-    //    $fs->remove($this->getParameter('kernel.cache_dir') . '/profiler');
+        $this->getDoctrine()->getManager()->clear();
 
         $calculator->calculate();
+
+        foreach ($this->cacheDirs as $cacheDir) {
+            $this->renameCacheDir($cacheDir);
+        }
+
+        foreach ($this->cacheDirs as $cacheDir) {
+            $this->removeCacheDir($cacheDir);
+        }
 
         $fileCache->clearAll();
 
         $this->addFlash('success', 'admin_maintenance_recalculete_points_success');
 
         return $this->redirect($this->generateUrl('easyadmin'));
+    }
+
+    /**
+     * @param $name
+     */
+    protected function renameCacheDir($name)
+    {
+        if (null === $this->fileSystem) {
+            $this->fileSystem = new Filesystem();
+        }
+
+        $this->fileSystem->rename(
+            $this->getParameter('kernel.cache_dir') . "/$name",
+            $this->getParameter('kernel.cache_dir') . "/$name" . "2"
+        );
+    }
+
+    /**
+     * @param $name
+     */
+    protected function removeCacheDir($name)
+    {
+        if (null === $this->fileSystem) {
+            $this->fileSystem = new Filesystem();
+        }
+
+        $this->fileSystem->remove($this->getParameter('kernel.cache_dir') . "/$name" . "2");
     }
 }
