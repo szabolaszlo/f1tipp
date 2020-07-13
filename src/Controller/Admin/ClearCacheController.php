@@ -37,10 +37,10 @@ class ClearCacheController extends AbstractController
 
         $fs->rename(
             $this->getParameter('kernel.cache_dir'),
-            $this->getParameter('kernel.cache_dir' . '2')
+            $this->getParameter('kernel.cache_dir') . '2'
         );
 
-        $fs->remove($this->getParameter('kernel.cache_dir' . '2'));
+        $fs->remove($this->getParameter('kernel.cache_dir'). '2');
 
         $this->addFlash('success', 'admin_maintenance_clear_cache_success');
         header("Location: /admin");
