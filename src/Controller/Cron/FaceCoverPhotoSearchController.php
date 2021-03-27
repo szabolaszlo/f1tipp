@@ -24,7 +24,6 @@ class FaceCoverPhotoSearchController extends AbstractController
     {
         $sourceCode = $this->getWebPage(self::URL);
         $img = '';
-        return new Response($img, 200);
         preg_match_all('/"coverPhotoData":{.*?{.*?{.*?},"uri":"(.*?)"/m', $sourceCode['content'], $matches, PREG_SET_ORDER, 0);
         foreach ($matches as $match) {
             if (isset($match[1])) {
