@@ -96,6 +96,7 @@
       <trans-unit id="admin_result_upload_submit_race"><source>admin_result_upload_submit_race</source><target>Futam Eredmény Rögzítése</target></trans-unit>
       <trans-unit id="admin_result_upload_default_option"><source>admin_result_upload_default_option</source><target>Add meg az eredményt</target></trans-unit>
       <trans-unit id="admin_maintenance"><source>admin_maintenance</source><target>Karbantartás</target></trans-unit>
+      <trans-unit id="admin_setting"><source>admin_setting</source><target>Beállítások</target></trans-unit>
       <trans-unit id="admin_maintenance_recalculete_points"><source>admin_maintenance_recalculate_points</source><target>Pontok Újraszámolása</target></trans-unit>
       <trans-unit id="admin_maintenance_recalculete_points_success"><source>admin_maintenance_recalculete_points_success</source><target>Sikeresen újraszámolva a pontok</target></trans-unit>
       <trans-unit id="admin_maintenance_reset_season"><source>admin_maintenance_reset_season</source><target>Évad Reset</target></trans-unit>

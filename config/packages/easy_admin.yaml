@@ -11,6 +11,7 @@ easy_admin:
       - { entity: 'Message', icon: 'envelope' }
       - { entity: 'Driver', icon: 'car' }
       - { entity: 'Information', icon: 'newspaper' }
+      - { entity: 'Setting', icon: 'tools' }
       - label: 'back_to_home'
         route: 'home'
         icon: 'globe-americas'
@@ -110,5 +111,18 @@ easy_admin:
         item_permission: ['ROLE_SUPER_ADMIN']
       new:
         item_permission: ['ROLE_SUPER_ADMIN']
+    Setting:
+      translation_domain: 'messages'
+      label: 'admin_setting'
+      class: App\Entity\Setting
+      list:
+        fields: [ 'key', 'value' ]
+        item_permission: [ 'ROLE_SUPER_ADMIN' ]
+      form:
+        fields: [ 'key', 'value' ]
+      edit:
+        item_permission: [ 'ROLE_SUPER_ADMIN' ]
+      new:
+        item_permission: [ 'ROLE_SUPER_ADMIN' ]
   user:
     name_property_path: name
