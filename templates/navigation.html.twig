@@ -39,8 +39,14 @@
                 <li {{ 'calendar'  in current_path  ? 'class="active"' : '' }}>
                     <a href="{{ path('calendar') }}">{{ 'nav_calendar'|trans }}</a>
                 </li>
-                <li {{ 'information_show'  in current_path  ? 'class="active"' : '' }}>
-                    <a href="{{ path('information_show', {'slug':'szabalyzat'}) }}">{{ 'nav_rules'|trans }}</a>
+                <li class="dropdown {{ current_path == 'information_show' ? 'active ' : '' }}">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="">{{ 'nav_rules'|trans }}<span
+                                class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ path('information_show', {'slug':'szabalyzat'}) }}">{{ 'nav_rules'|trans }} 2021</a></li>
+                        <li><a href="{{ path('information_show', {'slug':'szabalyzat_2022'}) }}">{{ 'nav_rules'|trans }} 2022</a></li>
+                        </li>
+                    </ul>
                 </li>
                 <li {{ current_path == 'statistics' ? 'class="active"' : '' }}>
                     <a href="{{ path('statistics') }}">{{ 'nav_statistics'|trans }}</a>
