@@ -12,7 +12,7 @@ table caption {
 }
 
 .color-one {
-    color: yellow;
+    color: #FFC906;
 }
 
 .color-two {
@@ -133,9 +133,15 @@ fieldset[disabled] .btn-new.active {
     margin-bottom: 0;
 }
 
+.panel-group{
+    border: 0px;
+    padding: 5px;
+    background-color: #CC1E4A;
+}
+
 .panel-default > .panel-heading {
     color: rgba(255, 255, 255, .75);
-    background-color: rgb(140, 5, 1);
+    background-color: #223971;
     border-radius: 0px;
     border: 0px;
     padding-top: 8px;

@@ -35,17 +35,17 @@ class ResultsController extends AbstractController
 
         $cacheKey = 'results' . count($results);
 
-        $tables = $cache->get($cacheKey);
+        $weekends = $cache->get($cacheKey);
 
-        if (empty($tables)) {
+        if (empty($weekends)) {
             foreach ($results as $result) {
-                $tables[] = $resultTable
+                $weekends[$result->getEvent()->getWeekendOrder()][] = $resultTable
                     ->getTable($this->getUser(), $result->getEvent(), 'full')
                     ->renderTable($result->getEvent());
             }
-            $cache->save($cacheKey, $tables);
+            $cache->save($cacheKey, $weekends);
         }
 
-        return $this->render('controller/page/results.html.twig', ['tables' => $tables]);
+        return $this->render('controller/page/results.html.twig', ['weekends' => $weekends]);
     }
 }
