@@ -35,14 +35,25 @@ class ResultsController extends AbstractController
 
         $cacheKey = 'results' . count($results);
 
-        $weekends = $cache->get($cacheKey);
+        $weekends = null;//$cache->get($cacheKey);
 
         if (empty($weekends)) {
             foreach ($results as $result) {
                 $weekends[$result->getEvent()->getWeekendOrder()][] = $resultTable
                     ->getTable($this->getUser(), $result->getEvent(), 'full')
                     ->renderTable($result->getEvent());
+
+                if ($result->getEvent()->getType() == 'race') {
+                    $weekends[$result->getEvent()->getWeekendOrder()]['summary'] =
+                        $this->getDoctrine()->getRepository('App:AlternativeChampionship')->findBy(
+                            ['race' => $result->getEvent()->getId()],
+                            ['points'=>'DESC']
+                        );
+                }
+
             }
+          //       dump($weekends);die();
+
             $cache->save($cacheKey, $weekends);
         }
 
