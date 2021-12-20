@@ -6,7 +6,7 @@ use App\Entity\AlternativeChampionship;
 use App\Entity\Event;
 use App\Entity\Race;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method AlternativeChampionship|null find($id, $lockMode = null, $lockVersion = null)

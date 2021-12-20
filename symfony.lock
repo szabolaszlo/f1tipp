@@ -26,6 +26,9 @@
     "doctrine/dbal": {
         "version": "v2.10.0"
     },
+    "doctrine/deprecations": {
+        "version": "v0.5.3"
+    },
     "doctrine/doctrine-bundle": {
         "version": "2.0",
         "recipe": {
@@ -78,6 +81,9 @@
     "doctrine/reflection": {
         "version": "v1.0.0"
     },
+    "doctrine/sql-formatter": {
+        "version": "1.1.2"
+    },
     "easycorp/easy-log-handler": {
         "version": "1.0",
         "recipe": {
@@ -106,6 +112,9 @@
     "egulias/email-validator": {
         "version": "2.1.12"
     },
+    "friendsofphp/proxy-manager-lts": {
+        "version": "v1.0.5"
+    },
     "friendsofsymfony/ckeditor-bundle": {
         "version": "2.0",
         "recipe": {
@@ -124,8 +133,14 @@
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },
+    "laminas/laminas-code": {
+        "version": "4.5.1"
+    },
     "monolog/monolog": {
         "version": "1.25.3"
+    },
+    "myclabs/deep-copy": {
+        "version": "1.10.2"
     },
     "nikic/php-parser": {
         "version": "v4.3.0"
@@ -139,6 +154,12 @@
     "pagerfanta/pagerfanta": {
         "version": "v2.1.3"
     },
+    "phar-io/manifest": {
+        "version": "2.0.3"
+    },
+    "phar-io/version": {
+        "version": "3.1.0"
+    },
     "php": {
         "version": "7.2"
     },
@@ -151,6 +172,41 @@
     "phpdocumentor/type-resolver": {
         "version": "1.0.1"
     },
+    "phpspec/prophecy": {
+        "version": "v1.15.0"
+    },
+    "phpstan/phpdoc-parser": {
+        "version": "1.2.0"
+    },
+    "phpunit/php-code-coverage": {
+        "version": "9.2.10"
+    },
+    "phpunit/php-file-iterator": {
+        "version": "3.0.6"
+    },
+    "phpunit/php-invoker": {
+        "version": "3.1.1"
+    },
+    "phpunit/php-text-template": {
+        "version": "2.0.4"
+    },
+    "phpunit/php-timer": {
+        "version": "5.0.3"
+    },
+    "phpunit/phpunit": {
+        "version": "9.5",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "9.3",
+            "ref": "a6249a6c4392e9169b87abf93225f7f9f59025e6"
+        },
+        "files": [
+            ".env.test",
+            "phpunit.xml.dist",
+            "tests/bootstrap.php"
+        ]
+    },
     "psr/cache": {
         "version": "1.0.1"
     },
@@ -162,6 +218,54 @@
     },
     "psr/log": {
         "version": "1.1.2"
+    },
+    "sebastian/cli-parser": {
+        "version": "1.0.1"
+    },
+    "sebastian/code-unit": {
+        "version": "1.0.8"
+    },
+    "sebastian/code-unit-reverse-lookup": {
+        "version": "2.0.3"
+    },
+    "sebastian/comparator": {
+        "version": "4.0.6"
+    },
+    "sebastian/complexity": {
+        "version": "2.0.2"
+    },
+    "sebastian/diff": {
+        "version": "4.0.4"
+    },
+    "sebastian/environment": {
+        "version": "5.1.3"
+    },
+    "sebastian/exporter": {
+        "version": "4.0.4"
+    },
+    "sebastian/global-state": {
+        "version": "5.0.3"
+    },
+    "sebastian/lines-of-code": {
+        "version": "1.0.3"
+    },
+    "sebastian/object-enumerator": {
+        "version": "4.0.4"
+    },
+    "sebastian/object-reflector": {
+        "version": "2.0.4"
+    },
+    "sebastian/recursion-context": {
+        "version": "4.0.4"
+    },
+    "sebastian/resource-operations": {
+        "version": "3.0.3"
+    },
+    "sebastian/type": {
+        "version": "2.3.4"
+    },
+    "sebastian/version": {
+        "version": "3.0.2"
     },
     "sensio/framework-extra-bundle": {
         "version": "5.2",
@@ -241,6 +345,9 @@
     },
     "symfony/dependency-injection": {
         "version": "v4.4.2"
+    },
+    "symfony/deprecation-contracts": {
+        "version": "v2.5.0"
     },
     "symfony/doctrine-bridge": {
         "version": "v4.4.2"
@@ -373,11 +480,17 @@
             "tests/.gitignore"
         ]
     },
+    "symfony/polyfill-intl-grapheme": {
+        "version": "v1.23.1"
+    },
     "symfony/polyfill-intl-icu": {
         "version": "v1.13.1"
     },
     "symfony/polyfill-intl-idn": {
         "version": "v1.13.1"
+    },
+    "symfony/polyfill-intl-normalizer": {
+        "version": "v1.23.0"
     },
     "symfony/polyfill-mbstring": {
         "version": "v1.13.1"
@@ -387,6 +500,12 @@
     },
     "symfony/polyfill-php73": {
         "version": "v1.13.1"
+    },
+    "symfony/polyfill-php80": {
+        "version": "v1.23.1"
+    },
+    "symfony/polyfill-php81": {
+        "version": "v1.23.0"
     },
     "symfony/process": {
         "version": "v4.4.2"
@@ -399,6 +518,9 @@
     },
     "symfony/property-info": {
         "version": "v4.4.2"
+    },
+    "symfony/proxy-manager-bridge": {
+        "version": "v5.4.0"
     },
     "symfony/routing": {
         "version": "4.2",
@@ -449,6 +571,9 @@
     },
     "symfony/stopwatch": {
         "version": "v4.4.2"
+    },
+    "symfony/string": {
+        "version": "v5.4.0"
     },
     "symfony/swiftmailer-bundle": {
         "version": "2.5",
@@ -566,6 +691,9 @@
     },
     "symfony/yaml": {
         "version": "v4.4.2"
+    },
+    "theseer/tokenizer": {
+        "version": "1.2.1"
     },
     "twig/twig": {
         "version": "v2.12.2"
