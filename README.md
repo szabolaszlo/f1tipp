@@ -7,7 +7,7 @@ The original project based on own framework, I decide to change it to symfony.
 So there is some legacy code from the original code, like src\LegacyService, but If I have time I will refactoring it one by one.
 
 Used technologies:
-- Symfony 4.3 https://symfony.com/doc/current/setup.html
+- Symfony 4.4 https://symfony.com/doc/current/setup.html
 - WebPack https://symfony.com/doc/current/frontend.html
 
 # Docker
@@ -18,11 +18,8 @@ docker-compose up -d
 http://localhost:8080/
 root - root
 
-## Maildev
-http://localhost:8001/#/
-
 ## Localhost
-http://localhost/
+http://127.0.0.1/
 pointer to public directory in repository
 
 # Database
