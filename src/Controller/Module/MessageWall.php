@@ -27,10 +27,14 @@ class MessageWall extends AbstractController
      */
     public function indexAction()
     {
-        return $this->render('controller/module/message_wall/message_wall.html.twig', [
-            'id' => 'messageWall',
-            'messages' => $this->getDoctrine()->getRepository('App:Message')->getMessages()
-        ]);
+        if ($this->getUser()) {
+            return $this->render('controller/module/message_wall/message_wall.html.twig', [
+                'id' => 'messageWall',
+                'messages' => $this->getDoctrine()->getRepository('App:Message')->getMessages()
+            ]);
+        } else {
+            return new Response();
+        }
     }
 
     /**
