@@ -1,9 +1,14 @@
-{% for key, table in tables %}
-    {% if loop.first %}
-        <div id="refreshing-able-table">
+<div class="panel panel-group panel-collapse">
+    <div class="panel-heading text-center">
+        <strong>X - HÉTVÉGE</strong>
+    </div>
+    {% for key, table in tables %}
+        {% if loop.first %}
+            <div id="refreshing-able-table">
+                {{ table|raw }}
+            </div>
+        {% else %}
             {{ table|raw }}
-        </div>
-    {% else %}
-        {{ table|raw }}
-    {% endif %}
-{% endfor %}
+        {% endif %}
+    {% endfor %}
+</div>

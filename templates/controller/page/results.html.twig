@@ -29,54 +29,15 @@
             {% for weekend in weekends %}
                 <div class="panel panel-group panel-collapse">
                     <div class="panel-heading text-center">
-                        Heading group
+                        <strong>X - HÉTVÉGE</strong>
                     </div>
                     <div class="panel panel-default">
                         {% for key, table in weekend %}
-                            {% if key is not same as('summary') %}{{ table|raw }} {% endif %}
+                            {{ table|raw }}
                         {% endfor %}
-                        {% if weekend.summary %}
-                            <div class="panel panel-default">
-                                <div class="panel-heading text-center">
-                                    {% set title = weekend.summary.0.race.name|split(' - ').0 %}
-                                    <strong>{{ title }}</strong>
-                                </div>
-                                <table class="table table-striped">
-                                    <thead>
-                                    <tr>
-                                        <th>
-                                            <strong class="color-two">{{ ('alternativeChampionship_name')|trans }}</strong>
-                                        </th>
-                                        <th>
-                                            <strong class="color-two">{{ ('alternativeChampionship_collected_points')|trans }}</strong>
-                                        </th>
-                                        <th>
-                                            <strong class="color-two">{{ ('alternativeChampionship_converted_points')|trans }}</strong>
-                                        </th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% for ac in weekend.summary %}
-                                        <tr>
-                                            <td>
-                                                <strong>{{ ac.getUser.getName }}</strong>
-                                            </td>
-                                            <td>
-                                                <strong>{{ ac.getCollectedPoints }}</strong>
-                                            </td>
-                                            <td>
-                                                <strong class="color-one">{{ ac.getPoints }}</strong>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        {% endif %}
                     </div>
                 </div>
             {% endfor %}
-
         {% else %}
             {% include('controller/module/no_results.html.twig') %}
         {% endif %}

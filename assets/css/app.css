@@ -12,7 +12,7 @@ table caption {
 }
 
 .color-one {
-    color: #FFC906;
+    color: yellow;
 }
 
 .color-two {
@@ -123,6 +123,15 @@ fieldset[disabled] .btn-new.active {
     border-radius: 0px;
 }
 
+
+.panel-group{
+    border: 0px;
+    border-radius: 0;
+    padding: 8px;
+    color: black;
+    background-color: rgba(255, 255, 255, .35);
+}
+
 .panel-default {
     border: 0;
     border-radius: 0;
@@ -133,15 +142,9 @@ fieldset[disabled] .btn-new.active {
     margin-bottom: 0;
 }
 
-.panel-group{
-    border: 0px;
-    padding: 5px;
-    background-color: #CC1E4A;
-}
-
 .panel-default > .panel-heading {
     color: rgba(255, 255, 255, .75);
-    background-color: #223971;
+    background-color: rgb(140, 5, 1);
     border-radius: 0px;
     border: 0px;
     padding-top: 8px;

@@ -45,14 +45,14 @@ class ResultsController extends AbstractController
 
                 if ($result->getEvent()->getType() == 'race') {
                     $weekends[$result->getEvent()->getWeekendOrder()]['summary'] =
-                        $this->getDoctrine()->getRepository('App:AlternativeChampionship')->findBy(
-                            ['race' => $result->getEvent()->getId()],
-                            ['points'=>'DESC']
+                        $resultTable->getTable($this->getUser(), $result->getEvent(), 'summary')->renderTable(
+                            $result->getEvent(),
                         );
                 }
-
             }
-          //       dump($weekends);die();
+
+            //dump($weekends);
+            //die();
 
             $cache->save($cacheKey, $weekends);
         }
