@@ -67,7 +67,9 @@ class Bet extends EntityRepository
     {
         return $this->createQueryBuilder('bet')
             ->innerJoin('App:Race', 'race', Join::WITH, 'bet.event_id = race.id')
+            ->innerJoin('App:User', 'user', Join::WITH, 'bet.user_id = user.id AND user.isAlterChamps = 1')
             ->orderBy('bet.pointSummary', 'DESC')
+            ->groupBy('user.name')
             ->getQuery()
             ->setMaxResults(3)
             ->getResult();
@@ -80,7 +82,9 @@ class Bet extends EntityRepository
     {
         return $this->createQueryBuilder('bet')
             ->innerJoin('App:Qualify', 'qualify', Join::WITH, 'bet.event_id = qualify.id')
+            ->innerJoin('App:User', 'user', Join::WITH, 'bet.user_id = user.id AND user.isAlterChamps = 1')
             ->orderBy('bet.pointSummary', 'DESC')
+            ->groupBy('user.name')
             ->getQuery()
             ->setMaxResults(3)
             ->getResult();
