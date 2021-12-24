@@ -46,6 +46,8 @@ class AdminController extends EasyAdminController
         $resultCache = $this->getDoctrine()->getManager()->getConfiguration()->getResultCacheImpl();
         $cacheKey = get_class($entity) . 'NextEvent';
         $resultCache->delete($cacheKey);
+        $cacheKey = get_class($entity) . 'ActualWeekendEvents';
+        $resultCache->delete($cacheKey);
         $cacheKey = get_class($entity) . 'Remain';
         $resultCache->delete($cacheKey);
 

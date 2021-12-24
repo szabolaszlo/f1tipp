@@ -3,6 +3,7 @@
 namespace App\Controller\Module;
 
 use App\Entity\Event;
+use App\Entity\Race;
 use App\LegacyService\ResultTable\ResultTable;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,10 +24,7 @@ class ActualEventsResultController extends AbstractController
      */
     public function indexAction(ResultTable $resultTable): Response
     {
-        $events = array(
-            $this->getDoctrine()->getRepository('App:Qualify')->getNextEvent(),
-            $race = $this->getDoctrine()->getRepository('App:Race')->getNextEvent(),
-        );
+        $events = $this->getDoctrine()->getRepository('App:Event')->getActualWeekendEvents();
 
         $tables = [];
 
@@ -36,17 +34,26 @@ class ActualEventsResultController extends AbstractController
         foreach ($events as $event) {
             $id = abs($now->getTimestamp() - $event->getDateTime()->getTimeStamp());
             $tables[$id] = $resultTable->getTable($this->getUser(), $event)->renderTable($event);
+
+            if ($event instanceof Race) {
+                $race = $event;
+            }
         }
 
-        //summary
-        $id = abs($now->getTimestamp() - ($race->getDateTime()->getTimeStamp() + 1));
-        $tables[$id] = $resultTable
-            ->getTable($this->getUser(), $race, 'summary')
-            ->renderTable($race);
+        if (isset($race)) {
+            $summaryTable = $resultTable
+                ->getTable($this->getUser(), $race, 'summary')
+                ->renderTable($race);
+
+            if ($summaryTable) {
+                $tables[0] = $summaryTable;
+            }
+        }
 
         ksort($tables);
 
         return $this->render('controller/module/actual_events_results.html.twig', [
+            'weekend' => end($events),
             'tables' => $tables
         ]);
     }
