@@ -81,10 +81,12 @@ abstract class ATableType implements ITableType
         $data['event'] = $event;
 
         $data['usersCount'] = count(
-            $this->em->getRepository('App\Entity\User')->findAll()
+            $this->em->getRepository('App\Entity\User')->getAlternativeChampionshipUsers()
         );
 
         $data['noBettingUsers'] = $this->getNoBettingUsers($data['bets']);
+
+        $data['countableBets'] = $this->getCountAbleBets($data['bets']);
 
         return $this->renderer->render($this->template, $data);
     }
@@ -93,9 +95,9 @@ abstract class ATableType implements ITableType
      * @param array $bets
      * @return array
      */
-    protected function getNoBettingUsers(array $bets)
+    protected function getNoBettingUsers(array $bets): array
     {
-        $users = $this->em->getRepository('App\Entity\User')->findAll();
+        $users = $this->em->getRepository('App\Entity\User')->getAlternativeChampionshipUsers();
         $userNames = array();
 
         /** @var User $user */
@@ -112,5 +114,30 @@ abstract class ATableType implements ITableType
             }
         }
         return $userNames;
+    }
+
+    /**
+     * @param array $bets
+     * @return array
+     */
+    protected function getCountAbleBets(array $bets): array
+    {
+        $users = $this->em->getRepository('App\Entity\User')->getAlternativeChampionshipUsers();
+        $userNames = array();
+
+        /** @var User $user */
+        foreach ($users as $user) {
+            $userNames[$user->getName()] = $user->getName();
+        }
+
+        /** @var Bet $bet */
+        foreach ($bets as $key => $bet) {
+            /** @var User $user */
+            $user = $bet->getUser();
+            if (!array_key_exists($user->getName(), $userNames)) {
+                unset($bets[$key]);
+            }
+        }
+        return $bets;
     }
 }

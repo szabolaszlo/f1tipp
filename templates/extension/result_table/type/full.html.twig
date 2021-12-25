@@ -1,8 +1,8 @@
-{% set no_betting_users = (usersCount/2 < bets|length) and not (usersCount == bets|length) %}
+{% set no_betting_users = (usersCount/2 < countableBets|length) and not (usersCount == countableBets|length) %}
 {% set bet_counter %}
-    {% if (usersCount/2 < bets|length) %}
+    {% if (usersCount/2 < countableBets|length) %}
         <div class="pull-right" style="margin-right: 10px">
-            {{ ('result_bets')|trans ~ bets|length ~ '/' ~ usersCount }}
+            {{ ('result_bets')|trans ~ countableBets|length ~ '/' ~ usersCount }}
         </div>
     {% endif %}
 {% endset %}
