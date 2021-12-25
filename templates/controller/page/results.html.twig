@@ -26,10 +26,10 @@
     </div>
     <div id="results">
         {% if weekends %}
-            {% for weekend in weekends %}
+            {% for key, weekend in weekends %}
                 <div class="panel panel-group panel-collapse">
                     <div class="panel-heading text-center">
-                        <strong>X - HÉTVÉGE</strong>
+                        <strong class="color-one">{{ weekendNames[key] }} - {{ 'general_weekend'|trans }}</strong>
                     </div>
                     <div class="panel panel-default">
                         {% for key, table in weekend %}

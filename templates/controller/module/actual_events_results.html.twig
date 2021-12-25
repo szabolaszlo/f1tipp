@@ -1,14 +1,9 @@
-<div class="panel panel-group panel-collapse">
-    <div class="panel-heading text-center">
-        <strong>{{ weekend.name }} - {{ 'general_full_weekend'|trans }}</strong>
-    </div>
-    {% for key, table in tables %}
-        {% if loop.first %}
-            <div id="refreshing-able-table">
-                {{ table|raw }}
-            </div>
-        {% else %}
+{% for key, table in tables %}
+    {% if loop.first %}
+        <div id="refreshing-able-table">
             {{ table|raw }}
-        {% endif %}
-    {% endfor %}
-</div>
+        </div>
+    {% else %}
+        {{ table|raw }}
+    {% endif %}
+{% endfor %}

@@ -53,7 +53,6 @@ class ActualEventsResultController extends AbstractController
         ksort($tables);
 
         return $this->render('controller/module/actual_events_results.html.twig', [
-            'weekend' => end($events),
             'tables' => $tables
         ]);
     }

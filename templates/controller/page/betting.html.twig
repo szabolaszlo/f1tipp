@@ -5,24 +5,18 @@
     {{ parent() }}
 {% endblock %}
 
-{% macro getIcon(event) %}
-    {% if event.event.getType == 'qualify' %}
-        {% set icon = 'time' %}
-    {% elseif event.event.getType == 'race' %}
-        {% set icon = 'flag' %}
-    {% elseif event.event.getType == 'sprint_qualify' %}
-        {% set icon = 'flash' %}
-    {% endif %}
-    <span class="glyphicon glyphicon-{{ icon }}" aria-hidden="false"></span>
-{% endmacro %}
+{% import 'macro/icon.html.twig' as iconProvider %}
 
 {% block body %}
     <div style="text-align: center; margin: 15px;">
         {% for event in events %}
-            <a class="btn btn-new"
+            <a id="button-{{ event.event.getType }}"
+               class="btn btn-new"
                role="button"
-               onclick="$('#collapse{{ event.event.getType }}').collapse('show');hideCollapsed();">
-                {{ _self.getIcon(event) }}
+               onclick="hideCollapsed('{{ event.event.getType }}');"
+               style="margin: 10px;"
+            >
+                {{ iconProvider.getIcon(event.event.getType) }}
                 {{ event.event.getType|trans|upper }}
             </a>
         {% endfor %}
@@ -59,10 +53,10 @@
                         {{ event.event.getName() }}
                         - {{ ('general_' ~ event.event.getType)|trans }}</strong>
                     <div class="pull-left">
-                        {{ _self.getIcon(event) }}
+                        {{ iconProvider.getIcon(event.event.getType) }}
                     </div>
                     <div class="pull-right">
-                        {{ _self.getIcon(event) }}
+                        {{ iconProvider.getIcon(event.event.getType) }}
                     </div>
                 </div>
                 <div id="collapse{{ event.event.getType }}" class="panel-collapse collapse {{ collapseType }}"
@@ -109,10 +103,17 @@
              */
         });
 
-        function hideCollapsed() {
+        function hideCollapsed(element) {
+            $('#collapse' + element).collapse('show');
             $('.panel-heading[aria-expanded=true]').fadeIn('fast');
             $('.collapse').collapse('hide');
             $('.panel-heading[aria-expanded=false]').fadeOut('fast');
+            if($('.panel-heading[aria-expanded=true]').length == 0){
+                setTimeout(function() {
+                    $('#collapse' + element).collapse('show');
+                    $('.panel-heading[aria-expanded=true]').fadeIn('fast');
+                }, 1000);
+            }
         }
     </script>
 {% endblock %}

@@ -9,6 +9,10 @@
                role="button">
                 {{ 'general_qualifies'|trans }}
             </a>
+            <a href="{{ path('calendar_sprint_qualify') }}" class="btn btn-new {{ type == 'SprintQualify' ? 'active' : '' }}"
+               role="button">
+                {{ 'general_sprint_qualifies'|trans }}
+            </a>
             <a href="{{ path('calendar_race') }}" class="btn btn-new {{ type == 'Race' ? 'active' : '' }}"
                role="button">
                 {{ 'general_races'|trans }}
@@ -29,7 +33,7 @@
             {% for event in events %}
                 <tr>
                     <td>
-                        <strong class="color-two">{{ event.getType() == 'race' ? 'general_race'|trans : 'general_qualify'|trans }}</strong>
+                        <strong class="color-two">{{ event.getType()|trans|upper}}</strong>
                     </td>
                     <td><strong class="color-one">{{ event.getName() }}</strong></td>
                     <td><strong class="color-one">{{ event.getDateTime()|date("Y. M. d. - H:i") }}</strong></td>

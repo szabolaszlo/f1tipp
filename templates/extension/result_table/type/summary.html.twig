@@ -1,42 +1,47 @@
 {% if result is not empty %}
-<div class="panel panel-default">
-    <div class="panel-heading text-center">
-        {% set title = result.0.race.name|split(' - ').0 %}
-        <strong>{{ title }} - {{ 'result_of_weekend'|trans|upper }}</strong>
-    </div>
-    {% block body_content %}
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>
-                        <strong class="color-two">{{ ('alternativeChampionship_name')|trans }}</strong>
-                    </th>
-                    <th>
-                        <strong class="color-two">{{ ('alternativeChampionship_collected_points')|trans }}</strong>
-                    </th>
-                    <th>
-                        <strong class="color-two">{{ ('alternativeChampionship_converted_points')|trans }}</strong>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for ac in result %}
-                    <tr>
-                        <td>
-                            <strong>{{ ac.getUser.getName }}</strong>
-                        </td>
-                        <td>
-                            <strong>{{ ac.getCollectedPoints }}</strong>
-                        </td>
-                        <td>
-                            <strong class="color-one">{{ ac.getPoints }}</strong>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+    {% import 'macro/icon.html.twig' as iconProvider %}
+    <div class="panel panel-default">
+        <div class="panel-heading text-center">
+            <div class="pull-right">{{ iconProvider.getIcon('none') }}</div>
+            <div class="pull-left">{{ iconProvider.getIcon('none') }}</div>
+            {% set title = result.0.race.name|split(' - ').0 %}
+            <strong>{{ title }} - {{ 'result_of_weekend'|trans|upper }}</strong>
         </div>
-    {% endblock %}
-</div>
+        {% block body_content %}
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>
+                                <strong class="color-two">{{ ('alternativeChampionship_name')|trans }}</strong>
+                            </th>
+                            <th>
+                                <strong class="color-two">{{ ('alternativeChampionship_collected_points')|trans }}</strong>
+                            </th>
+                            <th>
+                                <strong class="color-two">{{ ('alternativeChampionship_converted_points')|trans }}</strong>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for ac in result %}
+                            <tr>
+                                <td>
+                                    <strong>{{ ac.getUser.getName }}</strong>
+                                </td>
+                                <td>
+                                    <strong>{{ ac.getCollectedPoints }}</strong>
+                                </td>
+                                <td>
+                                    <strong class="color-one">{{ ac.getPoints }}</strong>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endblock %}
+    </div>
 {% endif %}
