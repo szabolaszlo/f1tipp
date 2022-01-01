@@ -5,6 +5,7 @@
 {% block body_content %}
     <div class="table-responsive">
         <table class="table table-striped">
+            {% if bets %}
             {% set betAttributes = bets|first.getAttributes() %}
             <thead>
             <tr>
@@ -15,6 +16,7 @@
             </tr>
             </thead>
             <tbody>
+            {% endif %}
             {% for bet in bets %}
                 <tr>
                     <td class="text-left"><strong class="color-one">{{ bet.getUser().getName() }}</strong></td>
