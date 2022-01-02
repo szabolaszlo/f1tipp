@@ -42,10 +42,7 @@ class ActualController extends AbstractController
             $data['image'] = self::ACTUAL_IMAGE_RELATIVE_URL;
         }
 
-        $events = array(
-            $this->getDoctrine()->getRepository('App\Entity\Qualify')->getNextEvent(),
-            $this->getDoctrine()->getRepository('App\Entity\Race')->getNextEvent()
-        );
+        $events = $this->getDoctrine()->getRepository('App:Event')->getActualWeekendEvents();
 
         $now = new \DateTime();
         /** @var Event $event */

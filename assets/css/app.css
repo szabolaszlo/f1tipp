@@ -123,6 +123,15 @@ fieldset[disabled] .btn-new.active {
     border-radius: 0px;
 }
 
+
+.panel-group{
+    border: 0px;
+    border-radius: 0;
+    padding: 8px;
+    color: black;
+    background-color: rgba(0, 250, 255, .2);
+}
+
 .panel-default {
     border: 0;
     border-radius: 0;

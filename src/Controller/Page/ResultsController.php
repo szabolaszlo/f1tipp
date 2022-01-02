@@ -11,6 +11,7 @@ namespace App\Controller\Page;
 
 use App\Cache\FileCache;
 use App\LegacyService\ResultTable\ResultTable;
+use Exception;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,24 +29,37 @@ class ResultsController extends AbstractController
      * @param FileCache $cache
      * @return Response
      * @throws InvalidArgumentException
+     * @throws Exception
      */
-    public function indexAction(ResultTable $resultTable, FileCache $cache)
+    public function indexAction(ResultTable $resultTable, FileCache $cache): Response
     {
         $results = $this->getDoctrine()->getRepository('App:Result')->findAll();
 
         $cacheKey = 'results' . count($results);
 
-        $tables = $cache->get($cacheKey);
+        $weekends = $cache->get($cacheKey);
 
-        if (empty($tables)) {
+        $weekendNames = [];
+
+        if (empty($weekends)) {
             foreach ($results as $result) {
-                $tables[] = $resultTable
+                $weekends[$result->getEvent()->getWeekendOrder()][] = $resultTable
                     ->getTable($this->getUser(), $result->getEvent(), 'full')
                     ->renderTable($result->getEvent());
+
+                $weekendNames[$result->getEvent()->getWeekendOrder()] = $result->getEvent()->getName();
+
+                if ($result->getEvent()->getType() == 'race') {
+                    $weekends[$result->getEvent()->getWeekendOrder()]['summary'] =
+                        $resultTable->getTable($this->getUser(), $result->getEvent(), 'summary')->renderTable(
+                            $result->getEvent(),
+                        );
+                }
             }
-            $cache->save($cacheKey, $tables);
+
+            $cache->save($cacheKey, $weekends);
         }
 
-        return $this->render('controller/page/results.html.twig', ['tables' => $tables]);
+        return $this->render('controller/page/results.html.twig', ['weekends' => $weekends, 'weekendNames' => $weekendNames]);
     }
 }

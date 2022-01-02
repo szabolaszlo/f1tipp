@@ -47,4 +47,16 @@ class CalendarController extends AbstractController
             'type' => 'Race'
         ]);
     }
+
+    /**
+     * @Route("/calendar/sprint_qualify", name="calendar_sprint_qualify", methods={"GET"})
+     * @return Response
+     */
+    public function sprintQualifyAction()
+    {
+        return $this->render("controller/page/calendar.html.twig", [
+            'events' => $this->getDoctrine()->getRepository('App:SprintQualify')->getRemainEvents(),
+            'type' => 'SprintQualify'
+        ]);
+    }
 }

@@ -64,7 +64,7 @@ class TrophyCalculator extends ACalculator
     protected function collectUsersWeekendPoints(Race $race)
     {
         $weekendEvents = $this->em->getRepository("App:Event")->getWeekendEvents($race);
-        $users = $this->em->getRepository('App\Entity\User')->findAll();
+        $users = $this->em->getRepository('App:User')->getAlternativeChampionshipUsers();
 
         foreach ($users as $user) {
             $userPoints = 0;
@@ -86,7 +86,7 @@ class TrophyCalculator extends ACalculator
      */
     protected function getPodiumUsers($users = array())
     {
-        $userPoints = array();
+        $userPoints = array(0);
         $podium = array(
             self::PODIUM_FIRST => array(),
             self::PODIUM_SECOND => array(),

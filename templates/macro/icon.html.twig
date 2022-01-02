@@ -1,0 +1,12 @@
+{% macro getIcon(type) %}
+    {% if type == 'qualify' %}
+        {% set icon = 'time' %}
+    {% elseif type == 'race' %}
+        {% set icon = 'flag' %}
+    {% elseif type == 'sprint_qualify' %}
+        {% set icon = 'flash' %}
+    {% elseif icon is not defined %}
+        {% set icon = 'stats' %}
+    {% endif %}
+    <span class="glyphicon glyphicon-{{ icon }}" aria-hidden="false"></span>
+{% endmacro %}

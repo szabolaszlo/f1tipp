@@ -5,22 +5,71 @@
     {{ parent() }}
 {% endblock %}
 
+{% import 'macro/icon.html.twig' as iconProvider %}
+
 {% block body %}
-    <div class="row">
+    <div style="text-align: center; margin: 15px;">
         {% for event in events %}
-            <div class="col-sm-6" style="margin-bottom: 10px">
-                <div class="panel panel-default text-center">
-                    <div class="panel-heading text-center">
-                        <strong>{{ event.event.getName() }}
-                            - {{ ('general_' ~ event.event.getType)|trans }}</strong>
+            <a id="button-{{ event.event.getType }}"
+               class="btn btn-new"
+               role="button"
+               onclick="hideCollapsed('{{ event.event.getType }}');"
+               style="margin: 10px;"
+            >
+                {{ iconProvider.getIcon(event.event.getType) }}
+                {{ event.event.getType|trans|upper }}
+            </a>
+        {% endfor %}
+    </div>
+
+    <div id="accordion" role="tablist" aria-multiselectable="false">
+        {% set formSubmitted = 0 %}
+        {% for key, event in events %}
+            {% if type == event.event.getType() %}
+                {% set formSubmitted = 1 %}
+            {% endif %}
+        {% endfor %}
+
+        {% for key, event in events %}
+            {% if loop.first and not formSubmitted %}
+                {% set collapseType = 'in' %}
+                {% set ariaExpanded = 'true' %}
+            {% else %}
+                {% set collapseType = '' %}
+                {% set ariaExpanded = 'false' %}
+            {% endif %}
+            {% if type == event.event.getType() %} %}
+                {% set collapseType = 'in' %}
+                {% set ariaExpanded = 'true' %}
+            {% endif %}
+
+            {% dump(collapseType) %}
+            <div id="{{ event.event.getType() }}" class="panel panel-default text-center bet-panel">
+                <div role="button" data-toggle="collapse" data-parent="#accordion"
+                     href="#collapse{{ event.event.getType }}"
+                     aria-expanded="{{ ariaExpanded }}" aria-controls="collapse{{ event.event.getType }}"
+                     class="panel-heading text-center">
+                    <strong>
+                        {{ event.event.getName() }}
+                        - {{ ('general_' ~ event.event.getType)|trans }}</strong>
+                    <div class="pull-left">
+                        {{ iconProvider.getIcon(event.event.getType) }}
                     </div>
-                    {% for message in app.flashes(event.form.vars.id) %}
-                        <div class="alert alert-success">
-                            {{ message|trans }}
-                        </div>
-                    {% endfor %}
-                    {% form_theme event.form 'bootstrap_3_layout.html.twig' %}
-                    {{ form(event.form) }}
+                    <div class="pull-right">
+                        {{ iconProvider.getIcon(event.event.getType) }}
+                    </div>
+                </div>
+                <div id="collapse{{ event.event.getType }}" class="panel-collapse collapse {{ collapseType }}"
+                     role="tabpanel" aria-labelledby="heading{{ event.event.getType }}">
+                    <div class="panel-body center-block" style="width: 70%">
+                        {% for message in app.flashes(event.form.vars.id) %}
+                            <div class="alert alert-success">
+                                {{ message|trans }}
+                            </div>
+                        {% endfor %}
+                        {% form_theme event.form 'bootstrap_3_layout.html.twig' %}
+                        {{ form(event.form) }}
+                    </div>
                 </div>
             </div>
         {% endfor %}
@@ -33,6 +82,7 @@
     {{ encore_entry_script_tags('select2import') }}
     <script type="text/javascript">
         $(document).ready(function () {
+            $('.panel-heading[aria-expanded=false]').fadeOut('fast');
             {% for event in events %}
             window.bundleObj.checkFakeBet('.event-{{ event.event.getId() }}', '.event-submit-{{ event.event.getId() }}');
             $('.event-submit-{{ event.event.getId() }}').click(function () {
@@ -52,5 +102,18 @@
             });
              */
         });
+
+        function hideCollapsed(element) {
+            $('#collapse' + element).collapse('show');
+            $('.panel-heading[aria-expanded=true]').fadeIn('fast');
+            $('.collapse').collapse('hide');
+            $('.panel-heading[aria-expanded=false]').fadeOut('fast');
+            if($('.panel-heading[aria-expanded=true]').length == 0){
+                setTimeout(function() {
+                    $('#collapse' + element).collapse('show');
+                    $('.panel-heading[aria-expanded=true]').fadeIn('fast');
+                }, 1000);
+            }
+        }
     </script>
 {% endblock %}

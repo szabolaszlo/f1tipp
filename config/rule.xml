@@ -20,6 +20,11 @@
             <tag name="app.rule_type"/>
         </service>
 
+        <service class="App\Rule\RuleType\SprintQualify" id="app.rule.rule_type.sprint_qualify">
+            <argument id="app.rule.attribute.attribute_factory" type="service"/>
+            <tag name="app.rule_type"/>
+        </service>
+
     </services>
 
 </container>

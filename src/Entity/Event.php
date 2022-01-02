@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="`event`")
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="event_type", type="string"))
- * @ORM\DiscriminatorMap({"event" = "Event", "race" = "Race", "qualify" = "Qualify"})
+ * @ORM\DiscriminatorMap({"event" = "Event", "race" = "Race", "qualify" = "Qualify", "sprint_qualify" = "SprintQualify"})
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
 class Event

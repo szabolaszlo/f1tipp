@@ -8,9 +8,10 @@
 
 namespace App\Controller\Module;
 
+use App\Entity\Event;
+use DateTimeImmutable;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Entity\Qualify;
-use App\Entity\Race;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -21,35 +22,31 @@ class CountDownController extends AbstractController
 {
     /**
      * @return Response
-     * @throws \Exception
+     * @throws Exception
      */
-    public function indexAction()
+    public function indexAction(): Response
     {
         //TODO Move this to Lazy Twig Extension (every subrequest has 20ms cost)
 
-        /** @var Qualify $qualify */
-        $qualify = $this->getDoctrine()->getRepository('App:Qualify')->getNextEvent();
+        $events = $this->getDoctrine()->getRepository('App:Event')->getActualWeekendEvents();
 
-        /** @var Race $race */
-        $race = $this->getDoctrine()->getRepository('App:Race')->getNextEvent();
+        $data = [];
 
-        $now = new \DateTime();
+        $now = new DateTimeImmutable();
+
+        /** @var Event $event */
+        foreach ($events as $event) {
+            $data[$event->getType()] = [
+                'id' => $event->getType(),
+                'name' => $event->getName(),
+                'date' => $event->getDateTime()->format('M.d H:i'),
+                'remain_time' => $now->diff($event->getDateTime())
+            ];
+        }
 
         return $this->render("controller/module/count_down/count_down.html.twig",
-            ['events' => [
-                'qualify' => array(
-                    'id' => $qualify->getType(),
-                    'name' => $qualify->getName(),
-                    'date' => $qualify->getDateTime()->format('M.d H:i'),
-                    'remain_time' => $now->diff($qualify->getDateTime())
-                ),
-                'race' => array(
-                    'id' => $race->getType(),
-                    'name' => $race->getName(),
-                    'date' => $race->getDateTime()->format('M.d H:i'),
-                    'remain_time' => $now->diff($race->getDateTime())
-                ),
-            ],
+            [
+                'events' => $data,
                 'details_link' => '/calendar',
                 'id' => 'count_down',
             ]

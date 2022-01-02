@@ -43,10 +43,12 @@ class Full extends ATableType
         $data['bets'] = $this->em->getRepository('App:Bet')->getBetsByEventOrderByPoints($event);
 
         $data['usersCount'] = count(
-            $this->em->getRepository('App\Entity\User')->findAll()
+            $this->em->getRepository('App\Entity\User')->getAlternativeChampionshipUsers()
         );
 
         $data['noBettingUsers'] = $this->getNoBettingUsers($data['bets']);
+
+        $data['countableBets'] = $this->getCountAbleBets($data['bets']);
 
         return $this->renderer->render($this->template, $data);
     }

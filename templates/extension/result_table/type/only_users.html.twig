@@ -1,5 +1,8 @@
 {% extends 'extension/result_table/type/full.html.twig' %}
+{% import 'macro/icon.html.twig' as iconProvider %}
 {% block heading_title %}
+    <div class="pull-right" style="padding: 10px;">{{ iconProvider.getIcon(event.getType) }}</div>
+    <div class="pull-left" style="padding: 10px;">{{ iconProvider.getIcon(event.getType) }}</div>
     <strong>{{ event.getName() }} - {{ ('general_' ~ event.getType)|trans }}</strong>
 {% endblock %}
 {% block body_content %}

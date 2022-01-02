@@ -23,7 +23,7 @@ class UserChampionshipController extends AbstractController
                 'users' => $this
                     ->getDoctrine()
                     ->getRepository('App\Entity\User')
-                    ->getUsersPointsSummaryDesc(),
+                    ->getAlternativeChampionshipUsers(),
                 'records' => [
                     'qualify_bets' => $this->getDoctrine()->getRepository('App:Bet')->getTopQualifyBets(),
                     'race_bets' => $this->getDoctrine()->getRepository('App:Bet')->getTopRaceBets()

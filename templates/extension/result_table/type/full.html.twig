@@ -1,15 +1,22 @@
-{% set no_betting_users = (usersCount/2 < bets|length) and not (usersCount == bets|length) %}
+{% set no_betting_users = (usersCount/2 < countableBets|length) and not (usersCount == countableBets|length) %}
 {% set bet_counter %}
-    {% if (usersCount/2 < bets|length) %}
+    {% if (usersCount/2 < countableBets|length) %}
         <div class="pull-right" style="margin-right: 10px">
-            {{ ('result_bets')|trans ~ bets|length ~ '/' ~ usersCount }}
+            {{ ('result_bets')|trans ~ countableBets|length ~ '/' ~ usersCount }}
         </div>
     {% endif %}
 {% endset %}
+
+{% import 'macro/icon.html.twig' as iconProvider %}
+
 <div class="panel panel-default">
     <div class="panel-heading text-center">
         <div class="row">
             {% block heading_title %}
+                <div class="pull-right"
+                     style="padding: 10px;">{{ iconProvider.getIcon(result.getEvent().getType()) }}</div>
+                <div class="pull-left"
+                     style="padding: 10px;">{{ iconProvider.getIcon(result.getEvent().getType()) }}</div>
                 {% set titletext = ('general_' ~ result.getEvent().getType)|trans %}
                 <strong>{{ result.getEvent().getName() ~ ' - ' ~ titletext }}</strong>
             {% endblock %}

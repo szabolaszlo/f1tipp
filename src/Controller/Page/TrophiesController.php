@@ -31,7 +31,7 @@ class TrophiesController extends AbstractController
         $users = $this
             ->getDoctrine()
             ->getRepository('App:User')
-            ->findBy(array(), array('name' => 'ASC'));
+            ->getAlternativeChampionshipUsers();
 
         $userTrophies = array();
 

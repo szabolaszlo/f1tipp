@@ -33,7 +33,7 @@ class Event extends EntityRepository
         }
 
         $date = new \DateTime();
-        $date->sub(new \DateInterval('P2D'));
+        $date->sub(new \DateInterval('P3D'));
 
         $nextEvent = $this->createQueryBuilder('e')
             ->where('e.date_time > :time')
@@ -48,11 +48,56 @@ class Event extends EntityRepository
 
         $nextEvent = reset($nextEvent);
 
-        $lifeTime = strtotime('+2 days', $nextEvent->getDateTime()->getTimeStamp()) - time();
+        $lifeTime = strtotime('+3 days', $nextEvent->getDateTime()->getTimeStamp()) - time();
 
         $resultCache->save($cacheKey, $nextEvent, $lifeTime);
 
         return $nextEvent;
+    }
+
+    /**
+     * @return array|mixed
+     */
+    public function getActualWeekendEvents()
+    {
+        $resultCache = $this->_em->getConfiguration()->getResultCacheImpl();
+        $cacheKey = $this->_entityName . 'ActualWeekendEvents';
+
+        if ($resultCache->contains($cacheKey)) {
+            return $resultCache->fetch($cacheKey);
+        }
+
+        /** @var EventEnt $nextEvent */
+        $nextEvent = $this->getNextEvent();
+
+        $weekendEvents = $this->findBy(
+            ['weekendOrder' => $nextEvent->getWeekendOrder()],
+            ['date_time' => 'ASC']
+        );
+
+        $lifeTime = strtotime('+3 days', $nextEvent->getDateTime()->getTimeStamp()) - time();
+
+        $resultCache->save($cacheKey, $weekendEvents, $lifeTime);
+
+        return $weekendEvents;
+    }
+
+    /**
+     * @return array
+     */
+    public function getEventTypes(): array
+    {
+        $events = $this->createQueryBuilder('e')
+            ->getQuery()
+            ->getResult();
+
+        $types = [];
+
+        foreach ($events as $event){
+            $types[$event->getType()] = $event->getType();
+        }
+
+        return $types;
     }
 
     /**

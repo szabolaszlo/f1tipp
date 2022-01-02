@@ -26,9 +26,9 @@
                                 {% endif %}
                             {% endfor %}
                         </td>
-                        <td><strong class="color-one">{{ user.getPointSummary() }}</strong></td>
+                        <td><strong class="color-one">{{ user.alternativePointSummary }}</strong></td>
                         <td>
-                            <span class="small color-two">{{ user.getPointDifference() ? '+ ' ~ user.getPointDifference() : '' }}</span>
+                            <span class="small color-two">{{ user.alternativePointDifference() ? '+ ' ~ user.alternativePointDifference() : '' }}</span>
                         </td>
                     </tr>
                 {% endfor %}
