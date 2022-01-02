@@ -35,7 +35,7 @@ class ResultsController extends AbstractController
     {
         $results = $this->getDoctrine()->getRepository('App:Result')->findAll();
 
-        $cacheKey = 'results' . count($results) . random_bytes(12);
+        $cacheKey = 'results' . count($results);
 
         $weekends = $cache->get($cacheKey);
 

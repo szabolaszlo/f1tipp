@@ -63,11 +63,10 @@ class Event extends EntityRepository
         $resultCache = $this->_em->getConfiguration()->getResultCacheImpl();
         $cacheKey = $this->_entityName . 'ActualWeekendEvents';
 
-        /*
         if ($resultCache->contains($cacheKey)) {
             return $resultCache->fetch($cacheKey);
         }
-*/
+
         /** @var EventEnt $nextEvent */
         $nextEvent = $this->getNextEvent();
 
@@ -76,7 +75,7 @@ class Event extends EntityRepository
             ['date_time' => 'ASC']
         );
 
-        $lifeTime = strtotime('+2 days', $nextEvent->getDateTime()->getTimeStamp()) - time();
+        $lifeTime = strtotime('+3 days', $nextEvent->getDateTime()->getTimeStamp()) - time();
 
         $resultCache->save($cacheKey, $weekendEvents, $lifeTime);
 

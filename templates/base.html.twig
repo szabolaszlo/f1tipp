@@ -66,13 +66,6 @@
                 {{ render(controller('App\\Controller\\Module\\UserChampionshipController::indexAction')) }}
             </div>
 
-            {# <div class="reload-able-module"
-                 data-module-route="alter_champs"
-                 data-module-entities='{"0": "alter_champs"}'
-                 data-module-count="-1">
-                {{ render(controller('App\\Controller\\Module\\AlternativeChampionshipModuleController::indexAction')) }}
-            </div>
-            #}
             <div class="visible-xs">
                 {{ render_hinclude(controller('App\\Controller\\Module\\FeedController::indexAction'), {default: 'Loading ..'}) }}
             </div>
