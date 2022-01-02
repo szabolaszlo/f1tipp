@@ -43,7 +43,6 @@
                 {% set ariaExpanded = 'true' %}
             {% endif %}
 
-            {% dump(collapseType) %}
             <div id="{{ event.event.getType() }}" class="panel panel-default text-center bet-panel">
                 <div role="button" data-toggle="collapse" data-parent="#accordion"
                      href="#collapse{{ event.event.getType }}"
