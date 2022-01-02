@@ -20,7 +20,7 @@ use App\LegacyService\Feed\Transformer\XMLToArray;
  */
 class MotorSportRepository implements IRepository
 {
-    const SOURCE = 'https://hu.motorsport.com/rss/category/f1/news/?eid=hu';
+    const SOURCE = 'https://hu.motorsport.com/rss/f1/news/';
 
     const TITLE = 'title';
 
