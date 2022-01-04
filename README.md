@@ -10,9 +10,11 @@ Used technologies:
 - Symfony 4.4 https://symfony.com/doc/current/setup.html
 - WebPack https://symfony.com/doc/current/frontend.html
 
-# Docker
+# Install
 ```
 docker-compose up -d
+npm install
+npm run watch
 ```
 ## PHPMyAdmin
 http://localhost:8080/

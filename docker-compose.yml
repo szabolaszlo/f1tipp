@@ -38,6 +38,7 @@ services:
     environment:
       PMA_HOST: mysql_db
       PMA_PORT: 3306
+      UPLOAD_LIMIT: 20M
     depends_on:
       - mysql_db
     ports:
