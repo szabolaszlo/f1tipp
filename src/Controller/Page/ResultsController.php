@@ -37,9 +37,11 @@ class ResultsController extends AbstractController
 
         $cacheKey = 'results' . count($results);
 
-        $weekends = $cache->get($cacheKey);
+        $cacheData = $cache->get($cacheKey);
 
-        $weekendNames = [];
+        $weekends = $cacheData[0] ?? [];
+
+        $weekendNames = $cacheData[1] ?? [];
 
         if (empty($weekends)) {
             foreach ($results as $result) {
@@ -57,7 +59,7 @@ class ResultsController extends AbstractController
                 }
             }
 
-            $cache->save($cacheKey, $weekends);
+            $cache->save($cacheKey, [0 => $weekends, 1 => $weekendNames]);
         }
 
         return $this->render('controller/page/results.html.twig', ['weekends' => $weekends, 'weekendNames' => $weekendNames]);

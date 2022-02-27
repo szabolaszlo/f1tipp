@@ -110,10 +110,12 @@ class AlternativeCalculator extends ACalculator
         /** @var AlternativeChampionship $ac */
         foreach ($alterChamps as $ac) {
             if ($ac->getCollectedPoints() == $lastPoint) {
-                $ac->setPoints($lastPlacePoint);
+                $toSavePoint = $ac->getCollectedPoints() > 0 ? $lastPlacePoint : 0;
+                $ac->setPoints($toSavePoint);
             } else {
                 $lastPlacePoint = $this->alternativePointsProvider->getPlacePoint($place);
-                $ac->setPoints($lastPlacePoint);
+                $toSavePoint = $ac->getCollectedPoints() > 0 ? $lastPlacePoint : 0;
+                $ac->setPoints($toSavePoint);
             }
             $lastPoint = $ac->getCollectedPoints();
             $place++;

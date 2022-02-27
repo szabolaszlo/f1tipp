@@ -23,7 +23,9 @@
                                 {% for trophy in trophies %}
                                     {% set user = trophy.getUser() %}
                                     {% set point = trophy.getPoint() %}
-                                    <strong>{{ user.getName() }}{{ loop.last ? '' : ', ' }}</strong>
+                                    {% if user %}
+                                        <strong>{{ user.getName() }}{{ loop.last ? '' : ', ' }}</strong>
+                                    {% endif %}
                                 {% endfor %}
                             </td>
                             <td><strong>{{ trophies|first.getPoint() }}</strong></td>
