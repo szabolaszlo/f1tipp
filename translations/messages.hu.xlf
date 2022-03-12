@@ -91,6 +91,9 @@
       <trans-unit id="userChampionship_best_of_race_bets"><source>userChampionship_best_of_race_bets</source><target>Futamok Legjobbjai (TOP 3):</target></trans-unit>
       <trans-unit id="userChampionship_best_of_qualify_bets"><source>userChampionship_best_of_qualify_bets</source><target>Időmérők Legjobbjai (TOP 3):</target></trans-unit>
       <trans-unit id="userChampionship_no_results"><source>userChampionship_no_results</source><target>Még nincsenek eredmények, nézz vissza az első időmérő után!</target></trans-unit>
+      <trans-unit id="userChampionship_point_calculating"><source>userChampionship_point_calculating</source><target>PONTSZÁMÍTÁS</target></trans-unit>
+      <trans-unit id="userChampionship_place"><source>userChampionship_place</source><target>Hétvégi helyezés</target></trans-unit>
+      <trans-unit id="userChampionship_converted_points"><source>userChampionship_converted_points</source><target>Bajnokság pont</target></trans-unit>
       <trans-unit id="resultsOfChampionship_title"><source>resultsOfChampionship_title</source><target>VB ÁLLÁS</target></trans-unit>
       <trans-unit id="resultsOfChampionship_construct"><source>resultsOfChampionship_construct</source><target>Csapat</target></trans-unit>
       <trans-unit id="resultsOfChampionship_driver"><source>resultsOfChampionship_driver</source><target>Homár</target></trans-unit>

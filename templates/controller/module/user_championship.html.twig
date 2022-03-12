@@ -56,4 +56,31 @@
             </table>
         </div>
     </div>
+    <div class="panel panel-default">
+        <div class="panel-heading text-center">
+            <strong>{{ (id ~ '_point_calculating')|trans }}</strong>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th><strong class="color-two">{{ (id ~ '_place')|trans }}</strong></th>
+                    {% for place, point in pointProvider.getPlacePoints %}
+                        <th class="text-center"><strong class="color-two">{{ place }}.</strong></th>
+                    {% endfor %}
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <strong class="color-one">{{ (id ~ '_converted_points')|trans }}</strong>
+                    </td>
+                    {% for place, point in pointProvider.getPlacePoints %}
+                        <td class="text-center"><strong class="color-one">{{ point }}</strong></td>
+                    {% endfor %}
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 {% endblock %}

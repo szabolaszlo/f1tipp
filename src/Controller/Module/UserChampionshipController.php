@@ -2,6 +2,7 @@
 
 namespace App\Controller\Module;
 
+use App\Calculator\Provider\PointProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -29,6 +30,7 @@ class UserChampionshipController extends AbstractController
                     'race_bets' => $this->getDoctrine()->getRepository('App:Bet')->getTopRaceBets()
                 ],
                 'details_link' => $this->generateUrl('results'),
+                'pointProvider' => new PointProvider(),
                 'id' => 'userChampionship'
             ]
         );
