@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\Event")
@@ -11,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\DiscriminatorColumn(name="event_type", type="string"))
  * @ORM\DiscriminatorMap({"event" = "Event", "race" = "Race", "qualify" = "Qualify", "sprint_qualify" = "SprintQualify"})
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
+ * @ApiResource
  */
 class Event
 {

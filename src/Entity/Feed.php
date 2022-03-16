@@ -9,11 +9,13 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\Feed")
  * @ORM\Table(name="`feed`")
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
+ * @ApiResource
  */
 class Feed
 {
