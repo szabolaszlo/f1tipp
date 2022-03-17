@@ -31,6 +31,7 @@ class UserChampionshipController extends AbstractController
                 ],
                 'details_link' => $this->generateUrl('results'),
                 'pointProvider' => new PointProvider(),
+                'userLogged' => (bool)$this->getUser(),
                 'id' => 'userChampionship'
             ]
         );
