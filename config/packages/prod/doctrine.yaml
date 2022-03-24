@@ -1,5 +1,10 @@
 doctrine:
     orm:
+        second_level_cache:
+            enabled: true
+            region_cache_driver:
+                type: service
+                id: doctrine.system_cache_provider
         auto_generate_proxy_classes: false
         metadata_cache_driver:
             type: service
