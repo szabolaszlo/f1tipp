@@ -19,7 +19,7 @@ class Bet extends EntityRepository
      */
     public function getBetsByEvent($event)
     {
-        return $this->findBy(['event_id' => $event]);
+        return $this->findBy(['event_id' => $event->getId()]);
     }
 
     /**
@@ -35,7 +35,7 @@ class Bet extends EntityRepository
     {
         return $this->findOneBy([
             'user_id' => $user,
-            'event_id' => $event
+            'event_id' => $event->getId()
         ]);
     }
 
@@ -55,7 +55,7 @@ class Bet extends EntityRepository
     public function getBetsByEventOrderByPoints($event)
     {
         return $this->findBy(
-            ['event_id' => $event],
+            ['event_id' => $event->getId()],
             ['pointSummary' => 'DESC']
         );
     }
@@ -66,11 +66,11 @@ class Bet extends EntityRepository
     public function getTopRaceBets()
     {
         return $this->createQueryBuilder('bet')
+            ->setCacheable(true)
             ->innerJoin('App:Race', 'race', Join::WITH, 'bet.event_id = race.id')
             ->innerJoin('App:User', 'user', Join::WITH, 'bet.user_id = user.id AND user.isAlterChamps = 1')
             ->where('bet.pointSummary > 0')
             ->orderBy('bet.pointSummary', 'DESC')
-            ->groupBy('user.name')
             ->getQuery()
             ->setMaxResults(3)
             ->getResult();
@@ -82,11 +82,11 @@ class Bet extends EntityRepository
     public function getTopQualifyBets()
     {
         return $this->createQueryBuilder('bet')
+            ->setCacheable(true)
             ->innerJoin('App:Qualify', 'qualify', Join::WITH, 'bet.event_id = qualify.id')
             ->innerJoin('App:User', 'user', Join::WITH, 'bet.user_id = user.id AND user.isAlterChamps = 1')
             ->where('bet.pointSummary > 0')
             ->orderBy('bet.pointSummary', 'DESC')
-            ->groupBy('user.name')
             ->getQuery()
             ->setMaxResults(3)
             ->getResult();

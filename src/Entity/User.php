@@ -43,6 +43,7 @@ class User implements UserInterface
 
     /**
      * @ORM\OneToMany(targetEntity="Trophy", mappedBy="user", cascade={"persist","remove"})
+     * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
      */
     protected $trophies;
 

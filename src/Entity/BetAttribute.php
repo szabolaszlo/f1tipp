@@ -26,6 +26,7 @@ class BetAttribute
     /**
      * @ORM\ManyToOne(targetEntity="Bet", inversedBy="attributes")
      * @ORM\JoinColumn(name="bet_id", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
      */
     protected $bet;
 

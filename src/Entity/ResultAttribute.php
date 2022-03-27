@@ -26,6 +26,7 @@ class ResultAttribute
     /**
      * @ORM\ManyToOne(targetEntity="Result", inversedBy="attributes")
      * @ORM\JoinColumn(name="result_id", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
      */
     protected $result;
 

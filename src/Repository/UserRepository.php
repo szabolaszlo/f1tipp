@@ -36,9 +36,11 @@ class UserRepository extends ServiceEntityRepository
      */
     public function getAlternativeChampionshipUsers()
     {
-        return $this->findBy(
-            ['isAlterChamps' => true],
-            ['alternativePointSummary' => 'DESC']
-        );
+        return $this->createQueryBuilder('user')
+            ->setCacheable(true)
+            ->where('user.isAlterChamps = 1')
+            ->orderBy('user.alternativePointSummary', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
 }

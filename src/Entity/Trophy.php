@@ -27,12 +27,14 @@ class Trophy
     /**
      * @ORM\ManyToOne(targetEntity="User", inversedBy="trophies")
      * @ORM\JoinColumn(name="user", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
      */
     protected $user;
     
     /**
      * @ORM\ManyToOne(targetEntity="Race", inversedBy="trophies")
      * @ORM\JoinColumn(name="event", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
      */
     protected $event;
     

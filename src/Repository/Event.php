@@ -88,12 +88,13 @@ class Event extends EntityRepository
     public function getEventTypes(): array
     {
         $events = $this->createQueryBuilder('e')
+            ->setCacheable(true)
             ->getQuery()
             ->getResult();
 
         $types = [];
 
-        foreach ($events as $event){
+        foreach ($events as $event) {
             $types[$event->getType()] = $event->getType();
         }
 

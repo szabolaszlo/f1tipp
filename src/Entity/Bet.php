@@ -39,6 +39,7 @@ class Bet
 
     /**
      * @ORM\OneToMany(targetEntity="BetAttribute", mappedBy="bet", cascade={"persist","remove"})
+     * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
      */
     protected $attributes;
 

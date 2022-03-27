@@ -85,6 +85,9 @@ class EasyAdminSubscriber implements EventSubscriberInterface
 
         $this->em->flush();
 
+        $this->em->getCache()->evictEntityRegions();
+        $this->em->getCache()->evictCollectionRegions();
+
         $this->calculator->calculate();
 
         $this->fileCache->clearAll();

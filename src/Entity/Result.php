@@ -28,11 +28,13 @@ class Result
     /**
      * @ORM\OneToOne(targetEntity="Event")
      * @ORM\JoinColumn(name="event", referencedColumnName="id")
+     * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
      */
     protected $event;
     
     /**
      * @ORM\OneToMany(targetEntity="ResultAttribute", mappedBy="result", cascade={"persist","remove"})
+     * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
      */
     protected $attributes;
 

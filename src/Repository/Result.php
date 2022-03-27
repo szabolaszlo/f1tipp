@@ -102,9 +102,15 @@ class Result extends EntityRepository
     /**
      * @param Event $event
      * @return object
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function getResultByEvent(Event $event)
     {
-        return $this->findOneBy(['event' => $event]);
+        return $this->createQueryBuilder('result')
+            ->setCacheable(true)
+            ->setParameter('givenEvent', $event->getId())
+            ->where('result.event = :givenEvent')
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }
