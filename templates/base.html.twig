@@ -51,8 +51,7 @@
 
         <!-- Sidebar Widgets Column -->
         <div class="col-md-4">
-            {{ render(controller('App\\Controller\\Module\\CountDownController::indexAction')) }}
-
+            {{ countDownExtension() }}
             <div class="reload-able-module"
                  data-module-route="trophies"
                  data-module-entities='{"0": "trophies"}'

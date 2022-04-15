@@ -27,10 +27,9 @@
          data-module-count="-1">
         {{ render(controller('App\\Controller\\Module\\ActualEventsResultController::indexAction')) }}
     </div>
-    {{ render(controller('App\\Controller\\Module\\TopFeedController::indexAction')) }}
+    {{ topFeedExtension() }}
     {{ render(controller('App\\Controller\\Module\\MessageWall::indexAction')) }}
-    {{ render(controller('App\\Controller\\Module\\PointSummaryChartJSController::indexAction')) }}
-
+    {{ pointSummaryChartExtension() }}
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}

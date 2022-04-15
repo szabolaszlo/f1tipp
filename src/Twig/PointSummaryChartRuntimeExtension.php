@@ -1,27 +1,51 @@
 <?php
 
-namespace App\Controller\Module;
+namespace App\Twig;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\ORM\EntityManagerInterface;
+use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use Twig\Extension\RuntimeExtensionInterface;
 
-class PointSummaryChartJSController extends AbstractController
+class PointSummaryChartRuntimeExtension implements RuntimeExtensionInterface
 {
     /**
-     * @Route("/point_summary_chart_js", name="point_summary_chart_js", methods={"GET"})
-     * @return Response
+     * @var EntityManagerInterface
      */
-    public function indexAction(): Response
+    protected EntityManagerInterface $entityManager;
+
+    /**
+     * @var Environment
+     */
+    protected Environment $twig;
+
+    /**
+     * @param EntityManagerInterface $entitryManager
+     * @param Environment $twig
+     */
+    public function __construct(EntityManagerInterface $entitryManager, Environment $twig)
     {
-        $races = $this->getDoctrine()->getRepository('App:Race')->findAll();
+        $this->entityManager = $entitryManager;
+        $this->twig = $twig;
+    }
+
+    /**
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws LoaderError
+     */
+    public function renderPointSummaryChart(): string
+    {
+        $races = $this->entityManager->getRepository('App:Race')->findAll();
 
         $pointHistory = [];
         $eventHistory = ['Start'];
 
         foreach ($races as $race) {
             $alter = $this
-                ->getDoctrine()
+                ->entityManager
                 ->getRepository('App:AlternativeChampionship')
                 ->getAlternativeChampionshipResultByRace($race);
             if (!empty($alter)) {
@@ -37,7 +61,7 @@ class PointSummaryChartJSController extends AbstractController
             array_unshift($pointHistory[$key], 0);
         }
 
-        $users = $this->getDoctrine()->getRepository('App:User')->getAlternativeChampionshipUsers();
+        $users = $this->entityManager->getRepository('App:User')->getAlternativeChampionshipUsers();
 
         $sortMap = [];
         foreach ($users as $user) {
@@ -51,7 +75,7 @@ class PointSummaryChartJSController extends AbstractController
             }
         }
 
-        return $this->render("controller/module/point_summary_chart_js.html.twig", [
+        return $this->twig->render("extension/point_summary_chart_js.html.twig", [
             'id' => 'point_summary_chart',
             'eventHistory' => $eventHistory,
             'pointHistory' => $pointHistorySorted
