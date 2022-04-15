@@ -28,13 +28,13 @@
         {{ render(controller('App\\Controller\\Module\\ActualEventsResultController::indexAction')) }}
     </div>
     {{ topFeedExtension() }}
-    {{ render(controller('App\\Controller\\Module\\MessageWall::indexAction')) }}
+    {{ messageWallExtension(app.user ? 1 : 0 ) }}
     {{ pointSummaryChartExtension() }}
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
     {{ encore_entry_script_tags('module_reload') }}
-    {#TODO Refact this duplication#}
+    {# TODO Refact this duplication #}
     <script type="text/javascript">
         var {{ titleEvent.id }}_days = {{ titleEvent.remain_time.days }};
         var {{ titleEvent.id }}_hours = {{ titleEvent.remain_time.h }};

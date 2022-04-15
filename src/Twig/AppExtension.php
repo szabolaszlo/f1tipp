@@ -33,6 +33,10 @@ class AppExtension extends AbstractExtension
             new TwigFunction(
                 'countDownExtension',
                 [CountDownRuntimeExtension::class, 'renderCountDown'],
+                ['is_safe' => ['html']]),
+            new TwigFunction(
+                'messageWallExtension',
+                [MessageWallRuntimeExtension::class, 'renderMessageWall'],
                 ['is_safe' => ['html']])
         ];
     }

@@ -20,23 +20,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class MessageWall extends AbstractController
 {
-    const MESSAGE_COUNT = 100;
-
-    /**
-     * @return mixed
-     */
-    public function indexAction()
-    {
-        if ($this->getUser()) {
-            return $this->render('controller/module/message_wall/message_wall.html.twig', [
-                'id' => 'messageWall',
-                'messages' => $this->getDoctrine()->getRepository('App:Message')->getMessages()
-            ]);
-        } else {
-            return new Response();
-        }
-    }
-
     /**
      * @Route("/module/messages/list", name="message_list", methods={"GET"})
      * @return string
