@@ -57,6 +57,7 @@ class TrophyCalculator extends ACalculator
         $this->em->flush();
 
         $this->em->getCache()->evictEntityRegion('App:User');
+        $this->em->getCache()->evictEntityRegion('App:Trophy');
     }
 
     /**
