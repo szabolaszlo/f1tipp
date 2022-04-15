@@ -47,6 +47,7 @@
       <trans-unit id="module_details"><source>module_details</source><target>Részletek</target></trans-unit>
       <trans-unit id="topFeed_title"><source>topFeed_title</source><target>LEGFRISSEBB</target></trans-unit>
       <trans-unit id="feed_title"><source>feed_title</source><target>HÍREK</target></trans-unit>
+      <trans-unit id="point_summary_chart_title"><source>point_summary_chart_title</source><target>EGYÉNI PONTVERSENY CHART</target></trans-unit>
       <trans-unit id="feed_source"><source>feed_source</source><target>Forrás: https://hu.motorsport.com/f1</target></trans-unit>
       <trans-unit id="calendar_type"><source>calendar_type</source><target>Típus</target></trans-unit>
       <trans-unit id="calendar_event"><source>calendar_event</source><target>Esemény</target></trans-unit>

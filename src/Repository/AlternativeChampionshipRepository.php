@@ -25,6 +25,16 @@ class AlternativeChampionshipRepository extends ServiceEntityRepository
         parent::__construct($registry, AlternativeChampionship::class);
     }
 
+    public function getAlternativeChampionshipResultByRace(Race $race)
+    {
+        return $this->createQueryBuilder('alternative_championship')
+            ->setCacheable(true)
+            ->where('alternative_championship.race = ' . $race->getId())
+            ->orderBy('alternative_championship.user', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
     /**
      * @param Race $race
      * @return AlternativeChampionship[]
