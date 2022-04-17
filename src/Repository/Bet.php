@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\Event;
 use App\Entity\User;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query\Expr\Join;
 
 /**
@@ -31,7 +33,21 @@ class Bet extends EntityRepository
         return $this->findBy(['user_id' => $user]);
     }
 
+    /**
+     * @throws NonUniqueResultException
+     * @throws NoResultException
+     */
     public function getBetByUserAndEvent($user, $event)
+    {
+        return $this->createQueryBuilder('betByUserAndEvent')
+            ->setCacheable(true)
+            ->where('betByUserAndEvent.user_id = ' . $user->getId())
+            ->andWhere('betByUserAndEvent.event_id = ' . $event->getId())
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getBetByUserAndEventNonCache($user, $event)
     {
         return $this->findOneBy([
             'user_id' => $user,
@@ -65,15 +81,26 @@ class Bet extends EntityRepository
      */
     public function getTopRaceBets()
     {
-        return $this->createQueryBuilder('bet')
+        $resultCache = $this->_em->getConfiguration()->getResultCacheImpl();
+        $cacheKey = 'topRaceBets';
+
+        if ($resultCache->contains($cacheKey)) {
+            return $resultCache->fetch($cacheKey);
+        }
+
+        $result = $this->createQueryBuilder('topRaceBet')
             ->setCacheable(true)
-            ->innerJoin('App:Race', 'race', Join::WITH, 'bet.event_id = race.id')
-            ->innerJoin('App:User', 'user', Join::WITH, 'bet.user_id = user.id AND user.isAlterChamps = 1')
-            ->where('bet.pointSummary > 0')
-            ->orderBy('bet.pointSummary', 'DESC')
-            ->getQuery()
+            ->innerJoin('App:Race', 'race', Join::WITH, 'topRaceBet.event_id = race.id')
+            ->innerJoin('App:User', 'user', Join::WITH, 'topRaceBet.user_id = user.id AND user.isAlterChamps = 1')
+            ->where('topRaceBet.pointSummary > 0')
+            ->orderBy('topRaceBet.pointSummary', 'DESC')
             ->setMaxResults(3)
+            ->getQuery()
             ->getResult();
+
+        $resultCache->save($cacheKey, $result);
+
+        return $result;
     }
 
     /**
@@ -81,15 +108,26 @@ class Bet extends EntityRepository
      */
     public function getTopQualifyBets()
     {
-        return $this->createQueryBuilder('bet')
+        $resultCache = $this->_em->getConfiguration()->getResultCacheImpl();
+        $cacheKey = 'topQualifyBets';
+
+        if ($resultCache->contains($cacheKey)) {
+            return $resultCache->fetch($cacheKey);
+        }
+
+        $result = $this->createQueryBuilder('topQualifyBet')
             ->setCacheable(true)
-            ->innerJoin('App:Qualify', 'qualify', Join::WITH, 'bet.event_id = qualify.id')
-            ->innerJoin('App:User', 'user', Join::WITH, 'bet.user_id = user.id AND user.isAlterChamps = 1')
-            ->where('bet.pointSummary > 0')
-            ->orderBy('bet.pointSummary', 'DESC')
-            ->getQuery()
+            ->innerJoin('App:Qualify', 'qualify', Join::WITH, 'topQualifyBet.event_id = qualify.id')
+            ->innerJoin('App:User', 'user', Join::WITH, 'topQualifyBet.user_id = user.id AND user.isAlterChamps = 1')
+            ->where('topQualifyBet.pointSummary > 0')
+            ->orderBy('topQualifyBet.pointSummary', 'DESC')
             ->setMaxResults(3)
+            ->getQuery()
             ->getResult();
+
+        $resultCache->save($cacheKey, $result);
+
+        return $result;
     }
 
     /**

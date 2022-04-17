@@ -20,7 +20,7 @@ easy_admin:
         children:
           - { label: 'admin_maintenance_recalculate_points', icon: 'calculator', route: 're_calculate_points', item_permission: ['ROLE_SUPER_ADMIN'] }
           - { label: 'admin_maintenance_cache_clear', icon: 'trash', route: 'cache_clear' }
-          - { label: 'admin_maintenance_reset_season', icon: 'trash', route: 'reset_season' }
+     #     - { label: 'admin_maintenance_reset_season', icon: 'trash', route: 'reset_season' }
   entities:
     Result:
       translation_domain: 'messages'

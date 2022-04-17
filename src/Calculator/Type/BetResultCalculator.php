@@ -80,6 +80,9 @@ class BetResultCalculator extends ACalculator
         }
 
         $this->em->flush();
+        $resultCache = $this->em->getConfiguration()->getResultCacheImpl();
+        $resultCache->delete('topRaceBets');
+        $resultCache->delete('topQualifyBets');
     }
 
     /**

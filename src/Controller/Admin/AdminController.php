@@ -44,20 +44,16 @@ class AdminController extends EasyAdminController
         $this->getDoctrine()->getManager()->flush();
 
         $resultCache = $this->getDoctrine()->getManager()->getConfiguration()->getResultCacheImpl();
-        $cacheKey = get_class($entity) . 'NextEvent';
-        $resultCache->delete($cacheKey);
-        $cacheKey = get_class($entity) . 'ActualWeekendEvents';
-        $resultCache->delete($cacheKey);
-        $cacheKey = get_class($entity) . 'Remain';
-        $resultCache->delete($cacheKey);
+        $resultCache->delete('App\Entity\EventNextEvent');
+        $resultCache->delete('App\Entity\QualifyNextEvent');
+        $resultCache->delete('App\Entity\RaceNextEvent');
+        $resultCache->delete('App\Entity\EventActualWeekendEvents');
+        $resultCache->delete('App\Entity\QualifyActualWeekendEvents');
+        $resultCache->delete('App\Entity\RaceActualWeekendEvents');
+        $resultCache->delete('App\Entity\EventRemain');
+        $resultCache->delete('App\Entity\QualifyRemain');
+        $resultCache->delete('App\Entity\RaceRemain');
 
         $this->addFlash('success', 'admin_result_upload_success');
     }
-
-    function get_class_name($classname)
-    {
-        if ($pos = strrpos($classname, '\\')) return substr($classname, $pos + 1);
-        return $pos;
-    }
-
 }

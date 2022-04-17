@@ -47,7 +47,7 @@ class Betting extends AbstractController
             $bets[$eventType] = $this
                 ->getDoctrine()
                 ->getRepository('App:Bet')
-                ->getBetByUserAndEvent(
+                ->getBetByUserAndEventNonCache(
                     $user,
                     $event
                 );
