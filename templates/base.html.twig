@@ -64,6 +64,8 @@
                  data-module-count="-1">
                 {{ render(controller('App\\Controller\\Module\\UserChampionshipController::indexAction')) }}
             </div>
+            {{ prizeDrawExtension(app.user ? 1 : 0) }}
+            {{ pointCalculatingInfoExtension(app.user ? 1 : 0) }}
 
             <div class="visible-xs">
                 {{ render_hinclude(controller('App\\Controller\\Module\\FeedController::indexAction'), {default: 'Loading ..'}) }}

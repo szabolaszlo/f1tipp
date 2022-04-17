@@ -41,6 +41,14 @@ class AppExtension extends AbstractExtension
             new TwigFunction(
                 'trophyExtension',
                 [TrophyRuntimeExtension::class, 'renderTrophyModule'],
+                ['is_safe' => ['html']]),
+            new TwigFunction(
+                'pointCalculatingInfoExtension',
+                [PointCalculatingInfoRuntimeExtension::class, 'renderPointCalculatingInfo'],
+                ['is_safe' => ['html']]),
+            new TwigFunction(
+                'prizeDrawExtension',
+                [PrizeDrawRuntimeExtension::class, 'renderPrizeDrawExtension'],
                 ['is_safe' => ['html']])
         ];
     }

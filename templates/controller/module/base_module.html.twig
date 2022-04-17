@@ -1,7 +1,7 @@
 <div class="panel panel-default">
     <div class="panel-heading text-center">
         {% block heading_title %}
-            <strong>{{ (id ~ '_title')|trans }}</strong>
+            <strong>{{ (id ~ '_title')|trans|upper }}</strong>
         {% endblock %}
         {% block button_details %}
             {% if details_link is defined and details_link%}

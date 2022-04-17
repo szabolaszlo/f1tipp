@@ -1,0 +1,37 @@
+{% extends 'controller/module/base_module.html.twig' %}
+{% block body_content %}
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th><strong class="color-two">{{ (id ~ '_place')|trans }}</strong></th>
+                {% for place, point in pointProvider.getPlacePoints %}
+                    <th class="text-center"><strong class="color-two">{{ place }}.</strong></th>
+                {% endfor %}
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <strong class="color-one">{{ (id ~ '_converted_points')|trans }}</strong>
+                </td>
+                {% for place, point in pointProvider.getPlacePoints %}
+                    <td class="text-center"><strong class="color-one">{{ point }}</strong></td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <td class="text-center" colspan="11">
+                    <strong class="color-one">Összpont = 14 résztvevő X 5 = 70 pont</strong>
+                </td>
+            </tr>
+            <tr>
+                <td class="text-center" colspan="11">
+                    <strong class="color-two center">Pont Eloszlás = Arányaiban megfelel annak, ahogyan az F1ben
+                        eloszlanak a
+                        pontok.</strong>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
