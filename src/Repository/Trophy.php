@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Event;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query\Expr\Join;
 
 class Trophy extends EntityRepository
@@ -46,5 +48,17 @@ class Trophy extends EntityRepository
             ->setParameter('e', $eventIds)
             ->getQuery()
             ->execute();
+    }
+
+    /**
+     * @throws NonUniqueResultException
+     * @throws NoResultException
+     */
+    public function getTrophyCount()
+    {
+        return $this->createQueryBuilder('trophy')
+                ->select('count(trophy.id)')
+                ->getQuery()
+                ->getSingleScalarResult() ?? 0;
     }
 }

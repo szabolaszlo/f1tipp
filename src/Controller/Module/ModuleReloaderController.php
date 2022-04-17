@@ -2,6 +2,8 @@
 
 namespace App\Controller\Module;
 
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,15 +17,17 @@ class ModuleReloaderController extends AbstractController
     /**
      * @Route("/module/entity_counts", name="entity_counts", methods={"GET"})
      * @return Response
+     * @throws NoResultException
+     * @throws NonUniqueResultException
      */
-    public function entityCountsAction()
+    public function entityCountsAction(): Response
     {
         return $this->json([
-            'results' => count($this->getDoctrine()->getRepository('App:Result')->findAll()),
-            'bets' => count($this->getDoctrine()->getRepository('App:Bet')->findAll()),
-            'trophies' => count($this->getDoctrine()->getRepository('App:Trophy')->findAll()),
-            'messages' => count($this->getDoctrine()->getRepository('App:Message')->findAll()),
-            'alter_champs' => count($this->getDoctrine()->getRepository('App:AlternativeChampionship')->findAll())
+            'results' => (int)$this->getDoctrine()->getRepository('App:Result')->getResultCount(),
+            'bets' => (int)$this->getDoctrine()->getRepository('App:Bet')->getBetCount(),
+            'trophies' => (int)$this->getDoctrine()->getRepository('App:Trophy')->getTrophyCount(),
+            'messages' => (int)$this->getDoctrine()->getRepository('App:Message')->getMessageCount(),
+            'alter_champs' => (int)$this->getDoctrine()->getRepository('App:AlternativeChampionship')->getAlterCount()
         ], 200);
 
     }

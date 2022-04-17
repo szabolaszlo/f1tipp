@@ -12,6 +12,8 @@ use App\Entity\Event;
 use App\Entity\Race;
 use Doctrine\ORM\EntityRepository;
 use App\Entity\Result as ResultEnt;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query\Expr\Join;
 
 /**
@@ -102,7 +104,7 @@ class Result extends EntityRepository
     /**
      * @param Event $event
      * @return object
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function getResultByEvent(Event $event)
     {
@@ -112,5 +114,17 @@ class Result extends EntityRepository
             ->where('result.event = :givenEvent')
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    /**
+     * @throws NonUniqueResultException
+     * @throws NoResultException
+     */
+    public function getResultCount()
+    {
+        return $this->createQueryBuilder('result')
+            ->select('count(result.id)')
+            ->getQuery()
+            ->getSingleScalarResult() ?? 0;
     }
 }
