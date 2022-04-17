@@ -37,6 +37,10 @@ class AppExtension extends AbstractExtension
             new TwigFunction(
                 'messageWallExtension',
                 [MessageWallRuntimeExtension::class, 'renderMessageWall'],
+                ['is_safe' => ['html']]),
+            new TwigFunction(
+                'trophyExtension',
+                [TrophyRuntimeExtension::class, 'renderTrophyModule'],
                 ['is_safe' => ['html']])
         ];
     }
