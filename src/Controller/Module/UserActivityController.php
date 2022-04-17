@@ -8,6 +8,8 @@
 
 namespace App\Controller\Module;
 
+use App\Cache\FileCache;
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\User;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -21,18 +23,17 @@ class UserActivityController extends AbstractController
 {
     /**
      * @Route("get_online_user", name="get_online_user", methods={"GET"})
+     * @param FileCache $cache
      * @return JsonResponse
+     * @throws InvalidArgumentException
      */
-    public function getOnlineUsersAction()
+    public function getOnlineUsersAction(FileCache $cache): JsonResponse
     {
         /** @var User $user */
         $user = $this->getUser();
 
         if ($user) {
-            $user->setTimestamp(time());
-
-            $this->getDoctrine()->getManager()->persist($user);
-            $this->getDoctrine()->getManager()->flush();
+            $cache->save($user->getName() . 'Online', [time()]);
         }
 
         $users = $this->getDoctrine()->getRepository('App:User')->findAll();
@@ -41,7 +42,8 @@ class UserActivityController extends AbstractController
 
         /** @var User $user */
         foreach ($users as $user) {
-            if ($user->getTimestamp() >= (time() - 20)) {
+            $timeStamp = $cache->get($user->getName() . 'Online');
+            if (reset($timeStamp) >= (time() - 20)) {
                 $userNames[] = $user->getName();
             }
         }
