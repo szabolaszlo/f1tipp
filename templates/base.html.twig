@@ -62,7 +62,7 @@
                  data-module-route="user_championship"
                  data-module-entities='{"0": "results"}'
                  data-module-count="-1">
-                {{ render(controller('App\\Controller\\Module\\UserChampionshipController::indexAction')) }}
+                {{ userChampionshipTableExtension() }}
             </div>
             {{ prizeDrawExtension(app.user ? 1 : 0) }}
             {{ pointCalculatingInfoExtension(app.user ? 1 : 0) }}

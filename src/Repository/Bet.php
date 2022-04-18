@@ -19,9 +19,13 @@ class Bet extends EntityRepository
      * @param $event
      * @return array
      */
-    public function getBetsByEvent($event)
+    public function getBetsByEvent($event): array
     {
-        return $this->findBy(['event_id' => $event->getId()]);
+        return $this->createQueryBuilder('betsByEvent')
+            ->setCacheable(true)
+            ->where('betsByEvent.event_id = ' . $event->getId())
+            ->getQuery()
+            ->getResult();
     }
 
     /**

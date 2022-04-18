@@ -2,13 +2,13 @@
 
 namespace App\Controller\Module;
 
-use App\Entity\Event;
-use App\Entity\Race;
-use App\LegacyService\ResultTable\ResultTable;
-use Exception;
+use App\Twig\ActualEventsRuntimeExtension;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 /**
  * Class ActualEventsResultController
@@ -18,42 +18,14 @@ class ActualEventsResultController extends AbstractController
 {
     /**
      * @Route("/module/actual_events_result", name="actual_events_result", methods={"GET"})
-     * @param ResultTable $resultTable
+     * @param ActualEventsRuntimeExtension $actualEventsRuntimeExtension
      * @return Response
-     * @throws Exception
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function indexAction(ResultTable $resultTable): Response
+    public function indexAction(ActualEventsRuntimeExtension $actualEventsRuntimeExtension): Response
     {
-        $events = $this->getDoctrine()->getRepository('App:Event')->getActualWeekendEvents();
-
-        $tables = [];
-
-        $now = new \DateTime();
-
-        /** @var Event $event */
-        foreach ($events as $event) {
-            $id = abs($now->getTimestamp() - $event->getDateTime()->getTimeStamp());
-            $tables[$id] = $resultTable->getTable($this->getUser(), $event)->renderTable($event);
-
-            if ($event instanceof Race) {
-                $race = $event;
-            }
-        }
-
-        if (isset($race)) {
-            $summaryTable = $resultTable
-                ->getTable($this->getUser(), $race, 'summary')
-                ->renderTable($race);
-
-            if ($summaryTable) {
-                $tables[0] = $summaryTable;
-            }
-        }
-
-        ksort($tables);
-
-        return $this->render('controller/module/actual_events_results.html.twig', [
-            'tables' => $tables
-        ]);
+        return new Response($actualEventsRuntimeExtension->renderActualEvents($this->getUser()));
     }
 }

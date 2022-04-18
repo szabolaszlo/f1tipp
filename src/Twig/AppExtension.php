@@ -49,6 +49,14 @@ class AppExtension extends AbstractExtension
             new TwigFunction(
                 'prizeDrawExtension',
                 [PrizeDrawRuntimeExtension::class, 'renderPrizeDrawExtension'],
+                ['is_safe' => ['html']]),
+            new TwigFunction(
+                'actualEventsExtension',
+                [ActualEventsRuntimeExtension::class, 'renderActualEvents'],
+                ['is_safe' => ['html']]),
+            new TwigFunction(
+                'userChampionshipTableExtension',
+                [UserChampionshipTableRuntimeExtension::class, 'renderUserChampionshipTable'],
                 ['is_safe' => ['html']])
         ];
     }

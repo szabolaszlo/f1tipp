@@ -2,9 +2,13 @@
 
 namespace App\Controller\Module;
 
-use App\Calculator\Provider\PointProvider;
+use App\Twig\UserChampionshipTableRuntimeExtension;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 /**
  * Class UserChampionshipController
@@ -14,26 +18,14 @@ class UserChampionshipController extends AbstractController
 {
     /**
      * @Route("/module/user_championship", name="module_user_championship", methods={"GET"})
-     * @return mixed
+     * @param UserChampionshipTableRuntimeExtension $championshipTableRuntimeExtension
+     * @return Response
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function indexAction()
+    public function indexAction(UserChampionshipTableRuntimeExtension $championshipTableRuntimeExtension): Response
     {
-        return $this->render(
-            'controller/module/user_championship.html.twig',
-            [
-                'users' => $this
-                    ->getDoctrine()
-                    ->getRepository('App\Entity\User')
-                    ->getAlternativeChampionshipUsers(),
-                'records' => [
-                    'qualify_bets' => $this->getDoctrine()->getRepository('App:Bet')->getTopQualifyBets(),
-                    'race_bets' => $this->getDoctrine()->getRepository('App:Bet')->getTopRaceBets()
-                ],
-                'details_link' => $this->generateUrl('results'),
-                'pointProvider' => new PointProvider(),
-                'userLogged' => (bool)$this->getUser(),
-                'id' => 'userChampionship'
-            ]
-        );
+        return new Response($championshipTableRuntimeExtension->renderUserChampionshipTable());
     }
 }
