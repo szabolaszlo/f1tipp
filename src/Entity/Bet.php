@@ -28,12 +28,14 @@ class Bet
     /**
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
      */
     protected $user_id;
 
     /**
      * @ORM\ManyToOne(targetEntity="Event")
      * @ORM\JoinColumn(name="event_id", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
      */
     protected $event_id;
 
