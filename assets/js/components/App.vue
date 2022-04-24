@@ -1,19 +1,24 @@
 <template>
-        <span v-if="renderedModule" v-html="renderedModule"> </span>
+  <div>
+    <Transition name="slide">
+      <span v-if="renderedModule">
+        <div v-html="renderedModule">
+        </div>
+      </span>
+    </Transition>
+  </div>
 </template>
 
 <script>
 import axios from "axios";
-import {Skeleton} from "vue-loading-skeleton";
 
 export default {
-  components: {Skeleton},
   data() {
     return {
-      renderedModule: ''
+      renderedModule: null,
     }
   },
-  beforeCreate() {
+  mounted() {
     axios
         .get('/module/user_championship')
         .then(response => {

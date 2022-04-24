@@ -11,7 +11,7 @@ export default {
       renderedTrophiesModule: null
     }
   },
-  beforeCreate() {
+  mounted() {
     axios
         .get('/module/trophies')
         .then(response => {

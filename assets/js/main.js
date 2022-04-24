@@ -1,22 +1,14 @@
-import Vue from 'vue';
+import {createApp} from 'vue';
 import MainComponent from './components/MainComponent';
 import Navigation from './components/Navigation';
 import Router from './router/index';
-//import Skeleton from 'vue-loading-skeleton';
-//import "vue-loading-skeleton/dist/style.css"
-
-//Vue.use(Skeleton);
 
 window.onload = function () {
-    new Vue({
-        el: '#navigation',
-        router: Router,
-        render: h => h(Navigation)
-    });
+    const navigation = createApp(Navigation);
+    navigation.use(Router);
+    navigation.mount('#navigation');
 
-    new Vue({
-        el: '#app',
-        router: Router,
-        render: h => h(MainComponent)
-    });
+    const mainComponent = createApp(MainComponent);
+    mainComponent.use(Router);
+    mainComponent.mount('#app')
 }
