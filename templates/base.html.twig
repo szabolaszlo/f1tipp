@@ -11,6 +11,7 @@
         <link rel="shortcut icon" type="image/png" href="{{ asset('build/images/favicon.ico') }}"/>
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
+            {{ encore_entry_link_tags('main') }}
         {% endblock %}
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -32,9 +33,11 @@
 
 {% block javascripts %}
     {{ encore_entry_script_tags('app') }}
+    {{ encore_entry_script_tags('main') }}
+
 {% endblock %}
 
-{% include('navigation.html.twig') %}
+<div id="navigation"></div>
 
 <!-- Page Content -->
 <div class="container">
