@@ -18,6 +18,7 @@ class CalendarController extends AbstractController
      */
     public function indexAction()
     {
+        sleep(2);
         return $this->render("controller/page/calendar.html.twig", [
             'events' => $this->getDoctrine()->getRepository('App:Event')->getRemainEvents(),
             'type' => 'Event'

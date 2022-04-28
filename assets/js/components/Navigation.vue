@@ -17,12 +17,12 @@
         <div class="collapse navbar-collapse" id="f1tipp-navbar-collapse">
           <ul class="nav navbar-nav navbar-right">
             <li>
-            Itt lesz a login
+              <Login></Login>
             </li>
           </ul>
           <ul class="nav navbar-nav navbar-left">
             <li>
-            <router-link to="/app-one">App1</router-link>
+              <router-link to="/app-one">App1</router-link>
             </li>
             <li>
               <router-link to="/app-two">App2</router-link>
@@ -37,4 +37,9 @@
 </template>
 
 <script>
+import Login from "./Login";
+
+export default {
+  components: {Login: Login}
+}
 </script>

@@ -1,10 +1,5 @@
 <template>
-  <div>
-      <span v-if="renderedModule">
-        <div v-html="renderedModule">
-        </div>
-      </span>
-  </div>
+  <div id="f1tipp-login"><span v-html="renderedLoginModule"> </span></div>
 </template>
 
 <script>
@@ -13,14 +8,14 @@ import axios from "axios";
 export default {
   data() {
     return {
-      renderedModule: null,
+      renderedLoginModule: null
     }
   },
   mounted() {
     axios
-        .get('/module/user_championship')
+        .get('/login')
         .then(response => {
-          this.renderedModule = response.data;
+          this.renderedLoginModule = response.data;
         })
         .catch(error => {
           this.loading = false;
