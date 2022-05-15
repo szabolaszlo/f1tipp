@@ -4,14 +4,14 @@
       <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse"
+          <button id="hambi-button" type="button" class="navbar-toggle" data-toggle="collapse"
                   data-target="#f1tipp-navbar-collapse">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/"><img src="build/images/logo.png" height="51" alt=""></a>
+          <a class="navbar-brand" href="/"><img src="@images/logo.png" height="50" alt=""></a>
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="f1tipp-navbar-collapse">
@@ -22,10 +22,10 @@
           </ul>
           <ul class="nav navbar-nav navbar-left">
             <li>
-              <router-link to="/app-one">App1</router-link>
+              <router-link to="/actual" @click="routerLinkClicked()">Aktuális</router-link>
             </li>
             <li>
-              <router-link to="/app-two">App2</router-link>
+              <router-link to="/calendar" @click="routerLinkClicked()">Naptár</router-link>
             </li>
           </ul>
         </div>
@@ -40,6 +40,15 @@
 import Login from "./Login";
 
 export default {
-  components: {Login: Login}
+  components: {Login: Login},
+  methods: {
+    routerLinkClicked: function () {
+      window.scrollTo(0, 0);
+      let navBarButton = document.getElementById("hambi-button");
+      if (navBarButton.getAttribute('aria-expanded') === 'true') {
+        navBarButton.click()
+      }
+    }
+  }
 }
 </script>

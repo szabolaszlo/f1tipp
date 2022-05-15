@@ -1,8 +1,8 @@
 <template>
-  <div id="f1tipp-calendar">
+  <div id="main-component">
     <router-view v-slot="{ Component }">
       <Transition name="fade" mode="out-in">
-        <component :is="Component" />
+          <component :is="Component"/>
       </Transition>
     </router-view>
   </div>
@@ -11,16 +11,16 @@
 <script>
 </script>
 
-<style scoped>
+<style>
 .fade-enter-active,
 .fade-leave-active {
-  transition: all 0.5s;
+  transition: all 0.3s;
   max-height: 500px;
 }
 
 .fade-enter-from,
 .fade-leave-to {
-  transition: all 0.5s;
+  transition: all 0.3s;
   opacity: 0;
   max-height: 30px;
 }
