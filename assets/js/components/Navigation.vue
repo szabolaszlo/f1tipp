@@ -22,10 +22,13 @@
           </ul>
           <ul class="nav navbar-nav navbar-left">
             <li>
-              <router-link to="/actual" @click="routerLinkClicked()">Aktuális</router-link>
+              <router-link to="/actual" @click="routerLinkClicked()">{{ $t('actual.title') }}</router-link>
             </li>
             <li>
-              <router-link to="/calendar" @click="routerLinkClicked()">Naptár</router-link>
+              <router-link to="/calendar" @click="routerLinkClicked()">{{ $t('calendar.title') }}</router-link>
+            </li>
+            <li>
+              <router-link to="/rules" @click="routerLinkClicked()">{{ $t('rules.title') }}</router-link>
             </li>
           </ul>
         </div>

@@ -4,17 +4,19 @@
       <div v-if="errorMessage">
         <div class="panel panel-default">
           <div class="panel-heading text-center">
-            <strong>{{ $t("calendar.title") }}</strong>
+            <strong>{{ $t("calendar.title").toUpperCase() }}</strong>
           </div>
           <div class="text-center" style="padding: 30px;">
             <strong class="text-center color-one">{{ $t('general.errorOnComponentLoad') }}</strong>
+            <hr/>
+            <strong class="text-center color-two">{{ errorMessage }}</strong>
           </div>
         </div>
       </div>
       <div v-else-if="!loading">
         <div class="panel panel-default">
           <div class="panel-heading text-center">
-            <strong>{{ $t("calendar.title") }}</strong>
+            <strong>{{ $t("calendar.title").toUpperCase() }}</strong>
           </div>
           <div class="form form-inline">
             <div class="row text-center">

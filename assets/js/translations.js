@@ -1,7 +1,7 @@
 export default {
     hu: {
         calendar: {
-            title: 'NAPTÁR',
+            title: 'Naptár',
             onlyRemaining: 'Csak Hátralévők'
         },
         general: {
@@ -10,6 +10,12 @@ export default {
             race: 'Futam',
             sprintQualify: 'Sprint Kvalifikáció',
             sprint_qualify: 'Sprint Kvalifikáció',
+        },
+        rules: {
+            title: 'Szabályzat'
+        },
+        actual: {
+            title: 'Aktuális'
         }
     },
     en: {
