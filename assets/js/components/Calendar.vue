@@ -6,7 +6,9 @@
           <div class="panel-heading text-center">
             <strong>{{ $t("calendar.title") }}</strong>
           </div>
-          <strong class="text-center color-one">Hiba történt a Naptár betöltésekor, próbáld később...</strong>
+          <div class="text-center" style="padding: 30px;">
+            <strong class="text-center color-one">{{ $t('general.errorOnComponentLoad') }}</strong>
+          </div>
         </div>
       </div>
       <div v-else-if="!loading">
@@ -19,13 +21,13 @@
               <div class="col-sm form-control-static" style="padding: 5px;">
                 <a class="btn btn-new" role="button" @click="onlyRemaining = !onlyRemaining; filterEvents();">
                   <input type="checkbox" v-model="onlyRemaining">
-                  {{ $t('onlyRemaining') }}
+                  {{ $t('calendar.onlyRemaining') }}
                 </a>
               </div>
               <div v-for="eventType in eventTypes" class="col-sm form-control-static" style="padding: 5px;">
                 <a class="btn btn-new" role="button" @click="eventType.state = !eventType.state; filterEvents();">
                   <input type="checkbox" v-model="eventType.state">
-                  {{ $t(eventType.translatedName) }}
+                  {{ $t('general.' + eventType.translatedName) }}
                 </a>
               </div>
             </div>
@@ -37,8 +39,10 @@
               <td>
                 <strong class="color-two">{{ event.name }}</strong>
               </td>
-              <td><strong class="color-one">{{ $t(event.type) }}</strong></td>
-              <td><strong class="color-one">{{ event.dateTime.toISOString().replace('T', '  -  ').replace(':00.000Z', '') }}</strong></td>
+              <td><strong class="color-one">{{ $t('general.' + event.type) }}</strong></td>
+              <td><strong class="color-one">{{
+                  event.dateTime.toISOString().replace('T', '  -  ').replace(':00.000Z', '')
+                }}</strong></td>
             </tr>
 
             </tbody>

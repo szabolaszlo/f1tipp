@@ -2,14 +2,14 @@ export default {
     hu: {
         calendar: {
             title: 'NAPTÁR',
+            onlyRemaining: 'Csak Hátralévők'
         },
-        qualify: 'Időmérő',
-        race: 'Futam',
-        sprintQualify: 'Sprint Kvalifikáció',
-        sprint_qualify: 'Sprint Kvalifikáció',
-        onlyRemaining: 'Csak Hátralévők',
-        message: {
-            calendar: 'NAPTÁR'
+        general: {
+            errorOnComponentLoad: 'Hiba történt a betöltésekor, próbáld később...',
+            qualify: 'Időmérő',
+            race: 'Futam',
+            sprintQualify: 'Sprint Kvalifikáció',
+            sprint_qualify: 'Sprint Kvalifikáció',
         }
     },
     en: {
