@@ -4,7 +4,7 @@
       <div v-if="errorMessage">
         <div class="panel panel-default">
           <div class="panel-heading text-center">
-            <strong>NAPTÁR</strong>
+            <strong>{{ $t("calendar.title") }}</strong>
           </div>
           <strong class="text-center color-one">Hiba történt a Naptár betöltésekor, próbáld később...</strong>
         </div>
@@ -12,31 +12,33 @@
       <div v-else-if="!loading">
         <div class="panel panel-default">
           <div class="panel-heading text-center">
-            <strong>NAPTÁR</strong>
+            <strong>{{ $t("calendar.title") }}</strong>
           </div>
-          <div style="text-align: center; margin-top: 15px;">
-            Itt a gombok
-            <div class="btn btn-new" role="button" @click="onlyRemaining = !onlyRemaining; filterEvents();">
-              <input type="checkbox" id="only-remaining" v-model="onlyRemaining">
-              Csak Hátralévők
+          <div class="form form-inline">
+            <div class="row text-center">
+              <div class="col-sm form-control-static" style="padding: 5px;">
+                <a class="btn btn-new" role="button" @click="onlyRemaining = !onlyRemaining; filterEvents();">
+                  <input type="checkbox" v-model="onlyRemaining">
+                  {{ $t('onlyRemaining') }}
+                </a>
+              </div>
+              <div v-for="eventType in eventTypes" class="col-sm form-control-static" style="padding: 5px;">
+                <a class="btn btn-new" role="button" @click="eventType.state = !eventType.state; filterEvents();">
+                  <input type="checkbox" v-model="eventType.state">
+                  {{ $t(eventType.translatedName) }}
+                </a>
+              </div>
             </div>
           </div>
           <table class="table table-responsive table-striped">
-            <thead>
-            <tr>
-              <th><strong class="color-two">1</strong></th>
-              <th><strong class="color-two">2</strong></th>
-              <th><strong class="color-two">3</strong></th>
-            </tr>
-            </thead>
             <tbody>
 
             <tr v-for="event in filteredEvents">
               <td>
                 <strong class="color-two">{{ event.name }}</strong>
               </td>
-              <td><strong class="color-one">{{ event.type }}</strong></td>
-              <td><strong class="color-one">{{ event.dateTime.toDateString("hu-HU") }}</strong></td>
+              <td><strong class="color-one">{{ $t(event.type) }}</strong></td>
+              <td><strong class="color-one">{{ event.dateTime.toISOString().replace('T', '  -  ').replace(':00.000Z', '') }}</strong></td>
             </tr>
 
             </tbody>
@@ -64,6 +66,12 @@ export default {
         new EventType('qualify', 'qualify', true),
         new EventType('race', 'race', true),
         new EventType('sprint_qualify', 'sprintQualify', true)
+      ],
+      buttons: [
+        'qualify',
+        'race',
+        'sprint_qualify',
+        'onlyRemaining'
       ],
       errorMessage: '',
       onlyRemaining: true,

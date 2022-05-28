@@ -27,6 +27,7 @@
     "select2": "^4.0.12",
     "select2-bootstrap-theme": "0.1.0-beta.10",
     "vue": "^3.2.33",
+    "vue-i18n": "^9.1.10",
     "vue-loader": "^16.8.3",
     "vue-router": "^4.0.14",
     "vue-spinner": "^1.0.4"
