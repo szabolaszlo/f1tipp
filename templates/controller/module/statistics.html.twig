@@ -1,5 +1,5 @@
-{% extends('base.html.twig') %}
-{% block body %}
+{% extends('controller/module/base_module.html.twig') %}
+{% block body_content %}
     {% if statistics|first|first %}
         {% for typeName, statisticType in statistics %}
             {% for name, statistic in statisticType %}

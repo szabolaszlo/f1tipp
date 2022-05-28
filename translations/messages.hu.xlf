@@ -20,6 +20,7 @@
       <trans-unit id="nav_admin_information_editor"><source>nav_admin_information_editor</source><target>Szövegek Szerkesztése</target></trans-unit>
       <trans-unit id="nav_admin_cache"><source>nav_admin_cache</source><target>Cache Törlés</target></trans-unit>
       <trans-unit id="nav_statistics"><source>nav_statistics</source><target>Statisztika</target></trans-unit>
+      <trans-unit id="statistics_title"><source>statistics_title</source><target>STATISZTIKA</target></trans-unit>
       <trans-unit id="error_not_found_page"><source>error_not_found_page</source><target>Az oldal nem található</target></trans-unit>
       <trans-unit id="user_logout"><source>user_logout</source><target>Kilépés</target></trans-unit>
       <trans-unit id="user_login"><source>user_login</source><target>Belépés</target></trans-unit>

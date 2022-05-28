@@ -16,6 +16,9 @@ export default {
         },
         actual: {
             title: 'Aktuális'
+        },
+        statistics: {
+            title: 'Statisztika'
         }
     },
     en: {
