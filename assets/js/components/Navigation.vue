@@ -33,6 +33,9 @@
             <li>
               <router-link to="/statistics" @click="routerLinkClicked()">{{ $t('statistics.title') }}</router-link>
             </li>
+            <li>
+              <router-link to="/results" @click="routerLinkClicked()">{{ $t('results.title') }}</router-link>
+            </li>
           </ul>
         </div>
         <!-- /.navbar-collapse -->

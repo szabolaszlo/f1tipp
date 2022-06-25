@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'controller/module/base_module.html.twig' %}
 {# TODO: Fix this manual years result#}
 {% set resultYears = [2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021] %}
 {% macro resultButton(year) %}
@@ -14,13 +14,13 @@
 
 {% import _self as button %}
 
-{% block body %}
+{% block body_content %}
     <div style="text-align: center; padding: 15px;">
         {% for year in resultYears %}
             {{ button.resultButton(year) }}
         {% endfor %}
-        <a href="{{ path('results') }}" class="btn btn-new" role="button"
-           onclick="$(this).css({'background-image' : 'url({{ asset('build/images/15.gif') }})', 'background-repeat': 'no-repeat', 'background-position' : 'center'});">
+        <a class="btn btn-new" role="button"
+           onclick="$(this).css({'background-image' : 'url({{ asset('build/images/15.gif') }})', 'background-repeat': 'no-repeat', 'background-position' : 'center'});location.reload()">
             2022
         </a>
     </div>

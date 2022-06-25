@@ -19,6 +19,9 @@ export default {
         },
         statistics: {
             title: 'Statisztika'
+        },
+        results: {
+            title: 'Eredmények'
         }
     },
     en: {
