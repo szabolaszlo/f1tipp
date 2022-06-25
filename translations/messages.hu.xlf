@@ -96,8 +96,8 @@
       <trans-unit id="userChampionship_place"><source>userChampionship_place</source><target>Hétvégi helyezés</target></trans-unit>
       <trans-unit id="userChampionship_converted_points"><source>userChampionship_converted_points</source><target>Bajnokság pont</target></trans-unit>
       <trans-unit id="userChampionship_maths"><source>userChampionship_maths</source><target>Bajnokság Matek</target></trans-unit>
-      <trans-unit id="userChampionship_remaining_races"><source>userChampionship_remaining_races</source><target>Hátralévő Hétvégék Száma</target></trans-unit>
-      <trans-unit id="userChampionship_remaining_points"><source>userChampionship_remaining_points</source><target>Még Gyűjthető Pontok Száma</target></trans-unit>
+      <trans-unit id="userChampionship_remaining_races"><source>userChampionship_remaining_races</source><target>Hátralévő Hétvégék</target></trans-unit>
+      <trans-unit id="userChampionship_remaining_points"><source>userChampionship_remaining_points</source><target>Még Szerezhető Pontok</target></trans-unit>
       <trans-unit id="userChampionship_checkered_flag"><source>userChampionship_checkered_flag</source><target>Sajnos már nincs matematikai esély a győzelemre</target></trans-unit>
       <trans-unit id="resultsOfChampionship_title"><source>resultsOfChampionship_title</source><target>VB ÁLLÁS</target></trans-unit>
       <trans-unit id="resultsOfChampionship_construct"><source>resultsOfChampionship_construct</source><target>Csapat</target></trans-unit>

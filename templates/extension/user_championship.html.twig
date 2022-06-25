@@ -51,13 +51,13 @@
                 </tr>
                 <tr class="text-left">
                     <td><strong>{{ (id ~ '_remaining_races')|trans }}</strong></td>
-                    <td><strong class="color-one">{{ maths.remaining_weekends|length }}</strong></td>
+                    <td class="text-center"><strong class="color-one">{{ maths.remaining_weekends|length }}</strong></td>
                 </tr>
                 <tr class="text-left">
                     <td><strong>
                             {{ (id ~ '_remaining_points')|trans }}
                             ({{ maths.remaining_weekends|length }}X{{ pointProvider.placePoint(1) }})</strong></td>
-                    <td>
+                    <td class="text-center">
                         <strong class="color-one">{{ maths.remaining_weekends|length * pointProvider.placePoint(1) }}</strong>
                     </td>
                 </tr>
