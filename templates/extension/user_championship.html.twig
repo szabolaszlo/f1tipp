@@ -7,8 +7,15 @@
                 {% for user in users %}
                     {% set podiumTrophies = user.getPodiumTrophies() %}
                     <tr>
+                        <td class="text-center">
+                            {% if user.alternativePointDifference() > maths.remaining_weekends|length * pointProvider.placePoint(1) %}
+                                <span title="{{ (id ~ '_checkered_flag')|trans }}">
+                                        <img src="{{ asset('build/images/checkered-flag.png') }}" height="18">
+                                </span>
+                            {% endif %}
+                        </td>
                         <td class="text-center user-activity user-{{ user.getName() }}">
-                            <span class="glyphicon glyphicon-eye-open"
+                            <span class="glyphicon glyphicon-flag"
                                   aria-hidden="true" title="Online"
                                   style="color: transparent; font-size: 1.1em;">
                             </span>
@@ -36,6 +43,24 @@
             </table>
             <table class="table table-striped border-primary">
                 <tbody>
+                <tr>
+                    <td class="text-center" colspan="3"
+                        style="border-top: 1px; border-top-color: white;">
+                        <strong class="color-two">{{ (id ~ '_maths')|trans }}:</strong>
+                    </td>
+                </tr>
+                <tr class="text-left">
+                    <td><strong>{{ (id ~ '_remaining_races')|trans }}</strong></td>
+                    <td><strong class="color-one">{{ maths.remaining_weekends|length }}</strong></td>
+                </tr>
+                <tr class="text-left">
+                    <td><strong>
+                            {{ (id ~ '_remaining_points')|trans }}
+                            ({{ maths.remaining_weekends|length }}X{{ pointProvider.placePoint(1) }})</strong></td>
+                    <td>
+                        <strong class="color-one">{{ maths.remaining_weekends|length * pointProvider.placePoint(1) }}</strong>
+                    </td>
+                </tr>
                 {% for key, record in records %}
                     {% if record is not empty %}
                         <tr>
