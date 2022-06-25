@@ -58,6 +58,9 @@ class UserChampionshipTableRuntimeExtension implements RuntimeExtensionInterface
                     'qualify_bets' => $this->entityManager->getRepository('App:Bet')->getTopQualifyBets(),
                     'race_bets' => $this->entityManager->getRepository('App:Bet')->getTopRaceBets()
                 ],
+                'maths' => [
+                    'remaining_weekends' => $this->entityManager->getRepository('App:Race')->getRemainEvents()
+                ],
                 'details_link' => $this->router->generate('results'),
                 'pointProvider' => new PointProvider(),
                 'id' => 'userChampionship'
