@@ -1,5 +1,5 @@
 <template>
-  <div id="f1tipp-login"><span v-html="renderedLoginModule"> </span></div>
+  <div v-html="renderedLoginModule"></div>
 </template>
 
 <script>

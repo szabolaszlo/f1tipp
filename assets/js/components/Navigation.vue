@@ -15,11 +15,6 @@
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="f1tipp-navbar-collapse">
-          <ul class="nav navbar-nav navbar-right">
-            <li>
-              <Login></Login>
-            </li>
-          </ul>
           <ul class="nav navbar-nav navbar-left">
             <li>
               <router-link to="/actual" @click="routerLinkClicked()">{{ $t('actual.title') }}</router-link>
@@ -37,6 +32,7 @@
               <router-link to="/results" @click="routerLinkClicked()">{{ $t('results.title') }}</router-link>
             </li>
           </ul>
+          <Login></Login>
         </div>
         <!-- /.navbar-collapse -->
       </div>
