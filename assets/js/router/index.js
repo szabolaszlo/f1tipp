@@ -29,14 +29,8 @@ const routes = [
         component: () => import(/* webpackChunkName: "about" */ '../components/Actual.vue')
     },
     {
-        path: '/',
-        component: () => import(/* webpackChunkName: "about" */ '../components/Actual.vue')
-    },
-    {
-        path: '/home',
-        name: 'Home',
-        component: () => import(/* webpackChunkName: "about" */ '../components/MainComponent.vue'),
-        meta: {transition: 'slide-left'},
+        path: "/",
+        redirect: "/actual",
     }
 ]
 

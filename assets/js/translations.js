@@ -17,6 +17,9 @@ export default {
         actual: {
             title: 'Aktuális'
         },
+        betting: {
+            title: 'Tippelek'
+        },
         statistics: {
             title: 'Statisztika'
         },

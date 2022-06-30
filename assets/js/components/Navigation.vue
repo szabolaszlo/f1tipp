@@ -17,7 +17,13 @@
         <div class="collapse navbar-collapse" id="f1tipp-navbar-collapse">
           <ul class="nav navbar-nav navbar-left">
             <li>
+              <a href="/betting/" @click="routerLinkClicked()">{{ $t('betting.title') }}</a>
+            </li>
+            <li>
               <router-link to="/actual" @click="routerLinkClicked()">{{ $t('actual.title') }}</router-link>
+            </li>
+            <li>
+              <router-link to="/results" @click="routerLinkClicked()">{{ $t('results.title') }}</router-link>
             </li>
             <li>
               <router-link to="/calendar" @click="routerLinkClicked()">{{ $t('calendar.title') }}</router-link>
@@ -27,9 +33,6 @@
             </li>
             <li>
               <router-link to="/statistics" @click="routerLinkClicked()">{{ $t('statistics.title') }}</router-link>
-            </li>
-            <li>
-              <router-link to="/results" @click="routerLinkClicked()">{{ $t('results.title') }}</router-link>
             </li>
           </ul>
           <Login></Login>

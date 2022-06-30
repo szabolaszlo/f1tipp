@@ -5,6 +5,10 @@
     {{ parent() }}
 {% endblock %}
 
+{% block navigation %}
+    {{ include('navigation.html.twig') }}
+{% endblock %}
+
 {% import 'macro/icon.html.twig' as iconProvider %}
 
 {% block body %}
@@ -76,7 +80,7 @@
 {% endblock %}
 
 {% block javascripts %}
-    {{ parent() }}
+    {{ encore_entry_script_tags('app') }}
     {{ encore_entry_script_tags('betting') }}
     {{ encore_entry_script_tags('select2import') }}
     <script type="text/javascript">
