@@ -1,5 +1,10 @@
 <template>
   <div>
+    <div style="text-align: center; padding: 15px;">
+      <button v-for="year in years" class="btn btn-new" role="button" style="margin: 5px;" @click="yearChosen(year)">
+        {{ year }}
+      </button>
+    </div>
     <Transition name="fade" mode="out-in">
       <div v-if="errorMessage">
         <div class="panel panel-default">
@@ -28,31 +33,44 @@ import axios from "axios";
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
 
 export default {
-  name: "Results",
+  name: 'Results',
   components: {PulseLoader},
   data() {
     return {
       loading: true,
       errorMessage: null,
       renderedModule: null,
+      currentYear: new Date().getFullYear(),
+      years: [],
     }
   },
+  created() {
+    let year = 2014
+    do {
+      this.years.push(year)
+      year++
+    } while (year <= this.currentYear)
+  },
   mounted() {
-    this.$el.addEventListener('ActualYearClicked', this.reload)
-    axios
-        .get('/module/results')
-        .then(response => {
-          this.renderedModule = response.data;
-          this.loading = false;
-        })
-        .catch(error => {
-          this.loading = false;
-          this.errorMessage = error.message;
-        })
+    this.yearChosen(this.currentYear)
   },
   methods: {
-    reload() {
-      this.$router.go(0)
+    yearChosen(year) {
+      this.loading = true
+      let url =
+          year === this.currentYear
+              ? '/module/results'
+              : '/information_content/' + year
+      axios
+          .get(url)
+          .then(response => {
+            this.renderedModule = response.data;
+            this.loading = false;
+          })
+          .catch(error => {
+            this.loading = false;
+            this.errorMessage = error.message;
+          })
     }
   }
 }

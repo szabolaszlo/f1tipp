@@ -1,29 +1,5 @@
 {% extends 'controller/module/base_module.html.twig' %}
-{# TODO: Fix this manual years result#}
-{% set resultYears = [2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021] %}
-{% macro resultButton(year) %}
-    <button id="result-button-{{ year }}"
-            onclick="$(this).css({'background-image' : 'url({{ asset('build/images/15.gif') }})', 'background-repeat': 'no-repeat', 'background-position' : 'center'});
-                    $('#results').load('/information_content/{{ year }}', function() {
-                    $('#result-button-{{ year }}').css({'background-image' : 'url()'});
-                    })"
-            class="btn btn-new" role="button">
-        {{ year }}
-    </button>
-{% endmacro %}
-
-{% import _self as button %}
-
 {% block body_content %}
-    <div style="text-align: center; padding: 15px;">
-        {% for year in resultYears %}
-            {{ button.resultButton(year) }}
-        {% endfor %}
-        <a class="btn btn-new" role="button"
-           onclick="$(this).css({'background-image' : 'url({{ asset('build/images/15.gif') }})', 'background-repeat': 'no-repeat', 'background-position' : 'center'});location.reload()">
-            2022
-        </a>
-    </div>
     <div id="results">
         {% if weekends %}
             {% for key, weekend in weekends %}

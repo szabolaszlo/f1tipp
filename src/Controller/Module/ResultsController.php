@@ -62,6 +62,10 @@ class ResultsController extends AbstractController
             $cache->save($cacheKey, [0 => $weekends, 1 => $weekendNames]);
         }
 
-        return $this->render('controller/module/results.html.twig', ['weekends' => $weekends, 'weekendNames' => $weekendNames]);
+        return $this->render('controller/module/results.html.twig', [
+            'id' => 'results',
+            'weekends' => $weekends,
+            'weekendNames' => $weekendNames
+        ]);
     }
 }
