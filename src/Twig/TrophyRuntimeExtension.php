@@ -59,7 +59,7 @@ class TrophyRuntimeExtension implements RuntimeExtensionInterface
             [
                 'podium_trophies' => $podiumTrophies,
                 'event' => $event,
-                'details_link' => '/trophies',
+                'details_link' => '/#/trophies',
                 'id' => 'trophies_module'
             ]
         );

@@ -24,20 +24,13 @@ class UserChampionshipTableRuntimeExtension implements RuntimeExtensionInterface
     protected Environment $twig;
 
     /**
-     * @var RouterInterface
-     */
-    protected RouterInterface $router;
-
-    /**
      * @param EntityManagerInterface $entityManager
      * @param Environment $twig
-     * @param RouterInterface $router
      */
-    public function __construct(EntityManagerInterface $entityManager, Environment $twig, RouterInterface $router)
+    public function __construct(EntityManagerInterface $entityManager, Environment $twig)
     {
         $this->entityManager = $entityManager;
         $this->twig = $twig;
-        $this->router = $router;
     }
 
     /**
@@ -61,7 +54,7 @@ class UserChampionshipTableRuntimeExtension implements RuntimeExtensionInterface
                 'maths' => [
                     'remaining_weekends' => $this->entityManager->getRepository('App:Race')->getRemainEvents()
                 ],
-                'details_link' => $this->router->generate('results'),
+                'details_link' => '/#/results',
                 'pointProvider' => new PointProvider(),
                 'id' => 'userChampionship'
             ]

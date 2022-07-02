@@ -38,6 +38,9 @@ const router = createRouter({
     // 4. Provide the history implementation to use. We are using the hash history for simplicity here.
     history: createWebHashHistory(),
     routes, // short for `routes: routes`
+    scrollBehavior(to, from, savedPosition) {
+        return {top: 0, behavior: 'smooth'}
+    }
 })
 
 // 5. Create and mount the root instance.

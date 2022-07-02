@@ -59,7 +59,7 @@ class CountDownRuntimeExtension implements RuntimeExtensionInterface
         return $this->twig->render("extension/count_down.html.twig",
             [
                 'events' => $data,
-                'details_link' => '/calendar',
+                'details_link' => '/#/calendar',
                 'id' => 'count_down',
             ]
         );
