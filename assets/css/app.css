@@ -318,7 +318,7 @@ fieldset[disabled] .btn-new.active {
     color: yellow;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 2048px) {
     .navbar .navbar-nav .open .dropdown-menu > li > a {
         color: #ecf0f1;
     }
