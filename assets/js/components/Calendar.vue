@@ -38,6 +38,7 @@
             <tbody>
 
             <tr v-for="event in filteredEvents">
+              <td></td>
               <td>
                 <strong class="color-two">{{ event.name }}</strong>
               </td>
@@ -45,6 +46,7 @@
               <td><strong class="color-one">{{
                   event.dateTime.toISOString().replace('T', '  -  ').replace(':00.000Z', '')
                 }}</strong></td>
+              <td></td>
             </tr>
 
             </tbody>

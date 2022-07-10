@@ -90,6 +90,7 @@
       <trans-unit id="result_bets"><source>result_bets</source><target>Tippek: </target></trans-unit>
       <trans-unit id="result_no_betting_users"><source>result_no_betting_users</source><target>Tippnélküliek: </target></trans-unit>
       <trans-unit id="results_title"><source>results_title</source><target>Eredmények</target></trans-unit>
+      <trans-unit id="trophies_title"><source>trophies_title</source><target>KUPÁK</target></trans-unit>
       <trans-unit id="userChampionship_title"><source>userChampionship_title</source><target>EGYÉNI PONTVERSENY</target></trans-unit>
       <trans-unit id="userChampionship_best_of_race_bets"><source>userChampionship_best_of_race_bets</source><target>Futamok Legjobbjai (TOP 3):</target></trans-unit>
       <trans-unit id="userChampionship_best_of_qualify_bets"><source>userChampionship_best_of_qualify_bets</source><target>Időmérők Legjobbjai (TOP 3):</target></trans-unit>

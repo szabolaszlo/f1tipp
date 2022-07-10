@@ -25,6 +25,9 @@ export default {
         },
         results: {
             title: 'Eredmények'
+        },
+        trophies:{
+            title: 'Kupák'
         }
     },
     en: {
