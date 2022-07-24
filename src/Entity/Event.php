@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\Event")
@@ -12,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\DiscriminatorMap({"event" = "Event", "race" = "Race", "qualify" = "Qualify", "sprint_qualify" = "SprintQualify"})
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
-class Event
+class Event implements JsonSerializable
 {
     /**
      * @ORM\Column(name="id", type="integer", length=11, nullable=false)
@@ -106,5 +107,14 @@ class Event
     public function getType()
     {
         return 'event';
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'type' => $this->getType(),
+        ];
     }
 }

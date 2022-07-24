@@ -70,6 +70,7 @@ class BetAttributesType extends AbstractType
                     'label' => 'betting_' . $form->get('key')->getData(),
                     'attr' => [
                         'class' => 'select2 event-' . $betAttribute->getBet()->getEvent()->getId(),
+                        'style' => 'width: 90%',
                         'disabled' => $betAttribute->getId() ? true : false
                     ]
                 ]);

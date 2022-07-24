@@ -20,6 +20,9 @@
               <a href="/betting/" @click="routerLinkClicked()">{{ $t('betting.title') }}</a>
             </li>
             <li>
+              <router-link to="/betting2" @click="routerLinkClicked()">{{ $t('betting.title') }}2</router-link>
+            </li>
+            <li>
               <router-link to="/actual" @click="routerLinkClicked()">{{ $t('actual.title') }}</router-link>
             </li>
             <li>

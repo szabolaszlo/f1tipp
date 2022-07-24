@@ -9,6 +9,7 @@ use App\Form\Constraint\UniqueBetAttributes;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\CallbackTransformer;
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -92,8 +93,9 @@ class BettingType extends AbstractType
             if ($bet instanceof Bet && !$bet->getId()) {
                 $now = new \DateTime();
                 if ($now < $bet->getEvent()->getDateTime()) {
-                    $form->add('submit', SubmitType::class, [
+                    $form->add('submit', ButtonType::class, [
                         'attr' => [
+                            'id' => 'betting-form-submit',
                             'class' => 'btn-new event-submit-' . $bet->getEvent()->getId(),
                         ],
                         'label' => 'betting_submit_' . $bet->getEvent()->getType()
@@ -112,6 +114,7 @@ class BettingType extends AbstractType
             'attr' => [
                 'class' => 'form form-inline',
                 'padding' => '10px',
+                'id' => 'betting-form'
             ],
             'data_class' => Bet::class,
             'csrf_protection' => true,

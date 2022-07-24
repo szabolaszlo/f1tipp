@@ -18,7 +18,8 @@ export default {
             title: 'Aktuális'
         },
         betting: {
-            title: 'Tippelek'
+            title: 'Tippelek',
+            needToSignIn: 'Nem vagy bejelentkezve!'
         },
         statistics: {
             title: 'Statisztika'
