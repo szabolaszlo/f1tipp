@@ -35,6 +35,9 @@
                     <div class="panel-heading text-center">
                       <strong>{{ $t("betting.title").toUpperCase() }}</strong>
                     </div>
+                    <div v-if="processingForm" class="text-center">
+                      <pulse-loader color="#B8211DE5"></pulse-loader>
+                    </div>
                     <div id="betting-form-closure" v-html="form"></div>
                   </div>
                 </div>
@@ -57,7 +60,6 @@
 import axios from "axios";
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
 import "select2/dist/js/select2.full.min";
-import "../../js/betting.js";
 import JQuery from 'jquery'
 import DriverImages from "../classes/driver-images/driver-images";
 
@@ -70,6 +72,7 @@ export default {
     return {
       loading: true,
       formLoading: true,
+      processingForm: false,
       errorMessage: null,
       formErrorMessage: null,
       weekendEvents: null,
@@ -96,19 +99,28 @@ export default {
   },
   methods: {
     afterFormLoaded() {
-      window.afterFormLoaded = function (){
+
+      var vueInstance = this
+
+      $('#betting_form_submit').prop('disabled', true);
+
+      window.afterFormLoaded = function () {
         $(document).on('select2:open', () => {
           document.querySelector('.select2-search__field').focus();
         });
 
         $('#betting_form_submit').click(function () {
+          $('#betting_form_submit').prop('disabled', true);
+          window.scrollTo(0, 0);
           const $form = $('#betting-form');
+          vueInstance.processingForm = true;
           $.ajax({
             url: $form.prop('action'),
             method: $form.prop('method'),
             data: $form.serialize(),
           }).done(function (html) {
             $("#betting-form-closure").html(html);
+            vueInstance.processingForm = false;
             afterFormLoaded();
           })
         });
@@ -123,16 +135,48 @@ export default {
 
         $('.select2').on('select2:select', function (e) {
           window.selectedValues = []
-          $('.select2').each(function () {
+
+          $('select.select2').each(function () {
+            $(this).parent().css('background-color', 'transparent');
             window.selectedValues.push($(this).val());
           });
+
+          let error = false;
+          let empty = false;
+
+          $('select.select2').each(function () {
+            let counter = 0
+
+            if ($(this).val() === '') {
+              empty = true
+            }
+
+            for (let value of window.selectedValues) {
+              if (value === $(this).val() && value !== '') {
+                counter++
+              }
+            }
+
+            if (counter > 1) {
+              console.log('egyezés:')
+              error = true;
+              $(this).parent().css('background-color', 'rgba(255, 25, 25, .5)');
+            }
+            console.log($(this))
+          });
+
+          if (error || empty) {
+            $('#betting_form_submit').prop('disabled', true);
+          } else {
+            $('#betting_form_submit').prop('disabled', false);
+          }
         });
       }
 
       window.selectedValues = []
 
       window.formatSelectDropDown = function (item) {
-        if (!item.id || window.selectedValues.includes(item.id) ) {
+        if (!item.id || window.selectedValues.includes(item.id)) {
           return null;
         }
         var $state = $(
