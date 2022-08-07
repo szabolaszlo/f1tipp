@@ -2,7 +2,7 @@
   <div>
     <link href="/build/select2/css/select2.min.css" rel="stylesheet"/>
     <link href="/build/select2-bootstrap-theme/select2-bootstrap.min.css" rel="stylesheet"/>
-    <link href="/build/app.css" rel="stylesheet"/>
+    <link href="/build/css/app.css" rel="stylesheet"/>
     <Transition name="fade" mode="out-in" @after-enter="afterFormLoaded">
       <div v-if="errorMessage">
         <div class="panel panel-default">
@@ -18,7 +18,8 @@
         <div class="form form-inline">
           <div class="row text-center">
             <div v-for="event in weekendEvents" class="col-sm form-control-static" style="padding: 15px;">
-              <a class="btn btn-new" role="button" @click="getForm(event.id)">
+              <a class="btn btn-new" role="button"
+                 @click="getForm(event.id); eventName = event.name; eventType = event.type;">
                 <span :class="'glyphicon glyphicon-' + getGlyphiconName(event.type)" aria-hidden="false"></span>
                 {{ $t('general.' + event.type).toUpperCase() }}
               </a>
@@ -33,7 +34,7 @@
                 <div v-else-if="!formLoading">
                   <div class="panel panel-default">
                     <div class="panel-heading text-center">
-                      <strong>{{ $t("betting.title").toUpperCase() }}</strong>
+                      <strong>{{ $t("betting.title").toUpperCase() }} - {{ eventName }} - {{ $t('general.' + eventType).toUpperCase() }}</strong>
                     </div>
                     <div v-if="processingForm" class="text-center">
                       <pulse-loader color="#B8211DE5"></pulse-loader>
@@ -70,6 +71,8 @@ export default {
   components: {PulseLoader},
   data() {
     return {
+      eventName: null,
+      eventType: null,
       loading: true,
       formLoading: true,
       processingForm: false,
@@ -86,6 +89,8 @@ export default {
           this.weekendEvents = response.data;
           this.loading = false;
           this.getForm(this.weekendEvents[0].id)
+          this.eventName = this.weekendEvents[0].name;
+          this.eventType = this.weekendEvents[0].type;
         })
         .catch(error => {
           this.loading = false;
@@ -179,9 +184,15 @@ export default {
         if (!item.id || window.selectedValues.includes(item.id)) {
           return null;
         }
-        var $state = $(
-            '<span><img height="70px" src="' + DriverImages[item.id.toLowerCase()] + '" class="img-flag" /> ' + item.text + '</span>'
-        );
+        if(DriverImages[item.id.toLowerCase()]) {
+          var $state = $(
+              '<span><img height="70px" src="' + DriverImages[item.id.toLowerCase()] + '" class="img-flag" /> ' + item.text + '</span>'
+          );
+        }else {
+          var $state = $(
+              '<span>' + item.text + '</span>'
+          );
+        }
         return $state;
       };
 

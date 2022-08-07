@@ -41,7 +41,9 @@ const DriverImages = {
     str: str,
     tsu: tsu,
     vet: vet,
-    zho: zho
+    zho: zho,
+    igen: false,
+    nem: false
 }
 
 export default DriverImages

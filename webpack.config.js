@@ -25,6 +25,20 @@ Encore
         //pattern: /\.(png|jpg|jpeg)$/
     })
 
+    // css
+    .copyFiles({
+        from: './assets/css',
+
+        // optional target path, relative to the output dir
+        // to: 'images/[path][name].[ext]',
+
+        // if versioning is enabled, add the file hash too
+        to: 'css/[path][name].[ext]',
+
+        // only copy files matching this pattern
+        //pattern: /\.(png|jpg|jpeg)$/
+    })
+
     .copyFiles([
         {from: './node_modules/ckeditor-full/', to: 'ckeditor/[path][name].[ext]', pattern: /\.(js|css)$/, includeSubdirectories: false},
         {from: './node_modules/ckeditor-full/adapters', to: 'ckeditor/adapters/[path][name].[ext]'},
@@ -40,6 +54,7 @@ Encore
 
     .addAliases({
         '@images': path.resolve(__dirname, 'assets/images'),
+        '@css': path.resolve(__dirname, 'assets/css'),
     })
 
     // public path used by the web server to access the output path

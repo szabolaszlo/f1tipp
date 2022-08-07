@@ -9,8 +9,8 @@ const routes = [
         component: () => import(/* webpackChunkName: "about" */ '../components/Calendar.vue')
     },
     {
-        path: '/betting2',
-        name: 'Betting2',
+        path: '/betting',
+        name: 'Betting',
         component: () => import(/* webpackChunkName: "about" */ '../components/Betting.vue')
     },
     {
