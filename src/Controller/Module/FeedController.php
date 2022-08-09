@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  */
 class FeedController extends AbstractController
 {
-    const FEED_LIMIT = 31;
+    const FEED_LIMIT = 11;
 
     /**
      * @return string
