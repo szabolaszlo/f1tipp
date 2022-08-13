@@ -72,10 +72,8 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('app', './assets/js/app.js')
-    .addEntry('betting', './assets/js/betting.js')
     .addEntry('module_reload', './assets/js/module_reload.js')
     .addEntry('messages', './assets/js/messages.js')
-    .addEntry('select2import', './assets/js/select2import.js')
     .addEntry('main', './assets/js/main.js')
 
     .enableVueLoader()

@@ -32,7 +32,6 @@ class Betting extends AbstractController
      */
     public function indexAction(Request $request, BetBuilder $betBuilder, TranslatorInterface $translator, $eventId)
     {
-        sleep(1);
         $user = $this->getUser();
 
         if (!$user) {
@@ -104,8 +103,6 @@ class Betting extends AbstractController
      */
     public function weekendEventsAction(): JsonResponse
     {
-        sleep(1);
-
         $user = $this->getUser();
 
         if (!$user) {
