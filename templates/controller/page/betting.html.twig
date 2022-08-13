@@ -1,9 +1,9 @@
-<div class="panel-body center-block" style="width: 50%">
+<div class="panel-body center-block" style="width: 75%">
     {% for message in app.flashes(form.vars.id) %}
         <div class="alert alert-success">
             {{ message|trans }}
         </div>
     {% endfor %}
-    {% form_theme form 'bootstrap_3_layout.html.twig' %}
+    {% form_theme form 'bet_form_layout.html.twig' %}
     {{ form(form) }}
 </div>

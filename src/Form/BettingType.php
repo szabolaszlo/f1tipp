@@ -112,7 +112,7 @@ class BettingType extends AbstractType
     {
         $resolver->setDefaults([
             'attr' => [
-                'class' => 'form form-inline',
+                'class' => 'form',
                 'padding' => '10px',
                 'id' => 'betting-form'
             ],
