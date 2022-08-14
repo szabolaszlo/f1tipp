@@ -1,8 +1,5 @@
 <template>
   <div>
-    <link href="/build/select2/css/select2.min.css" rel="stylesheet"/>
-    <link href="/build/select2-bootstrap-theme/select2-bootstrap.min.css" rel="stylesheet"/>
-    <link href="/build/css/bet.css" rel="stylesheet"/>
     <Transition name="fade" mode="out-in" @after-enter="afterFormLoaded">
       <div v-if="errorMessage">
         <div class="panel panel-default">
@@ -34,7 +31,8 @@
                 <div v-else-if="!formLoading">
                   <div class="panel panel-default">
                     <div class="panel-heading text-center">
-                      <strong>{{ $t("betting.title").toUpperCase() }} - {{ eventName }} - {{ $t('general.' + eventType).toUpperCase() }}</strong>
+                      <strong>{{ $t("betting.title").toUpperCase() }} - {{ eventName }} -
+                        {{ $t('general.' + eventType).toUpperCase() }}</strong>
                     </div>
                     <div v-if="processingForm" class="text-center">
                       <pulse-loader color="#B8211DE5"></pulse-loader>
@@ -58,11 +56,11 @@
 </template>
 
 <script>
-import axios from "axios";
-import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
-import "select2/dist/js/select2.full.min";
+import axios from "axios"
+import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
+import "select2/dist/js/select2.full.min"
 import JQuery from 'jquery'
-import DriverImages from "../classes/driver-images/driver-images";
+import DriverImages from "../classes/driver-images/driver-images"
 
 window.$ = JQuery
 
@@ -184,11 +182,11 @@ export default {
         if (!item.id || window.selectedValues.includes(item.id)) {
           return null;
         }
-        if(DriverImages[item.id.toLowerCase()]) {
+        if (DriverImages[item.id.toLowerCase()]) {
           var $state = $(
               '<span><img height="70px" src="' + DriverImages[item.id.toLowerCase()] + '" class="img-flag" /> ' + item.text + '</span>'
           );
-        }else {
+        } else {
           var $state = $(
               '<span>' + item.text + '</span>'
           );
@@ -226,3 +224,8 @@ export default {
   }
 }
 </script>
+<style>
+@import 'select2/dist/css/select2.min.css';
+@import 'select2-bootstrap-theme/dist/select2-bootstrap.min.css';
+@import "../../../assets/css/bet.css";
+</style>
