@@ -2,7 +2,7 @@
   <div>
     <link href="/build/select2/css/select2.min.css" rel="stylesheet"/>
     <link href="/build/select2-bootstrap-theme/select2-bootstrap.min.css" rel="stylesheet"/>
-    <link href="/build/css/app.css" rel="stylesheet"/>
+    <link href="/build/css/bet.css" rel="stylesheet"/>
     <Transition name="fade" mode="out-in" @after-enter="afterFormLoaded">
       <div v-if="errorMessage">
         <div class="panel panel-default">
