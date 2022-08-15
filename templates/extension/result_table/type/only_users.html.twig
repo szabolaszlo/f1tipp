@@ -3,7 +3,7 @@
 {% block heading_title %}
     <div class="pull-right" style="padding: 10px;">{{ iconProvider.getIcon(event.getType) }}</div>
     <div class="pull-left" style="padding: 10px;">{{ iconProvider.getIcon(event.getType) }}</div>
-    <strong>{{ event.getName() }} - {{ ('general_' ~ event.getType)|trans }}</strong>
+    <strong class="color-one">{{ event.getName() }} - {{ ('general_' ~ event.getType)|trans }} - {{ event.getDateTime()|date("M. d. H:i") }}</strong>
 {% endblock %}
 {% block body_content %}
     <div class="table-responsive">

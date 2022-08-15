@@ -18,7 +18,7 @@
                 <div class="pull-left"
                      style="padding: 10px;">{{ iconProvider.getIcon(result.getEvent().getType()) }}</div>
                 {% set titletext = ('general_' ~ result.getEvent().getType)|trans %}
-                <strong>{{ result.getEvent().getName() ~ ' - ' ~ titletext }}</strong>
+                <strong>{{ result.getEvent().getName() ~ ' - ' ~ titletext }} - {{ result.getEvent().getDateTime()|date("M. d. H:i") }}</strong>
             {% endblock %}
             {% if not no_betting_users %}
                 {{ bet_counter }}

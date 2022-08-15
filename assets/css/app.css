@@ -123,7 +123,7 @@ fieldset[disabled] .btn-new.active {
 
 
 .panel-group{
-    border: 0px;
+    border: 0;
     border-radius: 0;
     padding: 8px;
     color: black;
