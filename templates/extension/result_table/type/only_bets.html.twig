@@ -1,9 +1,9 @@
 {% extends 'extension/result_table/type/full.html.twig' %}
 {% import 'macro/icon.html.twig' as iconProvider %}
 {% block heading_title %}
-    <div class="pull-right" style="padding: 10px;">{{ iconProvider.getIcon(event.getType) }}</div>
-    <div class="pull-left" style="padding: 10px;">{{ iconProvider.getIcon(event.getType) }}</div>
-    <strong class="color-two">{{ event.getName() }} - {{ ('general_' ~ event.getType)|trans }} - {{ event.getDateTime()|date("M. d. H:i") }}</strong>
+    <div class="pull-right" style="padding-right: 10px;">{{ iconProvider.getIcon(event.getType) }}</div>
+    <div class="pull-left" style="padding-left: 10px;">{{ iconProvider.getIcon(event.getType) }}</div>
+    <strong class="color-one">{{ event.getName() }} - {{ ('general_' ~ event.getType)|trans }} - {{ event.getDateTime()|date("M. d. H:i") }}</strong>
 {% endblock %}
 {% block body_content %}
     <div class="table-responsive">

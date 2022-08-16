@@ -163,6 +163,24 @@ fieldset[disabled] .btn-new.active {
     /*border-bottom-color: #ddd;*/
 }
 
+.panel-weekend {
+    background-color: rgba(0, 0, 0, .75);
+    border-radius: 0;
+    border: 0px;
+    z-index: .1;
+    color: white;
+    margin-bottom: 10px;
+}
+
+.panel-weekend > .panel-heading {
+    color: rgba(255, 255, 255, .75);
+    background-color: rgb(140, 5, 1);
+    border-radius: 0;
+    border: 0px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
 .panel > .table-responsive + .panel-body {
     border-top: 0px;
 }
