@@ -28,5 +28,5 @@ function reloadModules() {
 }
 
 $(document).ready(function () {
-    setInterval(reloadModules, 5000);
+    setInterval(reloadModules, 10000);
 });

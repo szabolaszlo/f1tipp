@@ -161,11 +161,9 @@ export default {
             }
 
             if (counter > 1) {
-              console.log('egyezés:')
               error = true;
               $(this).parent().css('background-color', 'rgba(255, 25, 25, .5)');
             }
-            console.log($(this))
           });
 
           if (error || empty) {
