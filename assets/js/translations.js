@@ -29,6 +29,10 @@ export default {
         },
         trophies:{
             title: 'Kupák'
+        },
+        news:{
+            title: 'Hírek',
+            source: 'Forrás: https://hu.motorsport.com/f1'
         }
     },
     en: {

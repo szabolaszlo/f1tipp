@@ -92,7 +92,7 @@ export default {
     axios
         .get('/api/events')
         .then(response => {
-          this.events = response.data['hydra:member'];
+          this.events = response.data;
           this.loading = false;
         })
         .catch(error => {

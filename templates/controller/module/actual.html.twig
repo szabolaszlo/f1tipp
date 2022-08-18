@@ -7,39 +7,4 @@
 {% block javascripts %}
     {{ encore_entry_script_tags('app') }}
     {{ encore_entry_script_tags('module_reload') }}
-    {# TODO Refact this duplication #}
-    <script type="text/javascript">
-        var {{ titleEvent.id }}_days = {{ titleEvent.remain_time.days }};
-        var {{ titleEvent.id }}_hours = {{ titleEvent.remain_time.h }};
-        var {{ titleEvent.id }}_minutes = {{ titleEvent.remain_time.i }};
-        var {{ titleEvent.id }}_seconds = {{ titleEvent.remain_time.s }};
-        var {{ titleEvent.id }}_invert = {{ titleEvent.remain_time.invert }};
-
-        function setCountDown_{{ titleEvent.id }}() {
-            {{ titleEvent.id }}_seconds--;
-            if ({{ titleEvent.id }}_seconds < 0) {
-                {{ titleEvent.id }}_minutes--;
-                {{ titleEvent.id }}_seconds = 59;
-            }
-            if ({{ titleEvent.id }}_minutes < 0) {
-                {{ titleEvent.id }}_hours--;
-                {{ titleEvent.id }}_minutes = 59;
-            }
-            if ({{ titleEvent.id }}_hours < 0) {
-                {{ titleEvent.id }}_days--;
-                {{ titleEvent.id }}_hours = 23;
-            }
-            if ({{ titleEvent.id }}_days >= 0 && {{ titleEvent.id }}_invert != 1) {
-                document.getElementById("{{ titleEvent.id }}_counter").innerHTML =
-                        {{ titleEvent.id }}_days + "n " + {{ titleEvent.id }}_hours + "ó " + {{ titleEvent.id }}_minutes + "p " + {{ titleEvent.id }}_seconds + "mp";
-            } else {
-                document.getElementById("{{ titleEvent.id }}_counter").innerHTML = "Lejárt a Tippelési időszak!";
-            }
-            setTimeout("setCountDown_{{ titleEvent.id }}()", 1000);
-        }
-
-        window.onload = function () {
-            setCountDown_{{ titleEvent.id }}();
-        };
-    </script>
 {% endblock %}

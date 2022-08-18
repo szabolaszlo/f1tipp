@@ -1,8 +1,10 @@
-App\Entity\Information:
+App\Entity\Feed:
   attributes:
-    pagination_items_per_page: 100
+    pagination_items_per_page: 10
     formats:
       0: 'json'
+    order:
+      id: DESC
 
   collectionOperations: [ 'GET' ]
 
