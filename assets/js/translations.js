@@ -33,7 +33,14 @@ export default {
         news:{
             title: 'Hírek',
             source: 'Forrás: https://hu.motorsport.com/f1'
-        }
+        },
+        championshipResult:{
+            title: 'VB Állás',
+            construct: 'Csapat',
+            driver: 'Homár',
+            point: 'Pont',
+            wins: 'Nyert'
+        },
     },
     en: {
         message: {

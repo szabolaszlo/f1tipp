@@ -37,7 +37,7 @@
 {% endblock %}
 
 {% block navigation %}
-<div id="navigation"></div>
+    <div id="navigation"></div>
 {% endblock %}
 
 <!-- Page Content -->
@@ -75,7 +75,7 @@
             <div class="visible-xs">
                 <div id="news-on-mobile"></div>
             </div>
-            {{ render_hinclude(controller('App\\Controller\\Module\\ResultsOfChampionshipController::indexAction'), {default: 'Loading ..'}) }}
+            <div id="championship-result"></div>
         </div>
         <div class="col-1 col-lg-1 col-md-1"></div>
     </div>

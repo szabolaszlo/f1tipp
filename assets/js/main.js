@@ -2,6 +2,7 @@ import {createApp} from 'vue';
 import MainComponent from './components/MainComponent';
 import Navigation from './components/Navigation';
 import News from './components/News';
+import ChampionshipResult from './components/ChampionshipResult';
 import Router from './router/index';
 import {createI18n} from 'vue-i18n'
 import messages from './translations'
@@ -32,4 +33,9 @@ window.onload = function () {
     newsComponentOnMobile.use(Router);
     newsComponentOnMobile.use(i18n);
     newsComponentOnMobile.mount('#news-on-mobile')
+
+    const ChampionshipResultComponent = createApp(ChampionshipResult);
+    ChampionshipResultComponent.use(Router);
+    ChampionshipResultComponent.use(i18n);
+    ChampionshipResultComponent.mount('#championship-result')
 }

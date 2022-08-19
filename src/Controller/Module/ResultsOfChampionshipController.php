@@ -12,6 +12,7 @@ namespace App\Controller\Module;
 use App\Cache\FileCache;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -28,6 +29,7 @@ class ResultsOfChampionshipController extends AbstractController
     const RESULTS_CACHE_KEY = 'result_of_championship';
 
     /**
+     * @Route("module/championship_result", name="championship_result", methods={"GET"})
      * @param FileCache $cache
      * @return Response
      * @throws InvalidArgumentException
@@ -42,7 +44,7 @@ class ResultsOfChampionshipController extends AbstractController
 
         $data['id'] = 'resultsOfChampionship';
 
-        return $this->render('controller/module/results_of_championship.html.twig', $data);
+        return new JsonResponse($data);
     }
 
     /**

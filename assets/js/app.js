@@ -12,8 +12,6 @@ const $ = require('jquery');
 global.$ = global.jQuery = $;
 require('bootstrap');
 
-import '../../node_modules/Hinclude/hinclude.js';
-
 function refreshOnlineUsers() {
     $.getJSON("/get_online_user", function (data) {
         $('.user-activity').each(function () {

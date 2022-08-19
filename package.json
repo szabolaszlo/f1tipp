@@ -21,7 +21,6 @@
   },
   "dependencies": {
     "@vue/compat": "^3.2.33",
-    "Hinclude": "^1.2.0",
     "axios": "^0.26.1",
     "ckeditor-full": "^4.7.3",
     "select2": "^4.0.12",
