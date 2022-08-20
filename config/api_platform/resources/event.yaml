@@ -1,0 +1,11 @@
+App\Entity\Event:
+  attributes:
+    pagination_items_per_page: 100
+    formats:
+      0: 'json'
+
+  collectionOperations: [ 'GET' ]
+
+  itemOperations:
+    get:
+      method: 'GET'

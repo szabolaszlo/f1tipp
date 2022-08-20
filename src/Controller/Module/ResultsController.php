@@ -7,7 +7,7 @@
  * Time: 20:41
  */
 
-namespace App\Controller\Page;
+namespace App\Controller\Module;
 
 use App\Cache\FileCache;
 use App\LegacyService\ResultTable\ResultTable;
@@ -24,7 +24,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ResultsController extends AbstractController
 {
     /**
-     * @Route(path="/results", name="results", methods={"GET"})
+     * @Route(path="/module/results", name="results", methods={"GET"})
      * @param ResultTable $resultTable
      * @param FileCache $cache
      * @return Response
@@ -62,6 +62,10 @@ class ResultsController extends AbstractController
             $cache->save($cacheKey, [0 => $weekends, 1 => $weekendNames]);
         }
 
-        return $this->render('controller/page/results.html.twig', ['weekends' => $weekends, 'weekendNames' => $weekendNames]);
+        return $this->render('controller/module/results.html.twig', [
+            'id' => 'results',
+            'weekends' => $weekends,
+            'weekendNames' => $weekendNames
+        ]);
     }
 }

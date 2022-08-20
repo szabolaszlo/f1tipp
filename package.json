@@ -1,12 +1,14 @@
 {
   "devDependencies": {
-    "@symfony/webpack-encore": "^0.28.0",
+    "@symfony/webpack-encore": "^1.8.2",
+    "@vue/compiler-sfc": "^3.2.33",
     "bootstrap": "3.3.7",
     "core-js": "^3.0.0",
-    "file-loader": "^4.2.0",
+    "file-loader": "^6.2.0",
     "jquery": "^3.4.1",
     "popper.js": "^1.15.0",
     "regenerator-runtime": "^0.13.2",
+    "vue-template-compiler": "^2.6.14",
     "webpack-notifier": "^1.6.0"
   },
   "license": "UNLICENSED",
@@ -18,9 +20,15 @@
     "build": "encore production --progress"
   },
   "dependencies": {
-    "Hinclude": "^1.2.0",
+    "@vue/compat": "^3.2.33",
+    "axios": "^0.26.1",
     "ckeditor-full": "^4.7.3",
     "select2": "^4.0.12",
-    "select2-bootstrap-theme": "0.1.0-beta.10"
+    "select2-bootstrap-theme": "0.1.0-beta.10",
+    "vue": "^3.2.33",
+    "vue-i18n": "^9.1.10",
+    "vue-loader": "^16.8.3",
+    "vue-router": "^4.0.14",
+    "vue-spinner": "^1.0.4"
   }
 }

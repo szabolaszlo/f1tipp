@@ -20,6 +20,7 @@
       <trans-unit id="nav_admin_information_editor"><source>nav_admin_information_editor</source><target>Szövegek Szerkesztése</target></trans-unit>
       <trans-unit id="nav_admin_cache"><source>nav_admin_cache</source><target>Cache Törlés</target></trans-unit>
       <trans-unit id="nav_statistics"><source>nav_statistics</source><target>Statisztika</target></trans-unit>
+      <trans-unit id="statistics_title"><source>statistics_title</source><target>STATISZTIKA</target></trans-unit>
       <trans-unit id="error_not_found_page"><source>error_not_found_page</source><target>Az oldal nem található</target></trans-unit>
       <trans-unit id="user_logout"><source>user_logout</source><target>Kilépés</target></trans-unit>
       <trans-unit id="user_login"><source>user_login</source><target>Belépés</target></trans-unit>
@@ -88,6 +89,8 @@
       <trans-unit id="result_betting_nobody"><source>result_betting_nobody</source><target>Még senki sem tippelt.</target></trans-unit>
       <trans-unit id="result_bets"><source>result_bets</source><target>Tippek: </target></trans-unit>
       <trans-unit id="result_no_betting_users"><source>result_no_betting_users</source><target>Tippnélküliek: </target></trans-unit>
+      <trans-unit id="results_title"><source>results_title</source><target>Eredmények</target></trans-unit>
+      <trans-unit id="trophies_title"><source>trophies_title</source><target>KUPÁK</target></trans-unit>
       <trans-unit id="userChampionship_title"><source>userChampionship_title</source><target>EGYÉNI PONTVERSENY</target></trans-unit>
       <trans-unit id="userChampionship_best_of_race_bets"><source>userChampionship_best_of_race_bets</source><target>Futamok Legjobbjai (TOP 3):</target></trans-unit>
       <trans-unit id="userChampionship_best_of_qualify_bets"><source>userChampionship_best_of_qualify_bets</source><target>Időmérők Legjobbjai (TOP 3):</target></trans-unit>
@@ -174,6 +177,7 @@
       <trans-unit id="alternativeChampionship_points"><source>alternativeChampionship_points</source><target>Bajnokság Pont</target></trans-unit>
       <trans-unit id="alternativeChampionship_collected_points"><source>alternativeChampionship_collected_points</source><target>Hétvégi Pont</target></trans-unit>
       <trans-unit id="pointCalculatingInfo_converted_points"><source>pointCalculatingInfo_converted_points</source><target>Bajnokság Pont</target></trans-unit>
+      <trans-unit id="alternativeChampionship_converted_points"><source>alternativeChampionship_converted_points</source><target>Bajnokság Pont</target></trans-unit>
       <trans-unit id="alternativeChampionship_description"><source>alternativeChampionship_description</source><target>Az alternatív pontverseny lényege, hogy az adott hétvége alatt összegyűjtött pontokat összeadjuk. Tehát az időmérőn és a futamon szerzett pontok összege szerint felállítunk egy sorrendet és ez alapján F1 pontokat kapunk. Az F1 pontokat a lenti táblázatban találod, hogy adott helyezéshez hány pont jár. Azonos pontok esetén, az azonos pontot szerzők az annak megfelelő F1 pontot kapják, viszont így a mögöttük lévő helyezések értelemszerűen tolódnak és az annak megfelelő F1 pontot kapják. Például ha a 2. helyen két azonos pont lesz, akkor nincs 3. hely, hanem a 4. hely fogja követni őket, mert igazából a 2. és 3. helyen van holtverseny.</target></trans-unit>
       <trans-unit id="alternativeChampionship_goal"><source>alternativeChampionship_goal</source><target>Ezzel a pontrendszerrel talán megszűnnének a helyben toporgások, illetve talán jobban tudnánk egymást oda vissza előzni.</target></trans-unit>
       <trans-unit id="alternativeChampionship_test"><source>alternativeChampionship_test</source><target>Egyenlőre CSAK TESZT jelleggel üzemel az alternatív pontozás majd meglátjuk hogyan fog tetszeni.</target></trans-unit>

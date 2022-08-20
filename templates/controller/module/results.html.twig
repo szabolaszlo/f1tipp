@@ -1,0 +1,21 @@
+{% extends 'controller/module/base_module.html.twig' %}
+{% block body_content %}
+    <div id="results">
+        {% if weekends %}
+            {% for key, weekend in weekends %}
+                <div class="panel panel-group panel-collapse">
+                    <div class="panel-heading text-center">
+                        <strong class="color-one">{{ weekendNames[key] }} - {{ 'general_weekend'|trans }}</strong>
+                    </div>
+                    <div class="panel panel-default">
+                        {% for key, table in weekend %}
+                            {{ table|raw }}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            {% include('controller/module/no_results.html.twig') %}
+        {% endif %}
+    </div>
+{% endblock %}

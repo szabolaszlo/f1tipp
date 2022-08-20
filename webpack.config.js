@@ -1,4 +1,5 @@
 var Encore = require('@symfony/webpack-encore');
+const path = require('path');
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
@@ -30,12 +31,14 @@ Encore
         {from: './node_modules/ckeditor-full/lang', to: 'ckeditor/lang/[path][name].[ext]'},
         {from: './node_modules/ckeditor-full/plugins', to: 'ckeditor/plugins/[path][name].[ext]'},
         {from: './node_modules/ckeditor-full/skins', to: 'ckeditor/skins/[path][name].[ext]'},
-        {from: './node_modules/select2-bootstrap-theme/dist', to: 'select2-bootstrap-theme/[path][name].[ext]'},
-        {from: './node_modules/select2/dist', to: 'select2/[path][name].[ext]'},
-        {from: './node_modules/select2/dist', to: 'select2/[path][name].[ext]'}
     ])
     // Uncomment the following line if you are using Webpack Encore <= 0.24
     // .addLoader({test: /\.json$/i, include: [require('path').resolve(__dirname, 'node_modules/ckeditor')], loader: 'raw-loader', type: 'javascript/auto'})
+
+    .addAliases({
+        '@images': path.resolve(__dirname, 'assets/images'),
+        '@css': path.resolve(__dirname, 'assets/css'),
+    })
 
     // public path used by the web server to access the output path
     .setPublicPath('/build')
@@ -52,10 +55,11 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('app', './assets/js/app.js')
-    .addEntry('betting', './assets/js/betting.js')
     .addEntry('module_reload', './assets/js/module_reload.js')
     .addEntry('messages', './assets/js/messages.js')
-    .addEntry('select2import', './assets/js/select2import.js')
+    .addEntry('main', './assets/js/main.js')
+
+    .enableVueLoader()
     //.addEntry('page1', './assets/js/page1.js')
     //.addEntry('page2', './assets/js/page2.js')
 

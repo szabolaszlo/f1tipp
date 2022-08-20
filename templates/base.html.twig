@@ -11,6 +11,7 @@
         <link rel="shortcut icon" type="image/png" href="{{ asset('build/images/favicon.ico') }}"/>
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
+            {{ encore_entry_link_tags('main') }}
         {% endblock %}
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -32,25 +33,29 @@
 
 {% block javascripts %}
     {{ encore_entry_script_tags('app') }}
+    {{ encore_entry_script_tags('main') }}
 {% endblock %}
 
-{% include('navigation.html.twig') %}
+{% block navigation %}
+    <div id="navigation"></div>
+{% endblock %}
 
 <!-- Page Content -->
-<div class="container">
+<div class="container-fluid">
 
     <div class="row">
 
         <!-- Content Column -->
-        <div class="col-md-8">
+        <div class="col-1 col-lg-1 col-md-1"></div>
+        <div class="col-7 col-lg-7 col-md-7">
             {% block body %}{% endblock %}
             <div class="visible-lg visible-md visible-sm">
-                {{ render_hinclude(controller('App\\Controller\\Module\\FeedController::indexAction'), {default: 'Loading ..'}) }}
+                <div id="news"></div>
             </div>
         </div>
 
         <!-- Sidebar Widgets Column -->
-        <div class="col-md-4">
+        <div class="col-3 col-lg-3 col-md-3">
             {{ countDownExtension() }}
             <div class="reload-able-module"
                  data-module-route="trophies"
@@ -68,10 +73,11 @@
             {{ pointCalculatingInfoExtension(app.user ? 1 : 0) }}
 
             <div class="visible-xs">
-                {{ render_hinclude(controller('App\\Controller\\Module\\FeedController::indexAction'), {default: 'Loading ..'}) }}
+                <div id="news-on-mobile"></div>
             </div>
-            {{ render_hinclude(controller('App\\Controller\\Module\\ResultsOfChampionshipController::indexAction'), {default: 'Loading ..'}) }}
+            <div id="championship-result"></div>
         </div>
+        <div class="col-1 col-lg-1 col-md-1"></div>
     </div>
     <hr>
 

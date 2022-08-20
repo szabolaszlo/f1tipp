@@ -7,7 +7,7 @@
  * Time: 12:54
  */
 
-namespace App\Controller\Page;
+namespace App\Controller\Module;
 
 use App\Cache\FileCache;
 use App\LegacyService\Statistics\ObjectSorter;
@@ -35,7 +35,7 @@ class StatisticsController extends AbstractController
     protected $calculator;
 
     /**
-     * @Route("/statistics", name="statistics", methods={"GET"})
+     * @Route("/module/statistics", name="statistics", methods={"GET"})
      * @param ObjectSorter $sorter
      * @param StatisticsCalculator $calculator
      * @param FileCache $cache
@@ -56,10 +56,11 @@ class StatisticsController extends AbstractController
         if (empty($data)) {
             $data['statistics']['bets'] = $this->getStatistics($bets);
             $data['statistics']['results'] = $this->getStatistics($results);
+            $data['id'] = 'statistics';
             $cache->save($cacheKey, $data);
         }
 
-        return $this->render('controller/page/statistics.html.twig', $data);
+        return $this->render('controller/module/statistics.html.twig', $data);
     }
 
     /**

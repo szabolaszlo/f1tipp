@@ -6,12 +6,11 @@
  */
 
 // any CSS you require will output into a single css file (app.css in this case)
+require('../../node_modules/bootstrap/dist/css/bootstrap.min.css');
 require('../css/app.css');
 const $ = require('jquery');
 global.$ = global.jQuery = $;
 require('bootstrap');
-
-import '../../node_modules/Hinclude/hinclude.js';
 
 function refreshOnlineUsers() {
     $.getJSON("/get_online_user", function (data) {
@@ -25,6 +24,6 @@ function refreshOnlineUsers() {
 }
 
 $(document).ready(function () {
-    refreshOnlineUsers();
+    setTimeout(refreshOnlineUsers, 3000);
     setInterval(refreshOnlineUsers, 20000);
 });

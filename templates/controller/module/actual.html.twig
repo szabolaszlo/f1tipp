@@ -1,0 +1,10 @@
+<div class="reload-able-module"
+     data-module-route="actual_events_result"
+     data-module-entities='{"0": "bets","1": "results"}'
+     data-module-count="-1">
+    {{ actualEventsExtension(app.user) }}
+</div>
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+    {{ encore_entry_script_tags('module_reload') }}
+{% endblock %}

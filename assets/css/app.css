@@ -1,5 +1,3 @@
-@import "~bootstrap/dist/css/bootstrap.min.css";
-
 footer {
     margin: 50px 0;
 }
@@ -125,7 +123,7 @@ fieldset[disabled] .btn-new.active {
 
 
 .panel-group{
-    border: 0px;
+    border: 0;
     border-radius: 0;
     padding: 8px;
     color: black;
@@ -163,6 +161,24 @@ fieldset[disabled] .btn-new.active {
 
 .panel-default > .panel-footer + .panel-collapse > .panel-body {
     /*border-bottom-color: #ddd;*/
+}
+
+.panel-weekend {
+    background-color: rgba(0, 0, 0, .75);
+    border-radius: 0;
+    border: 0px;
+    z-index: .1;
+    color: white;
+    margin-bottom: 10px;
+}
+
+.panel-weekend > .panel-heading {
+    color: rgba(255, 255, 255, .75);
+    background-color: rgb(140, 5, 1);
+    border-radius: 0;
+    border: 0px;
+    padding-top: 8px;
+    padding-bottom: 8px;
 }
 
 .panel > .table-responsive + .panel-body {
@@ -318,7 +334,7 @@ fieldset[disabled] .btn-new.active {
     color: yellow;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 2048px) {
     .navbar .navbar-nav .open .dropdown-menu > li > a {
         color: #ecf0f1;
     }

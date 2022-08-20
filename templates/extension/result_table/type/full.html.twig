@@ -9,16 +9,16 @@
 
 {% import 'macro/icon.html.twig' as iconProvider %}
 
-<div class="panel panel-default">
+<div class="panel panel-weekend">
     <div class="panel-heading text-center">
         <div class="row">
             {% block heading_title %}
                 <div class="pull-right"
-                     style="padding: 10px;">{{ iconProvider.getIcon(result.getEvent().getType()) }}</div>
+                     style="padding-right: 10px;">{{ iconProvider.getIcon(result.getEvent().getType()) }}</div>
                 <div class="pull-left"
-                     style="padding: 10px;">{{ iconProvider.getIcon(result.getEvent().getType()) }}</div>
+                     style="padding-left: 10px;">{{ iconProvider.getIcon(result.getEvent().getType()) }}</div>
                 {% set titletext = ('general_' ~ result.getEvent().getType)|trans %}
-                <strong>{{ result.getEvent().getName() ~ ' - ' ~ titletext }}</strong>
+                <strong class="color-one">{{ result.getEvent().getName() ~ ' - ' ~ titletext }} - {{ result.getEvent().getDateTime()|date("M. d. H:i") }}</strong>
             {% endblock %}
             {% if not no_betting_users %}
                 {{ bet_counter }}

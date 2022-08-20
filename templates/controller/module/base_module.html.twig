@@ -5,11 +5,11 @@
         {% endblock %}
         {% block button_details %}
             {% if details_link is defined and details_link%}
-                <div class="btn-group pull-left" style="margin-top: -2px">
+                <div class="btn-group pull-right" style="margin-top: -2px">
                     <a id="{{ id }}"
                        href="{{ details_link }}"
                        title="{{ 'module_details'|trans }}"
-                       class="text-right glyphicon glyphicon-info-sign"
+                       class="text-right glyphicon glyphicon-new-window"
                        aria-hidden=true>
                     </a>
                 </div>

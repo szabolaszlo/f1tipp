@@ -1,17 +1,13 @@
 <?php
 
-namespace App\Controller\Page;
+namespace App\Controller\Module;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * Class Results
- * @package App\Controller\Page\Results
- */
-class TrophiesController extends AbstractController
+class SeasonTrophiesController extends AbstractController
 {
     /**
      * @var array
@@ -23,7 +19,7 @@ class TrophiesController extends AbstractController
     );
 
     /**
-     * @Route("/trophies", name="trophies", methods={"GET"})
+     * @Route("/module/season-trophies", name="trophies", methods={"GET"})
      * @return string|Response
      */
     public function indexAction()
@@ -58,7 +54,7 @@ class TrophiesController extends AbstractController
             array_multisort($sortMap, SORT_DESC, $userTrophies, SORT_DESC);
         }
 
-        return $this->render('controller/page/trophies.html.twig',
+        return $this->render('controller/module/season_trophies.html.twig',
             [
                 'user_trophies' => $userTrophies,
                 'trophy_attributes' => $this->trophyAttributes,

@@ -1,72 +1,12 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-    <div class="panel panel-default remove-able-">
-        <div class="panel-heading text-center">
-            <table class="table table-responsive" style="margin-bottom: 0;">
-                <tr>
-                    <td class="visible-lg visible-md visible-sm"><strong
-                                class="color-one">{{ titleEvent.name }}</strong>
-                    </td>
-                    <td><strong class="color-one">{{ ('general_' ~ titleEvent.id)|trans }}</strong></td>
-                    <td class="visible-lg visible-md visible-sm"><strong
-                                class="color-one">{{ titleEvent.date }}</strong>
-                    </td>
-                    <td><strong><span id="{{ titleEvent.id }}_counter" class="color-one"></span></strong></td>
-                </tr>
-            </table>
-        </div>
-        {% if faceCoverImage %}
-            <img class="img-responsive" src="{{ faceCoverImage }}" alt="">
-        {% else %}
-            <img class="img-responsive" src="{{ image }}" alt="">
-        {% endif %}
+    <div id="app">
     </div>
-    <div class="reload-able-module"
-         data-module-route="actual_events_result"
-         data-module-entities='{"0": "bets","1": "results"}'
-         data-module-count="-1">
-        {{ actualEventsExtension(app.user)}}
-    </div>
-    {{ topFeedExtension() }}
     {{ messageWallExtension(app.user ? 1 : 0 ) }}
     {{ pointSummaryChartExtension() }}
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
+    {{ encore_entry_script_tags('app') }}
     {{ encore_entry_script_tags('module_reload') }}
-    {# TODO Refact this duplication #}
-    <script type="text/javascript">
-        var {{ titleEvent.id }}_days = {{ titleEvent.remain_time.days }};
-        var {{ titleEvent.id }}_hours = {{ titleEvent.remain_time.h }};
-        var {{ titleEvent.id }}_minutes = {{ titleEvent.remain_time.i }};
-        var {{ titleEvent.id }}_seconds = {{ titleEvent.remain_time.s }};
-        var {{ titleEvent.id }}_invert = {{ titleEvent.remain_time.invert }};
-
-        function setCountDown_{{ titleEvent.id }}() {
-            {{ titleEvent.id }}_seconds--;
-            if ({{ titleEvent.id }}_seconds < 0) {
-                {{ titleEvent.id }}_minutes--;
-                {{ titleEvent.id }}_seconds = 59;
-            }
-            if ({{ titleEvent.id }}_minutes < 0) {
-                {{ titleEvent.id }}_hours--;
-                {{ titleEvent.id }}_minutes = 59;
-            }
-            if ({{ titleEvent.id }}_hours < 0) {
-                {{ titleEvent.id }}_days--;
-                {{ titleEvent.id }}_hours = 23;
-            }
-            if ({{ titleEvent.id }}_days >= 0 && {{ titleEvent.id }}_invert != 1) {
-                document.getElementById("{{ titleEvent.id }}_counter").innerHTML =
-                        {{ titleEvent.id }}_days + "n " + {{ titleEvent.id }}_hours + "ó " + {{ titleEvent.id }}_minutes + "p " + {{ titleEvent.id }}_seconds + "mp";
-            } else {
-                document.getElementById("{{ titleEvent.id }}_counter").innerHTML = "Lejárt a Tippelési időszak!";
-            }
-            setTimeout("setCountDown_{{ titleEvent.id }}()", 1000);
-        }
-
-        $(document).ready(function () {
-            setCountDown_{{ titleEvent.id }}();
-        });
-    </script>
 {% endblock %}
