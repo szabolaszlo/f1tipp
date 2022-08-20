@@ -44,7 +44,7 @@
               </td>
               <td><strong class="color-one">{{ $t('general.' + event.type) }}</strong></td>
               <td><strong class="color-one">{{
-                  event.dateTime.toISOString().replace('T', '  -  ').replace(':00.000Z', '')
+                  event.dateTime.replace('T', '  -  ').replace(':00+00:00', '')
                 }}</strong></td>
               <td></td>
             </tr>
@@ -113,8 +113,8 @@ export default {
       let onlyRemaining = this.onlyRemaining;
       let filteredEvents = [];
       events.forEach(function (event) {
-        event.dateTime = new Date(event.dateTime);
-        if ((onlyRemaining && event.dateTime > new Date()) || !onlyRemaining) {
+        let eventDateTime = new Date(event.dateTime);
+        if ((onlyRemaining && eventDateTime > new Date()) || !onlyRemaining) {
           eventTypes.forEach(function (eventType) {
             if (event.type === eventType.id && eventType.state) {
               filteredEvents.push(event)
