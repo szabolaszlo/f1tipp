@@ -10,11 +10,11 @@ table caption {
 }
 
 .color-one {
-    color: yellow;
+    color: #f4801f;
 }
 
 .color-two {
-    color: cyan;
+    color: #ffc906;
 }
 
 .color-three {
@@ -67,14 +67,14 @@ table caption {
 }
 
 .navbar {
-    background-color: rgba(184, 33, 29, .9);
+    background-color: #223971;
     border: 0;
 }
 
 .btn-new {
     color: #FFFFFF;
-    background-color: #8C0501;
-    border-color: #8C0501;
+    background-color: #223971;
+    border-color: #223971;
 }
 
 .btn-new:hover,
@@ -108,12 +108,12 @@ fieldset[disabled] .btn-new:active,
 .btn-new.disabled.active,
 .btn-new[disabled].active,
 fieldset[disabled] .btn-new.active {
-    background-color: #8C0501;
-    border-color: #8C0501;
+    background-color: #223971;
+    border-color: #223971;
 }
 
 .btn-new .badge {
-    color: #8C0501;
+    color: #223971;
     background-color: #FFFFFF;
 }
 
@@ -136,13 +136,13 @@ fieldset[disabled] .btn-new.active {
     /*background-color: rgba(103, 99, 99, .75);*/
     background-color: rgba(0, 0, 0, .75);
     z-index: .1;
-    color: white;
+    color: #f4801f;
     margin-bottom: 0;
 }
 
 .panel-default > .panel-heading {
-    color: rgba(255, 255, 255, .75);
-    background-color: rgb(140, 5, 1);
+    color: #d4d6d8;
+    background-color: #223971;
     border-radius: 0px;
     border: 0px;
     padding-top: 8px;
@@ -267,7 +267,7 @@ fieldset[disabled] .btn-new.active {
     padding: 0px 0px;
     font-size: 18px;
     line-height: 0px;
-    color: #ecf0f1;
+    color: #d4d6d8;
 }
 
 .navbar .navbar-brand:hover,
@@ -276,12 +276,12 @@ fieldset[disabled] .btn-new.active {
 }
 
 .navbar .navbar-text {
-    color: white;
+    color: #d4d6d8;
 }
 
 .navbar .navbar-nav > li > a {
     font-weight: bold;
-    color: white;
+    color: #d4d6d8;
     padding-right: 10px;
     padding-left: 10px;
 }
