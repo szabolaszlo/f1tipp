@@ -150,16 +150,14 @@ class Bet extends EntityRepository
     }
 
     /**
-     * @return int
+     * @throws NonUniqueResultException
+     * @throws NoResultException
      */
-    public function getBetCount(): int
+    public function getBetCount()
     {
-        return count(
-            $this->createQueryBuilder('bet')
-                ->setCacheable(true)
-                ->select()
+        return $this->createQueryBuilder('bet')
+                ->select('count(bet.id)')
                 ->getQuery()
-                ->getResult() ?? []
-        );
+                ->getSingleScalarResult() ?? 0;
     }
 }

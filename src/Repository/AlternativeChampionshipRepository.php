@@ -78,16 +78,14 @@ class AlternativeChampionshipRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return int
+     * @throws NonUniqueResultException
+     * @throws NoResultException
      */
-    public function getAlterCount(): int
+    public function getAlterCount()
     {
-        return count(
-            $this->createQueryBuilder('ac')
-                ->setCacheable(true)
-                ->select()
+        return $this->createQueryBuilder('ac')
+                ->select('count(ac.id)')
                 ->getQuery()
-                ->getResult() ?? []
-        );
+                ->getSingleScalarResult() ?? 0;
     }
 }
