@@ -51,14 +51,16 @@ class Trophy extends EntityRepository
     }
 
     /**
-     * @throws NonUniqueResultException
-     * @throws NoResultException
+     * @return int
      */
-    public function getTrophyCount()
+    public function getTrophyCount(): int
     {
-        return $this->createQueryBuilder('trophy')
-                ->select('count(trophy.id)')
+        return count(
+            $this->createQueryBuilder('trophy')
+                ->setCacheable(true)
+                ->select()
                 ->getQuery()
-                ->getSingleScalarResult() ?? 0;
+                ->getResult() ?? []
+        );
     }
 }

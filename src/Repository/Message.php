@@ -21,14 +21,16 @@ class Message extends EntityRepository
     }
 
     /**
-     * @throws NonUniqueResultException
-     * @throws NoResultException
+     * @return int
      */
-    public function getMessageCount()
+    public function getMessageCount(): int
     {
-        return $this->createQueryBuilder('message')
-                ->select('count(message.id)')
+        return count(
+            $this->createQueryBuilder('message')
+                ->setCacheable(true)
+                ->select()
                 ->getQuery()
-                ->getSingleScalarResult() ?? 0;
+                ->getResult() ?? []
+        );
     }
 }

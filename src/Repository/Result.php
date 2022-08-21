@@ -10,8 +10,8 @@ namespace App\Repository;
 
 use App\Entity\Event;
 use App\Entity\Race;
-use Doctrine\ORM\EntityRepository;
 use App\Entity\Result as ResultEnt;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query\Expr\Join;
@@ -117,14 +117,16 @@ class Result extends EntityRepository
     }
 
     /**
-     * @throws NonUniqueResultException
-     * @throws NoResultException
+     * @return int
      */
-    public function getResultCount()
+    public function getResultCount(): int
     {
-        return $this->createQueryBuilder('result')
-            ->select('count(result.id)')
-            ->getQuery()
-            ->getSingleScalarResult() ?? 0;
+        return count(
+            $this->createQueryBuilder('result')
+                ->setCacheable(true)
+                ->select()
+                ->getQuery()
+                ->getResult() ?? []
+        );
     }
 }
