@@ -44,7 +44,7 @@
               </td>
               <td><strong class="color-one">{{ $t('general.' + event.type) }}</strong></td>
               <td><strong class="color-one">{{
-                  event.dateTime.replace('T', '  -  ').replace(':00+00:00', '')
+                  event.dateTime.replace('T', '  -  ').substring(0, 20)
                 }}</strong></td>
               <td></td>
             </tr>
