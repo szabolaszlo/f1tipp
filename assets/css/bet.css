@@ -2,17 +2,6 @@
     background-color: black;
 }
 
-a.glyphicon {
-    text-decoration: none;
-    font-size: 1.5em;
-    color: rgba(255, 255, 255, .45);
-}
-
-a:hover.glyphicon {
-    color: white;
-    cursor: pointer;
-}
-
 .form-control {
     font-weight: bold;
     color: white;
