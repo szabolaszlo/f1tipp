@@ -80,6 +80,10 @@ export default {
       form: null
     }
   },
+  activated() {
+    document.title = 'F1Tipp - Tippelek'
+    gtag('event', 'page_view')
+  },
   mounted() {
     axios
         .get('/module/betting/weekend-events')
