@@ -36,7 +36,7 @@ class UserActivityController extends AbstractController
             $cache->save($user->getName() . 'Online', [time()]);
         }
 
-        $users = $this->getDoctrine()->getRepository('App:User')->findAll();
+        $users = $this->getDoctrine()->getRepository('App:User')->getAlternativeChampionshipUsers();
 
         $userNames = array();
 
