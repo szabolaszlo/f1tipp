@@ -44,6 +44,10 @@ export default {
       years: [],
     }
   },
+  activated() {
+    document.title = 'F1Tipp - Eredmények'
+    gtag('event', 'page_view')
+  },
   created() {
     let year = 2014
     do {

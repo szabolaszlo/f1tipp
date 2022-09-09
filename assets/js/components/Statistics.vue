@@ -37,6 +37,10 @@ export default {
       renderedModule: null,
     }
   },
+  activated() {
+    document.title = 'F1Tipp - Statisztika'
+    gtag('event', 'page_view')
+  },
   mounted() {
     axios
         .get('/module/statistics')

@@ -37,6 +37,10 @@ export default {
       renderedModule: null,
     }
   },
+  activated() {
+    document.title = 'F1Tipp - Kupák'
+    gtag('event', 'page_view')
+  },
   mounted() {
     axios
         .get('/module/season-trophies')
