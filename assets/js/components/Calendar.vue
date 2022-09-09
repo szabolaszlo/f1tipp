@@ -88,6 +88,10 @@ export default {
       filteredEvents: []
     }
   },
+  activated() {
+    document.title = 'F1Tipp - Naptár'
+    gtag('event', 'page_view')
+  },
   created() {
     axios
         .get('/api/events')

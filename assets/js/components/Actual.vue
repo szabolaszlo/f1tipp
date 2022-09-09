@@ -38,6 +38,8 @@ export default {
     }
   },
   mounted() {
+    document.title = 'F1Tipp - Aktuális'
+    gtag('event', 'page_view')
     axios
         .get('/module/actual')
         .then(response => {

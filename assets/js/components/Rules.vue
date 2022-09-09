@@ -42,6 +42,10 @@ export default {
       loading: true,
     }
   },
+  activated() {
+    document.title = 'F1Tipp - Szabályzat'
+    gtag('event', 'page_view')
+  },
   created() {
     axios
         .get('/api/information/23')
