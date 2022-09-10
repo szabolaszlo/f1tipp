@@ -12,10 +12,10 @@
             {% set betAttributes = bets|first.getAttributes() %}
             <thead>
             <tr>
-                <th><strong class="color-two">{{ 'result_name'|trans }}</strong></th>
+                <th><strong class="bets-table-head">{{ 'result_name'|trans }}</strong></th>
                 {% for betAttribute in betAttributes %}
                     <th class="text-center"><strong
-                                class="color-two">{{ ('result_' ~ betAttribute.getKey())|trans }}</strong></th>
+                                class="bets-table-head">{{ ('result_' ~ betAttribute.getKey())|trans }}</strong></th>
                 {% endfor %}
             </tr>
             </thead>

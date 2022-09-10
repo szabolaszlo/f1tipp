@@ -85,6 +85,10 @@ table caption {
     font-weight: bold;
 }
 
+.bets-table-head{
+    color: var(--f1-tipp-color-5);
+}
+
 .btn-new {
     color: var(--f1-tipp-color-6);
     background-color: var(--f1-tipp-color-9);
@@ -197,7 +201,7 @@ fieldset[disabled] .btn-new.active {
 }
 
 .panel-heading-icon {
-    color: var(--f1-tipp-color-12)
+    color: var(--f1-tipp-color-6)
 }
 
 .panel > .table-responsive + .panel-body {
