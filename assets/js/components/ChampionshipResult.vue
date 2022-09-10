@@ -35,8 +35,12 @@
                     <td><strong class="color-two">{{ driver.wins }}</strong></td>
                   </tr>
                 </template>
-                <tr><td></td></tr>
-                <tr><td></td></tr>
+                <tr>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td></td>
+                </tr>
                 </tbody>
               </table>
               <table class="table table-striped">
@@ -63,7 +67,7 @@
           </div>
         </div>
         <div v-else class="text-center">
-          <pulse-loader color="#B8211DE5"></pulse-loader>
+          <pulse-loader :color="colorTheme.f1TippColor5"></pulse-loader>
         </div>
       </div>
     </Transition>
@@ -73,6 +77,7 @@
 <script>
 import axios from "axios";
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
+import colorTheme from "../classes/colorTheme/ColorTheme";
 
 export default {
   name: "ChampionshipResult",
@@ -82,6 +87,7 @@ export default {
       errorMessage: '',
       onlyRemaining: true,
       loading: true,
+      colorTheme: colorTheme,
       data: {
         event: {
           name: null

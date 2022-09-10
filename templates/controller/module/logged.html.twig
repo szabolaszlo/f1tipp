@@ -1,11 +1,11 @@
 <form id="signin" class="navbar-form navbar-right" role="form" method="GET" action="{{ path('app_logout') }}">
     <input class="form-control" id="disabledInput" type="hidden" value="{{ name }}" disabled>
-    <button class="btn btn-new color-one">
-        <i class="glyphicon glyphicon-user color-one"></i>
-        <span class="color-one">{{ name }}</span>
+    <button class="btn btn-new login-name-button">
+        <i class="glyphicon glyphicon-user"></i>
+        <span>{{ name }}</span>
     </button>
-    <button type="submit" class="btn btn-new">
-        <i class="glyphicon glyphicon-log-out color-one"></i>
-        <span class="color-one">{{ 'user_logout'|trans }}</span>
+    <button type="submit" class="btn btn-new logout-button">
+        <i class="glyphicon glyphicon-log-out"></i>
+        <span>{{ 'user_logout'|trans }}</span>
     </button>
 </form>

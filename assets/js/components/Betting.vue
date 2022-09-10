@@ -49,7 +49,7 @@
         </div>
       </div>
       <div v-else class="text-center">
-        <pulse-loader color="#B8211DE5"></pulse-loader>
+        <pulse-loader :color="colorTheme.f1TippColor5"></pulse-loader>
       </div>
     </Transition>
   </div>
@@ -61,6 +61,8 @@ import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
 import "select2/dist/js/select2.full.min"
 import JQuery from 'jquery'
 import DriverImages from "../classes/driver-images/driver-images"
+import colorTheme from "../classes/colorTheme/ColorTheme";
+
 
 window.$ = JQuery
 
@@ -77,7 +79,8 @@ export default {
       errorMessage: null,
       formErrorMessage: null,
       weekendEvents: null,
-      form: null
+      form: null,
+      colorTheme: colorTheme
     }
   },
   activated() {
