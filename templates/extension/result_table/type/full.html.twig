@@ -13,9 +13,9 @@
     <div class="panel-heading text-center">
         <div class="row">
             {% block heading_title %}
-                <div class="pull-right"
+                <div class="pull-right panel-heading-icon"
                      style="padding-right: 10px;">{{ iconProvider.getIcon(result.getEvent().getType()) }}</div>
-                <div class="pull-left"
+                <div class="pull-left panel-heading-icon"
                      style="padding-left: 10px;">{{ iconProvider.getIcon(result.getEvent().getType()) }}</div>
                 {% set titletext = ('general_' ~ result.getEvent().getType)|trans %}
                 <strong class="color-one">{{ result.getEvent().getName() ~ ' - ' ~ titletext }} - {{ result.getEvent().getDateTime()|date("M. d. H:i") }}</strong>
@@ -38,11 +38,11 @@
             <table class="table result-striped">
                 <thead>
                 <tr>
-                    <th><strong class="color-two">{{ 'result_name'|trans }}</strong></th>
-                    <th class="text-center"><strong class="color-two">{{ 'result_point'|trans }}</strong></th>
+                    <th><strong class="bets-table-head">{{ 'result_name'|trans }}</strong></th>
+                    <th class="text-center"><strong class="bets-table-head">{{ 'result_point'|trans }}</strong></th>
                     {% for resultAttribute in result.getAttributes() %}
                         <th class="text-center"><strong
-                                    class="color-two">{{ ('result_' ~ resultAttribute.getKey())|trans }}</strong></th>
+                                    class="bets-table-head">{{ ('result_' ~ resultAttribute.getKey())|trans }}</strong></th>
                     {% endfor %}
                 </tr>
                 </thead>
@@ -59,10 +59,10 @@
                     </tr>
                 {% endfor %}
                 <tr class="result-table-result-row">
-                    <td><strong class="color-two">{{ 'general_result'|trans }}</strong></td>
+                    <td><strong class="bets-table-head">{{ 'general_result'|trans }}</strong></td>
                     <td></td>
                     {% for resultAttribute in result.getAttributes() %}
-                        <td class="text-center"><strong class="color-two">{{ resultAttribute.getValue() }}</strong></td>
+                        <td class="text-center"><strong class="bets-table-head">{{ resultAttribute.getValue() }}</strong></td>
                     {% endfor %}
                 </tr>
                 </tbody>

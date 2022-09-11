@@ -7,7 +7,8 @@
                 {% for user in users %}
                     {% set podiumTrophies = user.getPodiumTrophies() %}
                     <tr>
-                        <td class="text-center">
+                        <td></td>
+                        <td>
                             {% if user.alternativePointDifference() > maths.remaining_weekends|length * pointProvider.placePoint(1) %}
                                 <span title="{{ (id ~ '_checkered_flag')|trans }}">
                                         <img src="{{ asset('build/images/checkered-flag.png') }}" height="18">
@@ -46,7 +47,7 @@
                 <tr>
                     <td class="text-center" colspan="3"
                         style="border-top: 1px; border-top-color: white;">
-                        <strong class="color-two">{{ (id ~ '_maths')|trans }}:</strong>
+                        <strong class="color-one">{{ (id ~ '_maths')|trans }}:</strong>
                     </td>
                 </tr>
                 <tr class="text-left">
@@ -66,7 +67,7 @@
                         <tr>
                             <td class="text-center" colspan="3"
                                 style="border-top: 1px; border-top-color: white;">
-                                <strong class="color-two">{{ (id ~ '_best_of_' ~ key)|trans }}</strong>
+                                <strong class="color-one">{{ (id ~ '_best_of_' ~ key)|trans }}</strong>
                             </td>
                         </tr>
                         {% for bet in record %}

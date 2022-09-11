@@ -2,8 +2,8 @@
     {% import 'macro/icon.html.twig' as iconProvider %}
     <div class="panel panel-default">
         <div class="panel-heading text-center">
-            <div class="pull-right">{{ iconProvider.getIcon('none') }}</div>
-            <div class="pull-left">{{ iconProvider.getIcon('none') }}</div>
+            <div class="pull-right panel-heading-icon">{{ iconProvider.getIcon('none') }}</div>
+            <div class="pull-left panel-heading-icon">{{ iconProvider.getIcon('none') }}</div>
             {% set title = result.0.race.name|split(' - ').0 %}
             <strong>{{ title }} - {{ 'result_of_weekend'|trans|upper }}</strong>
         </div>

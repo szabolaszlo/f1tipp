@@ -17,7 +17,7 @@
         <div v-html="renderedModule"></div>
       </div>
       <div v-else class="text-center">
-        <pulse-loader color="#B8211DE5"></pulse-loader>
+        <pulse-loader :color="colorTheme.f1TippColor5"></pulse-loader>
       </div>
     </Transition>
   </div>
@@ -26,6 +26,7 @@
 <script>
 import axios from "axios";
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
+import colorTheme from "../classes/colorTheme/ColorTheme";
 
 export default {
   name: "Statistics",
@@ -35,6 +36,7 @@ export default {
       loading: true,
       errorMessage: null,
       renderedModule: null,
+      colorTheme: colorTheme
     }
   },
   activated() {
