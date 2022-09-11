@@ -7,21 +7,20 @@
                 {% for user in users %}
                     {% set podiumTrophies = user.getPodiumTrophies() %}
                     <tr>
-                        <td></td>
-                        <td>
-                            {% if user.alternativePointDifference() > maths.remaining_weekends|length * pointProvider.placePoint(1) %}
-                                <span title="{{ (id ~ '_checkered_flag')|trans }}">
-                                        <img src="{{ asset('build/images/checkered-flag.png') }}" height="18">
-                                </span>
-                            {% endif %}
-                        </td>
                         <td class="text-center user-activity user-{{ user.getName() }}">
                             <span class="glyphicon glyphicon-flag"
                                   aria-hidden="true" title="Online"
                                   style="color: transparent; font-size: 1.1em;">
                             </span>
                         </td>
-                        <td><strong>{{ user.getName() }}</strong></td>
+                        <td>
+                            {% if user.alternativePointDifference() > maths.remaining_weekends|length * pointProvider.placePoint(1) %}
+                                <span title="{{ (id ~ '_checkered_flag')|trans }}">
+                                        <img src="{{ asset('build/images/checkered-flag.png') }}" height="18">
+                                </span>
+                            {% endif %}
+                            <strong>{{ user.getName() }}</strong>
+                        </td>
                         <td>
                             {% for type, trophies in podiumTrophies %}
                                 {% if trophies is not empty %}
@@ -52,7 +51,8 @@
                 </tr>
                 <tr class="text-left">
                     <td><strong>{{ (id ~ '_remaining_races')|trans }}</strong></td>
-                    <td class="text-center"><strong class="color-one">{{ maths.remaining_weekends|length }}</strong></td>
+                    <td class="text-center"><strong class="color-one">{{ maths.remaining_weekends|length }}</strong>
+                    </td>
                 </tr>
                 <tr class="text-left">
                     <td><strong>
