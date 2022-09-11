@@ -39,7 +39,7 @@
         "symfony/twig-bundle": "5.4.*",
         "symfony/validator": "5.4.*",
         "symfony/web-link": "5.4.*",
-        "symfony/webpack-encore-bundle": "^1.6",
+        "symfony/webpack-encore-bundle": "v1.15.1",
         "symfony/yaml": "5.4.*",
         "twig/twig": "2.*"
     },
