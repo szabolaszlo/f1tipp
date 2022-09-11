@@ -12,7 +12,7 @@
         <service class="App\LegacyService\Feed\Repository\MotorSportRepository"
                  id="app.legacy_service.feed.repository.motor_sport_repository"/>
 
-        <service class="App\LegacyService\Feed\Handler" id="app.legacy_service.feed.handler" public="true">
+        <service class="App\LegacyService\Feed\Handler" id="App\LegacyService\Feed\Handler">
             <argument type="collection">
                 <argument id="app.legacy_service.feed.repository.motor_sport_repository" type="service"/>
             </argument>

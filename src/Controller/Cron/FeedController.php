@@ -8,8 +8,10 @@
 
 namespace App\Controller\Cron;
 
+use App\LegacyService\Feed\Handler;
+use Doctrine\Persistence\ManagerRegistry;
 use Exception;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -17,26 +19,38 @@ use Symfony\Component\Routing\Annotation\Route;
  * Class FeedController
  * @package App\Controller\Page\FeedController
  */
-class FeedController extends Controller
+class FeedController extends AbstractController
 {
     /**
+     * @var Handler
+     */
+    private Handler $feedHandler;
+
+    /**
+     * @param Handler $feedHandler
+     */
+    public function __construct(Handler $feedHandler)
+    {
+        $this->feedHandler = $feedHandler;
+    }
+
+    /**
      * @Route("cron/collect_feeds", name="cron_collect_feeds", methods={"GET"})
+     * @param ManagerRegistry $managerRegistry
      * @return Response
      * @throws Exception
      */
-    public function collectAction()
+    public function collectAction(ManagerRegistry $managerRegistry): Response
     {
-        $feedsEntity = $this->getDoctrine()
+        $feedsEntity = $managerRegistry
             ->getRepository('App:Feed')
             ->findBy(array(), array('id' => 'DESC'), 1);
 
-        $feedHandler = $this->get('app.legacy_service.feed.handler');
-
-        $feeds = $feedHandler->getItems();
+        $feeds = $this->feedHandler->getItems();
 
         if ($this->getLastFeedId($feedsEntity) != $this->getLastFeedId($feeds)) {
-            $feedHandler->saveItems($feeds);
-            $this->getDoctrine()->getRepository('App:Feed')->deleteOldFeeds();
+            $this->feedHandler->saveItems($feeds);
+            $managerRegistry->getRepository('App:Feed')->deleteOldFeeds();
         }
 
         return new Response('OK', 200);
