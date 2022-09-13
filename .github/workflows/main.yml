@@ -64,9 +64,8 @@ jobs:
         host: "ftp.nethely.hu"
         user: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
-        remoteFiles: "precache-manifest.*.js;logs/*.log"
+        remoteFiles: "readme.txt"
         remoteDirectories: "/var/cache2"
-        workingDir: "/public_html"
         ignoreSSL: "1"    
 
 
