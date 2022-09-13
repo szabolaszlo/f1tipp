@@ -54,10 +54,19 @@ jobs:
       shell: python
       run: |
         import ftplib
+        def remove_ftp_dir(ftp, path):
+          for (name, properties) in ftp.mlsd(path=path):
+            if name in ['.', '..']:
+              continue
+            elif properties['type'] == 'file':
+              ftp.delete(f"{path}/{name}")
+            elif properties['type'] == 'dir':
+              remove_ftp_dir(ftp, f"{path}/{name}")
+        ftp.rmd(path)
         ftp = ftplib.FTP('ftp.nethely.hu')
         ftp.login('${{ secrets.FTP_USERNAME }}', '${{ secrets.FTP_PASSWORD }}')
         ftp.rename('var/cache', 'var/cache2')
-        ftp.rmd('var/cache2')
+        ftp.remove_ftp_dir(ftp, 'var/cache2')
         ftp.quit()
 
 
