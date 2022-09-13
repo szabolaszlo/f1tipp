@@ -59,7 +59,7 @@ jobs:
         ftp.rename('var/cache', 'var/cache2')
         ftp.quit()
     - name: Delete Symfony Cache
-      uses: StephanThierry/ftp-delete-action@/v2.1
+      uses: StephanThierry/ftp-delete-action@2.1
       with:
         host: "ftp.nethely.hu"
         user: ${{ secrets.FTP_USERNAME }}
