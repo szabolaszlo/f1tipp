@@ -47,4 +47,9 @@ jobs:
           symfony.lock
           **/translations/**
           webpack.config.js
+          .docker/nginx/nginx.conf
+          .docker/php74/PHP.Dockerfile
+          .env
+          .env.test
+
 
