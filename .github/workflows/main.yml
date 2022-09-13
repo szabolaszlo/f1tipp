@@ -57,6 +57,7 @@ jobs:
         ftp = ftplib.FTP('ftp.nethely.hu')
         ftp.login('${{ secrets.FTP_USERNAME }}', '${{ secrets.FTP_PASSWORD }}')
         ftp.rename('var/cache', 'var/cache2')
+        ftp.delete('var/cache2')
         ftp.quit()
 
 
