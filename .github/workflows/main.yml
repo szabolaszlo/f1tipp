@@ -50,23 +50,23 @@ jobs:
           **/.docker/**
           .env
           .env.test
-    - name: Symfony Cache Clear
+    - name: Quick "delete" Symfony Cache (only rename) 
       shell: python
       run: |
         import ftplib
-        def remove_ftp_dir(ftp, path):
-          for (name, properties) in ftp.mlsd(path=path):
-            if name in ['.', '..']:
-              continue
-            elif properties['type'] == 'file':
-              ftp.delete(f"{path}/{name}")
-            elif properties['type'] == 'dir':
-              remove_ftp_dir(ftp, f"{path}/{name}")
-        ftp.rmd(path)
         ftp = ftplib.FTP('ftp.nethely.hu')
         ftp.login('${{ secrets.FTP_USERNAME }}', '${{ secrets.FTP_PASSWORD }}')
         ftp.rename('var/cache', 'var/cache2')
-        ftp.remove_ftp_dir(ftp, 'var/cache2')
         ftp.quit()
+    - name: Delete Symfony Cache
+      uses: StephanThierry/ftp-delete-action@/v2.1
+      with:
+        host: "ftp.nethely.hu"
+        user: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        remoteFiles: "precache-manifest.*.js;logs/*.log"
+        remoteDirectories: "/var/cache2"
+        workingDir: "/public_html"
+        ignoreSSL: "1"    
 
 
