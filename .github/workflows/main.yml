@@ -22,6 +22,7 @@ jobs:
       uses: php-actions/composer@v6
       with:
         php_version: "7.4"
+        php_extensions: zip
         dev: no    
     
     - name: 📂 Sync files
