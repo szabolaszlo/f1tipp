@@ -17,6 +17,12 @@ jobs:
       run: |
         npm install
         npm run build
+        
+    - name: 🔨 Install PHP dependencies
+      uses: php-actions/composer@v6
+      with:
+        php_version: "7.4"
+        version: 2.x    
     
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@4.3.2
