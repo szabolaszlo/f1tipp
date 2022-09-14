@@ -1,5 +1,5 @@
 on: workflow_dispatch
-name: 🚀 Frontend Deploy
+name: 🚀 FTP Deploy (with already synced files)
 jobs:
   web-deploy:
     name: 🎉 Deploy
@@ -22,7 +22,7 @@ jobs:
       uses: php-actions/composer@v6
       with:
         php_version: "7.4"
-        command: "composer install --no-dev --optimize-autoloader"    
+        dev: no    
     
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@4.3.2
