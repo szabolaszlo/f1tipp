@@ -22,7 +22,7 @@ jobs:
       uses: php-actions/composer@v6
       with:
         php_version: "7.4"
-        version: 2.x    
+        command: "composer install --no-dev --optimize-autoloader"    
     
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@4.3.2
