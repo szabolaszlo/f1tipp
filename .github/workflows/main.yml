@@ -29,6 +29,7 @@ jobs:
       uses: SamKirkland/FTP-Deploy-Action@4.3.2
       with:
         dangerous-clean-slate: true
+        dry-run: true
         server: ftp.nethely.hu
         username:  ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
