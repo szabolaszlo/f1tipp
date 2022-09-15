@@ -28,6 +28,7 @@ jobs:
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@4.3.2
       with:
+        dangerous-clean-slate: true
         server: ftp.nethely.hu
         username:  ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
@@ -39,20 +40,14 @@ jobs:
           composer.json
           docker-compose.yml
           phpunit.xml.dist
-          **/templates/**
           **/var/**
           **/assets/**
           composer.lock
           package-lock.json
-          **/src/**
           **/tests/**
-          **/vendor/**
           **/bin/**	   
-          **/config/**
-          **/migrations/**
           package.json
           symfony.lock
-          **/translations/**
           webpack.config.js
           **/.docker/**
           .env
