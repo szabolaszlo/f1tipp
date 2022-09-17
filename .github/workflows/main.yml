@@ -59,7 +59,6 @@ jobs:
         remote-host: "ftp.nethely.hu"
         remote-user: ${{ secrets.FTP_USERNAME }}
         remote-password: ${{ secrets.FTP_PASSWORD }}
-        sync: "delta"
         sync-delta-excludes: |
           **/.git*
           **/.git*/**
