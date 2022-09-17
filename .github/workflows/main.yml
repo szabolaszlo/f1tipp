@@ -25,13 +25,42 @@ jobs:
         php_extensions: zip
         dev: no    
     
-    - name: 📂 Sync files
-      uses: SamKirkland/FTP-Deploy-Action@4.3.2
+    #- name: 📂 Sync files
+    #  uses: SamKirkland/FTP-Deploy-Action@4.3.2
+    #  with:
+    #    server: ftp.nethely.hu
+    #    username:  ${{ secrets.FTP_USERNAME }}
+    #    password: ${{ secrets.FTP_PASSWORD }}
+    #    exclude: |
+    #      **/.git*
+    #      **/.git*/**
+    #      **/node_modules/**
+    #      README.md
+    #      composer.json
+    #      docker-compose.yml
+    #      phpunit.xml.dist
+    #      **/var/**
+    #      **/assets/**
+    #      composer.lock
+    #      package-lock.json
+    #      **/tests/**
+    #      **/bin/**	   
+    #      package.json
+    #      symfony.lock
+    #      webpack.config.js
+    #      **/.docker/**
+    #      .env
+    #      .env.test
+    - name: FTP/SFTP file deployer
+      uses: milanmk/actions-file-deployer@1.11
       with:
-        server: ftp.nethely.hu
-        username:  ${{ secrets.FTP_USERNAME }}
-        password: ${{ secrets.FTP_PASSWORD }}
-        exclude: |
+        remote-protocol: "ftp"
+        remote-port: "21"
+        remote-host: "ftp.nethely.hu"
+        remote-user: ${{ secrets.FTP_USERNAME }}
+        remote-password: ${{ secrets.FTP_PASSWORD }}
+        sync: "delta"
+        sync-delta-excludes: |
           **/.git*
           **/.git*/**
           **/node_modules/**
