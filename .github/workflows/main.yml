@@ -1,5 +1,5 @@
 on: workflow_dispatch
-name: 🚀 FTP Deploy (with already synced files)
+name: 🚀 FTP Deploy
 jobs:
   web-deploy:
     name: 🎉 Deploy
@@ -28,8 +28,6 @@ jobs:
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@4.3.2
       with:
-        dangerous-clean-slate: true
-        dry-run: true
         server: ftp.nethely.hu
         username:  ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
