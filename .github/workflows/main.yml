@@ -1,0 +1,72 @@
+on: workflow_dispatch
+name: 🚀 FTP Deploy
+jobs:
+  web-deploy:
+    name: 🎉 Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v2
+
+    - name: Use Node.js 14
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+      
+    - name: 🔨 Build Project
+      run: |
+        npm install
+        npm run build
+        
+    - name: 🔨 Install PHP dependencies
+      uses: php-actions/composer@v6
+      with:
+        php_version: "7.4"
+        php_extensions: zip
+        dev: no    
+    
+    - name: 📂 Sync files
+      uses: SamKirkland/FTP-Deploy-Action@4.3.2
+      with:
+        server: ftp.nethely.hu
+        username:  ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/node_modules/**
+          README.md
+          composer.json
+          docker-compose.yml
+          phpunit.xml.dist
+          **/var/**
+          **/assets/**
+          composer.lock
+          package-lock.json
+          **/tests/**
+          **/bin/**	   
+          package.json
+          symfony.lock
+          webpack.config.js
+          **/.docker/**
+          .env
+          .env.test
+    - name: Quick "delete" Symfony Cache (only rename) 
+      shell: python
+      run: |
+        import ftplib
+        ftp = ftplib.FTP('ftp.nethely.hu')
+        ftp.login('${{ secrets.FTP_USERNAME }}', '${{ secrets.FTP_PASSWORD }}')
+        ftp.rename('var/cache', 'var/cache2')
+        ftp.quit()
+    - name: Delete Symfony Cache
+      uses: StephanThierry/ftp-delete-action@v2.1
+      with:
+        host: "ftp.nethely.hu"
+        user: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        remoteFiles: "readme.txt"
+        remoteDirectories: "/var/cache2"
+        ignoreSSL: "1"    
+
+
