@@ -6,37 +6,37 @@ const routes = [
     {
         path: '/calendar',
         name: 'Calendar',
-        component: () => import(/* webpackChunkName: "about" */ '../components/Calendar.vue')
+        component: () => import(/* webpackChunkName: "calendar" */ '../components/Calendar.vue')
     },
     {
         path: '/betting',
         name: 'Betting',
-        component: () => import(/* webpackChunkName: "about" */ '../components/Betting.vue')
+        component: () => import(/* webpackChunkName: "betting" */ '../components/Betting.vue')
     },
     {
         path: '/results',
         name: 'Results',
-        component: () => import(/* webpackChunkName: "about" */ '../components/Results.vue')
+        component: () => import(/* webpackChunkName: "results" */ '../components/Results.vue')
     },
     {
         path: '/rules',
         name: 'Rules',
-        component: () => import(/* webpackChunkName: "about" */ '../components/Rules.vue')
+        component: () => import(/* webpackChunkName: "rules" */ '../components/Rules.vue')
     },
     {
         path: '/statistics',
         name: 'Statistics',
-        component: () => import(/* webpackChunkName: "about" */ '../components/Statistics.vue')
+        component: () => import(/* webpackChunkName: "statistics" */ '../components/Statistics.vue')
     },
     {
         path: '/actual',
         name: 'Actual',
-        component: () => import(/* webpackChunkName: "about" */ '../components/Actual.vue')
+        component: () => import(/* webpackChunkName: "actual" */ '../components/Actual.vue')
     },
     {
         path: '/trophies',
         name: 'Trophies',
-        component: () => import(/* webpackChunkName: "about" */ '../components/Trophies.vue')
+        component: () => import(/* webpackChunkName: "trophies" */ '../components/Trophies.vue')
     },
     {
         path: "/",
