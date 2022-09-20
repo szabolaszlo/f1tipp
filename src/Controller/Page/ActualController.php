@@ -8,7 +8,7 @@
 
 namespace App\Controller\Page;
 
-use Exception;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,11 +21,17 @@ class ActualController extends AbstractController
 {
     /**
      * @Route(path="/", name="home", methods={"GET"})
+     * @param ManagerRegistry $managerRegistry
      * @return Response
-     * @throws Exception
      */
-    public function indexAction(): Response
+    public function indexAction(ManagerRegistry $managerRegistry): Response
     {
-        return $this->render('controller/page/actual.html.twig');
+        $ga4MeasurementId = $managerRegistry
+            ->getRepository('App:Setting')
+            ->getValueByKey('ga4MeasurementId');
+
+        return $this->render('controller/page/actual.html.twig',
+            ['ga4_measurement_id' => $ga4MeasurementId]
+        );
     }
 }
