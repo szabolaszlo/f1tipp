@@ -24,7 +24,7 @@ class ClearCacheController extends AbstractController
 {
     /**
      * @Route(path = "/admin/maintenance/cache_clear", name = "cache_clear")
-     * @Security("has_role('ROLE_ADMIN')")
+     * @Security("is_granted('ROLE_ADMIN')")
      * @param FileCache $fileCache
      * @return RedirectResponse
      * @throws \Exception

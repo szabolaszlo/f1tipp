@@ -17,7 +17,7 @@ class DriverPointSyncController extends AbstractController
 {
     /**
      * @Route(path = "/admin/driver/point_sync", name = "driver_point_sync")
-     * @Security("has_role('ROLE_ADMIN')")
+     * @Security("is_granted('ROLE_ADMIN')")
      * @param Request $request
      * @return RedirectResponse
      */
