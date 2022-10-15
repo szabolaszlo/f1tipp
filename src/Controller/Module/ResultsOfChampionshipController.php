@@ -53,7 +53,7 @@ class ResultsOfChampionshipController extends AbstractController
      * @return Response
      * @throws InvalidArgumentException
      */
-    public function getResultsAction(FileCache $cache)
+    public function getResultsAction(FileCache $cache): Response
     {
         $this->getResults($cache);
         return new Response('OK', 200);
@@ -70,13 +70,9 @@ class ResultsOfChampionshipController extends AbstractController
 
         $constructResponse = json_decode(file_get_contents(self::CONSTRUCT_JSON_PATH), true);
 
-        $weekendOrder = $driverResponse['MRData']['StandingsTable']['StandingsLists'][0]['round'];
+        $round = $driverResponse['MRData']['StandingsTable']['StandingsLists'][0]['round'];
 
-        $event = $this->getDoctrine()
-            ->getRepository('App\Entity\Race')
-            ->findOneBy(array('weekendOrder' => $weekendOrder));
-
-        $data['event'] = $event;
+        $data['event'] = $this->getEvent($round);
 
         $data['driverStandings'] =
             $driverResponse['MRData']['StandingsTable']['StandingsLists'][0]['DriverStandings'];
@@ -87,5 +83,14 @@ class ResultsOfChampionshipController extends AbstractController
         $cache->save(self::RESULTS_CACHE_KEY, $data);
 
         return $data;
+    }
+
+    private function getEvent($round)
+    {
+        $events = $this->getDoctrine()
+            ->getRepository('App\Entity\Race')
+            ->findAll();
+
+        return $events[$round - 1];
     }
 }
