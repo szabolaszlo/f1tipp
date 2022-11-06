@@ -5,7 +5,7 @@
             <div class="pull-right panel-heading-icon">{{ iconProvider.getIcon('none') }}</div>
             <div class="pull-left panel-heading-icon">{{ iconProvider.getIcon('none') }}</div>
             {% set title = result.0.race.name|split(' - ').0 %}
-            <strong>{{ title }} - {{ 'result_of_weekend'|trans|upper }}</strong>
+            <strong class="color-one">{{ title }} - {{ 'result_of_weekend'|trans|upper }}</strong>
         </div>
         {% block body_content %}
             <div class="panel-body">
@@ -14,13 +14,13 @@
                         <thead>
                         <tr>
                             <th>
-                                <strong class="color-two">{{ ('alternativeChampionship_name')|trans }}</strong>
+                                <strong class="color-two bets-table-head">{{ ('alternativeChampionship_name')|trans }}</strong>
                             </th>
                             <th>
-                                <strong class="color-two">{{ ('alternativeChampionship_collected_points')|trans }}</strong>
+                                <strong class="color-two bets-table-head">{{ ('alternativeChampionship_collected_points')|trans }}</strong>
                             </th>
                             <th>
-                                <strong class="color-two">{{ ('alternativeChampionship_converted_points')|trans }}</strong>
+                                <strong class="color-two bets-table-head">{{ ('alternativeChampionship_converted_points')|trans }}</strong>
                             </th>
                         </tr>
                         </thead>
@@ -28,7 +28,7 @@
                         {% for ac in result %}
                             <tr>
                                 <td>
-                                    <strong>{{ ac.getUser.getName }}</strong>
+                                    <strong class="color-one">{{ ac.getUser.getName }}</strong>
                                 </td>
                                 <td>
                                     <strong>{{ ac.getCollectedPoints }}</strong>
