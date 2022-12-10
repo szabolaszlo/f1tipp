@@ -188,6 +188,9 @@
       <trans-unit id="alternative_championship_extension_title"><source>alternative_championship_extension_title</source><target>ALTERNATÍV PONTVERSENY</target></trans-unit>
       <trans-unit id="alternative_championship_extension_no_results"><source>alternative_championship_extension_no_results</source><target>Még nincsenek eredmények, nézz vissza az első futam után!</target></trans-unit>
       <trans-unit id="admin.menu.message"><source>admin.menu.message</source><target>Még nincsenek eredmények, nézz vissza az első futam után!</target></trans-unit>
+      <trans-unit id="flash_calculate"><source>flash_calculate</source><target>Eredmények kiszámolva</target></trans-unit>
+      <trans-unit id="flash_re_calculate"><source>flash_re_calculate</source><target>Eredmények újraszámolva</target></trans-unit>
+      <trans-unit id="flash_cache_clear"><source>flash_cache_clear</source><target>Esemény Cachek törölve</target></trans-unit>
   </body>
     </file>
 </xliff>

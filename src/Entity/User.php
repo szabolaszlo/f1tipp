@@ -324,4 +324,9 @@ class User implements UserInterface
     {
         $this->isAlterChamps = $isAlterChamps;
     }
+
+    public function __toString()
+    {
+        return $this->getName();
+    }
 }

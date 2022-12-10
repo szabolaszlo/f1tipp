@@ -26,7 +26,7 @@ class Event extends EntityRepository
     public function getNextEvent()
     {
         $resultCache = $this->_em->getConfiguration()->getResultCacheImpl();
-        $cacheKey = $this->_entityName . 'NextEvent';
+        $cacheKey = str_replace("\\", '', $this->_entityName)  . 'NextEvent';
 
         if ($resultCache->contains($cacheKey)) {
             return $resultCache->fetch($cacheKey);
@@ -61,7 +61,7 @@ class Event extends EntityRepository
     public function getActualWeekendEvents()
     {
         $resultCache = $this->_em->getConfiguration()->getResultCacheImpl();
-        $cacheKey = $this->_entityName . 'ActualWeekendEvents';
+        $cacheKey = str_replace("\\", '', $this->_entityName) . 'ActualWeekendEvents';
 
         if ($resultCache->contains($cacheKey)) {
             return $resultCache->fetch($cacheKey);
@@ -107,7 +107,7 @@ class Event extends EntityRepository
     public function getRemainEvents()
     {
         $resultCache = $this->_em->getConfiguration()->getResultCacheImpl();
-        $cacheKey = $this->_entityName . 'Remain';
+        $cacheKey = str_replace("\\", '', $this->_entityName) . 'Remain';
 
         if ($resultCache->contains($cacheKey)) {
             return $resultCache->fetch($cacheKey);

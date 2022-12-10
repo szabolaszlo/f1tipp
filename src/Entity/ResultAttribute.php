@@ -103,4 +103,9 @@ class ResultAttribute
     {
         $this->value = $value;
     }
+
+    public function __toString()
+    {
+        return $this->getValue() ?? '';
+    }
 }

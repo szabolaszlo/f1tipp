@@ -4,10 +4,15 @@ namespace App\EventSubscriber;
 
 use App\Cache\FileCache;
 use App\Calculator\Calculator;
+use App\Entity\Event;
 use App\Entity\Result;
 use Doctrine\ORM\EntityManagerInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Contracts\Event\EntityLifecycleEventInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityDeletedEvent;
+use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityPersistedEvent;
+use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityUpdatedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\EventDispatcher\GenericEvent;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
 /**
  * Class EasyAdminSubscriber
@@ -18,59 +23,94 @@ class EasyAdminSubscriber implements EventSubscriberInterface
     /**
      * @var Calculator
      */
-    protected $calculator;
+    protected Calculator $calculator;
 
     /**
      * @var EntityManagerInterface
      */
-    protected $em;
+    protected EntityManagerInterface $em;
 
     /**
      * @var FileCache
      */
-    protected $fileCache;
+    protected FileCache $fileCache;
+
+    /**
+     * @var FlashBagInterface
+     */
+    protected FlashBagInterface $flashBag;
 
     /**
      * EasyAdminSubscriber constructor.
      * @param Calculator $calculator
      * @param EntityManagerInterface $em
      * @param FileCache $fileCache
+     * @param FlashBagInterface $flashBag
      */
-    public function __construct(Calculator $calculator, EntityManagerInterface $em, FileCache $fileCache)
+    public function __construct(Calculator $calculator, EntityManagerInterface $em, FileCache $fileCache, FlashBagInterface $flashBag)
     {
         $this->calculator = $calculator;
         $this->em = $em;
         $this->fileCache = $fileCache;
+        $this->flashBag = $flashBag;
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return array(
-            'easy_admin.post_persist' => array('calculateResults'),
-            'easy_admin.post_update' => array('reCalculateResults'),
-            'easy_admin.post_remove' => array('reCalculateResults'),
+            AfterEntityPersistedEvent::class => array('calculateResults'),
+            AfterEntityUpdatedEvent::class => [['reCalculateResults'], ['clearEventCaches']],
+            AfterEntityDeletedEvent::class => array('reCalculateResults'),
         );
     }
 
     /**
-     * @param GenericEvent $event
+     * @param EntityLifecycleEventInterface $event
+     * @return void
      */
-    public function calculateResults(GenericEvent $event)
+    public function clearEventCaches(EntityLifecycleEventInterface $event)
     {
-        $entity = $event->getSubject();
+        $entity = $event->getEntityInstance();
+
+        if (!($entity instanceof Event)) {
+            return;
+        }
+
+        $resultCache = $this->em->getConfiguration()->getResultCacheImpl();
+        $resultCache->delete('AppEntityEventNextEvent');
+        $resultCache->delete('AppEntityQualifyNextEvent');
+        $resultCache->delete('AppEntityRaceNextEvent');
+        $resultCache->delete('AppEntityEventActualWeekendEvents');
+        $resultCache->delete('AppEntityQualifyActualWeekendEvents');
+        $resultCache->delete('AppEntityRaceActualWeekendEvents');
+        $resultCache->delete('AppEntityEventRemain');
+        $resultCache->delete('AppEntityQualifyRemain');
+        $resultCache->delete('AppEntityRaceRemain');
+
+        $this->flashBag->add('success', 'flash_cache_clear');
+    }
+
+    /**
+     * @param EntityLifecycleEventInterface $event
+     */
+    public function calculateResults(EntityLifecycleEventInterface $event)
+    {
+        $entity = $event->getEntityInstance();
 
         if (!($entity instanceof Result)) {
             return;
         }
         $this->calculator->calculate();
+
+        $this->flashBag->add('success', 'flash_calculate');
     }
 
     /**
-     * @param GenericEvent $event
+     * @param EntityLifecycleEventInterface $event
      */
-    public function reCalculateResults(GenericEvent $event)
+    public function reCalculateResults(EntityLifecycleEventInterface $event)
     {
-        $entity = $event->getSubject();
+        $entity = $event->getEntityInstance();
 
         if (!($entity instanceof Result)) {
             return;
@@ -91,5 +131,7 @@ class EasyAdminSubscriber implements EventSubscriberInterface
         $this->calculator->calculate();
 
         $this->fileCache->clearAll();
+
+        $this->flashBag->add('success', 'flash_re_calculate');
     }
 }
