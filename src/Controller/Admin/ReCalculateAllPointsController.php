@@ -4,11 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Cache\FileCache;
 use App\Calculator\Calculator;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
@@ -38,7 +34,6 @@ class ReCalculateAllPointsController extends AbstractController
 
     /**
      * @Route(path = "/admin/maintenance/re_calculate_points", name = "re_calculate_points")
-     * @Security("is_granted('ROLE_SUPER_ADMIN')")
      * @param Calculator $calculator
      * @param FileCache $fileCache
      * @return RedirectResponse
