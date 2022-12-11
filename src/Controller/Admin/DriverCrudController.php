@@ -71,6 +71,8 @@ class DriverCrudController extends AbstractCrudController
         } elseif (Crud::PAGE_EDIT === $pageName) {
             return [$name, $short, $point, $status];
         }
+
+        return [];
     }
 
     //TODO Turn into service or usecase

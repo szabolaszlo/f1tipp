@@ -39,5 +39,6 @@ class SettingCrudController extends AbstractCrudController
         } elseif (Crud::PAGE_EDIT === $pageName) {
             return [$key, $value];
         }
+        return [];
     }
 }

@@ -50,5 +50,6 @@ class UserCrudController extends AbstractCrudController
         } elseif (Crud::PAGE_EDIT === $pageName) {
             return [$name, $username, $roles, $password, $isAlterChamps];
         }
+        return [];
     }
 }

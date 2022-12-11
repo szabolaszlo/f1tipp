@@ -52,5 +52,6 @@ class EventCrudController extends AbstractCrudController
         } elseif (Crud::PAGE_EDIT === $pageName) {
             return [$weekendOrder, $name, $dateTime];
         }
+        return [];
     }
 }

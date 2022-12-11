@@ -42,5 +42,6 @@ class MessageCrudController extends AbstractCrudController
         } elseif (Crud::PAGE_EDIT === $pageName) {
             return [$content, $dateTime, $user];
         }
+        return [];
     }
 }

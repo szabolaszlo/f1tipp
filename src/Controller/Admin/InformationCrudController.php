@@ -44,5 +44,6 @@ class InformationCrudController extends AbstractCrudController
         } elseif (Crud::PAGE_EDIT === $pageName) {
             return [$title, $content, $slug, $news];
         }
+        return [];
     }
 }
