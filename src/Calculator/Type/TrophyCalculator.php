@@ -102,7 +102,7 @@ class TrophyCalculator extends ACalculator
         }
 
         foreach ($podium as $key => $value) {
-            $podium[$key] = array_flip(array_keys($userPoints, max($userPoints)));
+            $podium[$key] = array_flip(array_keys($userPoints, max($userPoints, 0)));
             foreach ($podium[$key] as $userId => $pValue) {
                 $podium[$key][$userId] = $userPoints[$userId];
                 unset($userPoints[$userId]);

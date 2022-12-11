@@ -1,10 +1,10 @@
-{% extends '@!EasyAdmin/default/new.html.twig' %}
-{% block entity_form %}
-    {% form_theme form 'form_table_layout.html.twig' %}
-    {{ form(form) }}
-{% endblock entity_form %}
+{% extends '@!EasyAdmin/crud/new.html.twig' %}
+{% block new_form %}
+    {% form_theme new_form 'form_table_layout.html.twig' %}
+    {{ form(new_form) }}
+{% endblock new_form %}
 {% block content_title %}
     {% apply spaceless %}
-        {{ form.vars.value.event.name }} {{ form.vars.value.event.type|trans|capitalize }} {{ 'upload'|trans }}
+        {{ new_form.vars.value.event.name }} {{ new_form.vars.value.event.type|trans|capitalize }} {{ 'upload'|trans }}
     {% endapply %}
 {% endblock %}

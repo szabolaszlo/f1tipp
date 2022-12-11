@@ -38,7 +38,7 @@ class ReCalculateAllPointsController extends AbstractController
 
     /**
      * @Route(path = "/admin/maintenance/re_calculate_points", name = "re_calculate_points")
-     * @Security("has_role('ROLE_SUPER_ADMIN')")
+     * @Security("is_granted('ROLE_SUPER_ADMIN')")
      * @param Calculator $calculator
      * @param FileCache $fileCache
      * @return RedirectResponse
@@ -74,7 +74,7 @@ class ReCalculateAllPointsController extends AbstractController
 
         $this->addFlash('success', 'admin_maintenance_recalculete_points_success');
 
-        return $this->redirect($this->generateUrl('easyadmin'));
+        return $this->redirect($this->generateUrl('app_admin_dashboard_index'));
     }
 
     /**

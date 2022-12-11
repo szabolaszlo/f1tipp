@@ -117,4 +117,9 @@ class Event implements JsonSerializable
             'type' => $this->getType(),
         ];
     }
+
+    public function __toString()
+    {
+        return $this->getName();
+    }
 }
