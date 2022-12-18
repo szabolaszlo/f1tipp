@@ -27,6 +27,7 @@ Encore
 
     .copyFiles([
         {from: './node_modules/ckeditor-full/', to: 'ckeditor/[path][name].[ext]', pattern: /\.(js|css)$/, includeSubdirectories: false},
+        {from: './assets/images/rule_images', to: 'images/rule_images/[path][name].[ext]'},
         {from: './node_modules/ckeditor-full/adapters', to: 'ckeditor/adapters/[path][name].[ext]'},
         {from: './node_modules/ckeditor-full/lang', to: 'ckeditor/lang/[path][name].[ext]'},
         {from: './node_modules/ckeditor-full/plugins', to: 'ckeditor/plugins/[path][name].[ext]'},
