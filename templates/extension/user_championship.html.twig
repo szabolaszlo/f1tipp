@@ -24,12 +24,12 @@
                         <td>
                             {% for type, trophies in podiumTrophies %}
                                 {% if trophies is not empty %}
-                                    <span style="padding-left: 5px;padding-right: 5px;" title="{{ ('trophy_type_' ~ type)|trans }}">
-                                        <img src="{{ asset('build/images/trophy/trophy_' ~ type ~ '.svg') }}" height="19">
-                                        <span class="small" style="color:black; font-weight: bold; margin-left: -16px; margin-top: -15px;">{{ trophies|length }}</span>
+                                    <span class="user-championship-trophy"
+                                          title="{{ ('trophy_type_' ~ type)|trans }}">
+                                        <img class="user-championship-trophy-image"
+                                             src="{{ asset('build/images/trophy/trophy_' ~ type ~ '.svg') }}">
+                                        <span class="small user-championship-trophy-number">{{ trophies|length }}</span>
                                       </span>
-                                    {% if trophies|length > 1 %}
-                                    {% endif %}
                                 {% endif %}
                             {% endfor %}
                         </td>
