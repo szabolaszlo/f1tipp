@@ -26,14 +26,6 @@ class UserRepository extends ServiceEntityRepository
     /**
      * @return User[]
      */
-    public function getUsersPointsSummaryDesc()
-    {
-        return $this->findBy([], ['pointSummary' => 'DESC', 'name' => 'ASC']);
-    }
-
-    /**
-     * @return User[]
-     */
     public function getAlternativeChampionshipUsers()
     {
         return $this->createQueryBuilder('user')

@@ -12,8 +12,8 @@
     --f1-tipp-color-11: #202a2f;
     --f1-tipp-color-12: #f4f5f5;
     --f1-tipp-color-13: #171717;
-    --f1-tipp-color-14: rgba(203,32, 38, 0.3);
-    --f1-tipp-color-15: rgba(0,140, 209, 0.25);
+    --f1-tipp-color-14: rgba(203, 32, 38, 0.3);
+    --f1-tipp-color-15: rgba(0, 140, 209, 0.25);
 }
 
 footer {
@@ -85,7 +85,7 @@ table caption {
     font-weight: bold;
 }
 
-.bets-table-head{
+.bets-table-head {
     color: var(--f1-tipp-color-5);
 }
 
@@ -392,4 +392,20 @@ a:hover.glyphicon {
 
 a.feed_source {
     color: rgba(255, 255, 255, .75);
+}
+
+.user-championship-trophy {
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+.user-championship-trophy-image {
+    height: 18px;
+}
+
+.user-championship-trophy-number {
+    color: black;
+    font-weight: bold;
+    margin-left: -16px;
+    vertical-align: top;
 }

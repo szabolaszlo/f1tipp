@@ -22,7 +22,7 @@
                     {% for trophyKey, trophy in userTrophy %}
                         {% for trophyy in trophy %}
                             <span title="{{ ('trophy_type_' ~ trophyKey)|trans }}">
-                                    <img src="{{ asset('build/images/trophy_' ~  trophyKey ~ '.png') }}"
+                                    <img src="{{ asset('build/images/trophy/trophy_' ~  trophyKey ~ '.svg') }}"
                                          height="18">
                                 </span>
                         {% endfor %}
@@ -48,7 +48,7 @@
                 {% for trophyType, trophyPoint in trophy_attributes %}
                     <span style="padding-left: 15px;padding-right: 15px">
                         <span title="{{ ('trophy_type_' ~ trophyType)|trans }}">
-                                    <img src="{{ asset('build/images/trophy_' ~  trophyType ~ '.png') }}"
+                                    <img src="{{ asset('build/images/trophy/trophy_' ~  trophyType ~ '.svg') }}"
                                          height="18">
                         </span><strong> = {{ trophyPoint }}</strong>
                             </span>
