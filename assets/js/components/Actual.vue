@@ -1,23 +1,52 @@
 <template>
   <div>
     <Transition name="fade" mode="out-in">
-      <div v-if="errorMessage">
+      <div>
         <div class="panel panel-default">
           <div class="panel-heading text-center">
-            <strong>{{ $t("actual.title").toUpperCase() }}</strong>
+            <strong>{{ $t("actual.eventScheduleTitle").toUpperCase() }}</strong>
           </div>
-          <div class="text-center" style="padding: 30px;">
-            <strong class="text-center color-one">{{ $t('general.errorOnComponentLoad') }}</strong>
-            <hr/>
-            <strong class="text-center color-two">{{ errorMessage }}</strong>
+          <div class="panel-body">
+            <table class="table">
+              <thead>
+              <th>Előző</th>
+              <th>Aktuális</th>
+              <th>Következő</th>
+              </thead>
+              <tbody>
+              <tr>
+                <td>
+                  BAHREIN
+                </td>
+                <td>
+                  MONACO
+                </td>
+                <td>
+                  ABUDABI
+                </td>
+              </tr>
+              </tbody>
+            </table>
           </div>
         </div>
-      </div>
-      <div v-else-if="!loading">
-        <div v-html="renderedModule"></div>
-      </div>
-      <div v-else class="text-center">
-        <pulse-loader :color="colorTheme.f1TippColor5"></pulse-loader>
+        <div v-if="errorMessage">
+          <div class="panel panel-default">
+            <div class="panel-heading text-center">
+              <strong>{{ $t("actual.title").toUpperCase() }}</strong>
+            </div>
+            <div class="text-center" style="padding: 30px;">
+              <strong class="text-center color-one">{{ $t('general.errorOnComponentLoad') }}</strong>
+              <hr/>
+              <strong class="text-center color-two">{{ errorMessage }}</strong>
+            </div>
+          </div>
+        </div>
+        <div v-else-if="!loading">
+          <div v-html="renderedModule"></div>
+        </div>
+        <div v-else class="text-center">
+          <pulse-loader :color="colorTheme.f1TippColor5"></pulse-loader>
+        </div>
       </div>
     </Transition>
   </div>
