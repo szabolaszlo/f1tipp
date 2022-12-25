@@ -10,6 +10,7 @@ namespace App\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use App\Entity\Feed as FeedEntity;
+use Exception;
 
 /**
  * Class FeedController
@@ -18,7 +19,7 @@ use App\Entity\Feed as FeedEntity;
 class Feed extends EntityRepository
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function deleteOldFeeds()
     {
