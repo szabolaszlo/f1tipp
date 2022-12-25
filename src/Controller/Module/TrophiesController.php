@@ -10,8 +10,6 @@ namespace App\Controller\Module;
 
 use App\Twig\TrophyRuntimeExtension;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Entity\Result;
-use App\Entity\Trophy;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Twig\Error\LoaderError;
