@@ -8,6 +8,7 @@
 
 namespace App\Controller\Cron;
 
+use App\Entity\Feed;
 use App\LegacyService\Feed\Handler;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
@@ -43,14 +44,14 @@ class FeedController extends AbstractController
     public function collectAction(ManagerRegistry $managerRegistry): Response
     {
         $feedsEntity = $managerRegistry
-            ->getRepository('App:Feed')
+            ->getRepository(Feed::class)
             ->findBy(array(), array('id' => 'DESC'), 1);
 
         $feeds = $this->feedHandler->getItems();
 
         if ($this->getLastFeedId($feedsEntity) != $this->getLastFeedId($feeds)) {
             $this->feedHandler->saveItems($feeds);
-            $managerRegistry->getRepository('App:Feed')->deleteOldFeeds();
+            $managerRegistry->getRepository(Feed::class)->deleteOldFeeds();
         }
 
         return new Response('OK', 200);

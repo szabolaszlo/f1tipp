@@ -23,10 +23,6 @@ class AppExtension extends AbstractExtension
                 [ResultTableRuntimeExtension::class, 'renderResultTable'],
                 ['is_safe' => ['html']]),
             new TwigFunction(
-                'topFeedExtension',
-                [TopFeedRuntimeExtension::class, 'renderTopFeed'],
-                ['is_safe' => ['html']]),
-            new TwigFunction(
                 'pointSummaryChartExtension',
                 [PointSummaryChartRuntimeExtension::class, 'renderPointSummaryChart'],
                 ['is_safe' => ['html']]),

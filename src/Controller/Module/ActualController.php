@@ -2,7 +2,6 @@
 
 namespace App\Controller\Module;
 
-use App\Entity\Event;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;

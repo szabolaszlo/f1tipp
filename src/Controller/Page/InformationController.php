@@ -9,8 +9,8 @@
 
 namespace App\Controller\Page;
 
+use App\Entity\Information;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,23 +22,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class InformationController extends AbstractController
 {
     /**
-     * @Route("/information/{slug}", name="information_show", methods={"GET"})
-     * @param $slug
-     * @return Response
-     */
-    public function showAction($slug)
-    {
-        return $this->render('controller/page/information.html.twig', [
-            'information' => $this->getInformation($slug),
-        ]);
-    }
-
-    /**
      * @Route("/information_content/{slug}", name="information_content_show", methods={"GET"})
      * @param $slug
      * @return Response
      */
-    public function showOnlyContentAction($slug)
+    public function showOnlyContentAction($slug): Response
     {
         return $this->render('controller/page/information_content.html.twig', [
             'information' => $this->getInformation($slug),
@@ -49,10 +37,10 @@ class InformationController extends AbstractController
      * @param $slug
      * @return object|null
      */
-    protected function getInformation($slug)
+    protected function getInformation($slug): ?object
     {
         $information = $this->getDoctrine()
-            ->getRepository('App:Information')
+            ->getRepository(Information::class)
             ->findOneBy(['slug' => $slug]);
 
         if (!$information) {
