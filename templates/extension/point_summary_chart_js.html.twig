@@ -1,6 +1,7 @@
-{% extends 'controller/module/base_module.html.twig' %}
-{% block body_content %}
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% if pointHistory %}
+    {% extends 'controller/module/base_module.html.twig' %}
+    {% block body_content %}
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <div class="panel-body">
             <div style="position: relative;  margin: auto;  height: 60vh;">
                 <canvas id="myChart"></canvas>
@@ -11,88 +12,89 @@
                     és Te. A nevekre kattintva megjeleníthető vagy eltűntethető az adott tippelő pontgörbéje.</strong>
             </div>
         </div>
-{% endblock %}
-{% block javascripts %}
-    {{ parent() }}
-    <script>
-        $(document).ready(function () {
-            Chart.defaults.color = '#ffc906';
-            Chart.defaults.borderColor = 'rgba(0,140, 209, 0.25)';
-            const myChart = new Chart(
-                document.getElementById('myChart'),
-                config
-            );
-        });
-        const labels = [
-            {% for event in eventHistory %}
-            '{{ event }}',
-            {% endfor %}
-        ];
-
-        const lineColors = [
-            'rgb(108,211,191)',
-            'rgb(237,28,36)',
-            'rgb(34,147,209)',
-            'rgb(182,186,189)',
-            'rgb(245,128,32)',
-            'rgb(30,91,198)',
-            'rgb(78,124,155)',
-            'rgb(45,130,109)',
-            'rgb(55,190,221)',
-            'rgb(172,32,57)',
-            'rgb(108,211,191, 0.5)',
-            'rgb(237,28,36, 0.5)',
-            'rgb(34,147,209, 0.5)',
-            'rgb(182,186,189, 0.5)',
-            'rgb(245,128,32, 0.5)',
-            'rgb(30,91,198, 0.5)',
-            'rgb(78,124,155, 0.5)',
-            'rgb(45,130,109, 0.5)',
-            'rgb(55,190,221, 0.5)',
-            'rgb(172,32,57, 0.5)',
-        ];
-
-        const data = {
-            labels: labels,
-            datasets: [
-                {% for userName, points in pointHistory %}
-                {
-                    label: '{{ userName }}',
-                    backgroundColor: lineColors[{{ loop.index0 }}],
-                    borderColor: lineColors[{{ loop.index0 }}],
-                    hidden: {{ (loop.index < 4  or userName == app.user.name) ? 'false' : 'true' }} ,
-                    data: [
-                        {% for point in points %}
-                        {{ point }},
-                        {% endfor %}
-                    ],
-                },
+    {% endblock %}
+    {% block javascripts %}
+        {{ parent() }}
+        <script>
+            $(document).ready(function () {
+                Chart.defaults.color = '#ffc906';
+                Chart.defaults.borderColor = 'rgba(0,140, 209, 0.25)';
+                const myChart = new Chart(
+                    document.getElementById('myChart'),
+                    config
+                );
+            });
+            const labels = [
+                {% for event in eventHistory %}
+                '{{ event }}',
                 {% endfor %}
-            ]
-        };
-        const plugin = {
-            id: 'custom_canvas_background_color',
-            beforeDraw: (chart) => {
-                const ctx = chart.canvas.getContext('2d');
-                ctx.save();
-                ctx.globalCompositeOperation = 'destination-over';
-                ctx.fillStyle = 'rgb(0, 0, 0, 0.1)';
-                ctx.fillRect(0, 0, chart.width, chart.height);
-                ctx.restore();
-            }
-        };
-        const config = {
-            type: 'line',
-            data: data,
-            options: {
-                maintainAspectRatio: false,
-                color: 'white',
-            },
-            defaults: {
-                color: '#FFF'
-            },
-            plugins: [plugin]
-        };
+            ];
 
-    </script>
-{% endblock %}
+            const lineColors = [
+                'rgb(108,211,191)',
+                'rgb(237,28,36)',
+                'rgb(34,147,209)',
+                'rgb(182,186,189)',
+                'rgb(245,128,32)',
+                'rgb(30,91,198)',
+                'rgb(78,124,155)',
+                'rgb(45,130,109)',
+                'rgb(55,190,221)',
+                'rgb(172,32,57)',
+                'rgb(108,211,191, 0.5)',
+                'rgb(237,28,36, 0.5)',
+                'rgb(34,147,209, 0.5)',
+                'rgb(182,186,189, 0.5)',
+                'rgb(245,128,32, 0.5)',
+                'rgb(30,91,198, 0.5)',
+                'rgb(78,124,155, 0.5)',
+                'rgb(45,130,109, 0.5)',
+                'rgb(55,190,221, 0.5)',
+                'rgb(172,32,57, 0.5)',
+            ];
+
+            const data = {
+                labels: labels,
+                datasets: [
+                    {% for userName, points in pointHistory %}
+                    {
+                        label: '{{ userName }}',
+                        backgroundColor: lineColors[{{ loop.index0 }}],
+                        borderColor: lineColors[{{ loop.index0 }}],
+                        hidden: {{ (loop.index < 4  or userName == app.user.name) ? 'false' : 'true' }} ,
+                        data: [
+                            {% for point in points %}
+                            {{ point }},
+                            {% endfor %}
+                        ],
+                    },
+                    {% endfor %}
+                ]
+            };
+            const plugin = {
+                id: 'custom_canvas_background_color',
+                beforeDraw: (chart) => {
+                    const ctx = chart.canvas.getContext('2d');
+                    ctx.save();
+                    ctx.globalCompositeOperation = 'destination-over';
+                    ctx.fillStyle = 'rgb(0, 0, 0, 0.1)';
+                    ctx.fillRect(0, 0, chart.width, chart.height);
+                    ctx.restore();
+                }
+            };
+            const config = {
+                type: 'line',
+                data: data,
+                options: {
+                    maintainAspectRatio: false,
+                    color: 'white',
+                },
+                defaults: {
+                    color: '#FFF'
+                },
+                plugins: [plugin]
+            };
+
+        </script>
+    {% endblock %}
+{% endif %}
