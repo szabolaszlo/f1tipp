@@ -75,6 +75,10 @@ class PointSummaryChartRuntimeExtension implements RuntimeExtensionInterface
             }
         }
 
+        if (empty($pointHistory)) {
+            return '';
+        }
+
         return $this->twig->render("extension/point_summary_chart_js.html.twig", [
             'id' => 'point_summary_chart',
             'eventHistory' => $eventHistory,
