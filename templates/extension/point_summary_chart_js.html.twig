@@ -1,5 +1,4 @@
-{% if pointHistory %}
-    {% extends 'controller/module/base_module.html.twig' %}
+{% extends 'controller/module/base_module.html.twig' %}
     {% block body_content %}
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <div class="panel-body">
@@ -9,7 +8,8 @@
             <div class="text-center" style="padding: 10px">
                 <strong class="color-two text-center">A grafikonon az látható, hogyan alakulnak a pontjaink.
                     Alapértelmezetten a TOP 3 szerepel rajta
-                    és Te. A nevekre kattintva megjeleníthető vagy eltűntethető az adott tippelő pontgörbéje.</strong>
+                    és Te. A nevekre kattintva megjeleníthető vagy eltűntethető az adott tippelő
+                    pontgörbéje.</strong>
             </div>
         </div>
     {% endblock %}
@@ -97,4 +97,3 @@
 
         </script>
     {% endblock %}
-{% endif %}
