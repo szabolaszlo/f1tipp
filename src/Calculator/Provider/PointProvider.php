@@ -15,28 +15,17 @@ namespace App\Calculator\Provider;
 class PointProvider
 {
 
-    const PLACE_1 = 18;
-    const PLACE_2 = 13;
-    const PLACE_3 = 11;
-    const PLACE_4 = 8;
-    const PLACE_5 = 7;
-    const PLACE_6 = 6;
-    const PLACE_7 = 4;
+    const PLACE_1 = 14;
+    const PLACE_2 = 10;
+    const PLACE_3 = 8;
+    const PLACE_4 = 7;
+    const PLACE_5 = 6;
+    const PLACE_6 = 4;
+    const PLACE_7 = 3;
     const PLACE_8 = 2;
     const PLACE_9 = 1;
     const PLACE_10 = 0;
-/*
-    const PLACE_1 = 19;
-    const PLACE_2 = 13;
-    const PLACE_3 = 7;
-    const PLACE_4 = 5;
-    const PLACE_5 = 3;
-    const PLACE_6 = 2;
-    const PLACE_7 = 1;
-    const PLACE_8 = 0;
-    const PLACE_9 = 0;
-    const PLACE_10 = 0;
-*/
+
     protected $placePoints = array(
         1 => self::PLACE_1,
         2 => self::PLACE_2,
