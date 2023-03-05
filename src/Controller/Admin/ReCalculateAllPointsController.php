@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Cache\FileCache;
 use App\Calculator\Calculator;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -39,7 +40,7 @@ class ReCalculateAllPointsController extends AbstractController
      * @return RedirectResponse
      * @throws \Exception
      */
-    public function indexAction(Calculator $calculator, FileCache $fileCache)
+    public function indexAction(EntityManagerInterface $entityManager, Calculator $calculator, FileCache $fileCache)
     {
         $sql = '
         UPDATE bet SET point_summary = NULL;
@@ -49,53 +50,19 @@ class ReCalculateAllPointsController extends AbstractController
         TRUNCATE `trophy`;
         UPDATE `user` SET point_summary = NULL, point_difference = NULL, alternative_point_summary = NULL, alternative_point_difference = NULL;
                 ';
-        $stmt = $this->getDoctrine()->getConnection()->prepare($sql);
+        $stmt = $entityManager->getConnection()->prepare($sql);
         $stmt->execute();
-        $stmt->closeCursor();
+        $entityManager->getConnection()->close();
 
-        $this->getDoctrine()->getManager()->clear();
+        $entityManager->clear();
+        $entityManager->getCache()->evictEntityRegions();
 
         $calculator->calculate();
-
-        foreach ($this->cacheDirs as $cacheDir) {
-            $this->renameCacheDir($cacheDir);
-        }
-
-        foreach ($this->cacheDirs as $cacheDir) {
-            $this->removeCacheDir($cacheDir);
-        }
 
         $fileCache->clearAll();
 
         $this->addFlash('success', 'admin_maintenance_recalculete_points_success');
 
         return $this->redirect($this->generateUrl('app_admin_dashboard_index'));
-    }
-
-    /**
-     * @param $name
-     */
-    protected function renameCacheDir($name)
-    {
-        if (null === $this->fileSystem) {
-            $this->fileSystem = new Filesystem();
-        }
-
-        $this->fileSystem->rename(
-            $this->getParameter('kernel.cache_dir') . "/$name",
-            $this->getParameter('kernel.cache_dir') . "/$name" . "2"
-        );
-    }
-
-    /**
-     * @param $name
-     */
-    protected function removeCacheDir($name)
-    {
-        if (null === $this->fileSystem) {
-            $this->fileSystem = new Filesystem();
-        }
-
-        $this->fileSystem->remove($this->getParameter('kernel.cache_dir') . "/$name" . "2");
     }
 }
