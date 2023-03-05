@@ -185,5 +185,7 @@ class Event extends EntityRepository
         if (!$result) {
             return $lastResultedEvent;
         }
+
+        return $result;
     }
 }
