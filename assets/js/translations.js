@@ -8,8 +8,8 @@ export default {
             errorOnComponentLoad: 'Hiba történt a betöltésekor, próbáld később...',
             qualify: 'Időmérő',
             race: 'Futam',
-            sprintQualify: 'Sprint Kvalifikáció',
-            sprint_qualify: 'Sprint Kvalifikáció',
+            sprintQualify: 'Sprint Futam',
+            sprint_qualify: 'Sprint Futam',
         },
         rules: {
             title: 'Szabályzat'
