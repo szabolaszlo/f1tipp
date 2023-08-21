@@ -61,4 +61,45 @@ class Trophy extends EntityRepository
                 ->getQuery()
                 ->getSingleScalarResult() ?? 0;
     }
+
+    public function getTopWeekendUsers()
+    {
+        $resultCache = $this->_em->getConfiguration()->getResultCacheImpl();
+        $cacheKey = 'topWeekendUsers';
+
+        if ($resultCache->contains($cacheKey)) {
+            return $resultCache->fetch($cacheKey);
+        }
+
+        $result = $this->createQueryBuilder('topWeekendUsers')
+            ->setCacheable(true)
+            ->innerJoin('App:User', 'user', Join::WITH, 'topWeekendUsers.user = user.id AND user.isAlterChamps = 1')
+            ->where('topWeekendUsers.point > 0')
+            ->orderBy('topWeekendUsers.point', 'DESC')
+            ->getQuery()
+            ->getResult();
+
+        $pointsGroups = [];
+
+        foreach ($result as $trophy) {
+            $points = $trophy->getPoint();
+
+            if (!isset($pointsGroups[$points])) {
+                $pointsGroups[$points] = [];
+            }
+
+            $pointsGroups[$points][] = $trophy->getUser()->getName();
+        }
+
+        foreach ($pointsGroups as $points => $users) {
+            $pointsGroups[$points] = implode(', ', $users);
+        }
+
+        $pointsGroups = array_slice($pointsGroups, 0, 3, true);
+
+        $resultCache->save($cacheKey, $pointsGroups);
+
+        return $pointsGroups;
+    }
+
 }

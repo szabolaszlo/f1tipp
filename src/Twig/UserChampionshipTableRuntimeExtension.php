@@ -3,6 +3,7 @@
 namespace App\Twig;
 
 use App\Calculator\Provider\PointProvider;
+use App\Calculator\UserChampionshipOrderResolver\UserChampionshipOrderResolver;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
@@ -23,14 +24,18 @@ class UserChampionshipTableRuntimeExtension implements RuntimeExtensionInterface
      */
     protected Environment $twig;
 
+    protected UserChampionshipOrderResolver $userChampionshipOrderResolver;
+
     /**
      * @param EntityManagerInterface $entityManager
      * @param Environment $twig
+     * @param UserChampionshipOrderResolver $userChampionshipOrderResolver
      */
-    public function __construct(EntityManagerInterface $entityManager, Environment $twig)
+    public function __construct(EntityManagerInterface $entityManager, Environment $twig, UserChampionshipOrderResolver $userChampionshipOrderResolver)
     {
         $this->entityManager = $entityManager;
         $this->twig = $twig;
+        $this->userChampionshipOrderResolver = $userChampionshipOrderResolver;
     }
 
     /**
@@ -44,12 +49,12 @@ class UserChampionshipTableRuntimeExtension implements RuntimeExtensionInterface
             'extension/user_championship.html.twig',
             [
                 'users' => $this
-                    ->entityManager
-                    ->getRepository('App\Entity\User')
-                    ->getAlternativeChampionshipUsers(),
+                    ->userChampionshipOrderResolver
+                    ->getUserChampionShipOrder(),
                 'records' => [
                     'qualify_bets' => $this->entityManager->getRepository('App:Bet')->getTopQualifyBets(),
-                    'race_bets' => $this->entityManager->getRepository('App:Bet')->getTopRaceBets()
+                    'race_bets' => $this->entityManager->getRepository('App:Bet')->getTopRaceBets(),
+                    'weekend_bets' => $this->entityManager->getRepository('App:Trophy')->getTopWeekendUsers()
                 ],
                 'maths' => [
                     'remaining_weekends' => $this->entityManager->getRepository('App:Race')->getRemainEvents()

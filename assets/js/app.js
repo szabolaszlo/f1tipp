@@ -14,11 +14,12 @@ require('bootstrap');
 
 function refreshOnlineUsers() {
     $.getJSON("/get_online_user", function (data) {
-        $('.user-activity').each(function () {
-            $(this).empty();
-        });
+        // Először reseteljük az összes user-activity elem színét
+        $('.user-activity').css('background-color', 'transparent');
+
         $.each(data, function (key, val) {
-            $('.user-' + val).append('<span class="glyphicon glyphicon-eye-open" aria-hidden="true" title="Online" style="color: yellow; font-size: 1.1em;"></span>');
+            // Itt csak a színt fogjuk változtatni
+            $('.user-' + val).css('background-color', 'green');
         });
     });
 }
