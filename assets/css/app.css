@@ -395,17 +395,53 @@ a.feed_source {
 }
 
 .user-championship-trophy {
-    padding-left: 4px;
-    padding-right: 4px;
+    display: inline-block;
+    position: relative;
+    text-align: center;
 }
 
 .user-championship-trophy-image {
+    display: block;
     height: 18px;
 }
 
 .user-championship-trophy-number {
     color: black;
     font-weight: bold;
-    margin-left: -16px;
-    vertical-align: top;
+    position: absolute;
+    top: 40%; /* A szám felső sarka a középponthoz igazítva */
+    left: 50%; /* A szám bal sarka a középponthoz igazítva */
+    transform: translate(-50%, -50%); /* A szám közepére igazítása a középpontban */
+}
+
+.user-container {
+    display: inline-block;
+    position: relative;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+.online-dot {
+    position: absolute;
+    top: 25%;
+    right: -15px;
+    width: 10px;
+    height: 10px;
+    background-color: transparent;
+    border-radius: 50%;
+}
+.online-dot-meaning {
+    margin-left: 10px;
+    width: 10px;
+    height: 10px;
+    background-color: green;
+    border-radius: 50%;
+}
+
+.has-checkered-flag {
+    position: absolute;
+    top: 0%;
+    right: -30px;
+    width: 10px;
+    height: 10px;
 }

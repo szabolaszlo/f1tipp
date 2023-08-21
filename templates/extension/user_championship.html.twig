@@ -1,25 +1,27 @@
 {% extends 'controller/module/base_module.html.twig' %}
 {% block body_content %}
     <div class="panel-body center-block">
-        <div class="table-responsive center-block">
+        <div class="center-block">
             <table class="table table-striped">
                 <tbody>
                 {% for user in users %}
                     {% set podiumTrophies = user.getPodiumTrophies() %}
                     <tr>
-                        <td class="text-center user-activity user-{{ user.getName() }}">
-                            <span class="glyphicon glyphicon-flag"
-                                  aria-hidden="true" title="Online"
-                                  style="color: transparent; font-size: 1.1em;">
-                            </span>
+                        <td class="text-right">
+                            <strong class="color-one">{{ loop.index }}.</strong>
                         </td>
                         <td>
-                            {% if user.alternativePointDifference() > maths.remaining_weekends|length * pointProvider.placePoint(1) %}
-                                <span title="{{ (id ~ '_checkered_flag')|trans }}">
-                                        <img src="{{ asset('build/images/checkered-flag.png') }}" height="18">
-                                </span>
-                            {% endif %}
-                            <strong>{{ user.getName() }}</strong>
+                            <div class="user-container">
+                                <strong>{{ user.getName() }}</strong>
+                                <div class="user-activity user-{{ user.getName() }} online-dot" title="online"></div>
+                                <div class="has-checkered-flag" title="{{ (id ~ '_checkered_flag')|trans }}">
+                                    {% if user.alternativePointDifference() > maths.remaining_weekends|length * pointProvider.placePoint(1) %}
+                                        <img src="{{ asset('build/images/checkered-flag.png') }}"
+                                             height="18"
+                                        >
+                                    {% endif %}
+                                </div>
+                            </div>
                         </td>
                         <td>
                             {% for type, trophies in podiumTrophies %}
@@ -39,6 +41,32 @@
                         </td>
                     </tr>
                 {% endfor %}
+                <tr>
+                    <td colspan="5" style="padding: 10px;">
+                        <span class="small color-two">Pontegyenlőség esetén a több arany kupát szerző játékos végez előrébb. Amennyiben az egyenlő, akkor az ezüst, majd a bronz kupák száma dönt.</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-right" style="vertical-align: middle;">
+                        <div class="online-dot-meaning"></div>
+                    </td>
+                    <td colspan="3">
+                        <span class="small color-two">A felhasználó éppen online</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-center" style="vertical-align: middle;">
+                        <img alt="" src="{{ asset('build/images/checkered-flag.png') }}" height="18">
+                    </td>
+                    <td colspan="4">
+                        <span class="small color-two">Az adott felhasználónak sajnos már nincs matematikai esélye a győzelemre, de a többi helyezésért még természetesen versenyezhet</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="5">
+                        <div class="divider"></div>
+                    </td>
+                </tr>
                 </tbody>
             </table>
             <table class="table table-striped border-primary">
@@ -70,10 +98,10 @@
                                 <strong class="color-one">{{ (id ~ '_best_of_' ~ key)|trans }}</strong>
                             </td>
                         </tr>
-                        {% for bet in record %}
+                        {% for point, name in record %}
                             <tr class="text-center">
-                                <td><strong>{{ bet.user.getName() }}</strong></td>
-                                <td><strong class="color-one">{{ bet.getPointSummary() }}</strong></td>
+                                <td><strong>{{ name }}</strong></td>
+                                <td><strong class="color-one">{{ point }}</strong></td>
                             </tr>
                         {% endfor %}
                     {% endif %}

@@ -98,13 +98,30 @@ class Bet extends EntityRepository
             ->innerJoin('App:User', 'user', Join::WITH, 'topRaceBet.user_id = user.id AND user.isAlterChamps = 1')
             ->where('topRaceBet.pointSummary > 0')
             ->orderBy('topRaceBet.pointSummary', 'DESC')
-            ->setMaxResults(3)
             ->getQuery()
             ->getResult();
 
-        $resultCache->save($cacheKey, $result);
+        $pointsGroups = [];
 
-        return $result;
+        foreach ($result as $user) {
+            $points = $user->getPointSummary();
+
+            if (!isset($pointsGroups[$points])) {
+                $pointsGroups[$points] = [];
+            }
+
+            $pointsGroups[$points][] = $user->getUser()->getName();
+        }
+
+        foreach ($pointsGroups as $points => $users) {
+            $pointsGroups[$points] = implode(', ', $users);
+        }
+
+        $pointsGroups = array_slice($pointsGroups, 0, 3, true);
+
+        $resultCache->save($cacheKey, $pointsGroups);
+
+        return $pointsGroups;
     }
 
     /**
@@ -125,13 +142,30 @@ class Bet extends EntityRepository
             ->innerJoin('App:User', 'user', Join::WITH, 'topQualifyBet.user_id = user.id AND user.isAlterChamps = 1')
             ->where('topQualifyBet.pointSummary > 0')
             ->orderBy('topQualifyBet.pointSummary', 'DESC')
-            ->setMaxResults(3)
             ->getQuery()
             ->getResult();
 
-        $resultCache->save($cacheKey, $result);
+        $pointsGroups = [];
 
-        return $result;
+        foreach ($result as $user) {
+            $points = $user->getPointSummary();
+
+            if (!isset($pointsGroups[$points])) {
+                $pointsGroups[$points] = [];
+            }
+
+            $pointsGroups[$points][] = $user->getUser()->getName();
+        }
+
+        foreach ($pointsGroups as $points => $users) {
+            $pointsGroups[$points] = implode(', ', $users);
+        }
+
+        $pointsGroups = array_slice($pointsGroups, 0, 3, true);
+
+        $resultCache->save($cacheKey, $pointsGroups);
+
+        return $pointsGroups;
     }
 
     /**

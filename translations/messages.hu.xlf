@@ -84,6 +84,7 @@
       <trans-unit id="result_p9"><source>result_p9</source><target>9.</target></trans-unit>
       <trans-unit id="result_p10"><source>result_p10</source><target>10.</target></trans-unit>
       <trans-unit id="result_sc"><source>result_sc</source><target>SC</target></trans-unit>
+      <trans-unit id="userChampionship_best_of_weekend_bets"><source>userChampionship_best_of_weekend_bets</source><target>Hétvégék Legjobbjai (TOP 3):</target></trans-unit>
       <trans-unit id="result_betting_user"><source>result_betting_user</source><target>Tippesek: </target></trans-unit>
       <trans-unit id="result_of_weekend"><source>result_of_weekend</source><target>Teljes hétvége eredménye</target></trans-unit>
       <trans-unit id="result_betting_nobody"><source>result_betting_nobody</source><target>Még senki sem tippelt.</target></trans-unit>
