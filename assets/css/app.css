@@ -409,7 +409,7 @@ a.feed_source {
     color: black;
     font-weight: bold;
     position: absolute;
-    top: 40%; /* A szám felső sarka a középponthoz igazítva */
+    top: 7px; /* A szám felső sarka a középponthoz igazítva */
     left: 50%; /* A szám bal sarka a középponthoz igazítva */
     transform: translate(-50%, -50%); /* A szám közepére igazítása a középpontban */
 }
