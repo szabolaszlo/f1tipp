@@ -25,6 +25,6 @@ function refreshOnlineUsers() {
 }
 
 $(document).ready(function () {
-    setTimeout(refreshOnlineUsers, 3000);
+    setTimeout(refreshOnlineUsers, 1000);
     setInterval(refreshOnlineUsers, 20000);
 });
