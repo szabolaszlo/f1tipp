@@ -22,6 +22,7 @@ import zho from "@images/drivers/zho.png"
 import pia from "@images/drivers/pia.png"
 import sar from "@images/drivers/sar.png"
 import dev from "@images/drivers/dev.png"
+import law from "@images/drivers/law.png"
 
 const DriverImages = {
     ver: ver,
@@ -48,6 +49,7 @@ const DriverImages = {
     pia: pia,
     sar: sar,
     dev: dev,
+    law: law,
     igen: false,
     nem: false
 }
