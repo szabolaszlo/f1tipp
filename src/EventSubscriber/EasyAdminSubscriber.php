@@ -103,6 +103,9 @@ class EasyAdminSubscriber implements EventSubscriberInterface
         }
         $this->calculator->calculate();
 
+        $resultCache = $this->em->getConfiguration()->getResultCacheImpl();
+        $resultCache->delete('userChampionshipTrophyAwareOrder');
+
         $this->flashBag->add('success', 'flash_calculate');
     }
 
@@ -132,6 +135,9 @@ class EasyAdminSubscriber implements EventSubscriberInterface
         $this->calculator->calculate();
 
         $this->fileCache->clearAll();
+
+        $resultCache = $this->em->getConfiguration()->getResultCacheImpl();
+        $resultCache->delete('userChampionshipTrophyAwareOrder');
 
         $this->flashBag->add('success', 'flash_re_calculate');
     }
