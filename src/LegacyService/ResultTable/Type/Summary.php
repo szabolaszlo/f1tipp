@@ -30,7 +30,10 @@ class Summary extends ATableType
     {
         $data['result'] = $this->em->getRepository('App:AlternativeChampionship')->findBy(
             ['race' => $event->getId()],
-            ['points'=>'DESC']
+            [
+                'points' => 'DESC',
+                'collectedPoints' => 'DESC',
+            ]
         );
 
 
