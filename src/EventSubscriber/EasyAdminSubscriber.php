@@ -105,6 +105,9 @@ class EasyAdminSubscriber implements EventSubscriberInterface
 
         $resultCache = $this->em->getConfiguration()->getResultCacheImpl();
         $resultCache->delete('userChampionshipTrophyAwareOrder');
+        $resultCache->delete('AppEntityEventRemain');
+        $resultCache->delete('AppEntityQualifyRemain');
+        $resultCache->delete('AppEntityRaceRemain');
 
         $this->flashBag->add('success', 'flash_calculate');
     }
