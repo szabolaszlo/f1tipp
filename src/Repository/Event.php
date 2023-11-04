@@ -114,7 +114,7 @@ class Event extends EntityRepository
         }
 
         $date = new \DateTime();
-        $date->sub(new \DateInterval('PT2H'));
+        $date->sub(new \DateInterval('PT1H'));
 
         $remainEvents = $this->createQueryBuilder('e')
             ->where('e.date_time > :time')
@@ -126,7 +126,7 @@ class Event extends EntityRepository
             $resultCache->save(
                 $cacheKey,
                 $remainEvents,
-                strtotime('+2 hours', $remainEvents[0]->getDateTime()->getTimeStamp()) - time()
+                strtotime('+5 hours', $remainEvents[0]->getDateTime()->getTimeStamp()) - time()
             );
         }
         return $remainEvents;
