@@ -15,13 +15,13 @@ namespace App\Calculator\Provider;
 class PointProvider
 {
 
-    const PLACE_1 = 15;
-    const PLACE_2 = 11;
-    const PLACE_3 = 9;
-    const PLACE_4 = 7;
-    const PLACE_5 = 6;
+    const PLACE_1 = 16;
+    const PLACE_2 = 12;
+    const PLACE_3 = 10;
+    const PLACE_4 = 8;
+    const PLACE_5 = 7;
     const PLACE_6 = 5;
-    const PLACE_7 = 3;
+    const PLACE_7 = 4;
     const PLACE_8 = 2;
     const PLACE_9 = 1;
     const PLACE_10 = 0;
