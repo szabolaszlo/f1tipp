@@ -170,7 +170,9 @@ class Event extends EntityRepository
             ->getOneOrNullResult(AbstractQuery::HYDRATE_OBJECT);
 
         if (!$lastResultedEvent) {
-            return $this->findOneBy(['id' => 1]);
+            $firstRecord = $this->findBy([], ['id' => 'ASC'], 1);
+
+            return $firstRecord ? reset($firstRecord) : null;
         }
 
         $result = $this->createQueryBuilder('event')
