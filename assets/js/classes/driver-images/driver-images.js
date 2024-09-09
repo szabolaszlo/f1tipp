@@ -23,6 +23,8 @@ import pia from "@images/drivers/pia.png"
 import sar from "@images/drivers/sar.png"
 import dev from "@images/drivers/dev.png"
 import law from "@images/drivers/law.png"
+import bea from "@images/drivers/bea.png"
+import col from "@images/drivers/col.png"
 
 const DriverImages = {
     ver: ver,
@@ -50,6 +52,8 @@ const DriverImages = {
     sar: sar,
     dev: dev,
     law: law,
+    col: col,
+    bea: bea,
     igen: false,
     nem: false
 }
