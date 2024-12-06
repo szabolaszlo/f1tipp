@@ -25,6 +25,7 @@ import dev from "@images/drivers/dev.png"
 import law from "@images/drivers/law.png"
 import bea from "@images/drivers/bea.png"
 import col from "@images/drivers/col.png"
+import doo from "@images/drivers/doo.png"
 
 const DriverImages = {
     ver: ver,
@@ -54,6 +55,7 @@ const DriverImages = {
     law: law,
     col: col,
     bea: bea,
+    doo: doo,
     igen: false,
     nem: false
 }
