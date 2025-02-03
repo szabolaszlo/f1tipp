@@ -83,6 +83,11 @@ class User implements UserInterface
     private $alternativePointDifference;
 
     /**
+     * @ORM\Column(type="string", length=256, nullable=true)
+     */
+    private $email;
+
+    /**
      * @return mixed
      */
     public function getId()

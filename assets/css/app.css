@@ -135,6 +135,62 @@ fieldset[disabled] .btn-new.active {
     background-color: var(--f1-tipp-color-6);
 }
 
+.btn-google {
+    /* Elrendezés: horizontálisan középre,
+       kis margó, kicsit lekerekítve, fehér háttér */
+    display: inline-flex;           /* ikon + szöveg egymás mellett */
+    align-items: center;            /* ikon és szöveg függőlegesen középen */
+    justify-content: center;        /* ha szélesebb lesz a gomb, középre igazítja a tartalmat */
+    background-color: #fff;         /* fehér háttér */
+    color: #444;                    /* sötétszürke szöveg (fekete helyett) */
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;                /* Google-dizájnban kb. 14px */
+    line-height: 1.2;
+    border: 1px solid #dadce0;      /* világos szürke keret */
+    border-radius: 4px;             /* enyhén lekerekített sarkok */
+    height: 40px;                   /* a hivatalos gomb kb. 40px magas szokott lenni */
+    padding: 0 24px;                /* jobb-bal oldalon egy kis belső margó */
+    cursor: pointer;                /* egér kurzor */
+    user-select: none;              /* ne lehessen kijelölni a gomb szövegét */
+    outline: none;                  /* alapértelmezett outline elrejtése focusnál (ha úgy kívánod) */
+    transition: box-shadow 0.1s ease-in-out;
+}
+
+/* A logó a gomb bal oldalán, jobb oldalon egy kis margóval */
+.google-icon {
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+}
+
+/* A gomb felirata, ha külön akarod stilizálni (opcionális) */
+.google-text {
+    white-space: nowrap;  /* ne tördelődjön több sorba */
+}
+
+/* Hover és fókusz hatás: enyhe árnyék, világosabb/sötétebb változat */
+.btn-google:hover {
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.btn-google:focus {
+    box-shadow: 0 1px 4px rgba(66, 133, 244, 0.4);
+}
+
+/* Aktív állapot (kattintás közben) */
+.btn-google:active {
+    background-color: #eee;
+    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Disabled állapot (ha valamiért inaktív a gomb) */
+.btn-google:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+
 .btn {
     border-radius: 5px;
 }

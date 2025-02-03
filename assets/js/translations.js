@@ -1,5 +1,15 @@
 export default {
     hu: {
+        login: {
+            title: 'Bejelentkezés',
+            userName: 'Fehasználónév',
+            login: 'Bejelentkezés',
+            account: 'Fiókom',
+            greeting: 'Üdvözöllek',
+            logout: 'Kijelentkezés',
+            loginViaGoogle: 'Bejelentkezés Google fiókkal',
+            password: 'Jelszó',
+        },
         calendar: {
             title: 'Naptár',
             onlyRemaining: 'Csak Hátralévők'

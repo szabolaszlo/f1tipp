@@ -4,17 +4,23 @@
       <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
-          <button id="hambi-button" type="button" class="navbar-toggle" data-toggle="collapse"
-                  data-target="#f1tipp-navbar-collapse">
+          <button id="hambi-button" class="navbar-toggle" data-target="#f1tipp-navbar-collapse" data-toggle="collapse"
+                  type="button">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/#/actual"><img src="@images/logo.png" height="50" alt=""></a>
+          <a class="navbar-brand" href="/#/actual"><img alt="" height="50" src="@images/logo.png"></a>
+          <div class="nav navbar-nav navbar-right pull-right visible-xs" style="padding-right: 20px;">
+            <router-link to="/login" class="btn btn-new">
+              <i class="glyphicon glyphicon-user"></i>
+              {{ getUserName() ? getUserName() : $t('login.title') }}
+            </router-link>
+          </div>
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="f1tipp-navbar-collapse">
+        <div id="f1tipp-navbar-collapse" class="collapse navbar-collapse">
           <ul class="nav navbar-nav navbar-left">
             <li>
               <router-link to="/betting" @click="routerLinkClicked()">{{ $t('betting.title') }}</router-link>
@@ -35,7 +41,14 @@
               <router-link to="/statistics" @click="routerLinkClicked()">{{ $t('statistics.title') }}</router-link>
             </li>
           </ul>
-          <Login></Login>
+          <ul class="nav navbar-nav navbar-right">
+            <li>
+              <router-link to="/login" @click="routerLinkClicked()">
+                <i class="glyphicon glyphicon-user"></i>
+                {{ getUserName() ? getUserName() : $t('login.title') }}
+              </router-link>
+            </li>
+          </ul>
         </div>
         <!-- /.navbar-collapse -->
       </div>
@@ -50,6 +63,9 @@ import Login from "./Login";
 export default {
   components: {Login: Login},
   methods: {
+    getUserName() {
+      return localStorage.getItem('f1tipp_username') || '';
+    },
     routerLinkClicked: function () {
       window.scrollTo(0, 0);
       let navBarButton = document.getElementById("hambi-button");

@@ -10,7 +10,9 @@
 namespace App\Controller\Module;
 
 use App\Entity\User;
+use League\OAuth2\Client\Provider\Google;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -24,22 +26,50 @@ class LoginController extends AbstractController
     /**
      * @Route("/login", name="app_login")
      * @param AuthenticationUtils $authenticationUtils
-     * @return string|Response
+     * @return JsonResponse
      */
-    public function indexAction(AuthenticationUtils $authenticationUtils)
+    public function indexAction(AuthenticationUtils $authenticationUtils): JsonResponse
     {
         /** @var User $loggedUser */
         $loggedUser = $this->getUser();
 
         if ($loggedUser) {
-            return $this->render('controller/module/logged.html.twig', ['name' => $loggedUser->getName()]);
+            return $this->json([]);
         }
 
-        $data['error'] = $authenticationUtils->getLastAuthenticationError();
+        $exception = $authenticationUtils->getLastAuthenticationError();
 
-        $data['last_username'] = $authenticationUtils->getLastUsername();
+        return $this->json(
+            ['error' => $exception ? get_class($exception) : ''],
+            401
+        );
+    }
 
-        return $this->render('controller/module/login.html.twig', $data);
+    /**
+     * @Route("is_logged", name="is_logged")
+     */
+    public function isLoggedAction(): JsonResponse
+    {
+        return $this->json([], $this->getUser() ? 200 : 401);
+    }
+
+    /**
+     * @Route("get_google_oauth_url", name="get_google_oauth_url")
+     */
+    public function getGoogleAuthLinkAction(Google $google): JsonResponse
+    {
+        return $this->json(
+            ['google_oauth_link' => $google->getAuthorizationUrl()]
+        );
+    }
+
+    /**
+     * @Route ("auth/google", name="auth_google")
+     * @return Response
+     */
+    public function authGoogleAction()
+    {
+        throw new \LogicException('All google authentication should be handled in GoogleAuthenticator.');
     }
 
     /**
