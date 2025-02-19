@@ -68,6 +68,6 @@ class GoogleAuthenticator extends AbstractAuthenticator
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
-        return new RedirectResponse('/#/login?' . $exception->getMessage());
+        return new RedirectResponse('/#/login?error=1');
     }
 }

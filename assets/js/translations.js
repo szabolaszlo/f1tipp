@@ -8,6 +8,7 @@ export default {
             greeting: 'Üdvözöllek',
             logout: 'Kijelentkezés',
             loginViaGoogle: 'Bejelentkezés Google fiókkal',
+            loginErrorViaGoogle: 'Az email címed nem található a rendszerben, kérlek az adminnal vedd fel a kapcsolatot!',
             password: 'Jelszó',
         },
         calendar: {

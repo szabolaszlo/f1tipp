@@ -138,6 +138,7 @@ export default {
           .get('/is_logged')
           .then(response => {
             this.isLoggedUser = true;
+            this.$router.push({name: 'Actual'});
           })
           .catch(error => {
             this.csrfToken = localStorage.getItem('f1tipp_csrf_token') || '';
@@ -145,6 +146,9 @@ export default {
           .finally(() => {
             this.componentLoading = false;
           });
+      if(this.$route.query.error !== undefined) {
+        this.errorMessage = this.$t('login.loginErrorViaGoogle');
+      }
     },
     login() {
       this.loginLoading = true;
@@ -157,12 +161,10 @@ export default {
             _remember_me: 1
           })
           .then(response => {
-            // Sikeres login után pl. navigálhatsz, vagy session tárolás
             this.loading = false;
-            location.reload();
+            location.href = '/';
           })
           .catch(error => {
-            // Sikertelen bejelentkezés kezelése
             this.loading = false;
             this.errorMessage = error.response?.data?.error || error.message;
           })

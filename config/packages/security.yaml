@@ -21,6 +21,7 @@ security:
         main:
             json_login:
                 check_path: app_login
+                remember_me: true
             #guard:
             #    authenticators:
             #        - App\Security\LoginFormAuthenticator
@@ -28,10 +29,10 @@ security:
                 - App\Security\GoogleAuthenticator
             logout:
                 path: app_logout
-            #remember_me:
-            #    secret:   '%kernel.secret%'
-            #    lifetime: 1209600 # 1 week in seconds
-            #    path:     /
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 1209600       # pl. 2 hét másodpercben
+                always_remember_me: true # Ha mindig legyen "remember me", checkbox nélkül
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
