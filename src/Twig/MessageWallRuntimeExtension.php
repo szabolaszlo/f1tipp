@@ -2,6 +2,7 @@
 
 namespace App\Twig;
 
+use App\Entity\Message;
 use Doctrine\ORM\EntityManagerInterface;
 use Twig\Environment;
 use Twig\Error\LoaderError;
@@ -45,7 +46,7 @@ class MessageWallRuntimeExtension implements RuntimeExtensionInterface
                 'controller/module/message_wall/message_wall.html.twig',
                 [
                     'id' => 'messageWall',
-                    'messages' => $this->entityManager->getRepository('App:Message')->getMessages()
+                    'messages' => $this->entityManager->getRepository(Message::class)->getMessages()
                 ]
             );
         } else {

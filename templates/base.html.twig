@@ -27,6 +27,12 @@
             gtag('js', new Date());
 
             gtag('config', '{{ ga4_measurement_id }}');
+
+            const csrfToken = '{{ csrf_token('authenticate') }}';
+                // Ezt betesszük a localStorage-be:
+            localStorage.setItem('f1tipp_csrf_token', csrfToken);
+            localStorage.setItem('f1tipp_username', '{{ app.user ? app.user.getUserName : '' }}');
+            localStorage.setItem('f1tipp_google_login_url', '{{ app.user ? app.user.getUserName : '' }}');
         </script>
         <style>
             body {
