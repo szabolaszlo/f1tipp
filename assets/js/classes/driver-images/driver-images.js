@@ -25,7 +25,7 @@ import dev from "@images/drivers/dev.png"
 import law from "@images/drivers/law.png"
 import bea from "@images/drivers/bea.png"
 import col from "@images/drivers/col.png"
-import doo from "@images/drivers/doo.png"
+import doh from "@images/drivers/doo.png"
 import had from "@images/drivers/had.png"
 import ant from "@images/drivers/ant.png"
 import bor from "@images/drivers/bor.png"
@@ -59,7 +59,7 @@ const DriverImages = {
     law: law,
     col: col,
     bea: bea,
-    doo: doo,
+    doh: doh,
     had: had,
     ant: ant,
     bor: bor,
