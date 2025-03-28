@@ -10,6 +10,7 @@
 namespace App\Controller\Module;
 
 use App\Cache\FileCache;
+use GuzzleHttp\Client;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -22,11 +23,10 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ResultsOfChampionshipController extends AbstractController
 {
-    const DRIVER_JSON_PATH = "http://ergast.com/api/f1/current/driverStandings.json";
-
-    const CONSTRUCT_JSON_PATH = "http://ergast.com/api/f1/current/constructorStandings.json";
-
     const RESULTS_CACHE_KEY = 'result_of_championship';
+    const DRIVER_URL = 'https://api-formula-1.p.rapidapi.com/rankings/drivers?season=2025';
+    const CONSTRUCT_URL = 'https://api-formula-1.p.rapidapi.com/rankings/teams?season=2025';
+    const API_HOST = 'api-formula-1.p.rapidapi.com';
 
     /**
      * @Route("module/championship_result", name="championship_result", methods={"GET"})
@@ -66,31 +66,64 @@ class ResultsOfChampionshipController extends AbstractController
      */
     protected function getResults(FileCache $cache)
     {
-        $driverResponse = json_decode(file_get_contents(self::DRIVER_JSON_PATH), true);
+        $client = new Client();
 
-        $constructResponse = json_decode(file_get_contents(self::CONSTRUCT_JSON_PATH), true);
+        $response = $client->request('GET', self::DRIVER_URL, [
+            'headers' => [
+                'x-rapidapi-host' => self::API_HOST,
+                'x-rapidapi-key' => $_ENV['RAPIDAPI_KEY'],
+            ],
+        ]);
 
-        $round = $driverResponse['MRData']['StandingsTable']['StandingsLists'][0]['round'];
+        $responseData = json_decode($response->getBody(), true);
 
-        $data['event'] = $this->getEvent($round);
+        $driverStandings = [];
 
-        $data['driverStandings'] =
-            $driverResponse['MRData']['StandingsTable']['StandingsLists'][0]['DriverStandings'];
+        foreach ($responseData['response'] as $item) {
+            $driverStandings[] = [
+                'position' => $item['position'],
+                'points' => $item['points'],
+                'wins' => $item['wins'],
+                'Driver' => [
+                    'driverId' => $item['driver']['id'],
+                    'givenName' => explode(' ', $item['driver']['name'])[0],
+                    'familyName' => implode(' ', array_slice(explode(' ', $item['driver']['name']), 1)),
+                    'code' => $item['driver']['abbr'],
+                    'permanentNumber' => $item['driver']['number'],
+                    'image' => $item['driver']['image'],
+                ]
+            ];
+        }
 
-        $data['constructStandings'] =
-            $constructResponse['MRData']['StandingsTable']['StandingsLists'][0]['ConstructorStandings'];
+        $constructStandings = [];
+
+        $response = $client->request('GET', self::CONSTRUCT_URL, [
+            'headers' => [
+                'x-rapidapi-host' => self::API_HOST,
+                'x-rapidapi-key' => $_ENV['RAPIDAPI_KEY'],
+            ],
+        ]);
+
+        $responseData = json_decode($response->getBody(), true);
+
+        foreach ($responseData['response'] as $item) {
+            $constructStandings[] = [
+                'position' => $item['position'],
+                'points' => $item['points'],
+                'Constructor' => [
+                    'name' => $item['team']['name'],
+                ]
+            ];
+        }
+
+        $data = [
+            'event' => 1,
+            'driverStandings' => $driverStandings,
+            'constructStandings' => $constructStandings,
+        ];
 
         $cache->save(self::RESULTS_CACHE_KEY, $data);
 
         return $data;
-    }
-
-    private function getEvent($round)
-    {
-        $events = $this->getDoctrine()
-            ->getRepository('App\Entity\Race')
-            ->findAll();
-
-        return $events[$round - 1];
     }
 }

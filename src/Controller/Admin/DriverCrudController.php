@@ -13,6 +13,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use GuzzleHttp\Client;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -83,13 +84,39 @@ class DriverCrudController extends AbstractCrudController
      */
     public function syncDriverPoints(Request $request): RedirectResponse
     {
-        $response = json_decode(file_get_contents(ResultsOfChampionshipController::DRIVER_JSON_PATH), true);
+        $client = new Client();
 
-        $standings = $response['MRData']['StandingsTable']['StandingsLists'][0]['DriverStandings'];
+        $response = $client->request('GET', ResultsOfChampionshipController::DRIVER_URL, [
+            'headers' => [
+                'x-rapidapi-host' => ResultsOfChampionshipController::API_HOST,
+                'x-rapidapi-key' => $_ENV['RAPIDAPI_KEY'],
+            ],
+        ]);
 
-        foreach ($standings as $standing) {
+        $responseData = json_decode($response->getBody(), true);
+
+        $driverStandings = [];
+
+        foreach ($responseData['response'] as $item) {
+            $driverStandings[] = [
+                'position' => $item['position'],
+                'points' => $item['points'],
+                'wins' => $item['wins'],
+                'Driver' => [
+                    'driverId' => $item['driver']['id'],
+                    'givenName' => explode(' ', $item['driver']['name'])[0],
+                    'familyName' => implode(' ', array_slice(explode(' ', $item['driver']['name']), 1)),
+                    'code' => $item['driver']['abbr'],
+                    'permanentNumber' => $item['driver']['number'],
+                    'image' => $item['driver']['image'],
+                ]
+            ];
+        }
+
+        foreach ($driverStandings as $standing) {
             $point = $standing['points'];
             $driverShort = $standing['Driver']['code'];
+            $driverName = $standing['Driver']['givenName'] . ' ' . $standing['Driver']['familyName'];
 
             $driverEntity = $this->doctrine
                 ->getRepository('App\Entity\Driver')
@@ -98,6 +125,14 @@ class DriverCrudController extends AbstractCrudController
             if ($driverEntity) {
                 $driverEntity->setPoint($point);
                 $this->doctrine->getManager()->persist($driverEntity);
+            } else {
+                $driverEntity = $this->doctrine
+                    ->getRepository('App\Entity\Driver')
+                    ->findOneBy(array('name' => $driverName));
+                if ($driverEntity) {
+                    $driverEntity->setPoint($point);
+                    $this->doctrine->getManager()->persist($driverEntity);
+                }
             }
         }
 

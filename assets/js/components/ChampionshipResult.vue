@@ -49,7 +49,6 @@
                   <th></th>
                   <th>{{ $t('championshipResult.construct') }}</th>
                   <th>{{ $t('championshipResult.point') }}</th>
-                  <th>{{ $t('championshipResult.wins') }}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -58,7 +57,6 @@
                     <td></td>
                     <td><strong>{{ construct.Constructor.name }}</strong></td>
                     <td><strong class="color-one">{{ construct.points }}</strong></td>
-                    <td><strong class="color-two">{{ construct.wins }}</strong></td>
                   </tr>
                 </template>
                 </tbody>
