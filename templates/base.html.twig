@@ -51,62 +51,10 @@
     {{ encore_entry_script_tags('main') }}
 {% endblock %}
 
-{% block navigation %}
-    <div id="navigation"></div>
-{% endblock %}
-
-<!-- Page Content -->
-<div class="container-fluid">
-
-    <div class="row">
-
-        <!-- Content Column -->
-        <div class="col-1 col-lg-1 col-md-1"></div>
-        <div class="col-7 col-lg-7 col-md-7">
-            {% block body %}{% endblock %}
-            <div class="visible-lg visible-md visible-sm">
-                <div id="news"></div>
-            </div>
-        </div>
-
-        <!-- Sidebar Widgets Column -->
-        <div class="col-3 col-lg-3 col-md-3">
-            <div class="reload-able-module"
-                 data-module-route="trophies"
-                 data-module-entities='{"0": "trophies"}'
-                 data-module-count="-1">
-                {{ trophyExtension() }}
-            </div>
-            <div class="reload-able-module"
-                 data-module-route="user_championship"
-                 data-module-entities='{"0": "results"}'
-                 data-module-count="-1">
-                {{ userChampionshipTableExtension() }}
-            </div>
-            {{ prizeDrawExtension(app.user ? 1 : 0) }}
-            {{ pointCalculatingInfoExtension(app.user ? 1 : 0) }}
-            <div class="visible-xs">
-                <div id="news-on-mobile"></div>
-            </div>
-            <div id="championship-result"></div>
-        </div>
-        <div class="col-1 col-lg-1 col-md-1"></div>
-    </div>
-    <hr>
-
-    <!-- Footer -->
-    <footer>
-        <div class="row">
-            <div class="col-lg-12">
-                <p class="color-two">{{ 'app_creator'|trans }}</p>
-            </div>
-        </div>
-        <!-- /.row -->
-    </footer>
-
-</div>
-<!-- /.container -->
+<!-- Single Vue App Mount Point -->
+<div id="app"></div>
 
 </body>
 
 </html>
+

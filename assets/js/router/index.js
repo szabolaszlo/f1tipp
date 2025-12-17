@@ -1,6 +1,4 @@
-import {createRouter} from 'vue-router'
-import {createWebHashHistory} from 'vue-router'
-import {createApp} from 'vue'
+import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
     {
@@ -41,27 +39,26 @@ const routes = [
     {
         path: '/login',
         name: 'Login',
-        component: () => import(/* webpackChunkName: "trophies" */ '../components/Login.vue')
+        component: () => import(/* webpackChunkName: "login" */ '../components/Login.vue')
     },
     {
-        path: "/",
-        redirect: "/actual",
+        path: '/',
+        redirect: '/actual',
+    },
+    {
+        // Catch-all route for SPA - redirect unknown routes to actual
+        path: '/:pathMatch(.*)*',
+        redirect: '/actual',
     }
-]
+];
 
 const router = createRouter({
-    // 4. Provide the history implementation to use. We are using the hash history for simplicity here.
-    history: createWebHashHistory(),
-    routes, // short for `routes: routes`
+    history: createWebHistory(),
+    routes,
     scrollBehavior(to, from, savedPosition) {
-        return {top: 0, behavior: 'smooth'}
+        return { top: 0, behavior: 'smooth' };
     }
-})
+});
 
-// 5. Create and mount the root instance.
-const app = createApp()
-// Make sure to _use_ the router instance to make the
-// whole app router-aware.
-app.use(router)
+export default router;
 
-export default router
