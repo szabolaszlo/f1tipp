@@ -1,57 +1,31 @@
 <template>
-  <div id="f1tipp-app">
-    <Navigation />
-    <main class="container-fluid">
-      <div class="row">
-        <div class="col-1 col-lg-1 col-md-1"></div>
-        <div class="col-7 col-lg-7 col-md-7">
-          <router-view v-slot="{ Component }">
-            <keep-alive>
-              <component :is="Component" />
-            </keep-alive>
-          </router-view>
-          <div class="visible-lg visible-md visible-sm">
-            <News />
-          </div>
-        </div>
-        <div class="col-3 col-lg-3 col-md-3">
-          <TrophiesWidget />
-          <UserChampionshipWidget />
-          <div class="visible-xs">
-            <News />
-          </div>
-          <ChampionshipResult />
-        </div>
-        <div class="col-1 col-lg-1 col-md-1"></div>
-      </div>
-      <hr>
-      <footer>
-        <div class="row">
-          <div class="col-lg-12">
-            <p class="color-two">{{ $t('app_creator') }}</p>
-          </div>
-        </div>
-      </footer>
+  <div class="app">
+    <TopBar />
+    
+    <main class="main-content">
+      <router-view v-slot="{ Component }">
+        <transition name="page-slide" mode="out-in">
+          <keep-alive>
+            <component :is="Component" />
+          </keep-alive>
+        </transition>
+      </router-view>
     </main>
+    
+    <BottomNav />
   </div>
 </template>
 
 <script>
-import Navigation from './Navigation.vue';
-import News from './News.vue';
-import ChampionshipResult from './ChampionshipResult.vue';
-import TrophiesWidget from './widgets/TrophiesWidget.vue';
-import UserChampionshipWidget from './widgets/UserChampionshipWidget.vue';
+import TopBar from './TopBar.vue';
+import BottomNav from './BottomNav.vue';
 import { useAuthStore } from '../stores/auth';
 
 export default {
   name: 'App',
   components: {
-    Navigation,
-    News,
-    ChampionshipResult,
-    TrophiesWidget,
-    UserChampionshipWidget,
+    TopBar,
+    BottomNav,
   },
   setup() {
     const authStore = useAuthStore();
@@ -62,7 +36,9 @@ export default {
 </script>
 
 <style>
-body {
-  padding-top: 70px;
-}
+/* Import design system */
+@import '../../css/design.css';
+
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 </style>

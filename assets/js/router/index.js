@@ -2,29 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
     {
-        path: '/calendar',
-        name: 'Calendar',
-        component: () => import(/* webpackChunkName: "calendar" */ '../components/Calendar.vue')
-    },
-    {
         path: '/betting',
         name: 'Betting',
         component: () => import(/* webpackChunkName: "betting" */ '../components/Betting.vue')
-    },
-    {
-        path: '/results',
-        name: 'Results',
-        component: () => import(/* webpackChunkName: "results" */ '../components/Results.vue')
-    },
-    {
-        path: '/rules',
-        name: 'Rules',
-        component: () => import(/* webpackChunkName: "rules" */ '../components/Rules.vue')
-    },
-    {
-        path: '/statistics',
-        name: 'Statistics',
-        component: () => import(/* webpackChunkName: "statistics" */ '../components/Statistics.vue')
     },
     {
         path: '/actual',
@@ -32,21 +12,50 @@ const routes = [
         component: () => import(/* webpackChunkName: "actual" */ '../components/Actual.vue')
     },
     {
-        path: '/trophies',
-        name: 'Trophies',
-        component: () => import(/* webpackChunkName: "trophies" */ '../components/Trophies.vue')
+        path: '/standings',
+        name: 'Standings',
+        component: () => import(/* webpackChunkName: "standings" */ '../components/Standings.vue')
+    },
+    {
+        path: '/calendar',
+        name: 'Calendar',
+        component: () => import(/* webpackChunkName: "calendar" */ '../components/Calendar.vue')
+    },
+    {
+        path: '/profile',
+        name: 'Profile',
+        component: () => import(/* webpackChunkName: "profile" */ '../components/Profile.vue')
     },
     {
         path: '/login',
         name: 'Login',
-        component: () => import(/* webpackChunkName: "login" */ '../components/Login.vue')
+        redirect: '/profile'
+    },
+    {
+        path: '/results',
+        name: 'Results',
+        redirect: '/standings'
+    },
+    {
+        path: '/trophies',
+        name: 'Trophies',
+        redirect: '/standings'
+    },
+    {
+        path: '/statistics',
+        name: 'Statistics',
+        component: () => import(/* webpackChunkName: "statistics" */ '../components/Statistics.vue')
+    },
+    {
+        path: '/rules',
+        name: 'Rules',
+        component: () => import(/* webpackChunkName: "rules" */ '../components/Rules.vue')
     },
     {
         path: '/',
         redirect: '/actual',
     },
     {
-        // Catch-all route for SPA - redirect unknown routes to actual
         path: '/:pathMatch(.*)*',
         redirect: '/actual',
     }
