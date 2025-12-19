@@ -2,7 +2,7 @@
   <div class="page standings-page">
     <div class="card mb-lg">
       <div class="card-header">
-        <h2 class="card-title">🏆 Ranglista</h2>
+        <h2 class="card-title">F1 CHAMPIONSHIP LEADERBOARD</h2>
       </div>
       
       <div v-if="loading" class="loader">
@@ -13,26 +13,44 @@
         <p class="text-error">{{ error }}</p>
       </div>
       
-      <div v-else class="standings-list">
+      <div v-else class="f1-table-container">
+        <!-- Header Row -->
+        <div class="f1-table-header">
+          <span class="f1-col-pos">POS</span>
+          <span class="f1-col-name">DRIVER</span>
+          <span class="f1-col-pts">PTS</span>
+          <span class="f1-col-diff">DIFF</span>
+        </div>
+
         <div 
           v-for="(user, index) in users" 
           :key="user.id" 
-          class="standing-item"
+          class="f1-row"
         >
-          <div class="rank" :class="getRankClass(index)">
+          <!-- Rank (Colored Box) -->
+          <div class="f1-rank" :class="getRankClass(index)">
             {{ index + 1 }}
           </div>
-          <div class="user-info">
-            <span class="user-name">{{ user.name }}</span>
-          </div>
-          <div class="points-section">
-            <span class="points">{{ user.pointSummary }}</span>
-            <span 
-              class="diff" 
-              :class="getDiffClass(user.pointDifference)"
-            >
-              {{ formatDiff(user.pointDifference) }}
-            </span>
+          
+          <!-- Content -->
+          <div class="f1-row-content">
+            <!-- Team Color Strip (Random for now or based on user ID hash) -->
+            <div class="f1-team-strip" :style="{ background: getUserColor(user.id) }"></div>
+            
+            <div class="f1-name">
+              {{ user.name }}
+            </div>
+            
+            <div class="f1-data-group">
+              <span class="f1-data">{{ user.pointSummary }}</span>
+              <span 
+                class="f1-diff" 
+                :class="getDiffClass(user.pointDifference)"
+                v-if="user.pointDifference !== 0"
+              >
+                {{ formatDiff(user.pointDifference) }}
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -41,16 +59,16 @@
     <!-- Records Card -->
     <div v-if="!loading && records" class="card">
       <div class="card-header">
-        <h2 class="card-title">📊 Rekordok</h2>
+        <h2 class="card-title">SEASON RECORDS</h2>
       </div>
       <div class="card-body">
         <div class="records-grid">
           <div class="record-item">
-            <span class="record-label">Legjobb kvalifikációs tipp</span>
+            <span class="record-label">BEST QUALIFIER</span>
             <span class="record-value text-gold">{{ records.qualifyBets }}</span>
           </div>
           <div class="record-item">
-            <span class="record-label">Legjobb versenytipp</span>
+            <span class="record-label">BEST RACER</span>
             <span class="record-value text-gold">{{ records.raceBets }}</span>
           </div>
         </div>
@@ -71,6 +89,19 @@ export default {
       users: [],
       records: null,
       maths: null,
+      // F1 Team colors for decoration
+      teamColors: [
+        '#3671C6', // Red Bull
+        '#F91536', // Ferrari
+        '#6CD3BF', // Mercedes
+        '#2293D1', // Alpine
+        '#F58020', // McLaren
+        '#C92D4B', // Alfa Romeo
+        '#B6BABD', // Haas
+        '#5E8FAA', // Williams
+        '#358C75', // Aston Martin
+        '#5A9BD3'  // AlphaTauri
+      ]
     };
   },
   mounted() {
@@ -95,9 +126,9 @@ export default {
       }
     },
     getRankClass(index) {
-      if (index === 0) return 'rank-1';
-      if (index === 1) return 'rank-2';
-      if (index === 2) return 'rank-3';
+      if (index === 0) return 'f1-rank-1';
+      if (index === 1) return 'f1-rank-2';
+      if (index === 2) return 'f1-rank-3';
       return '';
     },
     getDiffClass(diff) {
@@ -106,62 +137,46 @@ export default {
       return 'text-muted';
     },
     formatDiff(diff) {
-      if (diff === null || diff === undefined) return '-';
+      if (diff === null || diff === undefined) return '';
       if (diff > 0) return `+${diff}`;
       return String(diff);
     },
+    getUserColor(id) {
+      // Deterministic color based on ID
+      const index = id % this.teamColors.length;
+      return this.teamColors[index];
+    }
   },
 };
 </script>
 
 <style scoped>
-.standings-list {
-  padding: 0;
+.f1-table-header {
+  display: flex;
+  padding: var(--space-xs) var(--space-md);
+  margin-bottom: var(--space-xs);
+  color: var(--text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
 }
 
-.standing-item {
+.f1-col-pos { width: 40px; text-align: center; margin-right: var(--space-md); }
+.f1-col-name { flex: 1; }
+.f1-col-pts { width: 50px; text-align: right; margin-right: var(--space-sm); }
+.f1-col-diff { width: 40px; text-align: right; }
+
+.f1-data-group {
   display: flex;
   align-items: center;
   gap: var(--space-md);
-  padding: var(--space-md) var(--space-lg);
-  border-bottom: 1px solid var(--border-light);
-  transition: background var(--transition-fast);
 }
 
-.standing-item:last-child {
-  border-bottom: none;
-}
-
-.standing-item:hover {
-  background: var(--bg-card-hover);
-}
-
-.user-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.user-name {
-  font-weight: var(--font-weight-semibold);
-  color: var(--text-primary);
-}
-
-.points-section {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 2px;
-}
-
-.points {
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-bold);
-  color: var(--text-primary);
-}
-
-.diff {
+.f1-diff {
   font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--font-weight-bold);
+  width: 40px; /* Fixed width for alignment */
+  text-align: right;
 }
 
 .records-grid {
@@ -184,22 +199,12 @@ export default {
 .record-label {
   color: var(--text-secondary);
   font-size: var(--font-size-sm);
+  font-style: italic;
+  font-weight: bold;
 }
 
 .record-value {
-  font-weight: var(--font-weight-semibold);
-}
-
-.spinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid var(--border-color);
-  border-top-color: var(--accent-red);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-lg);
 }
 </style>

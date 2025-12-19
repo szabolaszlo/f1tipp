@@ -57,4 +57,12 @@ class PointProvider
     {
         return $this->placePoints;
     }
+
+    /**
+     * @return int
+     */
+    public function getMaxPoint()
+    {
+        return self::PLACE_1;
+    }
 }

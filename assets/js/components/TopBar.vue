@@ -1,12 +1,13 @@
 <template>
   <header class="top-bar">
     <div class="top-bar-content">
-      <!-- Logo -->
-      <router-link to="/" class="logo">
-        <img src="@images/logo.png" alt="F1 Tipp" class="logo-img" />
+      <!-- Logo Area -->
+      <router-link to="/" class="brand">
+        <span class="f1-logo-text">F1</span>
+        <span class="tipp-logo-text">TIPP</span>
       </router-link>
 
-      <!-- Desktop Navigation (hidden on mobile) -->
+      <!-- Desktop Navigation -->
       <nav class="desktop-nav">
         <router-link 
           v-for="item in navItems" 
@@ -26,7 +27,7 @@
         </template>
         <template v-else-if="authStore.state.isAuthenticated">
           <span class="username">{{ authStore.state.user }}</span>
-          <a href="/logout" class="btn-logout" title="Kijelentkezés">
+          <a href="/logout" class="btn-logout" title="LOGOUT">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
               <polyline points="16 17 21 12 16 7"/>
@@ -35,8 +36,8 @@
           </a>
         </template>
         <template v-else>
-          <router-link to="/login" class="btn btn-primary btn-sm">
-            Belépés
+          <router-link to="/login" class="btn btn-primary btn-sm login-btn">
+            LOGIN
           </router-link>
         </template>
       </div>
@@ -56,10 +57,10 @@ export default {
   data() {
     return {
       navItems: [
-        { path: '/betting', label: 'Tippelés' },
-        { path: '/actual', label: 'Aktuális' },
-        { path: '/standings', label: 'Ranglista' },
-        { path: '/calendar', label: 'Naptár' },
+        { path: '/betting', label: 'Tipp' },
+        { path: '/actual', label: 'Race' },
+        { path: '/standings', label: 'Rank' },
+        { path: '/calendar', label: 'Cal' },
       ]
     };
   },
@@ -79,8 +80,9 @@ export default {
   right: 0;
   height: var(--nav-height);
   background: var(--bg-secondary);
-  border-bottom: 1px solid var(--border-light);
+  border-bottom: 2px solid var(--accent-red);
   z-index: 1000;
+  backdrop-filter: blur(10px);
 }
 
 .top-bar-content {
@@ -89,18 +91,41 @@ export default {
   justify-content: space-between;
   height: 100%;
   padding: 0 var(--space-md);
-  max-width: 1200px;
+  max-width: var(--content-max-width);
   margin: 0 auto;
 }
 
-.logo {
-  display: flex;
-  align-items: center;
+@media (min-width: 768px) {
+  .top-bar-content {
+    max-width: 800px;
+    padding: 0 var(--space-lg);
+  }
 }
 
-.logo-img {
-  height: 36px;
-  width: auto;
+.brand {
+  display: flex;
+  align-items: baseline;
+  text-decoration: none;
+  transform: skew(-10deg);
+}
+
+.f1-logo-text {
+  font-family: var(--font-family);
+  font-weight: 900;
+  font-size: 24px;
+  color: var(--accent-red);
+  letter-spacing: -2px;
+  margin-right: 2px;
+  font-style: italic;
+}
+
+.tipp-logo-text {
+  font-family: var(--font-family);
+  font-weight: 900;
+  font-size: 24px;
+  color: var(--text-primary);
+  font-style: italic;
+  letter-spacing: -1px;
 }
 
 /* Desktop Navigation */
@@ -118,21 +143,27 @@ export default {
 .nav-link {
   color: var(--text-secondary);
   font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--font-weight-bold);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  font-style: italic;
+  letter-spacing: 1px;
   padding: var(--space-sm) 0;
-  border-bottom: 2px solid transparent;
-  transition: all var(--transition-fast);
-}
-
-.nav-link:hover {
-  color: var(--text-primary);
+  position: relative;
 }
 
 .nav-link.active {
-  color: var(--accent-red);
-  border-bottom-color: var(--accent-red);
+  color: #fff;
+}
+
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--accent-red);
+  transform: skew(-15deg);
 }
 
 /* User Section */
@@ -144,8 +175,10 @@ export default {
 
 .username {
   font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--font-weight-bold);
   color: var(--text-primary);
+  text-transform: uppercase;
+  font-style: italic;
   display: none;
 }
 
@@ -162,18 +195,18 @@ export default {
   width: 36px;
   height: 36px;
   color: var(--text-secondary);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-sm);
   transition: all var(--transition-fast);
 }
 
 .btn-logout:hover {
-  background: var(--bg-card);
   color: var(--accent-red);
+  background: rgba(255, 255, 255, 0.05);
 }
 
-.btn-sm {
-  padding: var(--space-xs) var(--space-md);
-  font-size: var(--font-size-xs);
+.login-btn {
+  font-size: 12px;
+  padding: 4px 12px;
 }
 
 .avatar-skeleton {

@@ -1,38 +1,43 @@
 /* ==========================================================================
-   F1Tipp Design System - Dark Theme
-   Mobile-First Approach
+   F1Tipp Design System - F1 Broadcast Style
    ========================================================================== */
+
+/* Import F1-like font */
+@import url('https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,400;0,600;0,700;1,400&display=swap');
 
 :root {
   /* === Colors === */
-  /* Background colors */
-  --bg-primary: #0f0f1a;
-  --bg-secondary: #1a1a2e;
-  --bg-card: #252542;
-  --bg-card-hover: #2d2d4a;
-  --bg-input: #1e1e32;
-  
+  /* Background colors - Darker, Glassmorphism */
+  --bg-primary: #101010;
+  --bg-secondary: #15151e;
+  --bg-card: rgba(30, 30, 40, 0.7);
+  --bg-card-hover: rgba(50, 50, 60, 0.8);
+  --bg-row: rgba(255, 255, 255, 0.05);
+  --bg-row-alt: rgba(255, 255, 255, 0.08);
+  --bg-input: rgba(255, 255, 255, 0.1);
+
   /* Accent colors */
-  --accent-red: #e10600;
-  --accent-red-hover: #ff1a14;
-  --accent-red-dark: #b00500;
-  --accent-gold: #ffd700;
-  --accent-gold-light: #ffed4a;
-  
+  --accent-red: #ff1801;
+  --accent-red-glow: rgba(255, 24, 1, 0.5);
+  --accent-gold: #fbbf24;
+  --accent-silver: #9ca3af;
+  --accent-bronze: #b45309;
+
   /* Text colors */
   --text-primary: #ffffff;
-  --text-secondary: #a0a0b0;
-  --text-muted: #6b6b7b;
-  
+  --text-secondary: #d1d5db;
+  --text-muted: #9ca3af;
+
   /* Status colors */
   --success: #10b981;
   --warning: #f59e0b;
   --error: #ef4444;
-  
+
   /* Border colors */
-  --border-color: #3a3a5a;
-  --border-light: rgba(255, 255, 255, 0.1);
-  
+  --border-color: rgba(255, 255, 255, 0.1);
+  --border-light: rgba(255, 255, 255, 0.05);
+  --border-tech: rgba(255, 255, 255, 0.2);
+
   /* === Spacing === */
   --space-xs: 4px;
   --space-sm: 8px;
@@ -40,45 +45,44 @@
   --space-lg: 24px;
   --space-xl: 32px;
   --space-2xl: 48px;
-  
+
   /* === Layout === */
-  --nav-height: 56px;
-  --bottom-nav-height: 64px;
-  --content-max-width: 600px;
+  --nav-height: 60px;
+  --bottom-nav-height: 70px;
+  --content-max-width: 800px;
   --safe-area-bottom: env(safe-area-inset-bottom, 0px);
-  
+
   /* === Typography === */
-  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-size-xs: 0.75rem;   /* 12px */
-  --font-size-sm: 0.875rem;  /* 14px */
-  --font-size-md: 1rem;      /* 16px */
-  --font-size-lg: 1.125rem;  /* 18px */
-  --font-size-xl: 1.5rem;    /* 24px */
-  --font-size-2xl: 2rem;     /* 32px */
-  
+  --font-family: 'Titillium Web', sans-serif;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.5rem;
+  --font-size-2xl: 2rem;
+
   --font-weight-normal: 400;
-  --font-weight-medium: 500;
-  --font-weight-semibold: 600;
+  --font-weight-medium: 600;
+  /* Titillium has 600 as semi-bold equivalent */
   --font-weight-bold: 700;
-  
+
   /* === Border Radius === */
-  --radius-sm: 6px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
+  /* F1 style uses skewed/sharp edges mostly, but small radius for inputs */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 20px;
   --radius-full: 9999px;
-  
-  /* === Shadows === */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
-  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.3);
-  
+
+  /* === Effects === */
+  --skew-angle: -15deg;
+  --backdrop-blur: blur(10px);
+  --shadow-card: 0 4px 6px rgba(0, 0, 0, 0.3);
+  --glow-text: 0 0 10px rgba(255, 255, 255, 0.3);
+
   /* === Transitions === */
   --transition-fast: 150ms ease;
   --transition-base: 200ms ease;
-  --transition-slow: 300ms ease;
-  --transition-page: 350ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* === Base Styles === */
@@ -99,6 +103,10 @@ html {
 body {
   font-family: var(--font-family);
   background-color: var(--bg-primary);
+  background-image:
+    radial-gradient(circle at 10% 20%, rgba(255, 24, 1, 0.05) 0%, transparent 20%),
+    radial-gradient(circle at 90% 80%, rgba(255, 24, 1, 0.05) 0%, transparent 20%);
+  background-attachment: fixed;
   color: var(--text-primary);
   line-height: 1.5;
   min-height: 100vh;
@@ -106,36 +114,60 @@ body {
 }
 
 /* === Typography === */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: var(--font-weight-bold);
-  line-height: 1.2;
+  line-height: 1.1;
+  text-transform: uppercase;
+  font-style: italic;
+  /* Slight italic for speed look */
 }
 
-h1 { font-size: var(--font-size-2xl); }
-h2 { font-size: var(--font-size-xl); }
-h3 { font-size: var(--font-size-lg); }
+h1 {
+  font-size: var(--font-size-2xl);
+  letter-spacing: 1px;
+}
+
+h2 {
+  font-size: var(--font-size-xl);
+  letter-spacing: 0.5px;
+}
+
+h3 {
+  font-size: var(--font-size-lg);
+}
 
 /* === Links === */
 a {
-  color: var(--accent-red);
+  color: var(--text-primary);
   text-decoration: none;
   transition: color var(--transition-fast);
 }
 
 a:hover {
-  color: var(--accent-red-hover);
+  color: var(--accent-red);
 }
 
-/* === Cards === */
+/* === Cards (F1 Style) === */
 .card {
   background: var(--bg-card);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-card);
+  backdrop-filter: var(--backdrop-blur);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  /* Tech border layout - left thick border */
+  border-left: 4px solid var(--accent-red);
+  margin-bottom: var(--space-md);
+  position: relative;
   overflow: hidden;
 }
 
 .card-header {
   padding: var(--space-md) var(--space-lg);
+  background: linear-gradient(90deg, rgba(255, 24, 1, 0.1) 0%, transparent 100%);
   border-bottom: 1px solid var(--border-light);
   display: flex;
   align-items: center;
@@ -143,98 +175,243 @@ a:hover {
 }
 
 .card-title {
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-semibold);
-  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  font-style: italic;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  color: var(--text-primary);
+  /* Text skew to match container if needed, but here we just italicize */
 }
 
 .card-body {
   padding: var(--space-lg);
 }
 
-/* === Buttons === */
+/* === Buttons (Technical) === */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-sm);
-  padding: var(--space-sm) var(--space-lg);
+  padding: var(--space-sm) var(--space-xl);
+  font-family: var(--font-family);
   font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
-  border-radius: var(--radius-md);
+  font-weight: var(--font-weight-bold);
+  font-style: italic;
+  text-transform: uppercase;
   border: none;
   cursor: pointer;
+  position: relative;
   transition: all var(--transition-fast);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  /* Skew the button shape */
+  transform: skew(var(--skew-angle));
+  border-radius: 4px;
+}
+
+/* Unskew content inside button */
+.btn>* {
+  transform: skew(calc(var(--skew-angle) * -1));
 }
 
 .btn-primary {
   background: var(--accent-red);
-  color: var(--text-primary);
+  color: #fff;
+  box-shadow: 0 0 10px var(--accent-red-glow);
 }
 
 .btn-primary:hover {
   background: var(--accent-red-hover);
-  transform: translateY(-1px);
+  box-shadow: 0 0 20px var(--accent-red-glow);
 }
 
 .btn-secondary {
-  background: var(--bg-card);
-  color: var(--text-primary);
+  background: transparent;
   border: 1px solid var(--border-color);
+  color: var(--text-primary);
 }
 
 .btn-secondary:hover {
-  background: var(--bg-card-hover);
+  border-color: var(--accent-red);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 /* === Form Elements === */
 .input {
   width: 100%;
   padding: var(--space-md);
+  font-family: var(--font-family);
   font-size: var(--font-size-md);
   background: var(--bg-input);
   border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
   color: var(--text-primary);
-  transition: border-color var(--transition-fast);
 }
 
 .input:focus {
   outline: none;
   border-color: var(--accent-red);
+  background: rgba(255, 24, 1, 0.1);
 }
 
-.input::placeholder {
-  color: var(--text-muted);
+/* === F1 Table Style (Leaderboard) === */
+.f1-table-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  /* Space between rows */
 }
 
-/* === Tables === */
-.table {
+.f1-row {
+  display: flex;
+  align-items: center;
+  background: var(--bg-row);
+  padding: 0;
+  /* No padding on container */
+  position: relative;
+  transition: background var(--transition-fast);
+}
+
+.f1-row:hover {
+  background: var(--bg-card-hover);
+}
+
+.f1-row-content {
+  display: flex;
+  align-items: center;
   width: 100%;
-  border-collapse: collapse;
+  padding: var(--space-sm) var(--space-md);
+  padding-left: 0;
+  /* Space for rank */
 }
 
-.table th,
-.table td {
-  padding: var(--space-md);
-  text-align: left;
-  border-bottom: 1px solid var(--border-light);
+/* Rank Box - The colored square on the left */
+.f1-rank {
+  width: 40px;
+  height: 48px;
+  /* Match row height roughly */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-lg);
+  color: #000;
+  background: #333;
+  /* Default */
+  margin-right: var(--space-md);
+  font-style: italic;
 }
 
-.table th {
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
-  color: var(--text-secondary);
+.f1-rank-1 {
+  background: var(--accent-gold);
+}
+
+.f1-rank-2 {
+  background: var(--accent-silver);
+}
+
+.f1-rank-3 {
+  background: var(--accent-bronze);
+}
+
+/* Driver Name / User Name */
+.f1-name {
+  flex: 1;
+  font-weight: var(--font-weight-bold);
   text-transform: uppercase;
+  font-size: var(--font-size-md);
   letter-spacing: 0.5px;
 }
 
-.table tr:last-child td {
-  border-bottom: none;
+/* Points / Data */
+.f1-data {
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-md);
+  text-align: right;
+  min-width: 60px;
+}
+
+.f1-label {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-right: 4px;
+}
+
+/* Team Color Strip - Optional, thin line */
+.f1-team-strip {
+  width: 4px;
+  height: 24px;
+  background: var(--accent-red);
+  margin-right: var(--space-sm);
+  transform: skew(var(--skew-angle));
+}
+
+/* === Tables (Legacy Bootstrap Override for F1 Style) === */
+.table {
+  width: 100%;
+  border-collapse: separate;
+  /* Allow spacing between rows */
+  border-spacing: 0 4px;
+  /* Gap between rows */
+  margin-top: var(--space-md);
+}
+
+.table thead th {
+  border: none;
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  padding: 0 var(--space-md) var(--space-xs) var(--space-md);
+}
+
+.table tbody tr {
+  background: var(--bg-row);
+  transition: background var(--transition-fast);
+}
+
+.table tbody tr:hover {
+  background: var(--bg-card-hover);
+}
+
+.table td {
+  padding: var(--space-md);
+  border: none;
+  /* Remove default borders */
+  vertical-align: middle;
+  color: var(--text-primary);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-md);
+}
+
+/* First cell rounded left */
+.table td:first-child {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-left: 4px solid var(--accent-red);
+  /* F1 Style marker */
+}
+
+/* Last cell rounded right */
+.table td:last-child {
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+/* Specific overrides for legacy content colors */
+.color-one {
+  color: var(--text-primary) !important;
+}
+
+/* Usually names */
+.color-two {
+  color: var(--accent-red) !important;
+}
+
+/* Usually details */
+.color-three {
+  color: var(--text-muted) !important;
 }
 
 /* === Page Layout === */
@@ -254,16 +431,6 @@ a:hover {
   width: 100%;
 }
 
-/* Desktop: wider content */
-@media (min-width: 768px) {
-  .main-content {
-    max-width: 800px;
-    padding: var(--space-lg);
-    padding-top: calc(var(--nav-height) + var(--space-lg));
-    padding-bottom: var(--space-lg);
-  }
-}
-
 /* === Page Transitions === */
 .page-slide-enter-active,
 .page-slide-leave-active {
@@ -272,44 +439,32 @@ a:hover {
 
 .page-slide-enter-from {
   opacity: 0;
-  transform: translateX(20px);
+  transform: translateX(100px);
+  /* More dramatic slide */
 }
 
 .page-slide-leave-to {
   opacity: 0;
-  transform: translateX(-20px);
-}
-
-/* Fade transition */
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity var(--transition-base);
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
+  transform: translateX(-100px);
 }
 
 /* === Utility Classes === */
-.text-center { text-align: center; }
-.text-right { text-align: right; }
-.text-primary { color: var(--text-primary); }
-.text-secondary { color: var(--text-secondary); }
-.text-muted { color: var(--text-muted); }
-.text-accent { color: var(--accent-red); }
-.text-gold { color: var(--accent-gold); }
-.text-success { color: var(--success); }
-.text-error { color: var(--error); }
+.text-center {
+  text-align: center;
+}
 
-.font-bold { font-weight: var(--font-weight-bold); }
-.font-semibold { font-weight: var(--font-weight-semibold); }
+.text-right {
+  text-align: right;
+}
 
-.mb-sm { margin-bottom: var(--space-sm); }
-.mb-md { margin-bottom: var(--space-md); }
-.mb-lg { margin-bottom: var(--space-lg); }
+.text-error {
+  color: var(--error);
+}
 
-/* === Loading Spinner === */
+.text-gold {
+  color: var(--accent-gold);
+}
+
 .loader {
   display: flex;
   justify-content: center;
@@ -317,45 +472,41 @@ a:hover {
   padding: var(--space-2xl);
 }
 
-/* === Badge === */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  padding: var(--space-xs) var(--space-sm);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
-  border-radius: var(--radius-full);
-  background: var(--bg-card);
+/* Spinner styling */
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--border-color);
+  border-top-color: var(--accent-red);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
 }
 
-.badge-gold {
-  background: var(--accent-gold);
-  color: #000;
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-.badge-silver {
-  background: #c0c0c0;
-  color: #000;
-}
+--bg-input: #1e1e32;
 
-.badge-bronze {
-  background: #cd7f32;
-  color: #000;
-}
+/* Accent colors */
+--accent-red: #e10600;
+--accent-red-hover: #ff1a14;
+--accent-red-dark: #b00500;
+--accent-gold: #ffd700;
+--accent-gold-light: #ffed4a;
 
-/* === Rank Position === */
-.rank {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-bold);
-  border-radius: var(--radius-full);
-  background: var(--bg-secondary);
-}
+/* Text colors */
+--text-primary: #ffffff;
+--text-secondary: #a0a0b0;
+--text-muted: #6b6b7b;
 
-.rank-1 { background: var(--accent-gold); color: #000; }
-.rank-2 { background: #c0c0c0; color: #000; }
-.rank-3 { background: #cd7f32; color: #000; }
+/* Status colors */
+--success: #10b981;
+--warning: #f59e0b;
+--error: #ef4444;
+
+/* Border colors */
+--border-color: #3a3a5a;
+--border-light: rgba(255, 255, 255, 0.1);
