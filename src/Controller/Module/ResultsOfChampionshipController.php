@@ -23,10 +23,10 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ResultsOfChampionshipController extends AbstractController
 {
-    const RESULTS_CACHE_KEY = 'result_of_championship';
-    const DRIVER_URL = 'https://api-formula-1.p.rapidapi.com/rankings/drivers?season=2025';
-    const CONSTRUCT_URL = 'https://api-formula-1.p.rapidapi.com/rankings/teams?season=2025';
-    const API_HOST = 'api-formula-1.p.rapidapi.com';
+    private const RESULTS_CACHE_KEY_PREFIX = 'result_of_championship_';
+    private const DRIVER_URL = 'https://api-formula-1.p.rapidapi.com/rankings/drivers?season=';
+    private const CONSTRUCT_URL = 'https://api-formula-1.p.rapidapi.com/rankings/teams?season=';
+    private const API_HOST = 'api-formula-1.p.rapidapi.com';
 
     /**
      * @Route("module/championship_result", name="championship_result", methods={"GET"})
@@ -34,9 +34,10 @@ class ResultsOfChampionshipController extends AbstractController
      * @return Response
      * @throws InvalidArgumentException
      */
-    public function indexAction(FileCache $cache)
+    public function indexAction(FileCache $cache): Response
     {
-        $data = $cache->get(self::RESULTS_CACHE_KEY);
+        $cacheKey = $this->getCacheKey();
+        $data = $cache->get($cacheKey);
 
         if (empty($data)) {
             $data = $this->getResults($cache);
@@ -56,63 +57,50 @@ class ResultsOfChampionshipController extends AbstractController
     public function getResultsAction(FileCache $cache): Response
     {
         $this->getResults($cache);
+
         return new Response('OK', 200);
     }
 
     /**
      * @param FileCache $cache
-     * @return mixed
+     * @return array
      * @throws InvalidArgumentException
      */
-    protected function getResults(FileCache $cache)
+    protected function getResults(FileCache $cache): array
     {
         $client = new Client();
+        $season = $this->getSeason();
 
-        $response = $client->request('GET', self::DRIVER_URL, [
-            'headers' => [
-                'x-rapidapi-host' => self::API_HOST,
-                'x-rapidapi-key' => $_ENV['RAPIDAPI_KEY'],
-            ],
-        ]);
-
-        $responseData = json_decode($response->getBody(), true);
+        $driverResponseData = $this->requestApi($client, self::DRIVER_URL . $season);
+        $constructResponseData = $this->requestApi($client, self::CONSTRUCT_URL . $season);
 
         $driverStandings = [];
+        foreach ($driverResponseData['response'] ?? [] as $item) {
+            $driverNameParts = explode(' ', $item['driver']['name']);
 
-        foreach ($responseData['response'] as $item) {
             $driverStandings[] = [
                 'position' => $item['position'],
                 'points' => $item['points'],
                 'wins' => $item['wins'],
                 'Driver' => [
                     'driverId' => $item['driver']['id'],
-                    'givenName' => explode(' ', $item['driver']['name'])[0],
-                    'familyName' => implode(' ', array_slice(explode(' ', $item['driver']['name']), 1)),
+                    'givenName' => $driverNameParts[0] ?? '',
+                    'familyName' => implode(' ', array_slice($driverNameParts, 1)),
                     'code' => $item['driver']['abbr'],
                     'permanentNumber' => $item['driver']['number'],
                     'image' => $item['driver']['image'],
-                ]
+                ],
             ];
         }
 
         $constructStandings = [];
-
-        $response = $client->request('GET', self::CONSTRUCT_URL, [
-            'headers' => [
-                'x-rapidapi-host' => self::API_HOST,
-                'x-rapidapi-key' => $_ENV['RAPIDAPI_KEY'],
-            ],
-        ]);
-
-        $responseData = json_decode($response->getBody(), true);
-
-        foreach ($responseData['response'] as $item) {
+        foreach ($constructResponseData['response'] ?? [] as $item) {
             $constructStandings[] = [
                 'position' => $item['position'],
                 'points' => $item['points'],
                 'Constructor' => [
                     'name' => $item['team']['name'],
-                ]
+                ],
             ];
         }
 
@@ -122,8 +110,30 @@ class ResultsOfChampionshipController extends AbstractController
             'constructStandings' => $constructStandings,
         ];
 
-        $cache->save(self::RESULTS_CACHE_KEY, $data);
+        $cache->save($this->getCacheKey(), $data);
 
         return $data;
+    }
+
+    private function requestApi(Client $client, string $url): array
+    {
+        $response = $client->request('GET', $url, [
+            'headers' => [
+                'x-rapidapi-host' => self::API_HOST,
+                'x-rapidapi-key' => $_ENV['RAPIDAPI_KEY'],
+            ],
+        ]);
+
+        return json_decode($response->getBody(), true);
+    }
+
+    private function getSeason(): int
+    {
+        return (int) date('Y');
+    }
+
+    private function getCacheKey(): string
+    {
+        return self::RESULTS_CACHE_KEY_PREFIX . $this->getSeason();
     }
 }
