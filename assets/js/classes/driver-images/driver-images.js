@@ -29,6 +29,7 @@ import doh from "@images/drivers/doo.png"
 import had from "@images/drivers/had.png"
 import ant from "@images/drivers/ant.png"
 import bor from "@images/drivers/bor.png"
+import lin from "@images/drivers/lin.png"
 
 
 const DriverImages = {
@@ -63,6 +64,7 @@ const DriverImages = {
     had: had,
     ant: ant,
     bor: bor,
+    lin: lin,
     igen: false,
     nem: false
 }
