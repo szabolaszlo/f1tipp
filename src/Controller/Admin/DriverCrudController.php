@@ -86,7 +86,7 @@ class DriverCrudController extends AbstractCrudController
     {
         $client = new Client();
 
-        $response = $client->request('GET', ResultsOfChampionshipController::DRIVER_URL, [
+        $response = $client->request('GET', ResultsOfChampionshipController::DRIVER_URL . (int)date('Y'), [
             'headers' => [
                 'x-rapidapi-host' => ResultsOfChampionshipController::API_HOST,
                 'x-rapidapi-key' => $_ENV['RAPIDAPI_KEY'],

@@ -24,9 +24,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class ResultsOfChampionshipController extends AbstractController
 {
     private const RESULTS_CACHE_KEY_PREFIX = 'result_of_championship_';
-    private const DRIVER_URL = 'https://api-formula-1.p.rapidapi.com/rankings/drivers?season=';
-    private const CONSTRUCT_URL = 'https://api-formula-1.p.rapidapi.com/rankings/teams?season=';
-    private const API_HOST = 'api-formula-1.p.rapidapi.com';
+    public const DRIVER_URL = 'https://api-formula-1.p.rapidapi.com/rankings/drivers?season=';
+    public const CONSTRUCT_URL = 'https://api-formula-1.p.rapidapi.com/rankings/teams?season=';
+    public const API_HOST = 'api-formula-1.p.rapidapi.com';
 
     /**
      * @Route("module/championship_result", name="championship_result", methods={"GET"})
