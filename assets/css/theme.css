@@ -772,3 +772,45 @@ hr {
     border: 1px solid var(--f1-line);
     border-radius: 6px;
 }
+
+/* ---------- hírek ---------- */
+.f1-news__item {
+    display: grid;
+    grid-template-columns: 160px minmax(0, 1fr);
+    gap: 14px;
+    padding: 12px;
+    border-top: 1px solid var(--f1-line);
+}
+
+.f1-news__img {
+    width: 100%;
+    border-radius: 6px;
+    object-fit: cover;
+    aspect-ratio: 16 / 9;
+    background: var(--f1-chip);
+}
+
+.f1-news__title {
+    margin: 2px 0 6px;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.25;
+    color: #fff;
+}
+
+.f1-news__desc {
+    font-size: 14px;
+    line-height: 1.45;
+    color: #c4c4cf;
+}
+
+.f1-news__desc img {
+    max-width: 100%;
+    height: auto;
+}
+
+@media (max-width: 600px) {
+    .f1-news__item {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
