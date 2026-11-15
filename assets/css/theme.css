@@ -524,7 +524,7 @@ a:hover, a:focus {
     color: var(--f1-text);
     box-shadow: none;
     margin-bottom: 18px;
-    overflow: hidden;
+    overflow-x: auto;
 }
 
 .panel-default > .panel-heading,
