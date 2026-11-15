@@ -1,0 +1,11 @@
+{# Közös panelfejléc az eseménytáblákhoz. Változók: event, countableBets, usersCount #}
+<div class="f1-board__head">
+    <span class="f1-board__tag">{{ ('general_' ~ event.getType())|trans|upper }}</span>
+    <span class="f1-board__title">{{ event.getName() }}</span>
+    <span class="f1-board__meta">
+        {{ event.getDateTime()|date("M. d. H:i") }}
+        {%- if usersCount is defined and countableBets is defined and usersCount %}
+            <span class="f1-hide-mobile">&nbsp;· {{ 'result_bets'|trans }}{{ countableBets|length }}/{{ usersCount }}</span>
+        {%- endif %}
+    </span>
+</div>

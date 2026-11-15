@@ -1,37 +1,32 @@
+{# Eseménytábla eredmény előtt: a leadott tippek semleges chipekkel. Változók: event, bets, ... #}
 {% extends 'extension/result_table/type/full.html.twig' %}
-{% import 'macro/icon.html.twig' as iconProvider %}
-{% block heading_title %}
-    <div class="pull-right panel-heading-icon" style="padding-right: 10px;">{{ iconProvider.getIcon(event.getType) }}</div>
-    <div class="pull-left panel-heading-icon" style="padding-left: 10px;">{{ iconProvider.getIcon(event.getType) }}</div>
-    <strong class="color-one">{{ event.getName() }} - {{ ('general_' ~ event.getType)|trans }} - {{ event.getDateTime()|date("M. d. H:i") }}</strong>
-{% endblock %}
 {% block body_content %}
-    <div class="table-responsive">
-        <table class="table table-striped">
-            {% if bets %}
-            {% set betAttributes = bets|first.getAttributes() %}
-            <thead>
-            <tr>
-                <th><strong class="bets-table-head">{{ 'result_name'|trans }}</strong></th>
-                {% for betAttribute in betAttributes %}
-                    <th class="text-center"><strong
-                                class="bets-table-head">{{ ('result_' ~ betAttribute.getKey())|trans }}</strong></th>
+    {% if bets is not empty %}
+        <div class="f1-tiprow f1-tiprow--head">
+            <div></div>
+            <div class="f1-name">{{ 'result_name'|trans }}</div>
+            <div class="f1-chips" style="{{ gridStyle }}">
+                {% for attribute in (bets|first).getAttributes() %}
+                    <div>{{ ('result_' ~ attribute.getKey())|trans }}</div>
                 {% endfor %}
-            </tr>
-            </thead>
-            <tbody>
-            {% endif %}
-            {% for bet in bets %}
-                <tr>
-                    <td class="text-left"><strong class="color-one">{{ bet.getUser().getName() }}</strong></td>
-                    {% for betAttribute in bet.getAttributes() %}
-                        <td class="text-center"><strong>{{ betAttribute.getValue() }}</strong></td>
+            </div>
+            <div></div>
+        </div>
+        {% for bet in bets %}
+            <div class="f1-tiprow">
+                <div></div>
+                <div class="f1-name">{{ bet.getUser().getName() }}</div>
+                <div class="f1-chips" style="{{ gridStyle }}">
+                    {% for attribute in bet.getAttributes() %}
+                        <div class="f1-chip f1-chip--plain{{ loop.index0 >= legend.positions ? ' f1-chip--q' : '' }}">{{ attribute.getValue() }}</div>
                     {% endfor %}
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
+                </div>
+                <div></div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="f1-board__note">{{ 'result_betting_nobody'|trans }}</div>
+    {% endif %}
     <input type="hidden" id="event-table-bet-numbers" value="{{ bets|length }}">
     <input type="hidden" id="event-table-event-id" value="{{ event.getId() }}">
 {% endblock %}

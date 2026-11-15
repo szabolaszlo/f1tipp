@@ -302,6 +302,14 @@ a:hover, a:focus {
     text-align: center;
 }
 
+.f1-tiprow--head > .f1-name,
+.f1-tiprow--head > .f1-tiprow__pts {
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--f1-muted);
+    letter-spacing: 1px;
+}
+
 .f1-tiprow--result {
     background: #17171f !important;
 }
