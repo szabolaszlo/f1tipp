@@ -1,88 +1,37 @@
 <template>
-  <div id="f1tipp-navigation">
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-          <button id="hambi-button" class="navbar-toggle" data-target="#f1tipp-navbar-collapse" data-toggle="collapse"
-                  type="button">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="/#/actual"><img alt="" height="50" src="@images/logo.png"></a>
-          <div class="nav navbar-nav navbar-right pull-right visible-xs" style="padding-right: 20px;">
-            <router-link v-if="!username" to="/login" class="btn btn-new">
-              <i class="glyphicon glyphicon-user"></i>
-              <span v-if="componentLoading" ><pulse-loader :color="colorTheme.f1TippColor5" style="display: inline-flex"/></span>
-              <span v-if="!componentLoading">{{ $t('login.title') }}</span>
-            </router-link>
-            <a v-if="username" class="btn btn-new" aria-disabled="true">
-              <i class="glyphicon glyphicon-user"></i>
-              {{ username.length > 10 ? username.substring(0, 6) + '…' : username }}
-            </a>
-            <a v-if="username" href="/logout" class="btn btn-new">
-              <i class="glyphicon glyphicon-log-out"></i>
-            </a>
-          </div>
-        </div>
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div id="f1tipp-navbar-collapse" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav navbar-left">
-            <li>
-              <router-link to="/betting" @click="routerLinkClicked()">{{ $t('betting.title') }}</router-link>
-            </li>
-            <li>
-              <router-link to="/actual" @click="routerLinkClicked()">{{ $t('actual.title') }}</router-link>
-            </li>
-            <li>
-              <router-link to="/results" @click="routerLinkClicked()">{{ $t('results.title') }}</router-link>
-            </li>
-            <li>
-              <router-link to="/calendar" @click="routerLinkClicked()">{{ $t('calendar.title') }}</router-link>
-            </li>
-            <li>
-              <router-link to="/rules" @click="routerLinkClicked()">{{ $t('rules.title') }}</router-link>
-            </li>
-            <li>
-              <router-link to="/statistics" @click="routerLinkClicked()">{{ $t('statistics.title') }}</router-link>
-            </li>
-          </ul>
-          <!-- Jobb oldali menüpontok -->
-          <ul class="nav navbar-nav navbar-right">
-            <!-- Ha nincs bejelentkezve a felhasználó, akkor sima "Belépés" link -->
-            <li>
-              <router-link v-if="!username" to="/login" @click="routerLinkClicked()">
-                <i class="glyphicon glyphicon-user"></i>
-                <span v-if="componentLoading" ><pulse-loader :color="colorTheme.f1TippColor5" style="display: inline-flex"/></span>
-                <span v-if="!componentLoading">{{ $t('login.title') }}</span>
-              </router-link>
-            </li>
-            <li>
-              <a v-if="username" class="btn btn-new" aria-disabled="true">
-                <i class="glyphicon glyphicon-user"></i>
-                {{ username }}
-              </a>
-            </li>
-            <li>
-              <a v-if="username" href="/logout" class="btn btn-new">
-                <i class="glyphicon glyphicon-log-out"></i>
-              </a>
-            </li>
-          </ul>
-        </div>
-        <!-- /.navbar-collapse -->
+  <header id="f1tipp-navigation" class="f1-header">
+    <div class="f1-header__bar">
+      <a class="f1-logo" href="/#/actual">F1<span>TIPP</span></a>
+      <nav class="f1-nav f1-nav--desktop" aria-label="Főmenü">
+        <router-link v-for="item in menu" :key="item.to" :to="item.to" @click="routerLinkClicked()">
+          {{ $t(item.label) }}
+        </router-link>
+      </nav>
+      <div class="f1-user">
+        <router-link v-if="!username" to="/login" class="f1-user__login" @click="routerLinkClicked()">
+          <span v-if="componentLoading"><pulse-loader color="#e10600" size="6px"/></span>
+          <span v-else>{{ $t('login.title') }}</span>
+        </router-link>
+        <template v-else>
+          <span class="f1-user__avatar" aria-hidden="true">{{ username.charAt(0).toUpperCase() }}</span>
+          <span class="f1-user__name" :title="username">{{ username }}</span>
+          <a href="/logout" class="f1-user__logout" :title="$t('login.logout')">
+            <i class="glyphicon glyphicon-log-out"></i>
+          </a>
+        </template>
       </div>
-      <!-- /.container -->
+    </div>
+    <nav class="f1-nav f1-nav--mobile" aria-label="Főmenü">
+      <router-link v-for="item in menu" :key="item.to" :to="item.to" @click="routerLinkClicked()">
+        {{ $t(item.label) }}
+      </router-link>
     </nav>
-  </div>
+  </header>
 </template>
 
 <script>
 import Login from "./Login";
 import axios from "axios";
-import colorTheme from "../classes/colorTheme/ColorTheme";
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
 
 export default {
@@ -94,7 +43,14 @@ export default {
     return {
       username: '',
       componentLoading: false,
-      colorTheme: colorTheme
+      menu: [
+        {to: '/betting', label: 'betting.title'},
+        {to: '/actual', label: 'actual.title'},
+        {to: '/results', label: 'results.title'},
+        {to: '/calendar', label: 'calendar.title'},
+        {to: '/rules', label: 'rules.title'},
+        {to: '/statistics', label: 'statistics.title'}
+      ]
     }
   },
   mounted() {
@@ -121,18 +77,153 @@ export default {
     },
     routerLinkClicked: function () {
       window.scrollTo(0, 0);
-      let navBarButton = document.getElementById("hambi-button");
-      if (navBarButton.getAttribute('aria-expanded') === 'true') {
-        navBarButton.click()
-      }
     }
   }
 }
 </script>
 
 <style scoped>
-.disabled {
-  pointer-events: none;
-  cursor: not-allowed;
+.f1-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: var(--f1-bg);
+  border-bottom: 1px solid var(--f1-line);
+}
+
+.f1-header__bar {
+  max-width: 1280px;
+  margin: 0 auto;
+  height: 56px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.f1-logo {
+  flex: none;
+  font-weight: 900;
+  font-style: italic;
+  font-size: 24px;
+  letter-spacing: -.5px;
+  color: #fff;
+  text-decoration: none;
+}
+
+.f1-logo span {
+  color: var(--f1-red);
+}
+
+.f1-logo:hover, .f1-logo:focus {
+  color: #fff;
+  text-decoration: none;
+}
+
+.f1-nav {
+  display: flex;
+  gap: 22px;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.f1-nav a {
+  padding: 17px 0 15px;
+  border-bottom: 3px solid transparent;
+  color: var(--f1-text);
+  opacity: .6;
+  text-decoration: none;
+}
+
+.f1-nav a:hover {
+  opacity: .9;
+}
+
+.f1-nav a.router-link-active {
+  opacity: 1;
+  border-bottom-color: var(--f1-red);
+}
+
+.f1-nav--mobile {
+  display: none;
+}
+
+.f1-user {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.f1-user__avatar {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #2c2c3a;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+}
+
+.f1-user__name {
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.f1-user__login,
+.f1-user__logout {
+  color: var(--f1-text);
+  text-decoration: none;
+  padding: 6px 10px;
+  border: 1px solid var(--f1-line);
+  border-radius: 6px;
+}
+
+.f1-user__login:hover,
+.f1-user__logout:hover {
+  border-color: var(--f1-red);
+  color: #fff;
+  text-decoration: none;
+}
+
+@media (max-width: 900px) {
+  .f1-header__bar {
+    height: 52px;
+    padding: 0 12px;
+  }
+
+  .f1-nav--desktop {
+    display: none;
+  }
+
+  .f1-nav--mobile {
+    display: flex;
+    gap: 18px;
+    overflow-x: auto;
+    padding: 0 14px;
+    font-size: 13px;
+    background: var(--f1-panel);
+    scrollbar-width: none;
+  }
+
+  .f1-nav--mobile::-webkit-scrollbar {
+    display: none;
+  }
+
+  .f1-nav--mobile a {
+    padding: 10px 0 8px;
+  }
+
+  .f1-user__name {
+    max-width: 90px;
+  }
 }
 </style>
