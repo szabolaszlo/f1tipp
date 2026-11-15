@@ -1,0 +1,6 @@
+# Csak teszt környezet: a FileCache cserélhető legyen ideiglenes könyvtárra,
+# hogy a tesztek ne írjanak a dev/éles közös var/cache/file-cache-be.
+services:
+  App\Cache\FileCache:
+    public: true
+    autowire: true

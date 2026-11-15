@@ -6,20 +6,24 @@ use App\Cache\FileCache;
 use App\Controller\Module\ResultsOfChampionshipController;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
+use Symfony\Component\Filesystem\Filesystem;
 
 class ChampionshipResultColorsTest extends WebTestCase
 {
-    /** @var array|null az éles/dev cache értéke, amit a teszt után visszaállítunk (közös var/cache/file-cache) */
-    private $original;
-    private $cache;
+    /** @var string ideiglenes könyvtár: a FileCache itt dolgozik, nem a dev/éles közös var/cache/file-cache-ben */
+    private $tmpDir;
 
     public function test_standings_include_team_colors(): void
     {
         $client = static::createClient();
-        $this->cache = static::getContainer()->get(FileCache::class);
-        $this->original = $this->cache->get(ResultsOfChampionshipController::RESULTS_CACHE_KEY);
+        $sharedBefore = $this->sharedCacheHit();
 
-        $this->cache->save(ResultsOfChampionshipController::RESULTS_CACHE_KEY, [
+        $this->tmpDir = sys_get_temp_dir() . '/f1tipp-test-' . uniqid();
+        $cache = new FileCache(new ParameterBag(['kernel.project_dir' => $this->tmpDir]));
+        static::getContainer()->set(FileCache::class, $cache);
+
+        $cache->save(ResultsOfChampionshipController::RESULTS_CACHE_KEY, [
             'event' => 1,
             'driverStandings' => [[
                 'position' => 1, 'points' => 421, 'wins' => 8,
@@ -39,17 +43,19 @@ class ChampionshipResultColorsTest extends WebTestCase
         self::assertSame('#3671C6', $data['driverStandings'][0]['teamColor']);
         self::assertSame('#6b6b78', $data['driverStandings'][1]['teamColor']);
         self::assertSame('#FF8000', $data['constructStandings'][0]['teamColor']);
+        self::assertSame($sharedBefore, $this->sharedCacheHit(), 'a teszt nem írhat a dev/éles közös var/cache/file-cache könyvtárba');
+    }
+
+    private function sharedCacheHit(): bool
+    {
+        return (new FilesystemAdapter('', 0, static::getContainer()->getParameter('kernel.project_dir') . '/var/cache/file-cache'))
+            ->getItem(ResultsOfChampionshipController::RESULTS_CACHE_KEY)->isHit();
     }
 
     protected function tearDown(): void
     {
-        if ($this->cache !== null) {
-            if (!empty($this->original)) {
-                $this->cache->save(ResultsOfChampionshipController::RESULTS_CACHE_KEY, $this->original);
-            } else {
-                (new FilesystemAdapter('', 0, static::getContainer()->getParameter('kernel.project_dir') . '/var/cache/file-cache'))
-                    ->deleteItem(ResultsOfChampionshipController::RESULTS_CACHE_KEY);
-            }
+        if ($this->tmpDir !== null) {
+            (new Filesystem())->remove($this->tmpDir);
         }
         parent::tearDown();
     }

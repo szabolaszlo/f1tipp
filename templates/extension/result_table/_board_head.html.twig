@@ -4,7 +4,7 @@
     <span class="f1-board__title">{{ event.getName() }}</span>
     <span class="f1-board__meta">
         {{ event.getDateTime()|date("M. d. H:i") }}
-        {%- if usersCount is defined and countableBets is defined and usersCount %}
+        {%- if majorityTipped is defined and majorityTipped %}
             <span class="f1-hide-mobile">&nbsp;· {{ 'result_bets'|trans }}{{ countableBets|length }}/{{ usersCount }}</span>
         {%- endif %}
     </span>

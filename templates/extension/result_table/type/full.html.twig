@@ -2,6 +2,8 @@
 {% set event = result is defined and result ? result.getEvent() : event %}
 {% set legend = bet_legend(event.getType()) %}
 {% set gridStyle = '--cols: ' ~ legend.positions ~ '; --q: ' ~ (legend.question is null ? 0 : 1) %}
+{# Mint a régi sablonban: a számláló és a nem tippelők listája csak akkor látszik, ha a tippelők több mint fele már tippelt #}
+{% set majorityTipped = usersCount is defined and countableBets is defined and usersCount / 2 < countableBets|length %}
 
 <div class="f1-board f1-board--event">
     {% include 'extension/result_table/_board_head.html.twig' %}
@@ -44,11 +46,6 @@
                 <div class="f1-tiprow__pts">{{ bet.getPointSummary() }}</div>
             </div>
         {% endfor %}
-        {% if noBettingUsers is not empty %}
-            <div class="f1-board__note">
-                <strong>{{ 'result_no_betting_users'|trans }}</strong>{{ noBettingUsers|join(', ') }}
-            </div>
-        {% endif %}
         <div class="f1-legend">
             <span><span class="f1-chip f1-chip--exact">VER</span>Pontos hely · {{ legend.exact }} pont</span>
             {% if legend.near > 0 %}
@@ -60,4 +57,10 @@
             {% endif %}
         </div>
     {% endblock %}
+    {# A blokkon kívül: eredmény előtt (only_bets / only_users) is látszódjon, ki nem tippelt még #}
+    {% if majorityTipped and usersCount != countableBets|length and noBettingUsers is defined and noBettingUsers is not empty %}
+        <div class="f1-board__note">
+            <strong>{{ 'result_no_betting_users'|trans }}</strong>{{ noBettingUsers|join(', ') }}
+        </div>
+    {% endif %}
 </div>

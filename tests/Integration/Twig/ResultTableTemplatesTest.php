@@ -139,4 +139,33 @@ class ResultTableTemplatesTest extends KernelTestCase
         self::assertCount(0, $crawler->filter('.f1-tiprow'));
         self::assertCount(1, $crawler->filter('#event-table-bet-numbers'));
     }
+
+    public function test_pre_result_tables_list_users_without_tips(): void
+    {
+        foreach (['only_bets', 'only_users'] as $type) {
+            $bets = array_map(fn($i) => $this->raceBet('User' . $i, 0), range(1, 9));
+            $crawler = $this->render('extension/result_table/type/' . $type . '.html.twig', [
+                'event' => $this->event('race'), 'bets' => $bets, 'usersCount' => 11,
+                'noBettingUsers' => ['Barala94', 'Borintius'], 'countableBets' => $bets,
+            ]);
+
+            $text = $crawler->filter('.f1-board')->text();
+            self::assertStringContainsString('Tippnélküliek', $text, $type);
+            self::assertStringContainsString('Barala94, Borintius', $text, $type);
+            self::assertStringContainsString('9/11', $text, $type);
+        }
+    }
+
+    public function test_no_betting_list_hidden_until_majority_tipped(): void
+    {
+        $bet = $this->raceBet('Steve', 0);
+        $crawler = $this->render('extension/result_table/type/only_bets.html.twig', [
+            'event' => $this->event('race'), 'bets' => [$bet], 'usersCount' => 11,
+            'noBettingUsers' => ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'], 'countableBets' => [$bet],
+        ]);
+
+        $text = $crawler->filter('.f1-board')->text();
+        self::assertStringNotContainsString('Tippnélküliek', $text);
+        self::assertStringNotContainsString('1/11', $text);
+    }
 }
