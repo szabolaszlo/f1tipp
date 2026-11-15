@@ -1,0 +1,610 @@
+/*
+ * F1Tipp „TV-grafika” téma (2026-11-15)
+ * Spec: docs/superpowers/specs/2026-11-15-aktualis-redesign-design.md
+ * Betöltés: Bootstrap 3 + app.css UTÁN (assets/js/app.js).
+ */
+
+:root {
+    --f1-bg: #14141b;
+    --f1-panel: #1b1b24;
+    --f1-row: #1f1f29;
+    --f1-line: #2a2a35;
+    --f1-chip: #24242f;
+    --f1-text: #e6e6ec;
+    --f1-muted: #9a9aa8;
+    --f1-faint: #686876;
+    --f1-red: #e10600;
+    --f1-exact: #3ecf8e;
+    --f1-near: #d9b44a;
+    --f1-p1: #d9b44a;
+    --f1-p2: #b9b9c4;
+    --f1-p3: #c08655;
+    --f1-font: 'Titillium Web', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+/* ---------- alap ---------- */
+html, body {
+    background: var(--f1-bg);
+}
+
+body {
+    font-family: var(--f1-font);
+    color: var(--f1-text);
+    padding-top: 0;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+
+a {
+    color: var(--f1-text);
+}
+
+a:hover, a:focus {
+    color: #fff;
+}
+
+/* ---------- elrendezés ---------- */
+.f1-layout {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 24px 16px 40px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 380px;
+    gap: 24px;
+    align-items: start;
+}
+
+.f1-main, .f1-aside {
+    min-width: 0;
+}
+
+.f1-footer {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 16px 16px 32px;
+    border-top: 1px solid var(--f1-line);
+    color: var(--f1-faint);
+    font-size: 13px;
+}
+
+@media (max-width: 900px) {
+    .f1-layout {
+        grid-template-columns: minmax(0, 1fr);
+        padding: 12px 10px 30px;
+        gap: 0;
+    }
+}
+
+/* ---------- panel ("board") ---------- */
+.f1-board {
+    background: var(--f1-panel);
+    border: 1px solid var(--f1-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 18px;
+    color: var(--f1-text);
+}
+
+.f1-board__head {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    background: linear-gradient(90deg, #2a2a36, #22222c 60%);
+    color: #fff;
+    border-bottom: 1px solid #34343f;
+    padding-right: 12px;
+}
+
+.f1-board__tag {
+    flex: none;
+    display: flex;
+    align-items: center;
+    height: 20px;
+    margin-left: 10px;
+    padding-left: 8px;
+    border-left: 4px solid var(--f1-red);
+    color: #ff5a52;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.f1-board__tag:empty {
+    padding-left: 0;
+}
+
+.f1-board__title {
+    flex: 1;
+    min-width: 0;
+    padding-left: 10px;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.f1-board__meta {
+    flex: none;
+    font-size: 12px;
+    opacity: .5;
+    white-space: nowrap;
+    margin-left: 8px;
+}
+
+.f1-board__meta a {
+    color: inherit;
+}
+
+.f1-board__body {
+    padding: 12px;
+}
+
+.f1-board__colhead {
+    display: flex;
+    align-items: center;
+    padding: 6px 10px 4px 40px;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--f1-muted);
+}
+
+.f1-board__colhead .f1-nums {
+    margin-left: auto;
+}
+
+.f1-board__note {
+    padding: 10px 12px;
+    font-size: 13px;
+    color: var(--f1-muted);
+    border-top: 1px solid var(--f1-line);
+}
+
+.f1-board__note strong {
+    color: var(--f1-text);
+    font-weight: 600;
+}
+
+/* ---------- sorok ---------- */
+.f1-row {
+    display: flex;
+    align-items: center;
+    min-height: 38px;
+    border-top: 1px solid var(--f1-line);
+}
+
+.f1-row:nth-child(even) {
+    background: var(--f1-row);
+}
+
+.f1-pos {
+    width: 40px;
+    flex: none;
+    text-align: center;
+    font-weight: 700;
+    font-size: 15px;
+    opacity: .9;
+}
+
+.f1-pos--p1 { color: var(--f1-p1); }
+.f1-pos--p2 { color: var(--f1-p2); }
+.f1-pos--p3 { color: var(--f1-p3); }
+
+.f1-stripe {
+    width: 4px;
+    height: 22px;
+    flex: none;
+    border-radius: 2px;
+    margin-right: 10px;
+    background: var(--f1-faint);
+}
+
+.f1-name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: .3px;
+    text-transform: uppercase;
+}
+
+.f1-name small {
+    font-weight: 400;
+    text-transform: none;
+    opacity: .6;
+    font-size: 12px;
+    margin-left: 5px;
+}
+
+.f1-nums {
+    margin-left: auto;
+    display: flex;
+    align-items: baseline;
+    flex: none;
+    padding-right: 10px;
+}
+
+.f1-num {
+    width: 56px;
+    text-align: right;
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.f1-num--wide {
+    width: 92px;
+}
+
+.f1-num--main {
+    font-weight: 700;
+    color: #fff;
+}
+
+.f1-num--dim {
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--f1-muted);
+}
+
+.f1-board__colhead .f1-num {
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--f1-muted);
+}
+
+.f1-muted {
+    color: var(--f1-muted);
+    font-size: 12px;
+}
+
+/* ---------- tipptábla ---------- */
+.f1-tiprow {
+    display: grid;
+    grid-template-columns: 40px 130px minmax(0, 1fr) 52px;
+    align-items: center;
+    min-height: 40px;
+    border-top: 1px solid var(--f1-line);
+}
+
+.f1-tiprow:nth-child(even) {
+    background: var(--f1-row);
+}
+
+.f1-tiprow > .f1-name {
+    padding-left: 4px;
+}
+
+.f1-tiprow__pts {
+    text-align: right;
+    padding-right: 12px;
+    font-weight: 700;
+    font-size: 15px;
+    color: #fff;
+}
+
+.f1-tiprow--head {
+    min-height: 26px;
+    background: none !important;
+    border-top: none;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--f1-muted);
+}
+
+.f1-tiprow--head .f1-chips > div {
+    text-align: center;
+}
+
+.f1-tiprow--result {
+    background: #17171f !important;
+}
+
+.f1-tiprow--result > .f1-name {
+    color: var(--f1-muted);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.f1-chips {
+    display: grid;
+    grid-template-columns: repeat(var(--cols, 10), minmax(0, 1fr)) repeat(var(--q, 0), minmax(0, 1.15fr));
+    gap: 3px;
+    min-width: 0;
+}
+
+.f1-chip {
+    min-width: 0;
+    overflow: hidden;
+    font-size: 11px;
+    font-weight: 600;
+    text-align: center;
+    padding: 4px 0 3px;
+    border-radius: 3px;
+    background: transparent;
+    color: var(--f1-faint);
+    border: 1px solid var(--f1-line);
+    white-space: nowrap;
+}
+
+.f1-chip--exact {
+    border-color: rgba(62, 207, 142, .36);
+    color: #a6d6bf;
+    background: rgba(62, 207, 142, .04);
+}
+
+.f1-chip--near {
+    border-color: rgba(217, 180, 74, .3);
+    border-style: dashed;
+    color: #bcae86;
+}
+
+.f1-chip--plain {
+    color: #b8b8c4;
+}
+
+.f1-chip--res {
+    color: var(--f1-text);
+    background: var(--f1-chip);
+    border-color: transparent;
+    border-left: 2px solid var(--f1-faint);
+    border-radius: 2px;
+}
+
+.f1-chip--q {
+    margin-left: 4px;
+}
+
+.f1-legend {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 12px 12px;
+    font-size: 12px;
+    color: var(--f1-muted);
+    border-top: 1px solid var(--f1-line);
+}
+
+.f1-legend .f1-chip {
+    display: inline-block;
+    width: 38px;
+    margin-right: 6px;
+}
+
+@media (max-width: 900px) {
+    .f1-tiprow {
+        grid-template-columns: 40px minmax(0, 1fr) 48px;
+        grid-template-areas: "pos name pts" "chips chips chips";
+        row-gap: 5px;
+        padding: 6px 0 8px;
+    }
+
+    .f1-tiprow > .f1-pos { grid-area: pos; }
+    .f1-tiprow > .f1-name { grid-area: name; }
+    .f1-tiprow > .f1-tiprow__pts { grid-area: pts; }
+
+    .f1-tiprow > .f1-chips {
+        grid-area: chips;
+        padding: 0 8px;
+        gap: 2px;
+    }
+
+    .f1-tiprow--head {
+        grid-template-areas: "chips chips chips";
+        padding: 4px 0 0;
+    }
+
+    .f1-tiprow--head > :not(.f1-chips) {
+        display: none;
+    }
+
+    .f1-chip {
+        font-size: 10px;
+        padding: 3px 0 2px;
+    }
+
+    .f1-chip--q {
+        margin-left: 2px;
+    }
+
+    .f1-board__meta .f1-hide-mobile {
+        display: none;
+    }
+}
+
+/* ---------- kupák, statisztika ---------- */
+.f1-trophies {
+    display: inline-flex;
+    gap: 3px;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+.f1-trophy {
+    position: relative;
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+}
+
+.f1-trophy svg {
+    display: block;
+    width: 24px;
+    height: 24px;
+}
+
+.f1-trophy b {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 11px;
+    line-height: 13px;
+    font-weight: 900;
+    color: #15151c;
+}
+
+.f1-trophy--gold { color: #cfae4f; }
+.f1-trophy--silver { color: #b4b4be; }
+.f1-trophy--bronze { color: #b98252; }
+
+.f1-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--f1-line);
+}
+
+.f1-stat {
+    padding: 12px;
+}
+
+.f1-stat b {
+    display: block;
+    font-size: 22px;
+    font-weight: 900;
+    color: #fff;
+}
+
+.f1-stat span {
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--f1-muted);
+}
+
+/* ---------- Bootstrap 3 illesztés a többi oldalhoz (compat) ---------- */
+.color-one {
+    color: var(--f1-text);
+    font-weight: 700;
+}
+
+.color-two {
+    color: var(--f1-muted);
+}
+
+.color-three {
+    color: #fff;
+}
+
+.panel,
+.panel-default,
+.panel-weekend {
+    background: var(--f1-panel);
+    border: 1px solid var(--f1-line);
+    border-radius: 8px;
+    color: var(--f1-text);
+    box-shadow: none;
+    margin-bottom: 18px;
+    overflow: hidden;
+}
+
+.panel-default > .panel-heading,
+.panel-weekend > .panel-heading {
+    background: linear-gradient(90deg, #2a2a36, #22222c 60%);
+    color: #fff;
+    border-bottom: 1px solid #34343f;
+    border-radius: 0;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+}
+
+.panel-group {
+    background: transparent;
+    padding: 0;
+    color: var(--f1-text);
+}
+
+.table > thead > tr > th,
+.table > tbody > tr > th,
+.table > tfoot > tr > th,
+.table > thead > tr > td,
+.table > tbody > tr > td,
+.table > tfoot > tr > td {
+    color: var(--f1-text);
+    border-top: 1px solid var(--f1-line);
+    vertical-align: middle;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: var(--f1-row);
+}
+
+.bets-table-head {
+    color: var(--f1-muted);
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.form-control,
+.form-control:focus {
+    color: var(--f1-text);
+    background-color: var(--f1-chip);
+    border: 1px solid var(--f1-line);
+    box-shadow: none;
+}
+
+.form-control:disabled,
+.form-control[readonly] {
+    color: var(--f1-muted);
+    background-color: var(--f1-row);
+}
+
+.btn-default,
+.btn-new {
+    color: var(--f1-text);
+    background-color: #2a2a36;
+    border-color: var(--f1-line);
+}
+
+.btn-new:hover,
+.btn-new:focus,
+.btn-default:hover,
+.btn-default:focus {
+    color: #fff;
+    background-color: var(--f1-red);
+    border-color: var(--f1-red);
+}
+
+.btn-primary,
+.btn-success {
+    background-color: var(--f1-red);
+    border-color: var(--f1-red);
+    color: #fff;
+}
+
+.select2-container--bootstrap .select2-selection,
+.select2-search--dropdown,
+.select2-container--bootstrap .select2-results > .select2-results__options {
+    background-color: var(--f1-chip);
+    color: var(--f1-text);
+    border-color: var(--f1-line);
+}
+
+.select2-container--bootstrap .select2-selection--single .select2-selection__rendered {
+    color: var(--f1-text);
+}
+
+.select2-container--bootstrap .select2-results__option--highlighted[aria-selected] {
+    background-color: var(--f1-red);
+    color: #fff;
+}
+
+hr {
+    border-top-color: var(--f1-line);
+}
+
+.well {
+    background: var(--f1-panel);
+    border-color: var(--f1-line);
+    color: var(--f1-text);
+}

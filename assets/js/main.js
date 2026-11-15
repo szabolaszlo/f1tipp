@@ -29,11 +29,6 @@ window.onload = function () {
     newsComponent.use(i18n);
     newsComponent.mount('#news')
 
-    const newsComponentOnMobile = createApp(News);
-    newsComponentOnMobile.use(Router);
-    newsComponentOnMobile.use(i18n);
-    newsComponentOnMobile.mount('#news-on-mobile')
-
     const ChampionshipResultComponent = createApp(ChampionshipResult);
     ChampionshipResultComponent.use(Router);
     ChampionshipResultComponent.use(i18n);

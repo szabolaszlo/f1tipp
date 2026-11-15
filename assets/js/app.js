@@ -8,6 +8,7 @@
 // any CSS you require will output into a single css file (app.css in this case)
 require('../../node_modules/bootstrap/dist/css/bootstrap.min.css');
 require('../css/app.css');
+require('../css/theme.css');
 const $ = require('jquery');
 global.$ = global.jQuery = $;
 require('bootstrap');
