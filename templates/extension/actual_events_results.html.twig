@@ -1,3 +1,4 @@
+{% include 'extension/actual_weekend_header.html.twig' with {events: events|default([])} %}
 {% for key, table in tables %}
     {% if loop.first %}
         <div id="refreshing-able-table">
