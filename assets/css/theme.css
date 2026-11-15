@@ -674,3 +674,101 @@ hr {
         font-size: 26px;
     }
 }
+
+/* ---------- oldalsáv modulok ---------- */
+.f1-board__subhead {
+    padding: 10px 12px 4px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #ff5a52;
+    border-top: 1px solid var(--f1-line);
+}
+
+.f1-row--compact {
+    min-height: 32px;
+    padding-left: 12px;
+    border-top: none;
+}
+
+.f1-name--plain {
+    text-transform: none;
+    font-weight: 600;
+    white-space: normal;
+}
+
+.f1-row--user {
+    gap: 0;
+}
+
+.f1-row--user .online-dot {
+    position: static;
+    display: inline-block;
+    flex: none;
+    width: 8px;
+    height: 8px;
+    margin-left: 6px;
+    border-radius: 50%;
+}
+
+.f1-flag {
+    flex: none;
+    margin-left: 6px;
+    opacity: .75;
+}
+
+.f1-row--user .f1-trophies {
+    flex: none;
+    margin-left: auto;
+    padding-left: 6px;
+}
+
+.f1-row--user .f1-nums {
+    margin-left: 4px;
+}
+
+.f1-row--user .f1-num {
+    width: 48px;
+}
+
+.f1-legend-list p {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 6px;
+    font-size: 12px;
+}
+
+.f1-legend-list .online-dot-meaning {
+    flex: none;
+    margin: 0;
+    width: 8px;
+    height: 8px;
+}
+
+.f1-pos .f1-trophy {
+    vertical-align: middle;
+}
+
+#messages-list {
+    max-height: 220px;
+    overflow-y: auto;
+}
+
+#message-send {
+    display: flex;
+    gap: 8px;
+}
+
+#message-send #message-input {
+    flex: 1;
+    min-width: 0;
+    width: auto !important;
+    height: 34px;
+    padding: 0 10px;
+    color: var(--f1-text);
+    background: var(--f1-chip);
+    border: 1px solid var(--f1-line);
+    border-radius: 6px;
+}

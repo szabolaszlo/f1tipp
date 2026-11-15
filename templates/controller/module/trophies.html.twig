@@ -1,40 +1,21 @@
 {% extends 'controller/module/base_module.html.twig' %}
+{% import 'macro/trophy.html.twig' as trophy %}
+{% block heading_tag %}{{ 'trophy_trophies'|trans }}{% endblock %}
 {% block heading_title %}
-    {% if event %}
-        {% set event_title = event.name|length > 20 ? event.name|split(' - ').0 : event.name %}
-        <strong>{{ event_title }} - {{ 'trophy_trophies'|trans }}</strong>
-    {% else %}
-        <strong>{{ 'trophy_trophies'|trans }}</strong>
-    {% endif %}
+    {% if event %}{{ event.name|length > 20 ? event.name|split(' - ').0 : event.name }}{% endif %}
 {% endblock %}
 {% block body_content %}
-    <div class="panel-body center-block">
-        <div class="table-responsive table-striped center-block">
-            {% if event %}
-                <table class="table table-striped">
-                    {% for type, trophies in podium_trophies %}
-                        <tr>
-                            <td class="text-center">
-                        <span title="{{ ('trophy_type_' ~ type)|trans }}">
-                            <img src="{{ asset('build/images/trophy/trophy_' ~ type ~ '.svg') }}" height="18">
-                        </span>
-                            </td>
-                            <td>
-                                {% for trophy in trophies %}
-                                    {% set user = trophy.getUser() %}
-                                    {% set point = trophy.getPoint() %}
-                                    {% if user %}
-                                        <strong>{{ user.getName() }}{{ loop.last ? '' : ', ' }}</strong>
-                                    {% endif %}
-                                {% endfor %}
-                            </td>
-                            <td><strong>{{ trophies|first.getPoint() }}</strong></td>
-                        </tr>
-                    {% endfor %}
-                </table>
-            {% else %}
-                {% include ('controller/module/no_results.html.twig') %}
-            {% endif %}
-        </div>
-    </div>
+    {% if event %}
+        {% for type, trophies in podium_trophies %}
+            <div class="f1-row">
+                <div class="f1-pos">{{ trophy.icon(type, null, ('trophy_type_' ~ type)|trans) }}</div>
+                <div class="f1-name f1-name--plain">
+                    {%- for t in trophies %}{% if t.getUser() %}{{ t.getUser().getName() }}{{ loop.last ? '' : ', ' }}{% endif %}{% endfor -%}
+                </div>
+                <div class="f1-nums"><span class="f1-num f1-num--main">{{ trophies|first.getPoint() }}</span></div>
+            </div>
+        {% endfor %}
+    {% else %}
+        {% include ('controller/module/no_results.html.twig') %}
+    {% endif %}
 {% endblock %}

@@ -1,4 +1,5 @@
 {% extends 'controller/module/base_module.html.twig' %}
+    {% block heading_tag %}VB{% endblock %}
     {% block body_content %}
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <div class="panel-body">
@@ -6,10 +7,10 @@
                 <canvas id="myChart"></canvas>
             </div>
             <div class="text-center" style="padding: 10px">
-                <strong class="color-two text-center">A grafikonon az látható, hogyan alakulnak a pontjaink.
+                <span class="f1-muted">A grafikonon az látható, hogyan alakulnak a pontjaink.
                     Alapértelmezetten a TOP 3 szerepel rajta
                     és Te. A nevekre kattintva megjeleníthető vagy eltűntethető az adott tippelő
-                    pontgörbéje.</strong>
+                    pontgörbéje.</span>
             </div>
         </div>
     {% endblock %}
@@ -17,8 +18,8 @@
         {{ parent() }}
         <script>
             $(document).ready(function () {
-                Chart.defaults.color = '#ffc906';
-                Chart.defaults.borderColor = 'rgba(0,140, 209, 0.25)';
+                Chart.defaults.color = '#9a9aa8';
+                Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.06)';
                 const myChart = new Chart(
                     document.getElementById('myChart'),
                     config
