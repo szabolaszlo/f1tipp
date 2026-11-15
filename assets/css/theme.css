@@ -335,9 +335,13 @@ a:hover, a:focus {
 
 .f1-chips {
     display: grid;
-    grid-template-columns: repeat(var(--cols, 10), minmax(0, 1fr)) repeat(var(--q, 0), minmax(0, 1.15fr));
+    grid-template-columns: repeat(var(--cols, 10), minmax(0, 1fr));
     gap: 3px;
     min-width: 0;
+}
+
+.f1-chips--q {
+    grid-template-columns: repeat(var(--cols, 10), minmax(0, 1fr)) minmax(0, 1.15fr);
 }
 
 .f1-chip {

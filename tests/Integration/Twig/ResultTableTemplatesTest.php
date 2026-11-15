@@ -87,7 +87,7 @@ class ResultTableTemplatesTest extends KernelTestCase
             self::assertStringContainsString('f1-chip--q', $chips->last()->attr('class'));
         });
         self::assertStringContainsString('--cols: 10', $crawler->filter('.f1-tiprow--result .f1-chips')->attr('style'));
-        self::assertStringContainsString('--q: 1', $crawler->filter('.f1-tiprow--result .f1-chips')->attr('style'));
+        self::assertStringContainsString('f1-chips--q', $crawler->filter('.f1-tiprow--result .f1-chips')->attr('class'));
     }
 
     public function test_full_legend_shows_rule_points(): void
@@ -111,7 +111,11 @@ class ResultTableTemplatesTest extends KernelTestCase
         ]);
 
         self::assertStringContainsString('--cols: 8', $crawler->filter('.f1-tiprow--result .f1-chips')->attr('style'));
-        self::assertStringContainsString('--q: 0', $crawler->filter('.f1-tiprow--result .f1-chips')->attr('style'));
+        // repeat(0, ...) érvénytelen CSS lenne és szétesne a rács: kérdés nélkül nincs q-oszlop, se --q változó
+        $crawler->filter('.f1-chips')->each(function (Crawler $chips) {
+            self::assertStringNotContainsString('f1-chips--q', $chips->attr('class'));
+            self::assertStringNotContainsString('--q', (string)$chips->attr('style'));
+        });
         self::assertStringNotContainsString('rossz helyen', $crawler->filter('.f1-legend')->text());
     }
 

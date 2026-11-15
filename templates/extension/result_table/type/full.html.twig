@@ -1,7 +1,9 @@
 {# Eseménytábla eredménnyel ("TV-grafika"). Változók: result, bets, usersCount, noBettingUsers, countableBets #}
 {% set event = result is defined and result ? result.getEvent() : event %}
 {% set legend = bet_legend(event.getType()) %}
-{% set gridStyle = '--cols: ' ~ legend.positions ~ '; --q: ' ~ (legend.question is null ? 0 : 1) %}
+{% set gridStyle = '--cols: ' ~ legend.positions %}
+{# A kérdés (SC) oszlop külön osztály: repeat(0, ...) érvénytelen CSS lenne és szétesne a rács #}
+{% set chipsClass = 'f1-chips' ~ (legend.question is null ? '' : ' f1-chips--q') %}
 {# Mint a régi sablonban: a számláló és a nem tippelők listája csak akkor látszik, ha a tippelők több mint fele már tippelt #}
 {% set majorityTipped = usersCount is defined and countableBets is defined and usersCount / 2 < countableBets|length %}
 
@@ -12,7 +14,7 @@
         <div class="f1-tiprow f1-tiprow--head">
             <div></div>
             <div class="f1-name">{{ 'result_name'|trans }}</div>
-            <div class="f1-chips" style="{{ gridStyle }}">
+            <div class="{{ chipsClass }}" style="{{ gridStyle }}">
                 {% for attribute in result.getAttributes() %}
                     <div>{{ ('result_' ~ attribute.getKey())|trans }}</div>
                 {% endfor %}
@@ -22,7 +24,7 @@
         <div class="f1-tiprow f1-tiprow--result">
             <div></div>
             <div class="f1-name">{{ 'general_result'|trans }}</div>
-            <div class="f1-chips" style="{{ gridStyle }}">
+            <div class="{{ chipsClass }}" style="{{ gridStyle }}">
                 {% for attribute in result.getAttributes() %}
                     {% if loop.index0 < legend.positions %}
                         <div class="f1-chip f1-chip--res" style="border-left-color: {{ team_color(attribute.getValue()) }}">{{ attribute.getValue() }}</div>
@@ -37,7 +39,7 @@
             <div class="f1-tiprow">
                 <div class="f1-pos">{{ ranks[loop.index0] }}</div>
                 <div class="f1-name">{{ bet.getUser().getName() }}</div>
-                <div class="f1-chips" style="{{ gridStyle }}">
+                <div class="{{ chipsClass }}" style="{{ gridStyle }}">
                     {% for attribute in bet.getAttributes() %}
                         {% set mark = attribute.getClass() == 'bet-high' ? ' f1-chip--exact' : (attribute.getClass() == 'bet-low' ? ' f1-chip--near' : '') %}
                         <div class="f1-chip{{ mark }}{{ loop.index0 >= legend.positions ? ' f1-chip--q' : '' }}">{{ attribute.getValue() }}</div>

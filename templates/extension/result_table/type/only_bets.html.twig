@@ -5,7 +5,7 @@
         <div class="f1-tiprow f1-tiprow--head">
             <div></div>
             <div class="f1-name">{{ 'result_name'|trans }}</div>
-            <div class="f1-chips" style="{{ gridStyle }}">
+            <div class="{{ chipsClass }}" style="{{ gridStyle }}">
                 {% for attribute in (bets|first).getAttributes() %}
                     <div>{{ ('result_' ~ attribute.getKey())|trans }}</div>
                 {% endfor %}
@@ -16,7 +16,7 @@
             <div class="f1-tiprow">
                 <div></div>
                 <div class="f1-name">{{ bet.getUser().getName() }}</div>
-                <div class="f1-chips" style="{{ gridStyle }}">
+                <div class="{{ chipsClass }}" style="{{ gridStyle }}">
                     {% for attribute in bet.getAttributes() %}
                         <div class="f1-chip f1-chip--plain{{ loop.index0 >= legend.positions ? ' f1-chip--q' : '' }}">{{ attribute.getValue() }}</div>
                     {% endfor %}
