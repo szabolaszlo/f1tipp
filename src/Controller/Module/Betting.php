@@ -61,6 +61,15 @@ class Betting extends AbstractController
         $bet->setUser($user);
 
         $form = $this->createBettingForm($bet, $eventId);
+
+        // a mentett tipp végleges: a zárolt mezők csak a felületen tiltottak, ezért a szerver sem fogad el rá
+        // újabb beküldést (különben a többiek – mentés után már látható – tippjei alapján át lehetne írni)
+        if ($bet->getId() && $request->isMethod('POST')) {
+            $form->addError(new FormError($translator->trans('betting_already_saved')));
+
+            return new JsonResponse($presenter->present($form, $event), Response::HTTP_CONFLICT);
+        }
+
         $form->handleRequest($request);
 
         if (!$form->isSubmitted()) {

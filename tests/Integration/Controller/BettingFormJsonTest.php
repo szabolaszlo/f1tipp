@@ -70,6 +70,10 @@ class BettingFormJsonTest extends WebTestCase
         if (count($driverFields) < 2 || $data['drivers'] === []) {
             self::markTestSkipped('Nincs tippelhető esemény a lokális adatbázisban.');
         }
+        if ($driverFields[0]['disabled']) {
+            // mentett tipp: arra a szerver már semmilyen beküldést nem fogad el (409, e2e: security_test.js)
+            self::markTestSkipped('A felhasználónak már van tippje a következő eseményre.');
+        }
 
         $payload = [];
         foreach ($data['hidden'] as $hidden) {
