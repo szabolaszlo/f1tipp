@@ -39,7 +39,39 @@ class E2eScenarios
 
     public const RACE_SAFETY_CAR = 'Igen';
 
-    public const NAMES = ['open-weekend', 'deadline-passed', 'about-to-close', 'bets-placed', 'results-entered'];
+    /** szezon szenárió: 4 hétvége, az első háromnak már van eredménye (időmérő Q, futam Q + SC Igen) */
+    public const SEASON_NAMES = ['E2E 1. Nagydíj', 'E2E 2. Nagydíj', 'E2E 3. Nagydíj', 'E2E 4. Nagydíj'];
+
+    /** hétvége (0-tól) => username => [időmérő tipp, futam tipp, safety car] */
+    public const SEASON_BETS = [
+        [
+            'e2e_user' => [self::Q, self::Q, 'Nem'],
+            'e2e_user2' => [self::Q_SWAPPED, self::Q, 'Igen'],
+            'e2e_user3' => [self::Q_OUTSIDERS, self::Q_OUTSIDERS, 'Igen'],
+        ],
+        [
+            'e2e_user' => [self::Q_SWAPPED, self::Q, 'Nem'],
+            'e2e_user2' => [self::Q, self::Q, 'Igen'],
+            'e2e_user3' => [self::Q_OUTSIDERS, self::Q_OUTSIDERS, 'Igen'],
+        ],
+        [
+            'e2e_user' => [self::Q_SWAPPED, self::Q, 'Nem'],
+            'e2e_user2' => [self::Q_OUTSIDERS, self::Q_OUTSIDERS, 'Nem'],
+            'e2e_user3' => [self::Q, self::Q, 'Igen'],
+        ],
+    ];
+
+    /** akik a "mások tippjei" szenáriókban már leadták az időmérő tippjüket (e2e_user még nem) */
+    public const OTHERS_QUALIFY_BETS = [
+        'e2e_user2' => self::Q_SWAPPED,
+        'e2e_user3' => self::Q_OUTSIDERS,
+    ];
+
+    public const NAMES = [
+        'open-weekend', 'deadline-passed', 'about-to-close', 'bets-placed', 'results-entered',
+        'others-bet', 'others-bet-closed', 'race-closer', 'recent-weekend', 'finished-weekend',
+        'sprint-bets-placed', 'season',
+    ];
 
     private EntityManagerInterface $em;
     private Calculator $calculator;
@@ -72,6 +104,10 @@ class E2eScenarios
 
         $now = new \DateTimeImmutable();
 
+        if ($name === 'season') {
+            return $this->buildSeason($now);
+        }
+
         switch ($name) {
             case 'open-weekend':
                 $events = [
@@ -92,6 +128,44 @@ class E2eScenarios
                     'race' => $this->event(new Race(), 1, $now->modify('+1 day')),
                 ];
                 break;
+            case 'others-bet':
+                $events = [
+                    'qualify' => $this->event(new Qualify(), 1, $now->modify('+2 hours')),
+                    'race' => $this->event(new Race(), 1, $now->modify('+1 day')),
+                ];
+                break;
+            case 'others-bet-closed':
+                $events = [
+                    'qualify' => $this->event(new Qualify(), 1, $now->modify('-1 hour')),
+                    'race' => $this->event(new Race(), 1, $now->modify('+1 day')),
+                ];
+                break;
+            case 'race-closer':
+                // vasárnap délelőtt: a szombati időmérő 20 órája volt, a futam 2 óra múlva
+                $events = [
+                    'qualify' => $this->event(new Qualify(), 1, $now->modify('-20 hours')),
+                    'race' => $this->event(new Race(), 1, $now->modify('+2 hours')),
+                ];
+                break;
+            case 'recent-weekend':
+                $events = [
+                    'qualify' => $this->event(new Qualify(), 1, $now->modify('-2 days -1 hour')),
+                    'race' => $this->event(new Race(), 1, $now->modify('-2 days')),
+                ];
+                break;
+            case 'finished-weekend':
+                $events = [
+                    'qualify' => $this->event(new Qualify(), 1, $now->modify('-4 days -1 hour')),
+                    'race' => $this->event(new Race(), 1, $now->modify('-4 days')),
+                ];
+                break;
+            case 'sprint-bets-placed':
+                $events = [
+                    'sprint_qualify' => $this->event(new SprintQualify(), 1, $now->modify('-3 hours')),
+                    'qualify' => $this->event(new Qualify(), 1, $now->modify('-2 hours')),
+                    'race' => $this->event(new Race(), 1, $now->modify('-1 hour')),
+                ];
+                break;
             default: // bets-placed, results-entered
                 $events = [
                     'qualify' => $this->event(new Qualify(), 1, $now->modify('-2 hours')),
@@ -106,17 +180,29 @@ class E2eScenarios
 
         $info = [
             'serverNow' => $now->getTimestamp(),
-            'events' => array_map(fn (Event $event) => [
-                'id' => $event->getId(),
-                'deadline' => $event->getDateTime()->getTimestamp(),
-            ], $events),
+            'events' => $this->eventInfo($events),
         ];
 
-        if ($name === 'bets-placed' || $name === 'results-entered') {
+        if (in_array($name, ['bets-placed', 'results-entered', 'recent-weekend', 'finished-weekend'], true)) {
             $this->placeBets($events['qualify'], $events['race']);
         }
 
-        if ($name === 'results-entered') {
+        if ($name === 'sprint-bets-placed') {
+            $this->placeBets($events['qualify'], $events['race']);
+            foreach (self::BETS as $username => [$qualifyTip]) {
+                $this->bet($this->user($username), $events['sprint_qualify'], array_slice($qualifyTip, 0, 8));
+            }
+            $this->em->flush();
+        }
+
+        if ($name === 'others-bet' || $name === 'others-bet-closed') {
+            foreach (self::OTHERS_QUALIFY_BETS as $username => $tip) {
+                $this->bet($this->user($username), $events['qualify'], $tip);
+            }
+            $this->em->flush();
+        }
+
+        if (in_array($name, ['results-entered', 'recent-weekend', 'finished-weekend'], true)) {
             $info['results'] = [
                 'qualify' => $this->result($events['qualify'], self::Q)->getId(),
                 'race' => $this->result($events['race'], self::Q, self::RACE_SAFETY_CAR)->getId(),
@@ -125,6 +211,57 @@ class E2eScenarios
         }
 
         return $info;
+    }
+
+    /**
+     * Szezon közben: 3 lezajlott hétvége (3, 2 és 1 hete) eredménnyel, a 4. jövő héten.
+     * Az eredményeket hétvégénként, időrendben számoljuk, ahogy élesben az admin rögzítené.
+     */
+    private function buildSeason(\DateTimeImmutable $now): array
+    {
+        $events = [];
+        foreach (self::SEASON_NAMES as $i => $weekendName) {
+            $weekend = $i + 1;
+            // 21, 14 és 7 napja, a 4. hétvége 7 nap múlva
+            $daysAgo = $weekend <= 3 ? (4 - $weekend) * 7 : -7;
+            $raceAt = $now->modify(sprintf('%+d days', -$daysAgo));
+            $events['w' . $weekend . '_qualify'] = $this->event(new Qualify(), $weekend, $raceAt->modify('-1 day'), $weekendName);
+            $events['w' . $weekend . '_race'] = $this->event(new Race(), $weekend, $raceAt, $weekendName);
+        }
+        $this->em->flush();
+
+        $info = ['serverNow' => $now->getTimestamp(), 'events' => $this->eventInfo($events), 'results' => []];
+
+        foreach (self::SEASON_BETS as $i => $bets) {
+            $w = 'w' . ($i + 1);
+            foreach ($bets as $username => [$qualifyTip, $raceTip, $safetyCar]) {
+                $user = $this->user($username);
+                $this->bet($user, $events[$w . '_qualify'], $qualifyTip);
+                $this->bet($user, $events[$w . '_race'], $raceTip, $safetyCar);
+            }
+            $this->em->flush();
+
+            $info['results'][$w . '_qualify'] = $this->result($events[$w . '_qualify'], self::Q)->getId();
+            $this->calculator->calculate();
+            $info['results'][$w . '_race'] = $this->result($events[$w . '_race'], self::Q, self::RACE_SAFETY_CAR)->getId();
+            $this->calculator->calculate();
+        }
+
+        return $info;
+    }
+
+    /** @param array<string, Event> $events */
+    private function eventInfo(array $events): array
+    {
+        return array_map(fn (Event $event) => [
+            'id' => $event->getId(),
+            'deadline' => $event->getDateTime()->getTimestamp(),
+        ], $events);
+    }
+
+    private function user(string $username): User
+    {
+        return $this->em->getRepository(User::class)->findOneBy(['username' => $username]);
     }
 
     private function event(Event $event, int $weekendOrder, \DateTimeImmutable $at, string $name = self::WEEKEND_NAME): Event
@@ -142,7 +279,7 @@ class E2eScenarios
     private function placeBets(Event $qualify, Event $race): void
     {
         foreach (self::BETS as $username => [$qualifyTip, $raceTip, $safetyCar]) {
-            $user = $this->em->getRepository(User::class)->findOneBy(['username' => $username]);
+            $user = $this->user($username);
             $this->bet($user, $qualify, $qualifyTip);
             $this->bet($user, $race, $raceTip, $safetyCar);
         }

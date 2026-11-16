@@ -52,4 +52,36 @@ module.exports = {
     async pointsOf(tag, userName) {
         return Number((await this._rowData(tag, userName)).points);
     },
+
+    /** a táblák címkéi megjelenési sorrendben (összesítő: HÉTVÉGE) */
+    async boardTags() {
+        I.waitForElement('.f1-board__tag');
+        return I.executeScript(() => Array.from(document.querySelectorAll('#main-component .f1-board__tag'))
+            .map(el => el.textContent.trim()));
+    },
+
+    async heroTitle() {
+        I.waitForElement('.f1-hero__title');
+        return I.executeScript(() => document.querySelector('.f1-hero__title').textContent.trim());
+    },
+
+    /** egy tábla tipp-sorainak user nevei (fejléc- és eredménysor nélkül) */
+    async tipRowNames(tag) {
+        this.seeBoard(tag);
+        return I.executeScript(xpath => {
+            const board = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+            return Array.from(board.querySelectorAll('.f1-tiprow:not(.f1-tiprow--head):not(.f1-tiprow--result) .f1-name'))
+                .map(el => el.textContent.trim());
+        }, this.board(tag));
+    },
+
+    /** a tábla megjegyzés-sorai (pl. "Tippesek: ...", "Tippnélküliek: ...", "Még senki sem tippelt."), whitespace-normalizálva */
+    async notesOf(tag) {
+        this.seeBoard(tag);
+        return I.executeScript(xpath => {
+            const board = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+            return Array.from(board.querySelectorAll('.f1-board__note'))
+                .map(el => el.textContent.replace(/\s+/g, ' ').trim());
+        }, this.board(tag));
+    },
 };

@@ -44,6 +44,8 @@ class E2eFixtures
         'e2e_user2' => ['E2E User2', ['ROLE_USER'], true],
         'e2e_user3' => ['E2E User3', ['ROLE_USER'], true],
         'e2e_admin' => ['E2E Admin', ['ROLE_ADMIN'], false],
+        // az EasyAdmin a pilóta / esemény / user / üzenet / információ / beállítás menüket ROLE_SUPER_ADMIN-hoz köti
+        'e2e_superadmin' => ['E2E Superadmin', ['ROLE_SUPER_ADMIN'], false],
     ];
 
     public const RULES_INFORMATION_ID = 23;
