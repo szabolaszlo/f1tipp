@@ -17,7 +17,9 @@ module.exports = {
 
     openEdit(resultId) {
         this.openIndex();
-        I.click(`a.action-edit[href*="entityId=${resultId}&"]`);
+        // a sor műveletei egy lenyíló menüben vannak
+        I.click(`tr[data-id="${resultId}"] .dropdown-toggle`);
+        I.click(`tr[data-id="${resultId}"] a.action-edit`);
         I.waitForElement('#result_submit');
     },
 
