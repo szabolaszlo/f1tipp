@@ -267,15 +267,6 @@
             "config/routes/web_profiler.yaml"
         ]
     },
-    "symfony/web-server-bundle": {
-        "version": "4.4",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "main",
-            "version": "3.3",
-            "ref": "dae9b39fd6717970be7601101ce5aa960bf53d9a"
-        }
-    },
     "symfony/webpack-encore-bundle": {
         "version": "2.4",
         "recipe": {
