@@ -41,7 +41,7 @@ class E2eHelper extends Helper {
 
         const watch = page => {
             page.on('console', msg => {
-                if (msg.type() === 'error' && !this._isBlockedRequestNoise(msg.text())) {
+                if (msg.type() === 'error' && !this._isExpectedNoise(msg.text(), (msg.location() || {}).url)) {
                     this.problems.push(`console.error: ${msg.text()}`);
                 }
             });
@@ -57,12 +57,20 @@ class E2eHelper extends Helper {
         context.on('page', watch);
     }
 
-    // "Failed to load resource" zaj: a szándékosan blokkolt külső kérések (net::ERR_FAILED) és a várt
-    // 4xx válaszok (pl. vendégként 401 az /is_logged-ra). Az 5xx-et a response figyelő külön rögzíti.
-    _isBlockedRequestNoise(text) {
-        return text.includes('net::ERR_FAILED')
-            || text.includes('ERR_BLOCKED')
-            || /Failed to load resource: the server responded with a status of 4\d\d/.test(text);
+    // "Failed to load resource" zaj, ami nem hiba: a szándékosan blokkolt külső kérések (net::ERR_FAILED),
+    // és a vendégként várt 401 az /is_logged-ra (Navigation.vue így dönti el, ki van-e lépve).
+    // Minden más 4xx/5xx saját erőforrás hibának számít.
+    _isExpectedNoise(text, url) {
+        if (text.includes('net::ERR_FAILED') || text.includes('ERR_BLOCKED')) {
+            return true;
+        }
+        if (!text.includes('Failed to load resource') || !url) {
+            return false;
+        }
+        const {host, pathname} = new URL(url);
+        return host === this.baseUrl.host
+            && pathname === '/is_logged'
+            && text.includes('status of 401');
     }
 
     _console(args) {
