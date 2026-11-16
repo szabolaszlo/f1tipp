@@ -18,10 +18,10 @@ function refreshOnlineUsers() {
         // Először reseteljük az összes user-activity elem színét
         $('.user-activity').css('background-color', 'transparent');
 
-        $.each(data, function (key, val) {
-            // Itt csak a színt fogjuk változtatni
-            $('.user-' + val).css('background-color', 'green');
-        });
+        // a név szóközt is tartalmazhat ("Kovács Péter"), ezért nem lehet CSS osztály/szelektor része
+        $('.user-activity').filter(function () {
+            return data.indexOf($(this).attr('data-user')) !== -1;
+        }).css('background-color', 'green');
     });
 }
 

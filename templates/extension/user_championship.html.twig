@@ -15,7 +15,7 @@
         <div class="f1-row f1-row--user">
             <div class="f1-pos{{ loop.index <= 3 ? ' f1-pos--p' ~ loop.index : '' }}">{{ loop.index }}</div>
             <div class="f1-name">{{ user.getName() }}</div>
-            <span class="user-activity user-{{ user.getName() }} online-dot" title="online"></span>
+            <span class="user-activity online-dot" data-user="{{ user.getName() }}" title="online"></span>
             {% if user.alternativePointDifference() > maxPoints %}
                 <img class="f1-flag" src="{{ asset('build/images/checkered-flag.png') }}" height="16" alt=""
                      title="{{ (id ~ '_checkered_flag')|trans }}">
