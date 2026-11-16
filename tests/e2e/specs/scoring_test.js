@@ -61,3 +61,58 @@ Scenario('admin enters results and points, standings and trophies are calculated
             assert.strictEqual(await trophiesPage.trophyOf(USERS[user].name), EXPECTED[user].trophy, `${user} trófea`);
         }
     });
+
+// Sprint hétvége: a sprint "időmérő" tipp p1–p8, pontos hely 1 pont, rossz helyen 0 (src/Rule/RuleType/SprintQualify.php).
+// A sprint pontja a hétvégi összpontszámba (kupák, bajnoki pont) is beszámít.
+Scenario('sprint weekend: sprint points count into the weekend total', async ({I, adminResultPage, actualPage, resultsPage}) => {
+    await I.seedScenario('sprint-bets-placed');
+    await I.loginAs('e2e_admin');
+
+    // az admin "új eredmény" űrlapja időrendben kínálja az eseményeket: sprint, időmérő, futam
+    adminResultPage.openNew();
+    I.see('Sprint');
+    adminResultPage.fill(Q_RESULT.slice(0, 8));
+    adminResultPage.save();
+    adminResultPage.seeSaved();
+
+    actualPage.open();
+    const sprint = {e2e_user: 8, e2e_user2: 6, e2e_user3: 0};
+    for (const user of PLAYERS) {
+        assert.strictEqual(await actualPage.pointsOf('SPRINT FUTAM', USERS[user].name), sprint[user], `${user} sprint pont`);
+    }
+
+    adminResultPage.openNew();
+    adminResultPage.fill(Q_RESULT);
+    adminResultPage.save();
+    adminResultPage.seeSaved();
+    adminResultPage.openNew();
+    adminResultPage.fill(Q_RESULT, 'Igen');
+    adminResultPage.save();
+    adminResultPage.seeSaved();
+
+    resultsPage.open();
+    assert.deepStrictEqual(await resultsPage.weekendSummary(1), [
+        [USERS.e2e_user.name, EXPECTED.e2e_user.weekend + 8, 14],
+        [USERS.e2e_user2.name, EXPECTED.e2e_user2.weekend + 6, 10],
+        [USERS.e2e_user3.name, EXPECTED.e2e_user3.weekend, 8],
+    ]);
+});
+
+// Aki nem tippelt, 0 pontos. Korábban a TrophyCalculator egy fantom (user nélküli) 0 pontos bejegyzéssel
+// indult, így a bronz mellé egy gazdátlan kupa is keletkezett.
+Scenario('a user without bets gets no extra ownerless trophy', async ({I, sidebarPage, trophiesPage}) => {
+    await I.seedScenario('results-without-user3');
+    await I.loginAs('e2e_user');
+
+    const counts = await I.executeScript(() => fetch('/module/entity_counts').then(r => r.json()));
+    assert.strictEqual(counts.trophies, 3, 'hétvégénként pontosan 3 kupa (arany, ezüst, bronz)');
+
+    assert.deepStrictEqual((await sidebarPage.standings()).map(r => [r.name, r.points, r.trophies]), [
+        [USERS.e2e_user.name, 14, ['gold']],
+        [USERS.e2e_user2.name, 10, ['silver']],
+        // 0 gyűjtött pont -> 0 bajnoki pont; a bronz (a jelenlegi szabály szerint) a 0 pontos harmadiké
+        [USERS.e2e_user3.name, 0, ['bronze']],
+    ]);
+    trophiesPage.open();
+    assert.strictEqual(await trophiesPage.trophyOf(USERS.e2e_user3.name), 'bronze');
+});

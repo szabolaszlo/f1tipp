@@ -70,7 +70,7 @@ class E2eScenarios
     public const NAMES = [
         'open-weekend', 'deadline-passed', 'about-to-close', 'bets-placed', 'results-entered',
         'others-bet', 'others-bet-closed', 'race-closer', 'recent-weekend', 'finished-weekend',
-        'sprint-bets-placed', 'season',
+        'sprint-bets-placed', 'season', 'results-without-user3',
     ];
 
     private EntityManagerInterface $em;
@@ -166,7 +166,7 @@ class E2eScenarios
                     'race' => $this->event(new Race(), 1, $now->modify('-1 hour')),
                 ];
                 break;
-            default: // bets-placed, results-entered
+            default: // bets-placed, results-entered, results-without-user3
                 $events = [
                     'qualify' => $this->event(new Qualify(), 1, $now->modify('-2 hours')),
                     'race' => $this->event(new Race(), 1, $now->modify('-1 hour')),
@@ -202,7 +202,12 @@ class E2eScenarios
             $this->em->flush();
         }
 
-        if (in_array($name, ['results-entered', 'recent-weekend', 'finished-weekend'], true)) {
+        if ($name === 'results-without-user3') {
+            // e2e_user3 nem tippelt: a hétvégén 0 pontos
+            $this->placeBets($events['qualify'], $events['race'], ['e2e_user', 'e2e_user2']);
+        }
+
+        if (in_array($name, ['results-entered', 'recent-weekend', 'finished-weekend', 'results-without-user3'], true)) {
             $info['results'] = [
                 'qualify' => $this->result($events['qualify'], self::Q)->getId(),
                 'race' => $this->result($events['race'], self::Q, self::RACE_SAFETY_CAR)->getId(),
@@ -276,9 +281,12 @@ class E2eScenarios
         return $event;
     }
 
-    private function placeBets(Event $qualify, Event $race): void
+    private function placeBets(Event $qualify, Event $race, ?array $onlyUsers = null): void
     {
         foreach (self::BETS as $username => [$qualifyTip, $raceTip, $safetyCar]) {
+            if ($onlyUsers !== null && !in_array($username, $onlyUsers, true)) {
+                continue;
+            }
             $user = $this->user($username);
             $this->bet($user, $qualify, $qualifyTip);
             $this->bet($user, $race, $raceTip, $safetyCar);

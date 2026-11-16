@@ -2,6 +2,7 @@
 
 namespace App\Calculator\Type;
 
+use App\Cache\ResultCache;
 use App\Entity\Bet;
 use App\Entity\Race;
 use App\Entity\Trophy;
@@ -58,6 +59,9 @@ class TrophyCalculator extends ACalculator
 
         $this->em->getCache()->evictEntityRegion(\App\Entity\User::class);
         $this->em->getCache()->evictEntityRegion(\App\Entity\Trophy::class);
+
+        // a "Hétvégék Legjobbjai" rekord a kupák pontjaiból áll: új / újraszámolt kupák után frissülnie kell
+        ResultCache::of($this->em)->delete('topWeekendUsers');
     }
 
     /**
@@ -89,7 +93,7 @@ class TrophyCalculator extends ACalculator
      */
     protected function getPodiumUsers($users = array())
     {
-        $userPoints = array(0);
+        $userPoints = array();
         $podium = array(
             self::PODIUM_FIRST => array(),
             self::PODIUM_SECOND => array(),
@@ -102,6 +106,9 @@ class TrophyCalculator extends ACalculator
         }
 
         foreach ($podium as $key => $value) {
+            if (empty($userPoints)) {
+                break;
+            }
             $podium[$key] = array_flip(array_keys($userPoints, max($userPoints)));
             foreach ($podium[$key] as $userId => $pValue) {
                 $podium[$key][$userId] = $userPoints[$userId];

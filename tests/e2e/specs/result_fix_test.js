@@ -65,7 +65,6 @@ const recordsScenario = keys => async ({I, adminResultPage, sidebarPage}) => {
 
 Scenario('sidebar qualifying top-3 record follows the corrected result', recordsScenario([RECORD_QUALIFY]));
 
-// BUG: a "Hétvégék Legjobbjai (TOP 3)" rekord eredményjavítás után is a régi pontokat mutatja (70/67 a 73/64 helyett).
-// Ok: Trophy::getTopWeekendUsers() (src/Repository/Trophy.php) élettartam nélkül cache-eli a 'topWeekendUsers' kulcsot,
-// és sem az EasyAdminSubscriber::reCalculateResults, sem a kalkulátorok nem törlik. Javítás után a skip levehető.
-Scenario.skip('sidebar weekend top-3 record follows the corrected result', recordsScenario([RECORD_WEEKEND]));
+// Korábban hibás volt: a 'topWeekendUsers' cache-t semmi nem ürítette, ezért javítás után a régi pontok maradtak.
+// Most a TrophyCalculator üríti, valahányszor kupákat számol.
+Scenario('sidebar weekend top-3 record follows the corrected result', recordsScenario([RECORD_WEEKEND]));
