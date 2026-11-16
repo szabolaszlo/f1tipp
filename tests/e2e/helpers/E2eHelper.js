@@ -4,6 +4,7 @@ const path = require('path');
 const {PASSWORD} = require('../data/expected');
 
 const REPO_ROOT = path.resolve(__dirname, '../../..');
+const CHART_JS_STUB = 'window.Chart = function Chart() { this.destroy = function () {}; this.update = function () {}; }; window.Chart.defaults = {};';
 const CONSOLE = ['compose', 'exec', '-T', '-u', 'www-data', '-w', '/var/www/f1tipp_sf4', 'php', 'php', 'bin/console'];
 
 /**
@@ -25,10 +26,17 @@ class E2eHelper extends Helper {
         this.problems = [];
         const context = this.pw.browserContext;
 
-        // csak az e2e app hostja érhető el: Google fontok/ikon, gtag, rapidapi stb. tiltva
+        // csak az e2e app hostja érhető el: Google fontok/ikon, gtag, rapidapi stb. tiltva.
+        // Kivétel: a CDN-ről töltött Chart.js (pontgrafikon) helyett csonk, hogy ne legyen "Chart is not defined".
         await context.route('**/*', route => {
             const url = new URL(route.request().url());
-            return url.host === this.baseUrl.host ? route.continue() : route.abort();
+            if (url.host === this.baseUrl.host) {
+                return route.continue();
+            }
+            if (url.host === 'cdn.jsdelivr.net' && url.pathname.startsWith('/npm/chart.js')) {
+                return route.fulfill({contentType: 'application/javascript', body: CHART_JS_STUB});
+            }
+            return route.abort();
         });
 
         const watch = page => {
