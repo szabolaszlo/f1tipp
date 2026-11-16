@@ -9,7 +9,6 @@
 namespace App\Repository;
 
 use App\Entity\Event;
-use App\Entity\Race;
 use Doctrine\ORM\EntityRepository;
 use App\Entity\Result as ResultEnt;
 use Doctrine\ORM\NonUniqueResultException;
@@ -49,21 +48,16 @@ class Result extends EntityRepository
      */
     public function getCalculatedRacesWithoutTrophies()
     {
-        $result = $this->createQueryBuilder('result')
+        // adatbázisból döntjük el, nem a Race::$trophies gyűjteményből: az egy EntityManageren belül
+        // nem frissül az új kupákkal, így egy második calculate() hívás duplán osztaná ki őket
+        return $this->createQueryBuilder('result')
             ->select('race')
             ->innerJoin(\App\Entity\Race::class, 'race', Join::WITH, 'result.event = race.id')
+            ->leftJoin(\App\Entity\Trophy::class, 'trophy', Join::WITH, 'trophy.event = race.id')
             ->where('result.isCalculated = 1')
+            ->andWhere('trophy.id IS NULL')
             ->getQuery()
             ->getResult();
-
-        /** @var Race $race */
-        foreach ($result as $key => $race) {
-            if (!$race->getTrophies()->isEmpty()) {
-                unset($result[$key]);
-            }
-        }
-
-        return $result;
     }
 
     /**
@@ -71,21 +65,14 @@ class Result extends EntityRepository
      */
     public function getCalculatedRacesWithoutAlternativeChampionship()
     {
-        $result = $this->createQueryBuilder('result')
+        return $this->createQueryBuilder('result')
             ->select('race')
             ->innerJoin(\App\Entity\Race::class, 'race', Join::WITH, 'result.event = race.id')
+            ->leftJoin(\App\Entity\AlternativeChampionship::class, 'ac', Join::WITH, 'ac.race = race.id')
             ->where('result.isCalculated = 1')
+            ->andWhere('ac.id IS NULL')
             ->getQuery()
             ->getResult();
-
-        /** @var Race $race */
-        foreach ($result as $key => $race) {
-            if (!$race->getAlternativeChampionships()->isEmpty()) {
-                unset($result[$key]);
-            }
-        }
-
-        return $result;
     }
 
     /**

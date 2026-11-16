@@ -30,6 +30,8 @@ exports.config = {
         adminResultPage: './pages/AdminResultPage.js',
         sidebarPage: './pages/SidebarPage.js',
         trophiesPage: './pages/TrophiesPage.js',
+        resultsPage: './pages/ResultsPage.js',
+        adminPage: './pages/AdminPage.js',
     },
     plugins: {
         screenshotOnFail: {enabled: true},

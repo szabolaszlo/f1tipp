@@ -20,4 +20,19 @@ module.exports = {
             return match ? match[1] : null;
         }, userName);
     },
+
+    /** @returns {Promise<Array<{name: string, trophies: string[], point: number}>>} a szezon kupatáblázata, sorrendben */
+    async seasonTable() {
+        return I.executeScript(() => Array.from(document.querySelectorAll('#main-component tbody tr'))
+            .filter(tr => tr.querySelectorAll('td').length === 5)
+            .map(tr => {
+                const cells = tr.querySelectorAll('td');
+                return {
+                    name: cells[1].textContent.trim(),
+                    trophies: Array.from(cells[2].querySelectorAll('img'))
+                        .map(img => (img.getAttribute('src').match(/trophy_(gold|silver|bronze)/) || [])[1]),
+                    point: Number(cells[3].textContent.trim()),
+                };
+            }));
+    },
 };

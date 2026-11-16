@@ -13,6 +13,12 @@ module.exports = {
             trophies: Array.from(row.querySelectorAll('.f1-trophy'))
                 .map(t => (t.className.match(/f1-trophy--(gold|silver|bronze)/) || [])[1])
                 .filter(Boolean),
+            // típus => darab (a kupaikon sarkában lévő szám)
+            trophyCounts: Object.fromEntries(Array.from(row.querySelectorAll('.f1-trophy')).map(t => [
+                (t.className.match(/f1-trophy--(gold|silver|bronze)/) || [])[1],
+                Number((t.querySelector('b') || {textContent: '1'}).textContent.trim()),
+            ])),
+            flag: !!row.querySelector('.f1-flag'),
         })));
     },
 

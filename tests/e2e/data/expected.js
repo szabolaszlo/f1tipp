@@ -52,7 +52,46 @@ const EXPECTED_RECORDS_AFTER_FIX = {
     [RECORD_WEEKEND]: [['E2E User2', 73], ['E2E User1', 64], ['E2E User3', 15]],
 };
 
+// --- szezon közbeni késői javítás (src/E2e/E2eScenarios.php: season) ---
+// 3 lezajlott hétvége (eredmény mindig: időmérő Q_RESULT, futam Q_RESULT + SC Igen), a 4. jövő héten.
+//   1. hétvége: User1 Q/Q/Nem = 40+30 = 70, User2 QS/Q/Igen = 34+33 = 67, User3 QO/QO/Igen = 6+9 = 15
+//   2. hétvége: User1 QS/Q/Nem = 34+30 = 64, User2 Q/Q/Igen = 40+33 = 73, User3 QO/QO/Igen = 15
+//   3. hétvége: User1 QS/Q/Nem = 64,        User2 QO/QO/Nem = 6+6 = 12,  User3 Q/Q/Igen = 73
+// A javítás az 1. hétvége időmérőjét Q_SWAPPED-re írja (két hétvégével később): User1 34+30 = 64, User2 40+33 = 73.
+const SEASON_ROUNDS = ['E2E 1. Nagydíj', 'E2E 2. Nagydíj', 'E2E 3. Nagydíj'];
+const SEASON = {
+    // hétvégénként [gyűjtött, bajnoki pont]
+    weekends: {
+        e2e_user: [[70, 14], [64, 10], [64, 10]],
+        e2e_user2: [[67, 10], [73, 14], [12, 8]],
+        e2e_user3: [[15, 8], [15, 8], [73, 14]],
+    },
+    // oldalsáv: sorrend, pont, lemaradás, kupák darabra
+    standings: [
+        ['E2E User1', 34, '', {gold: 1, silver: 2}],
+        ['E2E User2', 32, '+ 2', {gold: 1, silver: 1, bronze: 1}],
+        ['E2E User3', 30, '+ 4', {gold: 1, bronze: 2}],
+    ],
+    // szezon kupatábla (arany 25, ezüst 18, bronz 15)
+    trophyTable: [['E2E User1', 61], ['E2E User2', 58], ['E2E User3', 55]],
+};
+const SEASON_AFTER_FIX = {
+    weekends: {
+        e2e_user: [[64, 10], [64, 10], [64, 10]],
+        e2e_user2: [[73, 14], [73, 14], [12, 8]],
+        e2e_user3: [[15, 8], [15, 8], [73, 14]],
+    },
+    // User1 és User3 30-30 ponton: a több arany (User3: 1, User1: 0) dönt
+    standings: [
+        ['E2E User2', 36, '', {gold: 2, bronze: 1}],
+        ['E2E User3', 30, '+ 6', {gold: 1, bronze: 2}],
+        ['E2E User1', 30, '+ 6', {silver: 3}],
+    ],
+    trophyTable: [['E2E User2', 65], ['E2E User3', 55], ['E2E User1', 54]],
+};
+
 module.exports = {
+    SEASON_ROUNDS, SEASON, SEASON_AFTER_FIX,
     RECORD_QUALIFY, RECORD_WEEKEND, EXPECTED_RECORDS, EXPECTED_RECORDS_AFTER_FIX,
     PASSWORD, USERS, WEEKEND_NAME, Q_RESULT, Q_SWAPPED, Q_OUTSIDERS, BETS,
     EXPECTED, FIXED_QUALIFY_RESULT, EXPECTED_AFTER_FIX,
