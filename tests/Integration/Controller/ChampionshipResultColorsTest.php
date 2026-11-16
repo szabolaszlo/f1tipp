@@ -20,7 +20,7 @@ class ChampionshipResultColorsTest extends WebTestCase
         $sharedBefore = $this->sharedCacheHit();
 
         $this->tmpDir = sys_get_temp_dir() . '/f1tipp-test-' . uniqid();
-        $cache = new FileCache(new ParameterBag(['kernel.project_dir' => $this->tmpDir]));
+        $cache = new FileCache(new ParameterBag(['app.file_cache_dir' => $this->tmpDir . '/var/cache/file-cache']));
         static::getContainer()->set(FileCache::class, $cache);
 
         $cache->save(ResultsOfChampionshipController::RESULTS_CACHE_KEY, [

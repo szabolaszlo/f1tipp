@@ -5,6 +5,7 @@ services:
     image: nginx:latest
     ports:
       - "80:80"
+      - "8001:81"
     volumes:
       - ./.docker/nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
       - ./:/var/www/f1tipp_sf4

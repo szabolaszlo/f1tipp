@@ -1,0 +1,3 @@
+# Csak e2e környezet: saját FileCache mappa, hogy az e2e futás ne írja/törölje a dev cache-t.
+parameters:
+  app.file_cache_dir: '%kernel.cache_dir%/file-cache'
