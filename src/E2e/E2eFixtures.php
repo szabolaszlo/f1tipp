@@ -63,7 +63,7 @@ class E2eFixtures
      */
     public function rebuild(): void
     {
-        E2eGuard::assertE2e($this->kernelEnv);
+        $this->assertSafe();
 
         $metadata = $this->em->getMetadataFactory()->getAllMetadata();
         $schemaTool = new SchemaTool($this->em);
@@ -76,7 +76,7 @@ class E2eFixtures
 
     public function loadBase(): void
     {
-        E2eGuard::assertE2e($this->kernelEnv);
+        $this->assertSafe();
 
         foreach (self::DRIVERS as $code => [$name, $point]) {
             $driver = new Driver();
@@ -115,7 +115,7 @@ class E2eFixtures
      */
     public function clearCaches(): void
     {
-        E2eGuard::assertE2e($this->kernelEnv);
+        $this->assertSafe();
 
         $resultCache = $this->em->getConfiguration()->getResultCacheImpl();
         if ($resultCache) {
@@ -131,6 +131,13 @@ class E2eFixtures
 
         $this->fileCache->clearAll();
         $this->fileCache->save(ResultsOfChampionshipController::RESULTS_CACHE_KEY, self::championshipStandings());
+    }
+
+    /** e2e kernel-környezet ÉS _e2e végű adatbázis – különben kivétel, mielőtt bármit törölnénk */
+    public function assertSafe(): void
+    {
+        E2eGuard::assertE2e($this->kernelEnv);
+        E2eGuard::assertE2eDatabase($this->em->getConnection()->getParams()['dbname'] ?? null);
     }
 
     private static function championshipStandings(): array

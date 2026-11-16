@@ -35,6 +35,7 @@ class E2eResetCommand extends Command
     {
         try {
             E2eGuard::assertE2e($this->kernelEnv);
+            $this->fixtures->assertSafe();
         } catch (\RuntimeException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
 
@@ -52,6 +53,9 @@ class E2eResetCommand extends Command
      */
     public static function reset(Command $command, E2eFixtures $fixtures): void
     {
+        // a database:create előtt is: rossz DATABASE_URL esetén ne hozzunk létre / töröljünk semmit
+        $fixtures->assertSafe();
+
         $command->getApplication()->find('doctrine:database:create')
             ->run(new ArrayInput(['--if-not-exists' => true]), new NullOutput());
 

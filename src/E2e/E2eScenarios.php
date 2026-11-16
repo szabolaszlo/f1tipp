@@ -60,6 +60,7 @@ class E2eScenarios
     public function build(string $name, int $deadlineIn): array
     {
         E2eGuard::assertE2e($this->kernelEnv);
+        E2eGuard::assertE2eDatabase($this->em->getConnection()->getParams()['dbname'] ?? null);
 
         if (!in_array($name, self::NAMES, true)) {
             throw new \InvalidArgumentException(sprintf(

@@ -18,4 +18,18 @@ final class E2eGuard
             ));
         }
     }
+
+    /**
+     * Második védővonal: az env név mellett a ténylegesen csatolt adatbázis nevét is ellenőrizzük,
+     * mert egy felülírt DATABASE_URL (valódi env változó, .env.local.php, .env.e2e.local) a dev DB-re mutathat.
+     */
+    public static function assertE2eDatabase(?string $databaseName): void
+    {
+        if ($databaseName === null || substr($databaseName, -4) !== '_e2e') {
+            throw new \RuntimeException(sprintf(
+                'Refusing to touch database "%s": the e2e commands only run against a database whose name ends with "_e2e".',
+                (string) $databaseName
+            ));
+        }
+    }
 }

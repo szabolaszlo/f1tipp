@@ -44,6 +44,7 @@ class E2eScenarioCommand extends Command
 
         try {
             E2eGuard::assertE2e($this->kernelEnv);
+            $this->fixtures->assertSafe();
             if (!in_array($name, E2eScenarios::NAMES, true)) {
                 throw new \InvalidArgumentException(sprintf(
                     'Unknown scenario "%s". Valid: %s',
