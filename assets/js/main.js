@@ -9,6 +9,7 @@ import messages from './translations'
 
 window.onload = function () {
     const i18n = createI18n({
+        legacy: false,
         locale: 'hu',
         fallbackLocale: 'en',
         messages

@@ -62,6 +62,12 @@ Encore
     .addEntry('main', './assets/js/main.js')
 
     .enableVueLoader()
+    // a Vue esm-bundler build ezeket fordítási időben várja (különben konzol warning)
+    .configureDefinePlugin(options => {
+        options.__VUE_OPTIONS_API__ = JSON.stringify(true);
+        options.__VUE_PROD_DEVTOOLS__ = JSON.stringify(false);
+        options.__VUE_PROD_HYDRATION_MISMATCH_DETAILS__ = JSON.stringify(false);
+    })
     //.addEntry('page1', './assets/js/page1.js')
     //.addEntry('page2', './assets/js/page2.js')
 
@@ -80,7 +86,6 @@ Encore
      * https://symfony.com/doc/current/frontend.html#adding-more-features
      */
     .cleanupOutputBeforeBuild()
-    .enableBuildNotifications()
     .enableSourceMaps(!Encore.isProduction())
     // enables hashed filenames (e.g. app.abc123.css)
     .enableVersioning(Encore.isProduction())
