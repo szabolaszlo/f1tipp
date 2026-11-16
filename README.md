@@ -34,6 +34,36 @@ php bin/console doctrine:database:create
 php bin/console doctrine:database:create
 ```
 
+# E2E tesztek (CodeceptJS + Playwright)
+
+A tesztek böngészőben kattintják végig az appot, egy külön `e2e` Symfony környezeten
+(`http://127.0.0.1:8001`, nginx 81-es server blokk, `.env.e2e`). Ez a környezet külön
+`f1tipp_e2e` adatbázist és saját cache-t használ, a dev adatokat nem érinti. Minden teszt nulláról
+építi fel a saját adatait (`app:e2e:scenario`): teszt-userek (`e2e_user`, `e2e_user2`, `e2e_user3`,
+`e2e_admin`, jelszó: `e2e-pass`), a mostani időponthoz relatív események, tippek, eredmények.
+
+### Előfeltétel
+```
+docker compose up -d          # a web konténer a 8001-es portot is kiajánlja
+npm run dev                   # buildelt assetek (vagy fusson a watch)
+cd tests/e2e && npm install && npx playwright install chromium
+```
+
+### Futtatás
+```
+npm run e2e                                   # teljes csomag, headless
+npm --prefix tests/e2e run test:headed        # látható böngészővel
+npm --prefix tests/e2e test -- --grep @scoring   # csak egy csoport (@login, @betting, @deadline, @display, @scoring, @fix, @pages, @smoke)
+E2E_BASE_URL=http://127.0.0.1:8001 npm run e2e   # más cím esetén
+```
+
+Kézi seedelés (csak `--env=e2e`-vel fut, más környezetben hibával kilép):
+```
+docker compose exec -u www-data -w /var/www/f1tipp_sf4 php php bin/console app:e2e:scenario open-weekend --env=e2e
+```
+Szenáriók: `open-weekend`, `deadline-passed`, `about-to-close`, `bets-placed`, `results-entered`.
+A várt pontszámok és a tesztadat: `tests/e2e/data/expected.js`.
+
 # Project Production Details
 
 ## Cron
