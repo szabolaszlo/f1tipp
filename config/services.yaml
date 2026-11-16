@@ -74,3 +74,9 @@ services:
   App\Command\E2e\E2eResetCommand:
     arguments:
       $kernelEnv: '%kernel.environment%'
+  App\E2e\E2eScenarios:
+    arguments:
+      $kernelEnv: '%kernel.environment%'
+  App\Command\E2e\E2eScenarioCommand:
+    arguments:
+      $kernelEnv: '%kernel.environment%'
