@@ -366,9 +366,9 @@ a:hover, a:focus {
 }
 
 .f1-chip--near {
-    border-color: rgba(245, 208, 0, .22);
+    border-color: rgba(245, 208, 0, .17);
     border-style: dashed;
-    color: #bdb38a;
+    color: #aca78f;
 }
 
 .f1-chip--plain {
@@ -842,9 +842,9 @@ hr {
 }
 
 .table > tbody > tr > td.bet-low {
-    color: #bdb38a;
+    color: #aca78f;
     background: transparent;
-    outline: 1px dashed rgba(245, 208, 0, .22);
+    outline: 1px dashed rgba(245, 208, 0, .17);
     outline-offset: -2px;
     border-radius: 3px;
 }
