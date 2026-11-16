@@ -15,4 +15,29 @@ module.exports = {
                 .filter(Boolean),
         })));
     },
+
+    /**
+     * A tabella alatti TOP 3 rekordok (időmérő / futam / hétvége), címük szerint.
+     * @returns {Promise<Object<string, Array<[string, number]>>>} pl. {'Hétvégék Legjobbjai (TOP 3):': [['E2E User1', 70], ...]}
+     */
+    async records() {
+        I.waitForElement('.f1-aside .f1-row--user');
+        return I.executeScript(() => {
+            const board = document.querySelector('.f1-aside .f1-row--user').closest('.f1-board');
+            const out = {};
+            let current = null;
+            board.querySelectorAll('.f1-board__subhead, .f1-row--compact').forEach(el => {
+                if (el.classList.contains('f1-board__subhead')) {
+                    current = el.textContent.trim();
+                    out[current] = [];
+                } else if (current) {
+                    out[current].push([
+                        el.querySelector('.f1-name').textContent.trim(),
+                        Number(el.querySelector('.f1-num--main').textContent.trim()),
+                    ]);
+                }
+            });
+            return out;
+        });
+    },
 };

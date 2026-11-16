@@ -40,7 +40,20 @@ const EXPECTED_AFTER_FIX = {
     e2e_user3: {qualify: 6, race: 9, weekend: 15, alt: 8, lag: '+ 6', trophy: 'bronze'},
 };
 
+// az oldalsáv TOP 3 rekordjai (pont szerint csoportosítva, csökkenő sorrendben)
+const RECORD_QUALIFY = 'Időmérők Legjobbjai (TOP 3):';
+const RECORD_WEEKEND = 'Hétvégék Legjobbjai (TOP 3):';
+const EXPECTED_RECORDS = {
+    [RECORD_QUALIFY]: [['E2E User1', 40], ['E2E User2', 34], ['E2E User3', 6]],
+    [RECORD_WEEKEND]: [['E2E User1', 70], ['E2E User2', 67], ['E2E User3', 15]],
+};
+const EXPECTED_RECORDS_AFTER_FIX = {
+    [RECORD_QUALIFY]: [['E2E User2', 40], ['E2E User1', 34], ['E2E User3', 6]],
+    [RECORD_WEEKEND]: [['E2E User2', 73], ['E2E User1', 64], ['E2E User3', 15]],
+};
+
 module.exports = {
+    RECORD_QUALIFY, RECORD_WEEKEND, EXPECTED_RECORDS, EXPECTED_RECORDS_AFTER_FIX,
     PASSWORD, USERS, WEEKEND_NAME, Q_RESULT, Q_SWAPPED, Q_OUTSIDERS, BETS,
     EXPECTED, FIXED_QUALIFY_RESULT, EXPECTED_AFTER_FIX,
 };
