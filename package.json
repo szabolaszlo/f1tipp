@@ -23,8 +23,6 @@
     "@vue/compat": "^3.2.39",
     "axios": "^0.26.1",
     "ckeditor-full": "^4.7.3",
-    "select2": "^4.0.12",
-    "select2-bootstrap-theme": "0.1.0-beta.10",
     "vue": "^3.2.39",
     "vue-i18n": "^9.2.2",
     "vue-loader": "^16.8.3",

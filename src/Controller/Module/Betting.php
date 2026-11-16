@@ -3,11 +3,13 @@
 namespace App\Controller\Module;
 
 use App\Builder\BetBuilder;
+use App\Display\BettingFormPresenter;
+use App\Entity\Bet;
 use App\Entity\Event;
 use App\Form\BettingType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,51 +24,47 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class Betting extends AbstractController
 {
     /**
-     * @Route("module/betting/form/{eventId}", name="betting_one_form", methods={"GET", "POST"})
+     * A tippelő form JSON leírása (GET), illetve a beküldött tipp mentése (POST).
+     * A Symfony form végzi a validációt és a CSRF-ellenőrzést, a megjelenítés a Vue-é.
      *
-     * @param Request $request
-     * @param BetBuilder $betBuilder
-     * @param TranslatorInterface $translator
-     * @param $eventId
-     * @return Response
+     * @Route("module/betting/form/{eventId}", name="betting_one_form", methods={"GET", "POST"})
      */
-    public function indexAction(Request $request, BetBuilder $betBuilder, TranslatorInterface $translator, $eventId)
-    {
+    public function indexAction(
+        Request $request,
+        BetBuilder $betBuilder,
+        TranslatorInterface $translator,
+        BettingFormPresenter $presenter,
+        $eventId
+    ): JsonResponse {
         $user = $this->getUser();
 
         if (!$user) {
             throw new UnauthorizedHttpException('');
         }
 
+        /** @var Event|null $event */
         $event = $this->getDoctrine()->getRepository('App:Event')->find($eventId);
 
-        $bets = [];
+        if (!$event) {
+            throw $this->createNotFoundException();
+        }
 
-        $eventType = $event->getType();
-        $bets[$eventType] = $this
+        $bet = $this
             ->getDoctrine()
             ->getRepository('App:Bet')
-            ->getBetByUserAndEventNonCache(
-                $user,
-                $event
-            );
+            ->getBetByUserAndEventNonCache($user, $event);
 
-        $bets[$eventType] = $bets[$eventType] ?? $betBuilder->buildForEvent($event);
-        $bet = $bets[$eventType];
-        $bet->setUser($this->getUser());
+        $bet = $bet ?? $betBuilder->buildForEvent($event);
+        $bet->setUser($user);
 
-        $bet = $bets[$event->getType()];
-
-        /** @var Form $form */
-        $form = $this->get('form.factory')->createNamed(
-            'betting_form',
-            BettingType::class, $bet,
-        ['action' => '/module/betting/form/' . $eventId]);
-
-
+        $form = $this->createBettingForm($bet, $eventId);
         $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->get("security.csrf.token_manager")->refreshToken("form_intention");
+
+        if (!$form->isSubmitted()) {
+            return new JsonResponse($presenter->present($form, $event));
+        }
+
+        if ($form->isValid()) {
             $bet = $form->getData();
             $now = new \DateTime();
 
@@ -75,27 +73,33 @@ class Betting extends AbstractController
                 && $event->getId() == $bet->getEvent()->getId()
                 && $bet->getUser()->getId() == $user->getId()
             ) {
+                $this->get("security.csrf.token_manager")->refreshToken("form_intention");
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($bet);
                 $entityManager->flush();
 
-                $this->addFlash($form->getName(), 'betting_success');
-
-                return $this->redirectToRoute(
-                    'betting_one_form',
-                    ['eventId' => $eventId]
-                );
-            } else {
-                $form->addError(new FormError($translator->trans('betting_time_out')));
+                // friss form a mentett tippre: zárolt mezők, nincs beküldő gomb
+                return new JsonResponse($presenter->present(
+                    $this->createBettingForm($bet, $eventId),
+                    $event,
+                    'betting_success'
+                ));
             }
-        }
-        $form = $form->createView();
 
-        return $this->render('controller/page/betting.html.twig', [
-            'event' => $event,
-            'form' => $form,
-            'type' => $eventType
-        ]);
+            $form->addError(new FormError($translator->trans('betting_time_out')));
+        }
+
+        return new JsonResponse($presenter->present($form, $event), Response::HTTP_UNPROCESSABLE_ENTITY);
+    }
+
+    private function createBettingForm(Bet $bet, $eventId): FormInterface
+    {
+        return $this->get('form.factory')->createNamed(
+            'betting_form',
+            BettingType::class,
+            $bet,
+            ['action' => '/module/betting/form/' . $eventId]
+        );
     }
 
     /**

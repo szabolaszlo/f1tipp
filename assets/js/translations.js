@@ -30,7 +30,15 @@ export default {
         },
         betting: {
             title: 'Tippelek',
-            needToSignIn: 'Nem vagy bejelentkezve!'
+            needToSignIn: 'Nem vagy bejelentkezve!',
+            placeholder: 'Tippelj, Mákolj!',
+            search: 'Keresés név vagy kód alapján…',
+            noResult: 'Nincs találat',
+            alreadyTipped: 'Már tippelted',
+            locked: 'A tipped rögzítve, már nem módosítható.',
+            missing: 'Még {count} helyezés hiányzik',
+            redirecting: 'Átirányítás az Aktuális oldalra…',
+            stay: 'Maradok'
         },
         statistics: {
             title: 'Statisztika'
