@@ -35,10 +35,17 @@ module.exports = {
         this.openIndex(crud);
         I.click(`tr[data-id="${entityId}"] .dropdown-toggle`);
         I.click(`tr[data-id="${entityId}"] a.action-delete`);
-        I.waitForElement('#modal-delete-button', 5);
-        I.click('#modal-delete-button');
+        I.waitForElement('#modal-action-confirmation-button', 5);
+        I.click('#modal-action-confirmation-button');
         I.waitForElement('table.datagrid, .datagrid-empty, .no-results');
         I.dontSeeElement(`tr[data-id="${entityId}"]`);
+    },
+
+    /** a datetime-local mezőbe gépelés a böngésző dátumformátuma miatt szétesik: az értéket közvetlenül állítjuk */
+    setDateTime(selector, value) {
+        I.executeScript(({selector, value}) => {
+            document.querySelector(selector).value = value;
+        }, {selector, value});
     },
 
     seeFlash(text) {

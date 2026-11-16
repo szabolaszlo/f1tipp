@@ -7,6 +7,7 @@ use App\Cache\FileCache;
 use App\Calculator\Calculator;
 use App\Entity\Event;
 use App\Entity\Result;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Contracts\Event\EntityLifecycleEventInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityDeletedEvent;
@@ -59,9 +60,9 @@ class EasyAdminSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return array(
-            AfterEntityPersistedEvent::class => array('calculateResults'),
-            AfterEntityUpdatedEvent::class => [['reCalculateResults'], ['clearEventCaches']],
-            AfterEntityDeletedEvent::class => array('reCalculateResults'),
+            AfterEntityPersistedEvent::class => [['calculateResults'], ['clearUserCaches']],
+            AfterEntityUpdatedEvent::class => [['reCalculateResults'], ['clearEventCaches'], ['clearUserCaches']],
+            AfterEntityDeletedEvent::class => [['reCalculateResults'], ['clearUserCaches']],
         );
     }
 
@@ -90,6 +91,19 @@ class EasyAdminSubscriber implements EventSubscriberInterface
         $resultCache->delete('userChampionshipTrophyAwareOrder');
 
         $this->addFlash('success', 'flash_cache_clear');
+    }
+
+    /**
+     * Az oldalsáv VB tabellájának sorrendje (UserChampionshipOrderResolver) cache-elt user id lista:
+     * új / átírt / törölt user (pl. bajnokság tagja lett) csak ürítés után jelenik meg benne.
+     */
+    public function clearUserCaches(EntityLifecycleEventInterface $event): void
+    {
+        if (!($event->getEntityInstance() instanceof User)) {
+            return;
+        }
+
+        ResultCache::of($this->em)->delete('userChampionshipTrophyAwareOrder');
     }
 
     /**
