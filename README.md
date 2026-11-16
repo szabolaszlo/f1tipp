@@ -41,7 +41,8 @@ A tesztek böngészőben kattintják végig az appot, egy külön `e2e` Symfony 
 (`http://127.0.0.1:8001`, nginx 81-es server blokk, `.env.e2e`). Ez a környezet külön
 `f1tipp_e2e` adatbázist és saját cache-t használ, a dev adatokat nem érinti. Minden teszt nulláról
 építi fel a saját adatait (`app:e2e:scenario`): teszt-userek (`e2e_user`, `e2e_user2`, `e2e_user3`,
-`e2e_admin`, jelszó: `e2e-pass`), a mostani időponthoz relatív események, tippek, eredmények.
+`e2e_admin` – ROLE_ADMIN, `e2e_superadmin` – ROLE_SUPER_ADMIN; jelszó: `e2e-pass`), a mostani időponthoz
+relatív események, tippek, eredmények.
 
 ### Előfeltétel
 ```
@@ -54,7 +55,7 @@ cd tests/e2e && npm install && npx playwright install chromium
 ```
 npm run e2e                                   # teljes csomag, headless
 npm --prefix tests/e2e run test:headed        # látható böngészővel
-npm --prefix tests/e2e test -- --grep @scoring   # csak egy csoport (@login, @betting, @deadline, @display, @scoring, @fix, @pages, @smoke)
+npm --prefix tests/e2e test -- --grep @scoring   # csak egy csoport, lásd lent
 E2E_BASE_URL=http://127.0.0.1:8001 npm run e2e   # más cím esetén
 ```
 
@@ -62,8 +63,19 @@ Kézi seedelés (csak `--env=e2e`-vel fut, más környezetben hibával kilép):
 ```
 docker compose exec -u www-data -w /var/www/f1tipp_sf4 php php bin/console app:e2e:scenario open-weekend --env=e2e
 ```
-Szenáriók: `open-weekend`, `deadline-passed`, `about-to-close`, `bets-placed`, `results-entered`.
+Szenáriók: `open-weekend`, `deadline-passed`, `about-to-close`, `bets-placed`, `results-entered`,
+`others-bet`, `others-bet-closed`, `race-closer`, `recent-weekend`, `finished-weekend`, `sprint-bets-placed`,
+`results-without-user3`, `season` (3 lezajlott hétvége eredménnyel + egy következő).
 A várt pontszámok és a tesztadat: `tests/e2e/data/expected.js`.
+
+Csoportok (`--grep`):
+- `@login` belépés, kilépés, session; `@betting` tippleadás; `@deadline` határidő; `@display` mentett tipp
+- `@visibility` mások tippjei csak saját tipp (vagy a határidő) után láthatók
+- `@order` hétvégi sorrend (a legközelebbi esemény elöl, összesítő, váltás a következő hétvégére)
+- `@scoring` eredmény és pontszámítás (sprint is); `@fix` eredmény javítása / törlése
+- `@season` késői javítás több hétvégével később (tabella, kupák, holtverseny)
+- `@admin` minden admin menüpont hatása a front oldalon; `@security` jogosultságok, tipp-felülírás, XSS
+- `@live` élő modulfrissítés két böngészővel; `@pages` oldalak, statisztika, hírek, online jelzés; `@smoke`, `@helper`
 
 # Project Production Details
 
