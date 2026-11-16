@@ -9,7 +9,7 @@
         "doctrine/doctrine-bundle": "^2.5",
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.13",
-        "easycorp/easyadmin-bundle": "^3.5",
+        "easycorp/easyadmin-bundle": "^4.0",
         "friendsofsymfony/ckeditor-bundle": "^2.1",
         "league/oauth2-google": "^4.0",
         "nelmio/cors-bundle": "^2.2",
