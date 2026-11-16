@@ -66,3 +66,11 @@ services:
 
   App\Display\BetLegendProvider:
     public: true
+
+  # E2E (csak --env=e2e alatt futnak, lásd App\Command\E2e\E2eGuard)
+  App\E2e\E2eFixtures:
+    arguments:
+      $kernelEnv: '%kernel.environment%'
+  App\Command\E2e\E2eResetCommand:
+    arguments:
+      $kernelEnv: '%kernel.environment%'
