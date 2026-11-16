@@ -88,7 +88,7 @@ class E2eHelper extends Helper {
 
     /** Belépés a /login JSON végponton (a Login UI-t a login_test nyomkodja végig). */
     async loginAs(username) {
-        const response = await this.pw.page.request.post('/login', {data: {username, password: PASSWORD}});
+        const response = await this.pw.page.request.post(new URL('/login', this.baseUrl).href, {data: {username, password: PASSWORD}});
         if (!response.ok()) {
             throw new Error(`loginAs(${username}) failed: HTTP ${response.status()}`);
         }
