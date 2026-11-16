@@ -32,3 +32,11 @@ Scenario('guest cannot bet', ({I}) => {
     I.waitForText('Nem vagy bejelentkezve!');
     I.dontSeeElement('.f1-betting__form');
 });
+
+Scenario('stays logged in after reload', ({I, loginPage, navigationPage}) => {
+    loginPage.open();
+    loginPage.login('e2e_user', PASSWORD);
+    navigationPage.seeLoggedInAs('e2e_user');
+    I.refreshPage();
+    navigationPage.seeLoggedInAs('e2e_user');
+});

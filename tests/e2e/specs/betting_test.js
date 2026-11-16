@@ -60,3 +60,21 @@ Scenario('stay button cancels redirect', async ({I, bettingPage}) => {
     I.wait(4);
     I.seeInCurrentUrl('#/betting');
 });
+
+// A hétvége eseményeire külön-külön kell tippelni: a sprint tipp mentése után az időmérő még nyitott.
+Scenario('each weekend event is bet separately', ({I, bettingPage}) => {
+    bettingPage.selectTab('Sprint Futam');
+    bettingPage.seeMissing(8);
+    bettingPage.fillPositions(Q_RESULT.slice(0, 8));
+    bettingPage.submit();
+    I.waitForText('Tipped sikeresen rögzítve!');
+    I.click('Maradok');
+
+    bettingPage.selectTab('Időmérő');
+    bettingPage.seeMissing(10);
+    bettingPage.seeEmpty(1);
+
+    bettingPage.selectTab('Sprint Futam');
+    bettingPage.seeLocked();
+    bettingPage.seeSelected(8, Q_RESULT[7]);
+});
