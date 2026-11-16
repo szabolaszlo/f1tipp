@@ -50,6 +50,26 @@ Scenario('event: renaming and moving the deadline shows up for the players', asy
     I.waitForElement(locate('#main-component strong').withText('E2E Átnevezett Nagydíj'), 10);
 });
 
+// Elhalasztott hétvége (pl. időjárás miatt): az admin a hétvége eseményeit két héttel későbbre teszi.
+// Az eredetileg későbbi, de így előbb sorra kerülő hétvégének kell aktuálisnak lennie.
+Scenario('event: a postponed weekend gives way to the sooner one', async ({I, adminPage, actualPage, bettingPage}) => {
+    const info = await I.seedScenario('open-weekend');
+    await I.loginAs('e2e_superadmin');
+
+    for (const key of ['sprint_qualify', 'qualify', 'race']) {
+        adminPage.openEdit('Event', info.events[key].id);
+        const current = await I.grabValueFrom('#Event_date_time');
+        adminPage.setDateTime('#Event_date_time', shiftLocal(current, 14 * 24));
+        adminPage.saveAndReturn();
+    }
+
+    await I.loginAs('e2e_user');
+    actualPage.open();
+    assert.strictEqual(await actualPage.heroTitle(), 'E2E Második Nagydíj');
+    bettingPage.open();
+    assert.deepStrictEqual(await bettingPage.tabLabels(), ['Időmérő', 'Futam']);
+});
+
 Scenario('driver: deactivated, renamed and new drivers in the betting picker', async ({I, adminPage, bettingPage}) => {
     await I.seedScenario('open-weekend');
     await I.loginAs('e2e_superadmin');

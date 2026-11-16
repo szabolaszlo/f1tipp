@@ -63,8 +63,10 @@ class Event extends EntityRepository
         $date = new \DateTime();
         $date->sub(new \DateInterval('P3D'));
 
+        // időrendben: id-sorrendben egy elhalasztott (későbbre tett) hétvége megelőzné a valóban következőt
         $nextEvent = $this->createQueryBuilder('e')
             ->where('e.date_time > :time')
+            ->orderBy('e.date_time', 'ASC')
             ->setMaxResults(1)
             ->setParameter('time', $date)
             ->getQuery()
@@ -119,6 +121,7 @@ class Event extends EntityRepository
 
         $remainEvents = $this->createQueryBuilder('e')
             ->where('e.date_time > :time')
+            ->orderBy('e.date_time', 'ASC')
             ->setParameter('time', $date)
             ->getQuery()
             ->getResult();

@@ -17,8 +17,8 @@ use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * E2E szenárió-állapotok. Minden időpont a futás pillanatához relatív, mert a tippelési
- * határidőt a szerver a saját órájához méri. Az eseményeket időrendben, az 1. hétvégével kezdve
- * kell beszúrni: az EventRepository::getNextEvent() ORDER BY nélkül, id-sorrendben választ.
+ * határidőt a szerver a saját órájához méri. Az eseményeket időrendben szúrjuk be, ahogy élesben
+ * a naptár importja is (a kalkulátor és az admin eredmény-űrlapja is időrendre épít).
  */
 class E2eScenarios
 {
