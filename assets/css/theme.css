@@ -360,15 +360,15 @@ a:hover, a:focus {
 }
 
 .f1-chip--exact {
-    border-color: rgba(180, 76, 242, .5);
-    color: #d2a8f7;
-    background: rgba(180, 76, 242, .08);
+    border-color: rgba(180, 76, 242, .4);
+    color: #c6a6e6;
+    background: rgba(180, 76, 242, .06);
 }
 
 .f1-chip--near {
-    border-color: rgba(245, 208, 0, .35);
+    border-color: rgba(245, 208, 0, .28);
     border-style: dashed;
-    color: #ddc96a;
+    color: #cdbf80;
 }
 
 .f1-chip--plain {
@@ -835,16 +835,16 @@ hr {
 
 /* ---------- archív szezonok (information_content HTML) régi tippjelölései ---------- */
 .table > tbody > tr > td.bet-high {
-    color: #d2a8f7;
-    background: rgba(180, 76, 242, .08);
-    box-shadow: inset 0 0 0 1px rgba(180, 76, 242, .5);
+    color: #c6a6e6;
+    background: rgba(180, 76, 242, .06);
+    box-shadow: inset 0 0 0 1px rgba(180, 76, 242, .4);
     border-radius: 3px;
 }
 
 .table > tbody > tr > td.bet-low {
-    color: #ddc96a;
+    color: #cdbf80;
     background: transparent;
-    outline: 1px dashed rgba(245, 208, 0, .35);
+    outline: 1px dashed rgba(245, 208, 0, .28);
     outline-offset: -2px;
     border-radius: 3px;
 }
