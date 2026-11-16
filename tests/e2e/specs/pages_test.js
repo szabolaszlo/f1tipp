@@ -71,3 +71,21 @@ Scenario('logged in user is shown online in the standings', async ({I}) => {
         .map(r => r.querySelector('.f1-name').textContent.trim()));
     assert.deepStrictEqual(others, ['E2E User1']);
 });
+
+// A főoldal a belépett usernek több modult mutat: üzenőfal, nyeremény, pontszámítás; vendégnek csak a közös részeket.
+const MEMBER_ONLY = ['#message-input', locate('.f1-board__tag').withText('Nyeremény'), locate('.f1-board__tag').withText('Pontok')];
+
+Scenario('guest sees the news, standings and trophies but no member modules', async ({I}) => {
+    I.amOnPage('/');
+    I.waitForElement(locate('.f1-news__title').withText('E2E hír: lezárult a szezon előtti teszt'), 10);
+    I.seeElement('.f1-aside .f1-row--user');
+    MEMBER_ONLY.forEach(el => I.dontSeeElement(el));
+    await I.seeNoConsoleErrors();
+});
+
+Scenario('logged in user sees the member modules', async ({I}) => {
+    await I.loginAs('e2e_user');
+    I.waitForElement(locate('.f1-news__title').withText('E2E hír: lezárult a szezon előtti teszt'), 10);
+    MEMBER_ONLY.forEach(el => I.waitForElement(el, 10));
+    await I.seeNoConsoleErrors();
+});

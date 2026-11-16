@@ -7,6 +7,7 @@ use App\Cache\FileCache;
 use App\Command\E2e\E2eGuard;
 use App\Controller\Module\ResultsOfChampionshipController;
 use App\Entity\Driver;
+use App\Entity\Feed;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
@@ -99,6 +100,16 @@ class E2eFixtures
             $user->setIsAlterChamps($isAlterChamps);
             $this->em->persist($user);
         }
+
+        // hír a főoldal hírfolyamába (élesben a /cron/collect_feeds tölti a motorsport.com-ról)
+        $feed = new Feed();
+        $feed->setId(1); // a Feed id-ja nem generált (élesben a feed elemből jön)
+        $feed->setTitle('E2E hír: lezárult a szezon előtti teszt');
+        $feed->setDescription('<p>Az E2E csapat minden kört lefutott.</p>');
+        $feed->setLink('http://127.0.0.1:8001/');
+        $feed->setPublishDate(new \DateTime('-1 hour'));
+        $feed->setImage('data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7');
+        $this->em->persist($feed);
 
         $this->em->flush();
 
