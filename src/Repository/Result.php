@@ -51,7 +51,7 @@ class Result extends EntityRepository
     {
         $result = $this->createQueryBuilder('result')
             ->select('race')
-            ->innerJoin('App:Race', 'race', Join::WITH, 'result.event = race.id')
+            ->innerJoin(\App\Entity\Race::class, 'race', Join::WITH, 'result.event = race.id')
             ->where('result.isCalculated = 1')
             ->getQuery()
             ->getResult();
@@ -73,7 +73,7 @@ class Result extends EntityRepository
     {
         $result = $this->createQueryBuilder('result')
             ->select('race')
-            ->innerJoin('App:Race', 'race', Join::WITH, 'result.event = race.id')
+            ->innerJoin(\App\Entity\Race::class, 'race', Join::WITH, 'result.event = race.id')
             ->where('result.isCalculated = 1')
             ->getQuery()
             ->getResult();
@@ -95,7 +95,7 @@ class Result extends EntityRepository
     {
         return $this->createQueryBuilder('result')
             ->select('event')
-            ->innerJoin('App:Event', 'event', Join::WITH, 'result.event = event.id')
+            ->innerJoin(\App\Entity\Event::class, 'event', Join::WITH, 'result.event = event.id')
             ->where('result.isCalculated != 1')
             ->getQuery()
             ->getResult();

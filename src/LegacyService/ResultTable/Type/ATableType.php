@@ -76,7 +76,7 @@ abstract class ATableType implements ITableType
      */
     public function renderTable(Event $event)
     {
-        $data['bets'] = $this->em->getRepository('App:Bet')->getBetsByEvent($event);
+        $data['bets'] = $this->em->getRepository(\App\Entity\Bet::class)->getBetsByEvent($event);
 
         $data['event'] = $event;
 

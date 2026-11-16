@@ -33,7 +33,7 @@ class ResultsController extends AbstractController
      */
     public function indexAction(ResultTable $resultTable, FileCache $cache): Response
     {
-        $results = $this->getDoctrine()->getRepository('App:Result')->findAll();
+        $results = $this->getDoctrine()->getRepository(\App\Entity\Result::class)->findAll();
 
         $cacheKey = 'results_v2_' . count($results);
 

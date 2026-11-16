@@ -26,7 +26,7 @@ class SeasonTrophiesController extends AbstractController
     {
         $users = $this
             ->getDoctrine()
-            ->getRepository('App:User')
+            ->getRepository(\App\Entity\User::class)
             ->getAlternativeChampionshipUsers();
 
         $userTrophies = array();

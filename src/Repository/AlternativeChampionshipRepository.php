@@ -70,7 +70,7 @@ class AlternativeChampionshipRepository extends ServiceEntityRepository
         }
 
         return $this->createQueryBuilder('alternative_championship')
-            ->delete('App:AlternativeChampionship', 'ac')
+            ->delete(\App\Entity\AlternativeChampionship::class, 'ac')
             ->where('ac.race IN (:e)')
             ->setParameter('e', $eventIds)
             ->getQuery()

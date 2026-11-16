@@ -150,7 +150,7 @@ class Event extends EntityRepository
     {
         return $this->createQueryBuilder('race')
             ->select('race')
-            ->innerJoin('App:AlternativeChampionship', 'ac', Join::WITH, 'ac.race = race.id')
+            ->innerJoin(\App\Entity\AlternativeChampionship::class, 'ac', Join::WITH, 'ac.race = race.id')
             ->orderBy('race.weekendOrder', 'DESC')
             ->getQuery()
             ->getResult();
@@ -163,7 +163,7 @@ class Event extends EntityRepository
     {
         $lastResultedEvent = $this->createQueryBuilder('event')
             ->select('event')
-            ->innerJoin('App:Result', 'result', Join::WITH, 'result.event = event.id')
+            ->innerJoin(\App\Entity\Result::class, 'result', Join::WITH, 'result.event = event.id')
             ->orderBy('event.date_time', 'DESC')
             ->setMaxResults(1)
             ->getQuery()

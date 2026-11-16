@@ -23,10 +23,10 @@ class ModuleReloaderController extends AbstractController
     public function entityCountsAction(): Response
     {
         return $this->json([
-            'results' => (int)$this->getDoctrine()->getRepository('App:Result')->getResultCount(),
-            'bets' => (int)$this->getDoctrine()->getRepository('App:Bet')->getBetCount(),
-            'trophies' => (int)$this->getDoctrine()->getRepository('App:Trophy')->getTrophyCount(),
-            'messages' => (int)$this->getDoctrine()->getRepository('App:Message')->getMessageCount(),
+            'results' => (int)$this->getDoctrine()->getRepository(\App\Entity\Result::class)->getResultCount(),
+            'bets' => (int)$this->getDoctrine()->getRepository(\App\Entity\Bet::class)->getBetCount(),
+            'trophies' => (int)$this->getDoctrine()->getRepository(\App\Entity\Trophy::class)->getTrophyCount(),
+            'messages' => (int)$this->getDoctrine()->getRepository(\App\Entity\Message::class)->getMessageCount(),
         ], 200);
 
     }

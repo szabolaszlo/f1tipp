@@ -21,14 +21,14 @@ class AlternativePointSummaryCalculator extends ACalculator
 
     public function calculate()
     {
-        $users = $this->em->getRepository('App:User')->getAlternativeChampionshipUsers();
+        $users = $this->em->getRepository(\App\Entity\User::class)->getAlternativeChampionshipUsers();
         $sortMap = array();
 
         /** @var User $user */
         foreach ($users as $key => $user) {
             $userPoints = 0;
             //TODO Change this foreach, mysql SUM
-            $acs = $this->em->getRepository('App:AlternativeChampionship')->getBetsByUser($user);
+            $acs = $this->em->getRepository(\App\Entity\AlternativeChampionship::class)->getBetsByUser($user);
             /** @var AlternativeChampionship $ac */
             foreach ($acs as $ac) {
                 $userPoints += $ac->getPoints();

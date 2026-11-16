@@ -7,6 +7,7 @@ The original project based on own framework, I decide to change it to symfony.
 So there is some legacy code from the original code, like src\LegacyService, but If I have time I will refactoring it one by one.
 
 Used technologies:
+- PHP 8.4 (Docker: `.docker/php84/`)
 - Symfony 4.4 https://symfony.com/doc/current/setup.html
 - WebPack https://symfony.com/doc/current/frontend.html
 

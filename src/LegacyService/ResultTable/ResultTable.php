@@ -54,10 +54,10 @@ class ResultTable
 
             $type = 'only_users';
 
-            $result = $this->em->getRepository('App:Result')->getResultByEvent($event);
+            $result = $this->em->getRepository(\App\Entity\Result::class)->getResultByEvent($event);
 
             $userBet = $user
-                ? $this->em->getRepository('App:Bet')->getBetByUserAndEvent($user, $event)
+                ? $this->em->getRepository(\App\Entity\Bet::class)->getBetByUserAndEvent($user, $event)
                 : false;
 
             $now = new \DateTime();

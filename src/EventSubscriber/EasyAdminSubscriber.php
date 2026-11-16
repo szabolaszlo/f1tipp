@@ -124,11 +124,11 @@ class EasyAdminSubscriber implements EventSubscriberInterface
         }
         $event = $entity->getEvent();
 
-        $this->em->getRepository('App:Bet')->clearBetPointsByEvent($event);
-        $this->em->getRepository('App:BetAttribute')->clearBetAttributePointsByEvent($event);
-        $weekendEvents = $this->em->getRepository('App:Event')->getWeekendEvents($event);
-        $this->em->getRepository('App:Trophy')->removeTrophiesByEvents($weekendEvents);
-        $this->em->getRepository('App:AlternativeChampionship')->removeAlterChampsByEvents($weekendEvents);
+        $this->em->getRepository(\App\Entity\Bet::class)->clearBetPointsByEvent($event);
+        $this->em->getRepository(\App\Entity\BetAttribute::class)->clearBetAttributePointsByEvent($event);
+        $weekendEvents = $this->em->getRepository(\App\Entity\Event::class)->getWeekendEvents($event);
+        $this->em->getRepository(\App\Entity\Trophy::class)->removeTrophiesByEvents($weekendEvents);
+        $this->em->getRepository(\App\Entity\AlternativeChampionship::class)->removeAlterChampsByEvents($weekendEvents);
 
         $this->em->flush();
 

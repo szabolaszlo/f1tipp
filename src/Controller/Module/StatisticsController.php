@@ -47,8 +47,8 @@ class StatisticsController extends AbstractController
         $this->sorter = $sorter;
         $this->calculator = $calculator;
 
-        $bets = $this->getDoctrine()->getRepository('App:Bet')->findAll();
-        $results = $this->getDoctrine()->getRepository('App:Result')->findAll();
+        $bets = $this->getDoctrine()->getRepository(\App\Entity\Bet::class)->findAll();
+        $results = $this->getDoctrine()->getRepository(\App\Entity\Result::class)->findAll();
 
         $cacheKey = 'statistics' . count($results);
         $data = $cache->get($cacheKey);

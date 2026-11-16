@@ -41,7 +41,7 @@ class ResultBuilder
     public function build()
     {
         $result = new Result();
-        $event = $this->em->getRepository('App:Event')->getNextEventForResult();
+        $event = $this->em->getRepository(\App\Entity\Event::class)->getNextEventForResult();
         $result->setEvent($event);
         $result->setIsCalculated(false);
 

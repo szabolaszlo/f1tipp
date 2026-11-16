@@ -41,7 +41,7 @@ class TrophyRuntimeExtension implements RuntimeExtensionInterface
     {
         $lastTrophies = $this
                 ->entityManager
-                ->getRepository('App:Trophy')
+                ->getRepository(\App\Entity\Trophy::class)
                 ->getLastEventPodiumTrophies() ?? [];
 
         $podiumTrophies = [];

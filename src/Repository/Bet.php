@@ -94,8 +94,8 @@ class Bet extends EntityRepository
 
         $result = $this->createQueryBuilder('topRaceBet')
             ->setCacheable(true)
-            ->innerJoin('App:Race', 'race', Join::WITH, 'topRaceBet.event_id = race.id')
-            ->innerJoin('App:User', 'user', Join::WITH, 'topRaceBet.user_id = user.id AND user.isAlterChamps = 1')
+            ->innerJoin(\App\Entity\Race::class, 'race', Join::WITH, 'topRaceBet.event_id = race.id')
+            ->innerJoin(\App\Entity\User::class, 'user', Join::WITH, 'topRaceBet.user_id = user.id AND user.isAlterChamps = 1')
             ->where('topRaceBet.pointSummary > 0')
             ->orderBy('topRaceBet.pointSummary', 'DESC')
             ->getQuery()
@@ -138,8 +138,8 @@ class Bet extends EntityRepository
 
         $result = $this->createQueryBuilder('topQualifyBet')
             ->setCacheable(true)
-            ->innerJoin('App:Qualify', 'qualify', Join::WITH, 'topQualifyBet.event_id = qualify.id')
-            ->innerJoin('App:User', 'user', Join::WITH, 'topQualifyBet.user_id = user.id AND user.isAlterChamps = 1')
+            ->innerJoin(\App\Entity\Qualify::class, 'qualify', Join::WITH, 'topQualifyBet.event_id = qualify.id')
+            ->innerJoin(\App\Entity\User::class, 'user', Join::WITH, 'topQualifyBet.user_id = user.id AND user.isAlterChamps = 1')
             ->where('topQualifyBet.pointSummary > 0')
             ->orderBy('topQualifyBet.pointSummary', 'DESC')
             ->getQuery()
@@ -175,7 +175,7 @@ class Bet extends EntityRepository
     public function clearBetPointsByEvent(Event $event)
     {
         return $this->createQueryBuilder('bet')
-            ->update('App:Bet', 'b')
+            ->update(\App\Entity\Bet::class, 'b')
             ->set('b.pointSummary', 'NULL')
             ->where('b.event_id = :e')
             ->setParameter('e', $event->getId())

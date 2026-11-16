@@ -37,7 +37,7 @@ class TrophyCalculator extends ACalculator
     public function isNeedCalculate()
     {
         $this->calculatedRacesWithoutTrophies = $this->em
-            ->getRepository('App:Result')
+            ->getRepository(\App\Entity\Result::class)
             ->getCalculatedRacesWithoutTrophies();
         return (bool)(count($this->calculatedRacesWithoutTrophies));
     }
@@ -56,8 +56,8 @@ class TrophyCalculator extends ACalculator
 
         $this->em->flush();
 
-        $this->em->getCache()->evictEntityRegion('App:User');
-        $this->em->getCache()->evictEntityRegion('App:Trophy');
+        $this->em->getCache()->evictEntityRegion(\App\Entity\User::class);
+        $this->em->getCache()->evictEntityRegion(\App\Entity\Trophy::class);
     }
 
     /**
@@ -66,8 +66,8 @@ class TrophyCalculator extends ACalculator
      */
     protected function collectUsersWeekendPoints(Race $race)
     {
-        $weekendEvents = $this->em->getRepository("App:Event")->getWeekendEvents($race);
-        $users = $this->em->getRepository('App:User')->getAlternativeChampionshipUsers();
+        $weekendEvents = $this->em->getRepository(\App\Entity\Event::class)->getWeekendEvents($race);
+        $users = $this->em->getRepository(\App\Entity\User::class)->getAlternativeChampionshipUsers();
 
         foreach ($users as $user) {
             $userPoints = 0;

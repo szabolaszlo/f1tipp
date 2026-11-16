@@ -71,7 +71,7 @@ class BettingType extends AbstractType
             },
             function ($userId) {
                 // transform the integer back to User Object
-                return $this->em->getRepository('App:User')->find($userId);
+                return $this->em->getRepository(\App\Entity\User::class)->find($userId);
             }
         ));
 
@@ -82,7 +82,7 @@ class BettingType extends AbstractType
             },
             function ($eventId) {
                 // transform the integer back to Event Object
-                return $this->em->getRepository('App:Event')->find($eventId);
+                return $this->em->getRepository(\App\Entity\Event::class)->find($eventId);
             }
         ));
 

@@ -109,7 +109,7 @@ class Event implements JsonSerializable
         return 'event';
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'id' => $this->getId(),

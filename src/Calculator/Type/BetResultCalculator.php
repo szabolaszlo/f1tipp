@@ -55,7 +55,7 @@ class BetResultCalculator extends ACalculator
      */
     public function isNeedCalculate()
     {
-        $this->notCalculatedEvents = $this->em->getRepository("App:Result")->getNotCalculatedEvents();
+        $this->notCalculatedEvents = $this->em->getRepository(\App\Entity\Result::class)->getNotCalculatedEvents();
         return (bool)(count($this->notCalculatedEvents));
     }
 
@@ -65,8 +65,8 @@ class BetResultCalculator extends ACalculator
     public function calculate()
     {
         foreach ($this->notCalculatedEvents as $event) {
-            $bets = $this->em->getRepository('App:Bet')->getBetsByEvent($event);
-            $result = $this->em->getRepository('App:Result')->getResultByEvent($event);
+            $bets = $this->em->getRepository(\App\Entity\Bet::class)->getBetsByEvent($event);
+            $result = $this->em->getRepository(\App\Entity\Result::class)->getResultByEvent($event);
 
             /** @var Bet $bet */
             foreach ($bets as $bet) {

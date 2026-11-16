@@ -43,7 +43,7 @@ class Betting extends AbstractController
         }
 
         /** @var Event|null $event */
-        $event = $this->getDoctrine()->getRepository('App:Event')->find($eventId);
+        $event = $this->getDoctrine()->getRepository(\App\Entity\Event::class)->find($eventId);
 
         if (!$event) {
             throw $this->createNotFoundException();
@@ -51,7 +51,7 @@ class Betting extends AbstractController
 
         $bet = $this
             ->getDoctrine()
-            ->getRepository('App:Bet')
+            ->getRepository(\App\Entity\Bet::class)
             ->getBetByUserAndEventNonCache($user, $event);
 
         $bet = $bet ?? $betBuilder->buildForEvent($event);
@@ -113,7 +113,7 @@ class Betting extends AbstractController
             throw new UnauthorizedHttpException('');
         }
 
-        $events = $this->getDoctrine()->getRepository('App:Event')->getActualWeekendEvents();
+        $events = $this->getDoctrine()->getRepository(\App\Entity\Event::class)->getActualWeekendEvents();
 
         foreach ($events as $event) {
             $eventsData[$this->getTimeDiff($event->getDateTime())] = [

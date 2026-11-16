@@ -43,7 +43,7 @@ class Trophy extends EntityRepository
         }
 
         return $this->createQueryBuilder('trophy')
-            ->delete('App:Trophy', 't')
+            ->delete(\App\Entity\Trophy::class, 't')
             ->where('t.event IN (:e)')
             ->setParameter('e', $eventIds)
             ->getQuery()
@@ -73,7 +73,7 @@ class Trophy extends EntityRepository
 
         $result = $this->createQueryBuilder('topWeekendUsers')
             ->setCacheable(true)
-            ->innerJoin('App:User', 'user', Join::WITH, 'topWeekendUsers.user = user.id AND user.isAlterChamps = 1')
+            ->innerJoin(\App\Entity\User::class, 'user', Join::WITH, 'topWeekendUsers.user = user.id AND user.isAlterChamps = 1')
             ->where('topWeekendUsers.point > 0')
             ->orderBy('topWeekendUsers.point', 'DESC')
             ->getQuery()

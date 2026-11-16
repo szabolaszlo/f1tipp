@@ -52,7 +52,7 @@ class ActualEventsRuntimeExtension implements RuntimeExtensionInterface
     public function renderActualEvents($user): string
     {
 
-        $events = $this->entityManager->getRepository('App:Event')->getActualWeekendEvents();
+        $events = $this->entityManager->getRepository(\App\Entity\Event::class)->getActualWeekendEvents();
 
         $tables = [];
 

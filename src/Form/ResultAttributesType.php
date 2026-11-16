@@ -91,7 +91,7 @@ class ResultAttributesType extends AbstractType
 
         //TODO Make some provider or something instead of this wtf
         if ($ruleAttribute->getType() == 'driver') {
-            return array_merge($choices, $this->em->getRepository('App:Driver')->getDriverChoices());
+            return array_merge($choices, $this->em->getRepository(\App\Entity\Driver::class)->getDriverChoices());
         }
 
         return [

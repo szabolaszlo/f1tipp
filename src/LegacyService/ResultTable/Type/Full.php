@@ -38,9 +38,9 @@ class Full extends ATableType
      */
     public function renderTable(Event $event)
     {
-        $data['result'] = $this->em->getRepository('App:Result')->getResultByEvent($event);
+        $data['result'] = $this->em->getRepository(\App\Entity\Result::class)->getResultByEvent($event);
 
-        $data['bets'] = $this->em->getRepository('App:Bet')->getBetsByEventOrderByPoints($event);
+        $data['bets'] = $this->em->getRepository(\App\Entity\Bet::class)->getBetsByEventOrderByPoints($event);
 
         $data['usersCount'] = count(
             $this->em->getRepository('App\Entity\User')->getAlternativeChampionshipUsers()

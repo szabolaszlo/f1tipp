@@ -77,7 +77,7 @@ class ResultType extends AbstractType
             },
             function ($eventId) {
                 // transform the integer back to Event Object
-                return $this->em->getRepository('App:Event')->find($eventId);
+                return $this->em->getRepository(\App\Entity\Event::class)->find($eventId);
             }
         ));
 

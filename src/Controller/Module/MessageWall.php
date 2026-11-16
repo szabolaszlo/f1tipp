@@ -27,7 +27,7 @@ class MessageWall extends AbstractController
     public function messagesAction()
     {
         return $this->render('controller/module/message_wall/messages.html.twig', [
-            'messages' => $this->getDoctrine()->getRepository('App:Message')->getMessages()
+            'messages' => $this->getDoctrine()->getRepository(\App\Entity\Message::class)->getMessages()
         ]);
     }
 
