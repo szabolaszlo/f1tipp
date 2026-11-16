@@ -480,15 +480,21 @@ a:hover, a:focus {
 }
 
 .f1-trophy b {
+    /* darabszám-plecsni a kupa jobb alsó sarkában */
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
+    right: -3px;
+    bottom: -2px;
+    min-width: 14px;
+    height: 14px;
+    padding: 0 3px;
+    border: 1px solid currentColor;
+    border-radius: 7px;
+    background: #15151c;
+    color: #fff;
     text-align: center;
-    font-size: 11px;
-    line-height: 13px;
-    font-weight: 900;
-    color: #15151c;
+    font-size: 10px;
+    line-height: 12px;
+    font-weight: 700;
 }
 
 .f1-trophy--gold { color: #cfae4f; }
@@ -721,8 +727,20 @@ hr {
 
 .f1-row--user .f1-trophies {
     flex: none;
+    display: flex;
+    gap: 7px;
     margin-left: auto;
     padding-left: 6px;
+}
+
+.f1-row--user .f1-trophy {
+    width: 22px;
+    height: 20px;
+}
+
+.f1-row--user .f1-trophy svg {
+    width: 18px;
+    height: 18px;
 }
 
 .f1-row--user .f1-nums {
@@ -867,19 +885,18 @@ hr {
     }
 
     .f1-row--user .f1-trophies {
-        gap: 1px;
+        gap: 5px;
         padding-left: 4px;
     }
 
-    .f1-row--user .f1-trophy,
-    .f1-row--user .f1-trophy svg {
-        width: 21px;
-        height: 21px;
+    .f1-row--user .f1-trophy {
+        width: 20px;
+        height: 18px;
     }
 
-    .f1-row--user .f1-trophy b {
-        font-size: 10px;
-        line-height: 11px;
+    .f1-row--user .f1-trophy svg {
+        width: 16px;
+        height: 16px;
     }
 
     .f1-row--user .f1-nums {
