@@ -68,3 +68,27 @@ Scenario('sidebar qualifying top-3 record follows the corrected result', records
 // Korábban hibás volt: a 'topWeekendUsers' cache-t semmi nem ürítette, ezért javítás után a régi pontok maradtak.
 // Most a TrophyCalculator üríti, valahányszor kupákat számol.
 Scenario('sidebar weekend top-3 record follows the corrected result', recordsScenario([RECORD_WEEKEND]));
+
+// Tévesen rögzített eredmény törlése: az időmérő pontjai eltűnnek, a hétvége (tabella, kupák) csak a futam alapján számol.
+//   futam: User1 30, User2 33, User3 9 -> bajnoki pont User2 14, User1 10, User3 8
+Scenario('deleting a result recalculates the weekend without it', async ({I, adminPage, actualPage, sidebarPage}) => {
+    const info = await I.seedScenario('results-entered');
+    await I.loginAs('e2e_admin');
+    adminPage.deleteRow('Result', info.results.qualify);
+
+    actualPage.open();
+    // nincs eredmény, de a határidő lejárt: a tippek látszanak, pont és pontos/közeli jelölés nélkül
+    const classes = await actualPage.chipClassesOf('IDŐMÉRŐ', USERS.e2e_user.name);
+    assert.ok(classes.every(c => !c.includes('f1-chip--exact') && !c.includes('f1-chip--near')), classes.join(' | '));
+    I.dontSeeElement(locate(actualPage.row('IDŐMÉRŐ', USERS.e2e_user.name)).withDescendant('.//*[contains(@class,"f1-tiprow__pts")]'));
+    assert.strictEqual(await actualPage.pointsOf('FUTAM', USERS.e2e_user2.name), 33);
+
+    I.amOnPage('/');
+    assert.deepStrictEqual(
+        (await sidebarPage.standings()).map(r => [r.name, r.points, r.lag, r.trophies]),
+        [
+            [USERS.e2e_user2.name, 14, '', ['gold']],
+            [USERS.e2e_user.name, 10, '+ 4', ['silver']],
+            [USERS.e2e_user3.name, 8, '+ 6', ['bronze']],
+        ]);
+});
