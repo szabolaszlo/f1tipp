@@ -46,4 +46,24 @@ module.exports = {
             return out;
         });
     },
+
+    /**
+     * A "Kupák" modul: az utolsó lezárt hétvége dobogója (templates/controller/module/trophies.html.twig).
+     * @returns {Promise<{title: string, rows: Array<[string, string, number]>}>} [típus, nevek, pont]
+     */
+    async lastPodium() {
+        I.waitForElement('.reload-able-module[data-module-route="trophies"] .f1-board');
+        return I.executeScript(() => {
+            const module = document.querySelector('.reload-able-module[data-module-route="trophies"]');
+            const title = module.querySelector('.f1-board__title');
+            return {
+                title: title ? title.textContent.trim() : '',
+                rows: Array.from(module.querySelectorAll('.f1-row')).map(row => [
+                    (row.querySelector('.f1-trophy').className.match(/f1-trophy--(gold|silver|bronze)/) || [])[1],
+                    row.querySelector('.f1-name').textContent.trim(),
+                    Number(row.querySelector('.f1-num--main').textContent.trim()),
+                ]),
+            };
+        });
+    },
 };

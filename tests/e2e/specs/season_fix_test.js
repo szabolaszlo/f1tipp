@@ -40,6 +40,11 @@ Scenario('season state is calculated per weekend', async ({I, resultsPage, sideb
 
     I.amOnPage('/');
     assert.deepStrictEqual(await standings(sidebarPage), SEASON.standings);
+    // a "Kupák" modul a legutóbbi lezárt (3.) hétvége dobogóját mutatja
+    assert.deepStrictEqual(await sidebarPage.lastPodium(), {
+        title: SEASON_ROUNDS[2],
+        rows: [['gold', 'E2E User3', 73], ['silver', 'E2E User1', 64], ['bronze', 'E2E User2', 12]],
+    });
 
     trophiesPage.open();
     assert.deepStrictEqual((await trophiesPage.seasonTable()).map(r => [r.name, r.point]), SEASON.trophyTable);
@@ -63,6 +68,8 @@ Scenario('correcting a result two weekends later recalculates the whole season',
 
     I.amOnPage('/');
     assert.deepStrictEqual(await standings(sidebarPage), SEASON_AFTER_FIX.standings);
+    // az 1. hétvége javítása nem írja felül a "legutóbbi hétvége" dobogóját
+    assert.deepStrictEqual((await sidebarPage.lastPodium()).title, SEASON_ROUNDS[2]);
 
     trophiesPage.open();
     assert.deepStrictEqual((await trophiesPage.seasonTable()).map(r => [r.name, r.point]), SEASON_AFTER_FIX.trophyTable);
