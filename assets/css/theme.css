@@ -14,8 +14,9 @@
     --f1-muted: #9a9aa8;
     --f1-faint: #686876;
     --f1-red: #e10600;
-    --f1-exact: #3ecf8e;
-    --f1-near: #d9b44a;
+    /* F1 szektoridő-színek: lila = telitalálat, sárga = mellétalálat */
+    --f1-exact: #b44cf2;
+    --f1-near: #f5d000;
     --f1-p1: #d9b44a;
     --f1-p2: #b9b9c4;
     --f1-p3: #c08655;
@@ -359,15 +360,15 @@ a:hover, a:focus {
 }
 
 .f1-chip--exact {
-    border-color: rgba(62, 207, 142, .36);
-    color: #a6d6bf;
-    background: rgba(62, 207, 142, .04);
+    border-color: rgba(180, 76, 242, .5);
+    color: #d2a8f7;
+    background: rgba(180, 76, 242, .08);
 }
 
 .f1-chip--near {
-    border-color: rgba(217, 180, 74, .3);
+    border-color: rgba(245, 208, 0, .35);
     border-style: dashed;
-    color: #bcae86;
+    color: #ddc96a;
 }
 
 .f1-chip--plain {
@@ -834,16 +835,16 @@ hr {
 
 /* ---------- archív szezonok (information_content HTML) régi tippjelölései ---------- */
 .table > tbody > tr > td.bet-high {
-    color: #a6d6bf;
-    background: rgba(62, 207, 142, .06);
-    box-shadow: inset 0 0 0 1px rgba(62, 207, 142, .36);
+    color: #d2a8f7;
+    background: rgba(180, 76, 242, .08);
+    box-shadow: inset 0 0 0 1px rgba(180, 76, 242, .5);
     border-radius: 3px;
 }
 
 .table > tbody > tr > td.bet-low {
-    color: #bcae86;
+    color: #ddc96a;
     background: transparent;
-    outline: 1px dashed rgba(217, 180, 74, .3);
+    outline: 1px dashed rgba(245, 208, 0, .35);
     outline-offset: -2px;
     border-radius: 3px;
 }

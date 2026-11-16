@@ -47,8 +47,9 @@ A felhasználó az **A**-t választotta.
 - **Dobogós színezés** (tompa arany, ezüst, bronz helyezésszám): csak a hétvégi összesítőben és az egyéni pontversenyben. **A tipptáblákban nincs.**
 - **A belépett felhasználó sora nincs kiemelve.**
 - **Tippchipek** (`bet-high` / `bet-low` / üres), nagyon enyhe jelöléssel:
-  - pontos hely: halványzöld vékony keret, zöldes betű, alig látható zöld háttér
-  - rossz helyen eltalált tipp: halvány homokszínű, szaggatott keret és betű
+  - pontos hely: **F1 szektor-lila** (`#b44cf2`) vékony keret, lilás betű, alig látható lila háttér
+  - rossz helyen eltalált tipp: **F1 szektor-sárga** (`#f5d000`), halvány, szaggatott keret és sárgás betű
+  - (2026-11-16: a zöld/homokszín helyett a felhasználó kérésére az F1 szektoridő-színek)
   - nem talált: halványszürke betű, alapkeret
 
   Pontos értékek a látványterv CSS-ében: `.chip.exact`, `.chip.near`.
