@@ -50,7 +50,7 @@ class BetAttributesType extends AbstractType
      * @param FormBuilderInterface $builder
      * @param array $options
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('key', HiddenType::class);
         $builder->add('value', ChoiceType::class, [
@@ -95,7 +95,7 @@ class BetAttributesType extends AbstractType
         ];
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => BetAttribute::class

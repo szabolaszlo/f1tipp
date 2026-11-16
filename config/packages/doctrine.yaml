@@ -2,20 +2,22 @@ doctrine:
     dbal:
         # configure these for your database server
         driver: 'pdo_mysql'
-        server_version: '5.7'
+        server_version: '5.7.9'
         charset: utf8mb4
         options:
             1002: 'SET NAMES utf8mb4'
         default_table_options:
             charset: utf8mb4
-            collate: utf8mb4_unicode_ci
+            collation: utf8mb4_unicode_ci
 
         url: '%env(resolve:DATABASE_URL)%'
         #profiling_collect_backtrace: true
 
     orm:
         auto_generate_proxy_classes: true
-        naming_strategy: doctrine.orm.naming_strategy.underscore
+        enable_lazy_ghost_objects: true
+        report_fields_where_declared: true
+        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
         auto_mapping: true
         mappings:
             App:

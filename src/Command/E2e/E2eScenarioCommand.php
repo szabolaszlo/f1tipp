@@ -4,6 +4,7 @@ namespace App\Command\E2e;
 
 use App\E2e\E2eFixtures;
 use App\E2e\E2eScenarios;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -14,9 +15,9 @@ use Symfony\Component\Console\Output\OutputInterface;
  * E2E: reset, majd egy nevesített szenárió felépítése. Az utolsó stdout sor JSON
  * (serverNow, események id-je és határideje, rögzített eredmények id-je) – ezt olvassa a CodeceptJS helper.
  */
+#[AsCommand(name: 'app:e2e:scenario')]
 class E2eScenarioCommand extends Command
 {
-    protected static $defaultName = 'app:e2e:scenario';
 
     private E2eFixtures $fixtures;
     private E2eScenarios $scenarios;

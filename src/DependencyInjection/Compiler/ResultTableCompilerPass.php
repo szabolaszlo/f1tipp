@@ -15,7 +15,7 @@ class ResultTableCompilerPass implements CompilerPassInterface
     /**
      * @param ContainerBuilder $container
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $loaderIds = $container->findTaggedServiceIds('app.table_type');
 

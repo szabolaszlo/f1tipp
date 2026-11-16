@@ -3,6 +3,7 @@
 namespace App\Command\E2e;
 
 use App\E2e\E2eFixtures;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
@@ -12,9 +13,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * E2E adatbázis nulláról: létrehozás (ha kell), séma újraépítése, alapadatok, cache ürítés.
  */
+#[AsCommand(name: 'app:e2e:reset')]
 class E2eResetCommand extends Command
 {
-    protected static $defaultName = 'app:e2e:reset';
 
     private E2eFixtures $fixtures;
     private string $kernelEnv;

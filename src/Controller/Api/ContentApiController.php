@@ -8,7 +8,7 @@ use App\Entity\Information;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * Csak olvasó JSON végpontok a Vue SPA-nak (Calendar, News, Rules).
