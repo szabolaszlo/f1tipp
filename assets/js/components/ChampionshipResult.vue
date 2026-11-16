@@ -1,74 +1,59 @@
 <template>
   <div>
-    <Transition name="fade" mode="out-in">
-      <div class="panel panel-default">
-        <div class="panel-heading text-center">
-          <strong>{{ data.event.name ? data.event.name + ' - ' : '' }}{{
-              $t("championshipResult.title").toUpperCase()
-            }}</strong>
+    <div v-if="errorMessage" class="f1-board">
+      <div class="f1-board__head">
+        <span class="f1-board__tag">F1</span>
+        <span class="f1-board__title">{{ $t("championshipResult.title") }}</span>
+      </div>
+      <div class="f1-board__note">{{ $t('general.errorOnComponentLoad') }} – {{ errorMessage }}</div>
+    </div>
+    <div v-else-if="loading" class="f1-board">
+      <div class="f1-board__head">
+        <span class="f1-board__tag">F1</span>
+        <span class="f1-board__title">{{ $t("championshipResult.title") }}</span>
+      </div>
+      <div class="f1-board__body text-center"><pulse-loader color="#e10600"></pulse-loader></div>
+    </div>
+    <template v-else>
+      <div class="f1-board">
+        <div class="f1-board__head">
+          <span class="f1-board__tag">F1</span>
+          <span class="f1-board__title">Pilóta világbajnokság</span>
         </div>
-        <div v-if="errorMessage">
-          <div class="text-center" style="padding: 30px;">
-            <strong class="text-center color-one">{{ $t('general.errorOnComponentLoad') }}</strong>
-            <hr/>
-            <strong class="text-center color-two">{{ errorMessage }}</strong>
+        <div class="f1-board__colhead">
+          <span>{{ $t('championshipResult.driver') }}</span>
+          <span class="f1-nums">
+            <span class="f1-num">{{ $t('championshipResult.wins') }}</span>
+            <span class="f1-num">{{ $t('championshipResult.point') }}</span>
+          </span>
+        </div>
+        <div v-for="(driver, index) in data.driverStandings" :key="'d' + index" class="f1-row">
+          <div class="f1-pos">{{ driver.position || index + 1 }}</div>
+          <div class="f1-stripe" :style="{background: driver.teamColor}"></div>
+          <div class="f1-name">{{ driver.Driver.familyName }}<small>{{ driver.Driver.givenName }}</small></div>
+          <div class="f1-nums">
+            <span class="f1-num f1-num--dim">{{ driver.wins }}</span>
+            <span class="f1-num f1-num--main">{{ driver.points }}</span>
           </div>
-        </div>
-        <div v-else-if="!loading">
-          <div class="panel-body center-block">
-            <div class="table-responsive table-striped center-block">
-              <table class="table table-striped">
-                <thead>
-                <tr>
-                  <th></th>
-                  <th>{{ $t('championshipResult.driver') }}</th>
-                  <th>{{ $t('championshipResult.point') }}</th>
-                  <th>{{ $t('championshipResult.wins') }}</th>
-                </tr>
-                </thead>
-                <tbody>
-                <template v-for="driver in data.driverStandings">
-                  <tr>
-                    <td></td>
-                    <td><strong>{{ driver.Driver.givenName }} {{ driver.Driver.familyName }}</strong></td>
-                    <td><strong class="color-one">{{ driver.points }}</strong></td>
-                    <td><strong class="color-two">{{ driver.wins }}</strong></td>
-                  </tr>
-                </template>
-                <tr>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td></td>
-                </tr>
-                </tbody>
-              </table>
-              <table class="table table-striped">
-                <thead>
-                <tr>
-                  <th></th>
-                  <th>{{ $t('championshipResult.construct') }}</th>
-                  <th>{{ $t('championshipResult.point') }}</th>
-                </tr>
-                </thead>
-                <tbody>
-                <template v-for="construct in this.data.constructStandings">
-                  <tr>
-                    <td></td>
-                    <td><strong>{{ construct.Constructor.name }}</strong></td>
-                    <td><strong class="color-one">{{ construct.points }}</strong></td>
-                  </tr>
-                </template>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-        <div v-else class="text-center">
-          <pulse-loader :color="colorTheme.f1TippColor5"></pulse-loader>
         </div>
       </div>
-    </Transition>
+      <div class="f1-board">
+        <div class="f1-board__head">
+          <span class="f1-board__tag">F1</span>
+          <span class="f1-board__title">Konstruktőri VB</span>
+        </div>
+        <div class="f1-board__colhead">
+          <span>{{ $t('championshipResult.construct') }}</span>
+          <span class="f1-nums"><span class="f1-num">{{ $t('championshipResult.point') }}</span></span>
+        </div>
+        <div v-for="(construct, index) in data.constructStandings" :key="'c' + index" class="f1-row">
+          <div class="f1-pos">{{ construct.position || index + 1 }}</div>
+          <div class="f1-stripe" :style="{background: construct.teamColor}"></div>
+          <div class="f1-name">{{ construct.Constructor.name }}</div>
+          <div class="f1-nums"><span class="f1-num f1-num--main">{{ construct.points }}</span></div>
+        </div>
+      </div>
+    </template>
   </div>
 </template>
 

@@ -47,42 +47,8 @@ table caption {
     background-color: rgba(1, 1, 1, .0);
 }
 
-.bg-one {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
 .bg-success {
     background-color: rgba(223, 240, 216, .1);
-}
-
-.bet-empty {
-    background-color: rgba(0, 0, 0, .1);
-}
-
-.bet-empty-font {
-    font-style: italic;
-}
-
-.bet-high {
-    font-weight: bold;
-    color: var(--f1-tipp-color-12);
-    border-radius: 15px;
-    background-color: var(--f1-tipp-color-14);
-}
-
-.bet-high-font {
-    font-weight: bold;
-}
-
-.bet-low {
-    color: var(--f1-tipp-color-6);
-    font-weight: bold;
-    border-radius: 15px;
-    background-color: var(--f1-tipp-color-15);
-}
-
-.bet-low-font {
-    font-weight: bold;
 }
 
 .bets-table-head {
@@ -190,11 +156,9 @@ fieldset[disabled] .btn-new.active {
     box-shadow: none;
 }
 
-
 .btn {
     border-radius: 5px;
 }
-
 
 .panel-group {
     border: 1px;
@@ -238,42 +202,8 @@ fieldset[disabled] .btn-new.active {
     /*border-bottom-color: #ddd;*/
 }
 
-.panel-weekend {
-    background-color: rgba(0, 0, 0, .75);
-    border-radius: 0;
-    border: 0px;
-    z-index: .1;
-    color: white;
-    margin-bottom: 10px;
-}
-
-.panel-weekend > .panel-heading {
-    color: rgba(255, 255, 255, .75);
-    background-color: var(--f1-tipp-color-9);
-    border-radius: 0;
-    border: 0px;
-    padding-top: 8px;
-    padding-bottom: 8px;
-}
-
-.panel-heading-icon {
-    color: var(--f1-tipp-color-6)
-}
-
 .panel > .table-responsive + .panel-body {
     border-top: 0px;
-}
-
-.result-striped > tbody > tr:nth-of-type(odd):not(:last-child) > td:nth-of-type(1) {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-.result-striped > tbody > tr:nth-of-type(odd):not(:last-child) > td:nth-of-type(2) {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-.result-table-result-row {
-    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .table-striped > tbody > tr:nth-of-type(odd) {
@@ -439,7 +369,6 @@ a:hover.glyphicon {
     margin-bottom: 0px;
 }
 
-
 .form-control:disabled {
     font-weight: bold;
     color: var(--f1-tipp-color-6);
@@ -448,12 +377,6 @@ a:hover.glyphicon {
 
 a.feed_source {
     color: rgba(255, 255, 255, .75);
-}
-
-.user-championship-trophy {
-    display: inline-block;
-    position: relative;
-    text-align: center;
 }
 
 .user-championship-trophy-image {
@@ -468,13 +391,6 @@ a.feed_source {
     top: 7px; /* A szám felső sarka a középponthoz igazítva */
     left: 50%; /* A szám bal sarka a középponthoz igazítva */
     transform: translate(-50%, -50%); /* A szám közepére igazítása a középpontban */
-}
-
-.user-container {
-    display: inline-block;
-    position: relative;
-    padding-bottom: 0;
-    margin-bottom: 0;
 }
 
 .online-dot {
@@ -492,12 +408,4 @@ a.feed_source {
     height: 10px;
     background-color: green;
     border-radius: 50%;
-}
-
-.has-checkered-flag {
-    position: absolute;
-    top: 0%;
-    right: -30px;
-    width: 10px;
-    height: 10px;
 }

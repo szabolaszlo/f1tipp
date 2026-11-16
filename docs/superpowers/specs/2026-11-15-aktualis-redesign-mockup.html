@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>F1Tipp – Aktuális (desktop + mobil)</title>
+<link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --bg:#14141b; --panel:#1b1b24; --row:#1f1f29; --line:#2a2a35; --chip:#24242f; --red:#e10600; --exact:#3ecf8e; --near:#d9b44a; --text:#e6e6ec; }
+  body { font-family: 'Titillium Web', system-ui, sans-serif; background: var(--bg); color: var(--text); }
+  .note-bar { background: #2a2a33; color: #ccc; font-size: 13px; padding: 8px 16px; text-align: center; }
+
+  /* fejléc */
+  header { position: sticky; top: 0; z-index: 10; background: var(--bg); border-bottom: 1px solid var(--line); }
+  .hwrap { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; height: 56px; padding: 0 16px; gap: 28px; }
+  .logo { font-weight: 900; font-style: italic; font-size: 24px; letter-spacing: -.5px; }
+  .logo span { color: var(--red); }
+  nav { display: flex; gap: 22px; font-size: 14px; font-weight: 700; text-transform: uppercase; }
+  nav a { padding: 17px 0 15px; border-bottom: 3px solid transparent; opacity: .6; }
+  nav a.on { border-color: var(--red); opacity: 1; }
+  .user { margin-left: auto; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+  .user .av { width: 28px; height: 28px; border-radius: 50%; background: #2c2c3a; display: grid; place-items: center; font-size: 12px; }
+  .burger { display: none; width: 22px; height: 14px; border-top: 2px solid #fff; border-bottom: 2px solid #fff; position: relative; margin-left: auto; }
+  .burger:after { content: ''; position: absolute; left: 0; right: 0; top: 4px; border-top: 2px solid #fff; }
+
+  /* elrendezés */
+  .page { max-width: 1280px; margin: 0 auto; padding: 0 16px 40px; display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 24px; align-items: start; }
+  .hero { grid-column: 1 / -1; padding: 26px 0 6px; display: flex; align-items: flex-end; gap: 24px; }
+  .hero .round { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; opacity: .6; }
+  .hero h1 { font-size: 34px; font-weight: 900; text-transform: uppercase; line-height: 1.05; }
+  .hero .when { font-size: 14px; opacity: .6; }
+  .seg { display: flex; background: var(--chip); border-radius: 6px; overflow: hidden; font-size: 13px; font-weight: 700; text-transform: uppercase; margin-bottom: 16px; }
+  .seg div { flex: 1; text-align: center; padding: 9px 0; cursor: pointer; }
+  .seg div.on { background: #33333f; color: var(--text); box-shadow: inset 0 -2px 0 var(--red); }
+  aside { position: sticky; top: 72px; }
+
+  /* TV-tábla */
+  .board { background: var(--panel); border-radius: 8px; overflow: hidden; box-shadow: none; border: 1px solid var(--line); margin-bottom: 18px; }
+  .bhead { display: flex; align-items: center; height: 44px; background: linear-gradient(90deg, #2a2a36, #22222c 60%); color: #fff; border-bottom: 1px solid #34343f; }
+  .bhead .tag { color: #ff5a52; font-weight: 700; padding: 0 0 0 12px; display: flex; align-items: center; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; border-left: 4px solid var(--red); height: 20px; margin-left: 10px; padding-left: 8px; }
+  .bhead .ttl { flex: 1; display: flex; align-items: center; padding-left: 10px; font-weight: 700; font-size: 14px !important; text-transform: uppercase; font-size: 13px; letter-spacing: .5px; white-space: nowrap; overflow: hidden; }
+  .bhead .meta { display: flex; align-items: center; padding-right: 12px; font-size: 12px; opacity: .5; white-space: nowrap; }
+  .colh { display: flex; align-items: center; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; padding: 6px 10px 4px 0; opacity: .55; }
+  .colh .n { padding-left: 40px; }
+  .colh .r { margin-left: auto; display: flex; }
+  .colh .r span { width: 52px; text-align: right; }
+  .row { display: flex; align-items: center; min-height: 38px; border-top: 1px solid var(--line); }
+  .row:nth-child(even) { background: var(--row); }
+  
+  .pos { width: 40px; flex: none; text-align: center; font-weight: 700; opacity: .9; font-size: 15px; }
+  .p1 .pos { color: #d9b44a; } .p2 .pos { color: #b9b9c4; } .p3 .pos { color: #c08655; }
+  .stripe { width: 4px; height: 22px; border-radius: 2px; margin-right: 10px; flex: none; }
+  .name { font-weight: 600; font-size: 15px; text-transform: uppercase; letter-spacing: .3px; white-space: nowrap; }
+  .name small { font-weight: 400; text-transform: none; opacity: .6; font-size: 12px; margin-left: 5px; }
+  .nums { margin-left: auto; display: flex; padding-right: 10px; flex: none; }
+  .nums { align-items: baseline; }
+  .nums span { width: 52px; text-align: right; font-weight: 700; font-size: 15px; }
+  .nums .main { font-weight: 700; }
+  .nums .dim { opacity: .6; font-weight: 600; font-size: 13px; }
+  .trophy { display: inline-flex; gap: 3px; margin-left: 10px; vertical-align: middle; }
+  .trophy i { position: relative; width: 24px; height: 24px; font-style: normal; display: inline-block; }
+  .trophy i svg { width: 24px; height: 24px; display: block; }
+  .trophy i b { position: absolute; top: 0; left: 0; right: 0; text-align: center; font-size: 11px; line-height: 13px; font-weight: 900; color: #15151c; }
+  .more { text-align: center; font-size: 12px; font-weight: 600; color: #9a9aa8; text-transform: uppercase; padding: 10px; letter-spacing: 1px; background: var(--row); border-top: 1px solid var(--line); cursor: pointer; }
+
+  /* tipp-tábla: desktopon egy sor, mobilon név alatt */
+  .tiprow { display: grid; grid-template-columns: 40px 130px 1fr 52px; align-items: center; min-height: 40px; border-top: 1px solid var(--line); }
+  .tiprow:nth-child(even) { background: var(--row); }
+  
+  .tiprow .name { padding-left: 4px; }
+  .tiprow .pts { text-align: right; padding-right: 12px; font-weight: 700; font-size: 15px; }
+  .chips { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)) minmax(0, 1.15fr); min-width: 0; gap: 3px; }
+  .chip { font-size: 11px; font-weight: 600; text-align: center; padding: 4px 0 3px; border-radius: 3px; background: transparent; color: #686876; border: 1px solid var(--line); }
+  .chip.exact { border-color: rgba(62,207,142,.36); color: #a6d6bf; background: rgba(62,207,142,.04); }
+  .chip.near { border-color: rgba(217,180,74,.3); border-style: dashed; color: #bcae86; }
+  .chip.sc { margin-left: 4px; }
+  .chip.res { color: var(--text); background: var(--chip); border-color: transparent; border-left: 2px solid; border-radius: 2px; }
+  .sc { font-size: 11px; font-weight: 600; text-align: center; padding: 4px 0 3px; border-radius: 3px; border: 1px solid var(--line); color: #7d7d8c; margin-left: 6px; }
+  
+  .tiprow.result { background: #17171f; }
+  .tiprow.result .name { color: #9a9aa8; font-size: 11px; font-weight: 700; letter-spacing: 1px; }
+  .tiprow.head { min-height: 26px; background: none; border-top: none; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; opacity: .55; }
+  .tiprow.head .chips div { text-align: center; }
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; padding: 10px 12px 12px; color: #aaa; border-top: 1px solid var(--line); }
+  .legend .chip { display: inline-block; width: 38px; margin-right: 6px; }
+
+  .mathbox { display: grid; grid-template-columns: 1fr 1fr; }
+  .mathbox div { padding: 12px; border-top: 1px solid var(--line); }
+  .mathbox b { display: block; font-size: 22px; font-weight: 900; }
+  .mathbox span { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; opacity: .6; }
+
+  /* ---------- MOBIL ---------- */
+  @media (max-width: 900px) {
+    nav, .user { display: none; }
+    .burger { display: block; }
+    .mnav { display: flex !important; }
+    .page { grid-template-columns: 1fr; padding: 0 10px 30px; gap: 0; }
+    .hero { padding: 18px 4px 12px; flex-direction: column; align-items: flex-start; gap: 2px; }
+    .hero h1 { font-size: 26px; }
+    aside { position: static; }
+    .tiprow { grid-template-columns: 40px minmax(0,1fr) 48px; grid-template-areas: "pos name pts" "chips chips chips"; row-gap: 5px; padding: 6px 0 8px; }
+    .bhead .meta .long { display: none; }
+    .seg { margin-bottom: 12px; }
+    .tiprow .pos { grid-area: pos; } .tiprow .name { grid-area: name; } .tiprow .pts { grid-area: pts; }
+    .tiprow .chips { grid-area: chips; padding: 0 8px; gap: 2px; }
+    .chip { font-size: 10px; padding: 3px 0 2px; }
+    .tiprow.head { grid-template-areas: "chips chips chips"; padding: 4px 0 0; }
+    .tiprow.head .lbl { display: none; }
+    .tiprow.result { grid-template-areas: "pos name pts" "chips chips chips"; }
+    .chip.sc { margin-left: 2px; }
+  }
+  .mnav { display: none; gap: 18px; overflow-x: auto; padding: 0 14px; font-size: 13px; font-weight: 700; text-transform: uppercase; white-space: nowrap; background: var(--panel); scrollbar-width: none; }
+  .mnav a { padding: 10px 0; border-bottom: 3px solid transparent; opacity: .6; }
+  .mnav a.on { border-color: var(--red); opacity: 1; }
+</style>
+</head>
+<body>
+<div class="note-bar">11. változat – hétvégi összesítő: hétvégi pont → bajnoki pont. Reszponzív látványterv: széles ablakban desktop nézet, ha keskenyre húzod (vagy telefonon nézed), átvált mobilra.</div>
+<header>
+  <div class="hwrap">
+    <div class="logo">F1<span>TIPP</span></div>
+    <nav><a>Tippelés</a><a class="on">Aktuális</a><a>Eredmények</a><a>Naptár</a><a>Szabályok</a><a>Statisztika</a></nav>
+    <div class="user"><div class="av">B</div>Blasio</div>
+    <div class="burger"></div>
+  </div>
+  <div class="mnav"><a>Tippelés</a><a class="on">Aktuális</a><a>Eredmények</a><a>Naptár</a><a>Szabályok</a><a>Statisztika</a></div>
+</header>
+
+<div class="page">
+  <div class="hero">
+    <div>
+      <div class="round">24. forduló · Szezonzáró</div>
+      <h1>Abu Dhabi Nagydíj</h1>
+    </div>
+    <div class="when">Yas Marina · Dec. 5–7.</div>
+  </div>
+
+  <main>
+    <div id="tab-weekend"></div>
+    <div id="tab-race"></div>
+    <div id="tab-quali"></div>
+  </main>
+
+  <aside id="side"></aside>
+</div>
+
+<script>
+const TEAM = { VER:'#3671C6', TSU:'#3671C6', NOR:'#FF8000', PIA:'#FF8000', LEC:'#E8002D', HAM:'#E8002D', RUS:'#27F4D2', ANT:'#27F4D2', ALO:'#229971', STR:'#229971', OCO:'#B6BABD', BEA:'#B6BABD', HUL:'#52E252', BOR:'#52E252', GAS:'#0093CC', ALB:'#64C4FF', SAI:'#64C4FF' };
+const RESULT = ['VER','PIA','NOR','LEC','RUS','ALO','OCO','HAM','HUL','STR'];
+const SC_RESULT = 'Nem';
+const ME = 'Blasio';
+const raceTips = {
+  Steve:     [['VER','NOR','PIA','LEC','RUS','ALO','HAM','OCO','HUL','GAS'],'Nem'],
+  Blasio:    [['VER','PIA','RUS','NOR','LEC','HAM','ALO','OCO','ANT','STR'],'Nem'],
+  Karlitosz: [['VER','PIA','RUS','NOR','LEC','HAM','ANT','ALO','HUL','SAI'],'Igen'],
+  Sanya85:   [['VER','RUS','NOR','PIA','LEC','OCO','HAM','ALO','BEA','ALB'],'Nem'],
+  Quazi:     [['VER','NOR','PIA','RUS','LEC','ALO','HAM','ANT','HUL','STR'],'Igen'],
+  Imi12king: [['NOR','VER','PIA','LEC','RUS','HAM','ANT','ALO','GAS','TSU'],'Igen'],
+  Matt:      [['PIA','VER','NOR','RUS','LEC','ALO','HAM','ANT','OCO','HUL'],'Igen'],
+};
+const QRESULT = ['VER','NOR','PIA','RUS','LEC','ALO','BOR','OCO','HAD','TSU'];
+const qualiTips = {
+  Quazi:     [['VER','NOR','PIA','RUS','LEC','ALO','HAM','ANT','HUL','OCO']],
+  Steve:     [['NOR','VER','PIA','RUS','LEC','ALO','HAM','OCO','ANT','GAS']],
+  Barbie:    [['VER','NOR','RUS','PIA','LEC','ALO','HAM','ANT','BOR','TSU']],
+  Karlitosz: [['VER','PIA','NOR','RUS','LEC','HAM','ALO','ANT','HUL','STR']],
+  Imi12king: [['NOR','VER','PIA','RUS','LEC','HAM','ALO','ANT','GAS','TSU']],
+  Matt:      [['PIA','NOR','VER','RUS','LEC','ALO','HAM','ANT','OCO','HUL']],
+  Agneta:    [['NOR','PIA','VER','LEC','RUS','HAM','ALO','ANT','HUL','SAI']],
+  Blasio:    [['NOR','PIA','VER','LEC','HAM','RUS','ANT','ALO','HUL','STR']],
+};
+const CUP = '<svg viewBox="0 0 16 16" fill="currentColor"><path d="M2.5.5A.5.5 0 0 1 3 0h10a.5.5 0 0 1 .5.5c0 .538-.012 1.05-.034 1.536a3 3 0 1 1-1.133 5.89c-.79 1.865-1.878 2.777-2.833 3.011v2.173l1.425.356c.194.048.377.135.537.255L13.3 15.1a.5.5 0 0 1-.3.9H3a.5.5 0 0 1-.3-.9l1.838-1.379c.16-.12.343-.207.537-.255L6.5 13.11v-2.173c-.955-.234-2.043-1.146-2.833-3.012a3 3 0 1 1-1.132-5.89A33.076 33.076 0 0 1 2.5.5zm.099 2.54a2 2 0 0 0 .72 3.935c-.333-1.05-.588-2.346-.72-3.935zm10.083 3.935a2 2 0 0 0 .72-3.935c-.133 1.59-.388 2.885-.72 3.935z"/></svg>';
+const CUP_COLORS = ['#cfae4f', '#b4b4be', '#b98252'];
+const trophies = t => `<span class="trophy">${t.map((n,k)=> n ? `<i style="color:${CUP_COLORS[k]}">${CUP}<b>${n}</b></i>` : '').join('')}</span>`;
+const pc = i => i<3 ? ' p'+(i+1) : '';
+const board = (tag, ttl, meta, inner) => `<div class="board"><div class="bhead"><div class="tag">${tag}</div><div class="ttl">${ttl}</div><div class="meta">${meta||''}</div></div>${inner}</div>`;
+
+Object.assign(TEAM, { HAD:'#6692FF', BOR:'#52E252' });
+
+function score(t, result, exactPts, nearPts, scResult) {
+  let p = 0;
+  const cls = t[0].map((d,i)=>{ if (result[i]===d){p+=exactPts;return 'exact';} if (nearPts && result.includes(d)){p+=nearPts;return 'near';} return ''; });
+  let sc = null; if (scResult !== undefined) { sc = t[1]===scResult; if (sc) p+=3; }
+  return {p, cls, sc};
+}
+function tipBoard(tag, meta, result, tips, exactPts, nearPts, scResult) {
+  const hasSc = scResult !== undefined;
+  const rows = Object.entries(tips).map(([n,t])=>({n,t,...score(t,result,exactPts,nearPts,scResult)})).sort((a,b)=>b.p-a.p);
+  const cols = `grid-template-columns: repeat(${result.length}, minmax(0,1fr))${hasSc?' minmax(0,1.15fr)':''}`;
+  let h = `<div class="tiprow head"><div></div><div class="lbl">Tippelő</div><div class="chips" style="${cols}">${result.map((_,i)=>`<div>${i+1}.</div>`).join('')}${hasSc?'<div>SC</div>':''}</div><div class="lbl" style="text-align:right;padding-right:12px">Pont</div></div>`;
+  h += `<div class="tiprow result"><div></div><div class="name">Eredmény</div><div class="chips" style="${cols}">${result.map(d=>`<div class="chip res" style="border-left-color:${TEAM[d]||'#888'}">${d}</div>`).join('')}${hasSc?`<div class="chip res sc" style="border-left-color:#888">${scResult}</div>`:''}</div><div></div></div>`;
+  h += rows.map((r,i)=>`<div class="tiprow"><div class="pos">${i+1}</div><div class="name">${r.n}</div><div class="chips" style="${cols}">${r.t[0].map((d,k)=>`<div class="chip ${r.cls[k]}">${d}</div>`).join('')}${hasSc?`<div class="chip sc${r.sc?' exact':''}">${r.t[1]}</div>`:''}</div><div class="pts">${r.p}</div></div>`).join('');
+  h += `<div class="legend"><span><span class="chip exact">VER</span>Pontos hely · ${exactPts} pont</span>${nearPts?`<span><span class="chip near">NOR</span>Top ${result.length}-ben, rossz helyen · ${nearPts} pont</span>`:''}<span><span class="chip">GAS</span>Nem talált · 0 pont</span>${hasSc?'<span>SC: biztonsági autó kérdés · 3 pont</span>':''}</div>`;
+  return board(tag, 'Tippek vs. eredmény', meta, h);
+}
+document.getElementById('tab-race').innerHTML = tipBoard('Futam', 'Dec. 7. 14:00<span class="long">&nbsp;· Tippek 9/11</span>', RESULT, raceTips, 3, 1, SC_RESULT);
+document.getElementById('tab-quali').innerHTML = tipBoard('Időmérő', 'Dec. 6. 15:00<span class="long">&nbsp;· Tippek 8/11</span>', QRESULT, qualiTips, 4, 1);
+
+// HÉTVÉGE ÖSSZESÍTETT: hétvégi (gyűjtött) pont -> sorrend -> bajnoki (átváltott) pont
+const weekend = [['Steve',31,14],['Karlitosz',25,10],['Blasio',24,8],['Quazi',24,8],['Barbie',21,6],['Matt',19,4],['Agneta',18,3],['Sanya85',18,3],['Beni890',10,1],['Barala94',0,0],['Borintius',0,0]];
+let prev = null, place = 0;
+const wrows = weekend.map((r,i)=>{ if (r[1]!==prev) { place = i+1; prev = r[1]; } return [place, ...r]; });
+document.getElementById('tab-weekend').innerHTML = board('Hétvége','Összesített eredmény','11 tippelő',
+  `<div class="colh"><span class="n">Tippelő</span><span class="r"><span style="width:90px">Hétvégi pont</span><span style="width:90px">Bajnoki pont</span></span></div>`
+  + wrows.map(r=>`<div class="row${pc(r[0]-1)}"><div class="pos">${r[0]}</div><div class="name">${r[1]}</div><div class="nums"><span class="dim" style="width:90px">${r[2]}</span><span class="main" style="width:90px">${r[3] ? '+'+r[3] : '0'}</span></div></div>`).join(''));
+
+// OLDALSÁV
+const champ = [['Karlitosz',204,'',[5,3,2]],['Blasio',181,'−23',[4,3,2]],['Quazi',163,'−41',[3,2,4]],['Sanya85',159,'−45',[3,2,1]],['Matt',131,'−73',[2,1,3]],['Steve',130,'−74',[1,3,2]],['Agneta',127,'−77',[1,2,2]],['Barbie',115,'−89',[1,1,2]]];
+const wdc = [['Lando','Norris','NOR',423],['Max','Verstappen','VER',421],['Oscar','Piastri','PIA',410],['George','Russell','RUS',319],['Charles','Leclerc','LEC',242],['Lewis','Hamilton','HAM',156]];
+const wcc = [['McLaren','NOR',833],['Mercedes','RUS',469],['Red Bull','VER',451],['Ferrari','LEC',398]];
+let side = board('VB','Egyéni pontverseny','',
+  `<div class="colh"><span class="n">Tippelő</span><span class="r"><span>Hátrány</span><span>Pont</span></span></div>`
+  + champ.map((r,i)=>`<div class="row${pc(i)}${r[0]===ME?' me':''}"><div class="pos">${i+1}</div><div class="name">${r[0]}${trophies(r[3])}</div><div class="nums"><span class="dim">${r[2]}</span><span class="main">${r[1]}</span></div></div>`).join('')
+  + `<div class="mathbox"><div><b>0</b><span>Hátralévő hétvége</span></div><div><b>0</b><span>Még szerezhető pont</span></div></div>`
+  + `<div class="more">Teljes tabella és rekordok ▾</div>`);
+side += board('F1','Pilóta világbajnokság','2025',
+  wdc.map((r,i)=>`<div class="row"><div class="pos">${i+1}</div><div class="stripe" style="background:${TEAM[r[2]]}"></div><div class="name">${r[1]}<small>${r[0]}</small></div><div class="nums"><span class="main">${r[3]}</span></div></div>`).join('')
+  + `<div class="more">Konstruktőrök ▸</div>`);
+side += board('F1','Konstruktőri VB','2025',
+  wcc.map((r,i)=>`<div class="row"><div class="pos">${i+1}</div><div class="stripe" style="background:${TEAM[r[1]]}"></div><div class="name">${r[0]}</div><div class="nums"><span class="main">${r[2]}</span></div></div>`).join(''));
+document.getElementById('side').innerHTML = side;
+</script>
+</body>
+</html>

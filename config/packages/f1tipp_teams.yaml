@@ -1,0 +1,17 @@
+# Csapatszínek a megjelenítéshez (TeamColorProvider). Szezononként frissítendő!
+# - drivers: a Driver.short kódok (pl. VER), ezekkel jelennek meg a tippek/eredmények
+# - match: kisbetűs részsztringek az external API csapatnevéhez; az első találat nyer,
+#          ezért a Racing Bulls a Red Bull ELŐTT szerepel.
+parameters:
+    f1tipp.teams:
+        - { name: 'McLaren',      color: '#FF8000', match: ['mclaren'],                            drivers: ['NOR', 'PIA'] }
+        - { name: 'Ferrari',      color: '#E8002D', match: ['ferrari'],                            drivers: ['LEC', 'HAM'] }
+        - { name: 'Racing Bulls', color: '#6692FF', match: ['racing bulls', 'rb f1', 'vcarb'],     drivers: ['LAW', 'LIN'] }
+        - { name: 'Red Bull',     color: '#3671C6', match: ['red bull'],                           drivers: ['VER', 'HAD'] }
+        - { name: 'Mercedes',     color: '#27F4D2', match: ['mercedes'],                           drivers: ['RUS', 'ANT'] }
+        - { name: 'Aston Martin', color: '#229971', match: ['aston martin'],                       drivers: ['ALO', 'STR'] }
+        - { name: 'Alpine',       color: '#0093CC', match: ['alpine'],                             drivers: ['GAS', 'COL'] }
+        - { name: 'Williams',     color: '#64C4FF', match: ['williams'],                           drivers: ['ALB', 'SAI'] }
+        - { name: 'Haas',         color: '#B6BABD', match: ['haas'],                               drivers: ['OCO', 'BEA'] }
+        - { name: 'Audi',         color: '#52E252', match: ['audi', 'sauber', 'kick'],             drivers: ['HUL', 'BOR'] }
+        - { name: 'Cadillac',     color: '#C8C8C8', match: ['cadillac'],                           drivers: ['PER', 'BOT'] }

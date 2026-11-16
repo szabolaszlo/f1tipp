@@ -10,6 +10,7 @@
 namespace App\Controller\Module;
 
 use App\Cache\FileCache;
+use App\Display\TeamColorProvider;
 use GuzzleHttp\Client;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -31,15 +32,24 @@ class ResultsOfChampionshipController extends AbstractController
     /**
      * @Route("module/championship_result", name="championship_result", methods={"GET"})
      * @param FileCache $cache
+     * @param TeamColorProvider $teamColors
      * @return Response
      * @throws InvalidArgumentException
      */
-    public function indexAction(FileCache $cache)
+    public function indexAction(FileCache $cache, TeamColorProvider $teamColors)
     {
         $data = $cache->get(self::RESULTS_CACHE_KEY);
 
         if (empty($data)) {
             $data = $this->getResults($cache);
+        }
+
+        foreach ($data['driverStandings'] ?? [] as $i => $standing) {
+            $data['driverStandings'][$i]['teamColor'] = $teamColors->colorForDriver((string)($standing['Driver']['code'] ?? ''));
+        }
+
+        foreach ($data['constructStandings'] ?? [] as $i => $standing) {
+            $data['constructStandings'][$i]['teamColor'] = $teamColors->colorForTeam((string)($standing['Constructor']['name'] ?? ''));
         }
 
         $data['id'] = 'resultsOfChampionship';

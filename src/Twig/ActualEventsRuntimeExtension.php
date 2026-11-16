@@ -81,7 +81,8 @@ class ActualEventsRuntimeExtension implements RuntimeExtensionInterface
         ksort($tables);
 
         return $this->twig->render('extension/actual_events_results.html.twig', [
-            'tables' => $tables
+            'tables' => $tables,
+            'events' => $events
         ]);
     }
 }
