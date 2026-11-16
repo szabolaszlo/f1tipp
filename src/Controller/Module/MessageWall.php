@@ -13,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\Message;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
 /**
@@ -31,6 +32,11 @@ class MessageWall extends AbstractController
     #[Route(path: '/module/messages/list', name: 'message_list', methods: ['GET'])]
     public function messagesAction()
     {
+        // a fal csak belépett usereknek jelenik meg (MessageWallRuntimeExtension), a lista se legyen publikus
+        if (!$this->getUser()) {
+            throw new UnauthorizedHttpException('');
+        }
+
         return $this->render('controller/module/message_wall/messages.html.twig', [
             'messages' => $this->doctrine->getRepository(\App\Entity\Message::class)->getMessages()
         ]);
@@ -46,7 +52,10 @@ class MessageWall extends AbstractController
     {
         if ($request->get('message') && $this->getUser()) {
             $message = new Message();
-            $message->setContent($this->turnUrlIntoHyperlink($request->get('message')));
+            // a fal |raw-val jeleníti meg a tartalmat (a linkek miatt): a felhasználó szövegét előbb escape-eljük,
+            // csak a mi általunk generált <a> tag maradhat HTML
+            $text = htmlspecialchars((string) $request->get('message'), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            $message->setContent($this->turnUrlIntoHyperlink($text));
             $message->setUser($this->getUser());
             $message->setDateTime(new \DateTime());
 
