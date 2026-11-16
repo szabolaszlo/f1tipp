@@ -5,7 +5,6 @@
         "php": "^8.4",
         "ext-ctype": "*",
         "ext-iconv": "*",
-        "api-platform/core": "^2.7",
         "composer/package-versions-deprecated": "1.11.99.5",
         "doctrine/annotations": "^1.14",
         "doctrine/doctrine-bundle": "^2.5",
@@ -64,16 +63,6 @@
         "allow-plugins": {
             "composer/package-versions-deprecated": true,
             "symfony/flex": true
-        },
-        "policy": {
-            "advisories": {
-                "ignore": {
-                    "api-platform/core": {
-                        "on-audit": false,
-                        "reason": "Nincs javított 2.x kiadás; a 3.x Symfony 6.4+-ot igényel. Auditban látszik, csak az install blokkolását oldjuk fel."
-                    }
-                }
-            }
         }
     },
     "autoload": {
