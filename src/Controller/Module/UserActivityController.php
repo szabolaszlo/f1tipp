@@ -27,11 +27,11 @@ class UserActivityController extends AbstractController
     }
 
     /**
-     * @Route("get_online_user", name="get_online_user", methods={"GET"})
      * @param FileCache $cache
      * @return JsonResponse
      * @throws InvalidArgumentException
      */
+    #[Route(path: 'get_online_user', name: 'get_online_user', methods: ['GET'])]
     public function getOnlineUsersAction(FileCache $cache): JsonResponse
     {
         /** @var User $user */

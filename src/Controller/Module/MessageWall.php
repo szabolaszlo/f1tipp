@@ -26,9 +26,9 @@ class MessageWall extends AbstractController
     }
 
     /**
-     * @Route("/module/messages/list", name="message_list", methods={"GET"})
      * @return string
      */
+    #[Route(path: '/module/messages/list', name: 'message_list', methods: ['GET'])]
     public function messagesAction()
     {
         return $this->render('controller/module/message_wall/messages.html.twig', [
@@ -37,11 +37,11 @@ class MessageWall extends AbstractController
     }
 
     /**
-     * @Route("/module/messages/save", name="message_save", methods={"POST"})
      * @param Request $request
      * @return string
      * @throws \Exception
      */
+    #[Route(path: '/module/messages/save', name: 'message_save', methods: ['POST'])]
     public function saveAction(Request $request)
     {
         if ($request->get('message') && $this->getUser()) {

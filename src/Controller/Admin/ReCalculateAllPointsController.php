@@ -34,12 +34,12 @@ class ReCalculateAllPointsController extends AbstractController
     ];
 
     /**
-     * @Route(path = "/admin/maintenance/re_calculate_points", name = "re_calculate_points")
      * @param Calculator $calculator
      * @param FileCache $fileCache
      * @return RedirectResponse
      * @throws \Exception
      */
+    #[Route(path: '/admin/maintenance/re_calculate_points', name: 're_calculate_points')]
     public function indexAction(EntityManagerInterface $entityManager, Calculator $calculator, FileCache $fileCache)
     {
         $sql = '

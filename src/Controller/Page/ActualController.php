@@ -21,10 +21,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ActualController extends AbstractController
 {
     /**
-     * @Route(path="/", name="home", methods={"GET"})
      * @param ManagerRegistry $managerRegistry
      * @return Response
      */
+    #[Route(path: '/', name: 'home', methods: ['GET'])]
     public function indexAction(ManagerRegistry $managerRegistry): Response
     {
         $ga4MeasurementId = $managerRegistry

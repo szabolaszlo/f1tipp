@@ -32,9 +32,7 @@ class DashboardController extends AbstractDashboardController
         $this->urlGenerator = $urlGenerator;
     }
 
-    /**
-     * @Route("/admin")
-     */
+    #[Route(path: '/admin')]
     public function index(): Response
     {
         return $this->redirect(

@@ -29,13 +29,13 @@ class ResultsController extends AbstractController
     }
 
     /**
-     * @Route(path="/module/results", name="results", methods={"GET"})
      * @param ResultTable $resultTable
      * @param FileCache $cache
      * @return Response
      * @throws InvalidArgumentException
      * @throws Exception
      */
+    #[Route(path: '/module/results', name: 'results', methods: ['GET'])]
     public function indexAction(ResultTable $resultTable, FileCache $cache): Response
     {
         $results = $this->doctrine->getRepository(\App\Entity\Result::class)->findAll();

@@ -23,13 +23,13 @@ use Twig\Error\SyntaxError;
 class TrophiesController extends AbstractController
 {
     /**
-     * @Route("/module/trophies", name="module_trophies", methods={"GET"})
      * @param TrophyRuntimeExtension $trophyRuntimeExtension
      * @return Response
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
      */
+    #[Route(path: '/module/trophies', name: 'module_trophies', methods: ['GET'])]
     public function indexAction(TrophyRuntimeExtension $trophyRuntimeExtension): Response
     {
         return new Response($trophyRuntimeExtension->renderTrophyModule());

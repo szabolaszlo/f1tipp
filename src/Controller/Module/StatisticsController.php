@@ -40,13 +40,13 @@ class StatisticsController extends AbstractController
     protected $calculator;
 
     /**
-     * @Route("/module/statistics", name="statistics", methods={"GET"})
      * @param ObjectSorter $sorter
      * @param StatisticsCalculator $calculator
      * @param FileCache $cache
      * @return Response
      * @throws InvalidArgumentException
      */
+    #[Route(path: '/module/statistics', name: 'statistics', methods: ['GET'])]
     public function indexAction(ObjectSorter $sorter, StatisticsCalculator $calculator, FileCache $cache)
     {
         $this->sorter = $sorter;

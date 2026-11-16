@@ -15,11 +15,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class ClearCacheController extends AbstractController
 {
     /**
-     * @Route(path = "/admin/maintenance/cache_clear", name = "cache_clear")
      * @param FileCache $fileCache
      * @return RedirectResponse
      * @throws \Exception
      */
+    #[Route(path: '/admin/maintenance/cache_clear', name: 'cache_clear')]
     public function indexAction(FileCache $fileCache)
     {
         $fileCache->clearAll();

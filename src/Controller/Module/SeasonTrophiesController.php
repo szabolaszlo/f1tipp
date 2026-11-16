@@ -24,9 +24,9 @@ class SeasonTrophiesController extends AbstractController
     );
 
     /**
-     * @Route("/module/season-trophies", name="trophies", methods={"GET"})
      * @return string|Response
      */
+    #[Route(path: '/module/season-trophies', name: 'trophies', methods: ['GET'])]
     public function indexAction()
     {
         $users = $this->doctrine

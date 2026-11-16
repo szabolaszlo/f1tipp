@@ -27,10 +27,10 @@ class InformationController extends AbstractController
     }
 
     /**
-     * @Route("/information_content/{slug}", name="information_content_show", methods={"GET"})
      * @param $slug
      * @return Response
      */
+    #[Route(path: '/information_content/{slug}', name: 'information_content_show', methods: ['GET'])]
     public function showOnlyContentAction($slug): Response
     {
         return $this->render('controller/page/information_content.html.twig', [

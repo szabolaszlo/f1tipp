@@ -10,34 +10,24 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\Message")
- * @ORM\Table(name="`message_wall`")
- * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
- */
+#[ORM\Entity(repositoryClass: \App\Repository\Message::class)]
+#[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
+#[ORM\Table(name: '`message_wall`')]
 class Message
 {
-    /**
-     * @ORM\Column(name="id", type="integer", length=11, nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer', length: 11, nullable: false)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="user", referencedColumnName="id", onDelete="CASCADE")
-     */
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'user', referencedColumnName: 'id', onDelete: 'CASCADE')]
     protected $user;
 
-    /**
-     * @ORM\Column(name="content", type="text", nullable=false)
-     */
+    #[ORM\Column(name: 'content', type: 'text', nullable: false)]
     protected $content;
 
-    /**
-     * @ORM\Column(name="date_time", type="datetime", nullable=true)
-     */
+    #[ORM\Column(name: 'date_time', type: 'datetime', nullable: true)]
     protected $dateTime;
 
     /**

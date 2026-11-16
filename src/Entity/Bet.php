@@ -11,38 +11,28 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\Bet")
- * @ORM\Table(name="`bet`")
- * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
- */
+#[ORM\Entity(repositoryClass: \App\Repository\Bet::class)]
+#[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
+#[ORM\Table(name: '`bet`')]
 class Bet
 {
-    /**
-     * @ORM\Column(name="id", type="integer", length=11, nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer', length: 11, nullable: false)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
-     * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
-     */
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
     protected $user_id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Event")
-     * @ORM\JoinColumn(name="event_id", referencedColumnName="id", onDelete="CASCADE")
-     * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
-     */
+    #[ORM\ManyToOne(targetEntity: Event::class)]
+    #[ORM\JoinColumn(name: 'event_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
     protected $event_id;
 
-    /**
-     * @ORM\OneToMany(targetEntity="BetAttribute", mappedBy="bet", cascade={"persist","remove"})
-     * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
-     */
+    #[ORM\OneToMany(targetEntity: BetAttribute::class, mappedBy: 'bet', cascade: ['persist', 'remove'])]
+    #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
     protected $attributes;
 
     /**
@@ -50,9 +40,7 @@ class Bet
      */
     protected $point = 0;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
+    #[ORM\Column(type: 'integer', nullable: true)]
     private $pointSummary;
 
     /**

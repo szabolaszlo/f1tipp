@@ -30,12 +30,12 @@ class ResultsOfChampionshipController extends AbstractController
     const API_HOST = 'api-formula-1.p.rapidapi.com';
 
     /**
-     * @Route("module/championship_result", name="championship_result", methods={"GET"})
      * @param FileCache $cache
      * @param TeamColorProvider $teamColors
      * @return Response
      * @throws InvalidArgumentException
      */
+    #[Route(path: 'module/championship_result', name: 'championship_result', methods: ['GET'])]
     public function indexAction(FileCache $cache, TeamColorProvider $teamColors)
     {
         $data = $cache->get(self::RESULTS_CACHE_KEY);
@@ -58,11 +58,11 @@ class ResultsOfChampionshipController extends AbstractController
     }
 
     /**
-     * @Route("cron/championship_result_cache_warmer", name="championship_result_cache_warmer", methods={"GET"})
      * @param FileCache $cache
      * @return Response
      * @throws InvalidArgumentException
      */
+    #[Route(path: 'cron/championship_result_cache_warmer', name: 'championship_result_cache_warmer', methods: ['GET'])]
     public function getResultsAction(FileCache $cache): Response
     {
         $this->getResults($cache);

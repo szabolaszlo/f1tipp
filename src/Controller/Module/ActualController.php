@@ -10,10 +10,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class ActualController extends AbstractController
 {
     /**
-     * @Route(path="/module/actual", name="module_actual", methods={"GET"})
      * @return Response
      * @throws Exception
      */
+    #[Route(path: '/module/actual', name: 'module_actual', methods: ['GET'])]
     public function indexAction(): Response
     {
         return $this->render('controller/module/actual.html.twig', []);

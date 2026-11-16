@@ -11,39 +11,27 @@ namespace App\Entity;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="`information`")
- * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
- */
+#[ORM\Entity]
+#[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
+#[ORM\Table(name: '`information`')]
 class Information
 {
-    /**
-     * @ORM\Column(name="id", type="integer", length=11, nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer', length: 11, nullable: false)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected $id;
 
-    /**
-     * @ORM\Column(name="title", type="string", length=45, nullable=true)
-     */
+    #[ORM\Column(name: 'title', type: 'string', length: 45, nullable: true)]
     protected $title;
 
-    /**
-     * @ORM\Column(name="content", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'content', type: 'text', nullable: true)]
     protected $content;
 
-    /**
-     * @ORM\Column(name="news", type="boolean", nullable=true)
-     */
+    #[ORM\Column(name: 'news', type: 'boolean', nullable: true)]
     protected $news;
 
-    /**
-     * @Gedmo\Slug(fields={"title"})
-     * @ORM\Column(length=45)
-     */
+    #[Gedmo\Slug(fields: ['title'])]
+    #[ORM\Column(length: 45)]
     protected $slug;
 
     /**

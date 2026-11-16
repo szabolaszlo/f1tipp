@@ -20,11 +20,11 @@ class ModuleReloaderController extends AbstractController
     }
 
     /**
-     * @Route("/module/entity_counts", name="entity_counts", methods={"GET"})
      * @return Response
      * @throws NoResultException
      * @throws NonUniqueResultException
      */
+    #[Route(path: '/module/entity_counts', name: 'entity_counts', methods: ['GET'])]
     public function entityCountsAction(): Response
     {
         return $this->json([

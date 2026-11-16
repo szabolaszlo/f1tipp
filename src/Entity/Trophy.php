@@ -10,42 +10,30 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\Trophy")
- * @ORM\Table(name="`trophy`")
- * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
- */
+#[ORM\Entity(repositoryClass: \App\Repository\Trophy::class)]
+#[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
+#[ORM\Table(name: '`trophy`')]
 class Trophy
 {
-    /**
-     * @ORM\Column(name="id", type="integer", length=11, nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer', length: 11, nullable: false)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="trophies")
-     * @ORM\JoinColumn(name="user", referencedColumnName="id", onDelete="CASCADE")
-     * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
-     */
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'trophies')]
+    #[ORM\JoinColumn(name: 'user', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
     protected $user;
     
-    /**
-     * @ORM\ManyToOne(targetEntity="Race", inversedBy="trophies")
-     * @ORM\JoinColumn(name="event", referencedColumnName="id", onDelete="CASCADE")
-     * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
-     */
+    #[ORM\ManyToOne(targetEntity: Race::class, inversedBy: 'trophies')]
+    #[ORM\JoinColumn(name: 'event', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
     protected $event;
     
-    /**
-     * @ORM\Column(name="type", type="string")
-     */
+    #[ORM\Column(name: 'type', type: 'string')]
     protected $type;
 
-    /**
-     * @ORM\Column(name="point", type="integer", length=11, nullable=false)
-     */
+    #[ORM\Column(name: 'point', type: 'integer', length: 11, nullable: false)]
     protected $point;
 
     /**

@@ -36,11 +36,11 @@ class FeedController extends AbstractController
     }
 
     /**
-     * @Route("cron/collect_feeds", name="cron_collect_feeds", methods={"GET"})
      * @param ManagerRegistry $managerRegistry
      * @return Response
      * @throws Exception
      */
+    #[Route(path: 'cron/collect_feeds', name: 'cron_collect_feeds', methods: ['GET'])]
     public function collectAction(ManagerRegistry $managerRegistry): Response
     {
         $feedsEntity = $managerRegistry

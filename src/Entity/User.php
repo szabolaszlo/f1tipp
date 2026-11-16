@@ -7,60 +7,40 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
- * @ORM\Table(name="`user`")
- * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
- */
+#[ORM\Entity(repositoryClass: \App\Repository\UserRepository::class)]
+#[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
+#[ORM\Table(name: '`user`')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    /**
-     * @ORM\Column(name="id", type="integer", length=2, nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer', length: 2, nullable: false)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected $id;
 
     //TODO: Duplicate name because legacy stuffs, fix it!
-    /**
-     * @ORM\Column(name="name", type="string", length=45, nullable=false)
-     */
+    #[ORM\Column(name: 'name', type: 'string', length: 45, nullable: false)]
     protected $name;
 
-    /**
-     * @ORM\Column(type="string", length=180, unique=true)
-     */
+    #[ORM\Column(type: 'string', length: 180, unique: true)]
     private $username;
 
-    /**
-     * @ORM\Column(type="array")
-     */
+    #[ORM\Column(type: 'array')]
     private $roles = [];
 
-    /**
-     * @ORM\Column(name="password", type="string", length=60, nullable=false)
-     */
+    #[ORM\Column(name: 'password', type: 'string', length: 60, nullable: false)]
     protected $password;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Trophy", mappedBy="user", cascade={"persist","remove"})
-     * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
-     */
+    #[ORM\OneToMany(targetEntity: Trophy::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
+    #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
     protected $trophies;
 
-    /**
-     * @ORM\Column(name="timestamp", type="integer", length=11, nullable=true)
-     */
+    #[ORM\Column(name: 'timestamp', type: 'integer', length: 11, nullable: true)]
     protected $timestamp;
 
-    /**
-     * @ORM\Column(name="is_alter_champs", type="boolean", nullable=true, options={"default":0})
-     */
+    #[ORM\Column(name: 'is_alter_champs', type: 'boolean', nullable: true, options: ['default' => 0])]
     protected $isAlterChamps;
 
-    /**
-     * @ORM\Column(name="point_summary", type="integer", length=11, nullable=false)
-     */
+    #[ORM\Column(name: 'point_summary', type: 'integer', length: 11, nullable: false)]
     protected $pointSummary = 0;
 
     /**
@@ -68,24 +48,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     protected $point = 0;
 
-    /**
-     * @ORM\Column(name="point_difference", type="integer", length=11, nullable=true)
-     */
+    #[ORM\Column(name: 'point_difference', type: 'integer', length: 11, nullable: true)]
     protected $pointDifference = null;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
+    #[ORM\Column(type: 'integer', nullable: true)]
     private $alternativePointSummary;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
+    #[ORM\Column(type: 'integer', nullable: true)]
     private $alternativePointDifference;
 
-    /**
-     * @ORM\Column(type="string", length=256, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 256, nullable: true)]
     private $email;
 
     /**

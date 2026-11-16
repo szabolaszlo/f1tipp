@@ -17,13 +17,13 @@ use Twig\Error\SyntaxError;
 class UserChampionshipController extends AbstractController
 {
     /**
-     * @Route("/module/user_championship", name="module_user_championship", methods={"GET"})
      * @param UserChampionshipTableRuntimeExtension $championshipTableRuntimeExtension
      * @return Response
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
      */
+    #[Route(path: '/module/user_championship', name: 'module_user_championship', methods: ['GET'])]
     public function indexAction(UserChampionshipTableRuntimeExtension $championshipTableRuntimeExtension): Response
     {
         return new Response($championshipTableRuntimeExtension->renderUserChampionshipTable());

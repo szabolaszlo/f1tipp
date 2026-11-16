@@ -4,28 +4,20 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\Setting")
- * @ORM\Table(name="`setting`")
- * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
- */
+#[ORM\Entity(repositoryClass: \App\Repository\Setting::class)]
+#[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
+#[ORM\Table(name: '`setting`')]
 class Setting
 {
-    /**
-     * @ORM\Column(name="id", type="integer", length=11, nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer', length: 11, nullable: false)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected $id;
 
-    /**
-     * @ORM\Column(name="setting_key", type="string", length=64, nullable=false)
-     */
+    #[ORM\Column(name: 'setting_key', type: 'string', length: 64, nullable: false)]
     protected $key;
 
-    /**
-     * @ORM\Column(name="setting_value", type="text", nullable=true)
-     */
+    #[ORM\Column(name: 'setting_value', type: 'text', nullable: true)]
     protected $value;
 
     /**

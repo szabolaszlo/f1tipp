@@ -31,9 +31,8 @@ class Betting extends AbstractController
     /**
      * A tippelő form JSON leírása (GET), illetve a beküldött tipp mentése (POST).
      * A Symfony form végzi a validációt és a CSRF-ellenőrzést, a megjelenítés a Vue-é.
-     *
-     * @Route("module/betting/form/{eventId}", name="betting_one_form", methods={"GET", "POST"})
      */
+    #[Route(path: 'module/betting/form/{eventId}', name: 'betting_one_form', methods: ['GET', 'POST'])]
     public function indexAction(
         Request $request,
         BetBuilder $betBuilder,
@@ -106,9 +105,7 @@ class Betting extends AbstractController
         );
     }
 
-    /**
-     * @Route("/module/betting/weekend-events", name="betting-weekend-events", methods={"GET"})
-     */
+    #[Route(path: '/module/betting/weekend-events', name: 'betting-weekend-events', methods: ['GET'])]
     public function weekendEventsAction(): JsonResponse
     {
         $user = $this->getUser();
