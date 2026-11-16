@@ -2,6 +2,7 @@
 
 namespace App\Calculator\Type;
 
+use App\Cache\ResultCache;
 use App\Entity\Bet;
 use App\Entity\BetAttribute;
 use App\Entity\Event;
@@ -80,7 +81,7 @@ class BetResultCalculator extends ACalculator
         }
 
         $this->em->flush();
-        $resultCache = $this->em->getConfiguration()->getResultCacheImpl();
+        $resultCache = ResultCache::of($this->em);
         $resultCache->delete('topRaceBets');
         $resultCache->delete('topQualifyBets');
     }

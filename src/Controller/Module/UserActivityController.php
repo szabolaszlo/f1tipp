@@ -10,6 +10,7 @@ namespace App\Controller\Module;
 
 use App\Cache\FileCache;
 use Psr\Cache\InvalidArgumentException;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\User;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -21,6 +22,10 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class UserActivityController extends AbstractController
 {
+    public function __construct(private readonly ManagerRegistry $doctrine)
+    {
+    }
+
     /**
      * @Route("get_online_user", name="get_online_user", methods={"GET"})
      * @param FileCache $cache
@@ -36,7 +41,7 @@ class UserActivityController extends AbstractController
             $cache->save($user->getName() . 'Online', [time()]);
         }
 
-        $users = $this->getDoctrine()->getRepository(\App\Entity\User::class)->getAlternativeChampionshipUsers();
+        $users = $this->doctrine->getRepository(\App\Entity\User::class)->getAlternativeChampionshipUsers();
 
         $userNames = array();
 

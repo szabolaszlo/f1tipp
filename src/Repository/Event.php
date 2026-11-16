@@ -9,6 +9,7 @@
 
 namespace App\Repository;
 
+use App\Cache\ResultCache;
 use App\Entity\Event as EventEnt;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityRepository;
@@ -25,7 +26,7 @@ class Event extends EntityRepository
      */
     public function getActualWeekendEvents()
     {
-        $resultCache = $this->_em->getConfiguration()->getResultCacheImpl();
+        $resultCache = ResultCache::of($this->getEntityManager());
         $cacheKey = str_replace("\\", '', $this->_entityName) . 'ActualWeekendEvents';
 
         if ($resultCache->contains($cacheKey)) {
@@ -52,7 +53,7 @@ class Event extends EntityRepository
      */
     public function getNextEvent()
     {
-        $resultCache = $this->_em->getConfiguration()->getResultCacheImpl();
+        $resultCache = ResultCache::of($this->getEntityManager());
         $cacheKey = str_replace("\\", '', $this->_entityName) . 'NextEvent';
 
         if ($resultCache->contains($cacheKey)) {
@@ -106,7 +107,7 @@ class Event extends EntityRepository
      */
     public function getRemainEvents()
     {
-        $resultCache = $this->_em->getConfiguration()->getResultCacheImpl();
+        $resultCache = ResultCache::of($this->getEntityManager());
         $cacheKey = str_replace("\\", '', $this->_entityName) . 'Remain';
 
         if ($resultCache->contains($cacheKey)) {

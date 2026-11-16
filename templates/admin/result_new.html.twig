@@ -4,7 +4,5 @@
     {{ form(new_form) }}
 {% endblock new_form %}
 {% block content_title %}
-    {% apply spaceless %}
-        {{ new_form.vars.value.event.name }} {{ new_form.vars.value.event.type|trans|capitalize }} {{ 'upload'|trans }}
-    {% endapply %}
+    {{- new_form.vars.value.event.name }} {{ new_form.vars.value.event.type|trans|capitalize }} {{ 'upload'|trans -}}
 {% endblock %}

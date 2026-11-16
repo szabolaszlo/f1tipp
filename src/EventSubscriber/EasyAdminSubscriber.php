@@ -2,6 +2,7 @@
 
 namespace App\EventSubscriber;
 
+use App\Cache\ResultCache;
 use App\Cache\FileCache;
 use App\Calculator\Calculator;
 use App\Entity\Event;
@@ -12,7 +13,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityDeletedEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityPersistedEvent;
 use EasyCorp\Bundle\EasyAdminBundle\Event\AfterEntityUpdatedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class EasyAdminSubscriber
@@ -36,23 +37,23 @@ class EasyAdminSubscriber implements EventSubscriberInterface
     protected FileCache $fileCache;
 
     /**
-     * @var FlashBagInterface
+     * @var RequestStack
      */
-    protected FlashBagInterface $flashBag;
+    protected RequestStack $requestStack;
 
     /**
      * EasyAdminSubscriber constructor.
      * @param Calculator $calculator
      * @param EntityManagerInterface $em
      * @param FileCache $fileCache
-     * @param FlashBagInterface $flashBag
+     * @param RequestStack $requestStack
      */
-    public function __construct(Calculator $calculator, EntityManagerInterface $em, FileCache $fileCache, FlashBagInterface $flashBag)
+    public function __construct(Calculator $calculator, EntityManagerInterface $em, FileCache $fileCache, RequestStack $requestStack)
     {
         $this->calculator = $calculator;
         $this->em = $em;
         $this->fileCache = $fileCache;
-        $this->flashBag = $flashBag;
+        $this->requestStack = $requestStack;
     }
 
     public static function getSubscribedEvents(): array
@@ -76,7 +77,7 @@ class EasyAdminSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $resultCache = $this->em->getConfiguration()->getResultCacheImpl();
+        $resultCache = ResultCache::of($this->em);
         $resultCache->delete('AppEntityEventNextEvent');
         $resultCache->delete('AppEntityQualifyNextEvent');
         $resultCache->delete('AppEntityRaceNextEvent');
@@ -88,7 +89,7 @@ class EasyAdminSubscriber implements EventSubscriberInterface
         $resultCache->delete('AppEntityRaceRemain');
         $resultCache->delete('userChampionshipTrophyAwareOrder');
 
-        $this->flashBag->add('success', 'flash_cache_clear');
+        $this->addFlash('success', 'flash_cache_clear');
     }
 
     /**
@@ -103,13 +104,13 @@ class EasyAdminSubscriber implements EventSubscriberInterface
         }
         $this->calculator->calculate();
 
-        $resultCache = $this->em->getConfiguration()->getResultCacheImpl();
+        $resultCache = ResultCache::of($this->em);
         $resultCache->delete('userChampionshipTrophyAwareOrder');
         $resultCache->delete('AppEntityEventRemain');
         $resultCache->delete('AppEntityQualifyRemain');
         $resultCache->delete('AppEntityRaceRemain');
 
-        $this->flashBag->add('success', 'flash_calculate');
+        $this->addFlash('success', 'flash_calculate');
     }
 
     /**
@@ -139,9 +140,14 @@ class EasyAdminSubscriber implements EventSubscriberInterface
 
         $this->fileCache->clearAll();
 
-        $resultCache = $this->em->getConfiguration()->getResultCacheImpl();
+        $resultCache = ResultCache::of($this->em);
         $resultCache->delete('userChampionshipTrophyAwareOrder');
 
-        $this->flashBag->add('success', 'flash_re_calculate');
+        $this->addFlash('success', 'flash_re_calculate');
+    }
+
+    private function addFlash(string $type, string $message): void
+    {
+        $this->requestStack->getSession()->getFlashBag()->add($type, $message);
     }
 }

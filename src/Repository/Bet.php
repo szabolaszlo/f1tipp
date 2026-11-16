@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Cache\ResultCache;
 use App\Entity\Event;
 use App\Entity\User;
 use Doctrine\ORM\EntityRepository;
@@ -85,7 +86,7 @@ class Bet extends EntityRepository
      */
     public function getTopRaceBets()
     {
-        $resultCache = $this->_em->getConfiguration()->getResultCacheImpl();
+        $resultCache = ResultCache::of($this->getEntityManager());
         $cacheKey = 'topRaceBets';
 
         if ($resultCache->contains($cacheKey)) {
@@ -129,7 +130,7 @@ class Bet extends EntityRepository
      */
     public function getTopQualifyBets()
     {
-        $resultCache = $this->_em->getConfiguration()->getResultCacheImpl();
+        $resultCache = ResultCache::of($this->getEntityManager());
         $cacheKey = 'topQualifyBets';
 
         if ($resultCache->contains($cacheKey)) {

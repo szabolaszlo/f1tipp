@@ -13,6 +13,7 @@ use App\Cache\FileCache;
 use App\LegacyService\ResultTable\ResultTable;
 use Exception;
 use Psr\Cache\InvalidArgumentException;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -23,6 +24,10 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ResultsController extends AbstractController
 {
+    public function __construct(private readonly ManagerRegistry $doctrine)
+    {
+    }
+
     /**
      * @Route(path="/module/results", name="results", methods={"GET"})
      * @param ResultTable $resultTable
@@ -33,7 +38,7 @@ class ResultsController extends AbstractController
      */
     public function indexAction(ResultTable $resultTable, FileCache $cache): Response
     {
-        $results = $this->getDoctrine()->getRepository(\App\Entity\Result::class)->findAll();
+        $results = $this->doctrine->getRepository(\App\Entity\Result::class)->findAll();
 
         $cacheKey = 'results_v2_' . count($results);
 

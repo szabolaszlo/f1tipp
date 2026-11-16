@@ -51,7 +51,7 @@ class LoginController extends AbstractController
     public function isLoggedAction(): JsonResponse
     {
         return $this->json([
-            'userName' => $this->getUser() ? $this->getUser()->getUsername() : null
+            'userName' => $this->getUser() ? $this->getUser()->getUserIdentifier() : null
         ], $this->getUser() ? 200 : 401);
     }
 

@@ -2,7 +2,7 @@ security:
     role_hierarchy:
         ROLE_ADMIN:       ROLE_USER
         ROLE_SUPER_ADMIN: ROLE_ADMIN
-    encoders:
+    password_hashers:
         App\Entity\User:
             algorithm: auto
     enable_authenticator_manager: true
@@ -22,9 +22,6 @@ security:
             json_login:
                 check_path: app_login
                 remember_me: true
-            #guard:
-            #    authenticators:
-            #        - App\Security\LoginFormAuthenticator
             custom_authenticators:
                 - App\Security\GoogleAuthenticator
             logout:

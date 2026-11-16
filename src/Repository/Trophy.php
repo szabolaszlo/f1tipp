@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Cache\ResultCache;
 use App\Entity\Event;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
@@ -64,7 +65,7 @@ class Trophy extends EntityRepository
 
     public function getTopWeekendUsers()
     {
-        $resultCache = $this->_em->getConfiguration()->getResultCacheImpl();
+        $resultCache = ResultCache::of($this->getEntityManager());
         $cacheKey = 'topWeekendUsers';
 
         if ($resultCache->contains($cacheKey)) {

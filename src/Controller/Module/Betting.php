@@ -7,6 +7,7 @@ use App\Display\BettingFormPresenter;
 use App\Entity\Bet;
 use App\Entity\Event;
 use App\Form\BettingType;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
@@ -23,6 +24,10 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class Betting extends AbstractController
 {
+    public function __construct(private readonly ManagerRegistry $doctrine)
+    {
+    }
+
     /**
      * A tippelő form JSON leírása (GET), illetve a beküldött tipp mentése (POST).
      * A Symfony form végzi a validációt és a CSRF-ellenőrzést, a megjelenítés a Vue-é.
@@ -43,14 +48,13 @@ class Betting extends AbstractController
         }
 
         /** @var Event|null $event */
-        $event = $this->getDoctrine()->getRepository(\App\Entity\Event::class)->find($eventId);
+        $event = $this->doctrine->getRepository(\App\Entity\Event::class)->find($eventId);
 
         if (!$event) {
             throw $this->createNotFoundException();
         }
 
-        $bet = $this
-            ->getDoctrine()
+        $bet = $this->doctrine
             ->getRepository(\App\Entity\Bet::class)
             ->getBetByUserAndEventNonCache($user, $event);
 
@@ -73,8 +77,8 @@ class Betting extends AbstractController
                 && $event->getId() == $bet->getEvent()->getId()
                 && $bet->getUser()->getId() == $user->getId()
             ) {
-                $this->get("security.csrf.token_manager")->refreshToken("form_intention");
-                $entityManager = $this->getDoctrine()->getManager();
+                $this->container->get('security.csrf.token_manager')->refreshToken('form_intention');
+                $entityManager = $this->doctrine->getManager();
                 $entityManager->persist($bet);
                 $entityManager->flush();
 
@@ -94,7 +98,7 @@ class Betting extends AbstractController
 
     private function createBettingForm(Bet $bet, $eventId): FormInterface
     {
-        return $this->get('form.factory')->createNamed(
+        return $this->container->get('form.factory')->createNamed(
             'betting_form',
             BettingType::class,
             $bet,
@@ -113,7 +117,7 @@ class Betting extends AbstractController
             throw new UnauthorizedHttpException('');
         }
 
-        $events = $this->getDoctrine()->getRepository(\App\Entity\Event::class)->getActualWeekendEvents();
+        $events = $this->doctrine->getRepository(\App\Entity\Event::class)->getActualWeekendEvents();
 
         foreach ($events as $event) {
             $eventsData[$this->getTimeDiff($event->getDateTime())] = [

@@ -2,6 +2,7 @@
 
 namespace App\E2e;
 
+use App\Cache\ResultCache;
 use App\Cache\FileCache;
 use App\Command\E2e\E2eGuard;
 use App\Controller\Module\ResultsOfChampionshipController;
@@ -117,10 +118,7 @@ class E2eFixtures
     {
         $this->assertSafe();
 
-        $resultCache = $this->em->getConfiguration()->getResultCacheImpl();
-        if ($resultCache) {
-            $resultCache->deleteAll();
-        }
+        ResultCache::of($this->em)->deleteAll();
 
         $cache = $this->em->getCache();
         if ($cache) {

@@ -8,6 +8,7 @@
 
 namespace App\Controller\Module;
 
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\Message;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,6 +21,10 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class MessageWall extends AbstractController
 {
+    public function __construct(private readonly ManagerRegistry $doctrine)
+    {
+    }
+
     /**
      * @Route("/module/messages/list", name="message_list", methods={"GET"})
      * @return string
@@ -27,7 +32,7 @@ class MessageWall extends AbstractController
     public function messagesAction()
     {
         return $this->render('controller/module/message_wall/messages.html.twig', [
-            'messages' => $this->getDoctrine()->getRepository(\App\Entity\Message::class)->getMessages()
+            'messages' => $this->doctrine->getRepository(\App\Entity\Message::class)->getMessages()
         ]);
     }
 
@@ -45,8 +50,8 @@ class MessageWall extends AbstractController
             $message->setUser($this->getUser());
             $message->setDateTime(new \DateTime());
 
-            $this->getDoctrine()->getManager()->persist($message);
-            $this->getDoctrine()->getManager()->flush();
+            $this->doctrine->getManager()->persist($message);
+            $this->doctrine->getManager()->flush();
         }
 
         return new Response();

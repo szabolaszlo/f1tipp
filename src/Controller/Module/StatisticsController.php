@@ -14,6 +14,7 @@ use App\LegacyService\Statistics\ObjectSorter;
 use App\LegacyService\Statistics\StatisticsCalculator;
 use Exception;
 use Psr\Cache\InvalidArgumentException;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -24,6 +25,10 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class StatisticsController extends AbstractController
 {
+    public function __construct(private readonly ManagerRegistry $doctrine)
+    {
+    }
+
     /**
      * @var ObjectSorter
      */
@@ -47,8 +52,8 @@ class StatisticsController extends AbstractController
         $this->sorter = $sorter;
         $this->calculator = $calculator;
 
-        $bets = $this->getDoctrine()->getRepository(\App\Entity\Bet::class)->findAll();
-        $results = $this->getDoctrine()->getRepository(\App\Entity\Result::class)->findAll();
+        $bets = $this->doctrine->getRepository(\App\Entity\Bet::class)->findAll();
+        $results = $this->doctrine->getRepository(\App\Entity\Result::class)->findAll();
 
         $cacheKey = 'statistics' . count($results);
         $data = $cache->get($cacheKey);

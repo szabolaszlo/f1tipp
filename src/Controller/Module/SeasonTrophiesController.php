@@ -2,6 +2,7 @@
 
 namespace App\Controller\Module;
 
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
@@ -9,6 +10,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 class SeasonTrophiesController extends AbstractController
 {
+    public function __construct(private readonly ManagerRegistry $doctrine)
+    {
+    }
+
     /**
      * @var array
      */
@@ -24,8 +29,7 @@ class SeasonTrophiesController extends AbstractController
      */
     public function indexAction()
     {
-        $users = $this
-            ->getDoctrine()
+        $users = $this->doctrine
             ->getRepository(\App\Entity\User::class)
             ->getAlternativeChampionshipUsers();
 
