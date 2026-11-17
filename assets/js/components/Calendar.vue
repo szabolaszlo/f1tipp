@@ -19,14 +19,14 @@
             <strong>{{ $t("calendar.title").toUpperCase() }}</strong>
           </div>
           <div class="form form-inline">
-            <div class="row text-center">
-              <div class="col-sm form-control-static" style="padding: 5px;">
+            <div class="f1-calendar__filters">
+              <div class="form-control-static">
                 <a class="btn btn-new" role="button" @click="onlyRemaining = !onlyRemaining; filterEvents();">
                   <input type="checkbox" v-model="onlyRemaining">
                   {{ $t('calendar.onlyRemaining') }}
                 </a>
               </div>
-              <div v-for="eventType in eventTypes" class="col-sm form-control-static" style="padding: 5px;">
+              <div v-for="eventType in eventTypes" class="form-control-static">
                 <a class="btn btn-new" role="button" @click="eventType.state = !eventType.state; filterEvents();">
                   <input type="checkbox" v-model="eventType.state">
                   {{ $t('general.' + eventType.translatedName) }}

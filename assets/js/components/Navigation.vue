@@ -141,6 +141,21 @@ export default {
   opacity: .9;
 }
 
+/* egérkattintásra ne legyen böngésző-fókuszkeret (kitakarta a betűket), billentyűzetnél halvány aláhúzás jelzi */
+.f1-header a:focus {
+  outline: none;
+}
+
+.f1-nav a:focus-visible {
+  opacity: 1;
+  border-bottom-color: var(--f1-muted);
+}
+
+.f1-user__login:focus-visible,
+.f1-user__logout:focus-visible {
+  border-color: var(--f1-muted);
+}
+
 .f1-nav a.router-link-active {
   opacity: 1;
   border-bottom-color: var(--f1-red);

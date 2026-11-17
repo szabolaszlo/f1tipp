@@ -14,6 +14,9 @@
     --f1-muted: #9a9aa8;
     --f1-faint: #686876;
     --f1-red: #e10600;
+    /* panelcímkék kiemelőszíne: Red Bull kék (fekete alapon kevésbé bántó, mint a piros) */
+    --f1-accent: #3671c6;
+    --f1-accent-text: #6b9be6;
     /* F1 szektoridő-színek: lila = telitalálat, sárga = mellétalálat */
     --f1-exact: #b44cf2;
     --f1-near: #f5d000;
@@ -103,8 +106,8 @@ a:hover, a:focus {
     height: 20px;
     margin-left: 10px;
     padding-left: 8px;
-    border-left: 4px solid var(--f1-red);
-    color: #ff5a52;
+    border-left: 4px solid var(--f1-accent);
+    color: var(--f1-accent-text);
     font-weight: 700;
     font-size: 13px;
     letter-spacing: 1px;
@@ -684,7 +687,7 @@ hr {
     font-weight: 700;
     letter-spacing: 1px;
     text-transform: uppercase;
-    color: #ff5a52;
+    color: var(--f1-accent-text);
     border-top: 1px solid var(--f1-line);
 }
 
@@ -759,6 +762,22 @@ hr {
 
 .f1-pos .f1-trophy {
     vertical-align: middle;
+}
+
+/* hétvégi kupák panel: a kupa 20%-kal kisebb (24px -> 19px) */
+.f1-pos > .f1-trophy,
+.f1-pos > .f1-trophy svg {
+    width: 19px;
+    height: 19px;
+}
+
+/* naptár szűrőgombjai: a Bootstrap .row negatív margója kilógott a panelből -> vízszintes görgetősáv */
+.f1-calendar__filters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0 10px;
+    padding: 0 5px;
 }
 
 #messages-list {
