@@ -14,7 +14,7 @@
         </div>
       </div>
       <div v-else-if="!loading">
-        <div class="panel panel-default">
+        <div class="panel panel-default f1-calendar">
           <div class="panel-heading text-center">
             <strong>{{ $t("calendar.title").toUpperCase() }}</strong>
           </div>

@@ -158,7 +158,7 @@ export default {
 
 .f1-nav a.router-link-active {
   opacity: 1;
-  border-bottom-color: var(--f1-red);
+  border-bottom-color: var(--f1-select);
 }
 
 .f1-nav--mobile {

@@ -34,6 +34,12 @@
         </div>
     {% endfor %}
 
+    <div class="f1-board__note f1-legend-list">
+        <p>Pontegyenlőség esetén a több arany kupát szerző játékos végez előrébb. Amennyiben az egyenlő, akkor az ezüst, majd a bronz kupák száma dönt.</p>
+        <p><span class="online-dot-meaning"></span>A felhasználó éppen online</p>
+        <p><img src="{{ asset('build/images/checkered-flag.png') }}" height="14" alt="">Az adott felhasználónak sajnos már nincs matematikai esélye a győzelemre, de a többi helyezésért még természetesen versenyezhet</p>
+    </div>
+
     <div class="f1-stats">
         <div class="f1-stat">
             <b>{{ maths.remaining_weekends|length }}</b>
@@ -56,10 +62,4 @@
             {% endfor %}
         {% endif %}
     {% endfor %}
-
-    <div class="f1-board__note f1-legend-list">
-        <p>Pontegyenlőség esetén a több arany kupát szerző játékos végez előrébb. Amennyiben az egyenlő, akkor az ezüst, majd a bronz kupák száma dönt.</p>
-        <p><span class="online-dot-meaning"></span>A felhasználó éppen online</p>
-        <p><img src="{{ asset('build/images/checkered-flag.png') }}" height="14" alt="">Az adott felhasználónak sajnos már nincs matematikai esélye a győzelemre, de a többi helyezésért még természetesen versenyezhet</p>
-    </div>
 {% endblock %}

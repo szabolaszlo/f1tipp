@@ -87,8 +87,8 @@ Encore
      */
     .cleanupOutputBeforeBuild()
     .enableSourceMaps(!Encore.isProduction())
-    // enables hashed filenames (e.g. app.abc123.css)
-    .enableVersioning(Encore.isProduction())
+    // hashed filenames (e.g. app.abc123.css) dev buildben is, hogy a böngésző ne ragadjon be régi chunkon
+    .enableVersioning()
 
     // enables @babel/preset-env polyfills
     .configureBabel(() => {}, {

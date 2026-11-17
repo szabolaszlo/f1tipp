@@ -17,6 +17,9 @@
     /* panelcímkék kiemelőszíne: Red Bull kék (fekete alapon kevésbé bántó, mint a piros) */
     --f1-accent: #3671c6;
     --f1-accent-text: #6b9be6;
+    /* kiválasztott menüpont/fül/opció jelölése: Red Bull sárga */
+    --f1-select: #ffc906;
+    --f1-on-select: #14141b;
     /* F1 szektoridő-színek: lila = telitalálat, sárga = mellétalálat */
     --f1-exact: #b44cf2;
     --f1-near: #f5d000;
@@ -29,6 +32,11 @@
 /* ---------- alap ---------- */
 html, body {
     background: var(--f1-bg);
+}
+
+/* a böngésző natív vezérlői (görgetősávok, checkboxok) sötét változatban */
+:root {
+    color-scheme: dark;
 }
 
 body {
@@ -771,6 +779,11 @@ hr {
     height: 19px;
 }
 
+/* naptár: a tartalom mindig befér, így tört DPI-s kerekítés (pl. Windows 125%) se hozzon elő vízszintes görgetősávot */
+.f1-calendar.panel {
+    overflow-x: hidden;
+}
+
 /* naptár szűrőgombjai: a Bootstrap .row negatív margója kilógott a panelből -> vízszintes görgetősáv */
 .f1-calendar__filters {
     display: flex;
@@ -800,6 +813,11 @@ hr {
     background: var(--f1-chip);
     border: 1px solid var(--f1-line);
     border-radius: 6px;
+}
+
+#message-send #message-input:focus {
+    outline: none;
+    border-color: var(--f1-accent);
 }
 
 /* ---------- hírek ---------- */
@@ -951,7 +969,7 @@ hr {
 
 .f1-betting__tab.is-active {
     color: #fff;
-    border-bottom-color: var(--f1-red);
+    border-bottom-color: var(--f1-select);
 }
 
 .f1-betting__tab .glyphicon {
@@ -1039,8 +1057,8 @@ hr {
 }
 
 .f1-betting__choice.is-active {
-    background: var(--f1-red);
-    color: #fff;
+    background: var(--f1-select);
+    color: var(--f1-on-select);
 }
 
 .f1-betting__choice:disabled {
@@ -1114,7 +1132,7 @@ hr {
 }
 
 .f1-select__trigger:focus-visible {
-    box-shadow: 0 0 0 2px rgba(225, 6, 0, .45);
+    box-shadow: 0 0 0 2px rgba(255, 201, 6, .45);
 }
 
 .f1-select.is-disabled .f1-select__trigger {
@@ -1225,7 +1243,7 @@ hr {
 }
 
 .f1-select__option.is-selected {
-    box-shadow: inset 3px 0 0 var(--f1-red);
+    box-shadow: inset 3px 0 0 var(--f1-select);
 }
 
 .f1-select__option.is-taken {
