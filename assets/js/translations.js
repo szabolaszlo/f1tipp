@@ -51,7 +51,8 @@ export default {
         },
         news:{
             title: 'Hírek',
-            source: 'Forrás: https://hu.motorsport.com/f1'
+            source: 'Forrás: f1vilag.hu',
+            readMore: 'Tovább olvasom'
         },
         championshipResult:{
             title: 'VB Állás',

@@ -9,12 +9,12 @@
             <argument id="doctrine.orm.entity_manager" type="service"/>
         </service>
 
-        <service class="App\LegacyService\Feed\Repository\MotorSportRepository"
-                 id="app.legacy_service.feed.repository.motor_sport_repository"/>
+        <service class="App\LegacyService\Feed\Repository\F1VilagRepository"
+                 id="app.legacy_service.feed.repository.f1_vilag_repository"/>
 
         <service class="App\LegacyService\Feed\Handler" id="App\LegacyService\Feed\Handler">
             <argument type="collection">
-                <argument id="app.legacy_service.feed.repository.motor_sport_repository" type="service"/>
+                <argument id="app.legacy_service.feed.repository.f1_vilag_repository" type="service"/>
             </argument>
             <argument id="app.legacy_service.feed.storage.doctrine" type="service"/>
         </service>

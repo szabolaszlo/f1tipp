@@ -81,5 +81,5 @@ Csoportok (`--grep`):
 
 ## Cron
 - `/cron/search_cover_photo` This cron is try to check new cover image from facebook/boxutca. Recommend refresh hourly.
-- `/cron/collect_feeds` This cron is try to refresh news with motorsport.com feed. Recommend refersh every 15 minutes.
+- `/cron/collect_feeds` This cron is try to refresh news with the f1vilag.hu feed (https://f1vilag.hu/feed/). Recommend refersh every 15 minutes.
 - `/cron/championship_result_cache_warmer` This cron is try to refresh results of championship. Recommend refersh every 15 minutes.

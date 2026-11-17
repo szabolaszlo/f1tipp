@@ -49,6 +49,11 @@ class FeedController extends AbstractController
 
         $feeds = $this->feedHandler->getItems();
 
+        // elérhetetlen / hibás feed: a meglévő híreket nem bántjuk
+        if (empty($feeds)) {
+            return new Response('NO FEED ITEMS', 200);
+        }
+
         if ($this->getLastFeedId($feedsEntity) != $this->getLastFeedId($feeds)) {
             $this->feedHandler->saveItems($feeds);
             $managerRegistry->getRepository(Feed::class)->deleteOldFeeds();

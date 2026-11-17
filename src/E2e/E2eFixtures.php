@@ -101,7 +101,7 @@ class E2eFixtures
             $this->em->persist($user);
         }
 
-        // hír a főoldal hírfolyamába (élesben a /cron/collect_feeds tölti a motorsport.com-ról)
+        // hír a főoldal hírfolyamába (élesben a /cron/collect_feeds tölti az f1vilag.hu-ról)
         $feed = new Feed();
         $feed->setId(1); // a Feed id-ja nem generált (élesben a feed elemből jön)
         $feed->setTitle('E2E hír: lezárult a szezon előtti teszt');

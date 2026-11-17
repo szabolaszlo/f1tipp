@@ -54,7 +54,11 @@ class Doctrine implements IStorage
             ->setDescription($item->getDescription())
             ->setLink($item->getLink())
             ->setImage($item->getImage())
-            ->setPublishDate(new \DateTime($item->getPublishDate()));
+            // a DB időzóna nélkül tárol, ezért az alkalmazás időzónájára váltunk (a feed UTC-ben adja)
+            ->setPublishDate(
+                (new \DateTime($item->getPublishDate()))
+                    ->setTimezone(new \DateTimeZone(date_default_timezone_get()))
+            );
 
         $this->entityManager->persist($feed);
     }
