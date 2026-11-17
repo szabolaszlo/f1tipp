@@ -35,7 +35,7 @@ class ContentApiTest extends WebTestCase
         }
     }
 
-    public function test_feeds_are_listed_newest_first_ten_per_page(): void
+    public function test_feeds_are_listed_newest_first_five_per_page(): void
     {
         $client = static::createClient();
         $client->request('GET', '/api/feeds');
@@ -45,7 +45,7 @@ class ContentApiTest extends WebTestCase
         $data = json_decode($client->getResponse()->getContent(), true);
         self::assertIsArray($data);
         self::assertTrue(array_is_list($data));
-        self::assertLessThanOrEqual(10, count($data));
+        self::assertLessThanOrEqual(5, count($data));
 
         $previousId = PHP_INT_MAX;
         foreach ($data as $feed) {

@@ -13,10 +13,12 @@
       </a>
       <div v-else class="f1-news__img" aria-hidden="true"></div>
       <div class="f1-news__text">
-        <span class="f1-muted">{{ new Date(feed.publishDate).toLocaleString() }}</span>
+        <div class="f1-news__meta">
+          <span class="f1-muted">{{ new Date(feed.publishDate).toLocaleString() }}</span>
+          <a class="f1-news__more" :href="feed.link" target="_blank" rel="noopener">{{ $t("news.readMore") }} ›</a>
+        </div>
         <h3 class="f1-news__title"><a :href="feed.link" target="_blank" rel="noopener">{{ feed.title }}</a></h3>
         <div class="f1-news__desc" v-html="feed.description"></div>
-        <a class="f1-news__more" :href="feed.link" target="_blank" rel="noopener">{{ $t("news.readMore") }} ›</a>
       </div>
     </article>
   </div>

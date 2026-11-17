@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class ContentApiController
 {
     private const EVENTS_PER_PAGE = 100;
-    private const FEEDS_PER_PAGE = 10;
+    private const FEEDS_PER_PAGE = 5;
 
     public function __construct(private readonly EntityManagerInterface $entityManager)
     {
