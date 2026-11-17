@@ -823,26 +823,43 @@ hr {
 /* ---------- hírek ---------- */
 .f1-news__item {
     display: grid;
-    grid-template-columns: 160px minmax(0, 1fr);
+    grid-template-columns: 200px minmax(0, 1fr);
     gap: 14px;
     padding: 12px;
     border-top: 1px solid var(--f1-line);
 }
 
+/* fix 4:3-as (kb. 200×150) kép, ami a hír teljes magasságát kitölti: a különböző méretű feedképekből egyforma sorok lesznek
+   (a cím max. 2, a leírás max. 3 sor, így a szöveg nem nyúlik a kép fölé) */
 .f1-news__img-link {
     display: block;
+    min-height: 152px;
+    overflow: hidden;
+    border-radius: 6px;
 }
 
 .f1-news__img {
     display: block;
     width: 100%;
+    height: 100%;
+    min-height: 152px;
     border-radius: 6px;
     object-fit: cover;
-    aspect-ratio: 16 / 9;
+    object-position: center 30%;
     background: var(--f1-chip);
 }
 
+.f1-news__text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
 .f1-news__title {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
     margin: 2px 0 6px;
     font-size: 16px;
     font-weight: 700;
@@ -851,6 +868,10 @@ hr {
 }
 
 .f1-news__desc {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
     font-size: 14px;
     line-height: 1.45;
     color: #c4c4cf;
@@ -872,8 +893,9 @@ hr {
 }
 
 .f1-news__more {
-    display: inline-block;
-    margin-top: 6px;
+    align-self: flex-start;
+    margin-top: auto;
+    padding-top: 6px;
     font-size: 13px;
     font-weight: 600;
     color: var(--f1-accent-text);
@@ -888,6 +910,13 @@ hr {
 @media (max-width: 600px) {
     .f1-news__item {
         grid-template-columns: minmax(0, 1fr);
+    }
+
+    .f1-news__img-link,
+    .f1-news__img {
+        height: auto;
+        min-height: 0;
+        aspect-ratio: 16 / 9;
     }
 }
 
