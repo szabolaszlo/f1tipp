@@ -27,10 +27,12 @@
       <div v-if="formErrorMessage" class="f1-board__body text-center">
         <strong class="color-two">{{ formErrorMessage }}</strong>
       </div>
-      <div v-else-if="formLoading || !form" class="f1-board__body text-center">
+      <div v-else-if="!form" class="f1-board__body text-center">
         <pulse-loader color="#e10600"></pulse-loader>
       </div>
-      <form v-else class="f1-betting__form" novalidate @submit.prevent="submit">
+      <!-- tabváltáskor az előző form a helyén marad (halványítva), így a tábla nem esik össze egy pillanatra -->
+      <form v-else :key="formEventId" class="f1-betting__form" :class="{'is-switching': formLoading}"
+            :aria-busy="formLoading ? 'true' : 'false'" novalidate @submit.prevent="submit">
         <div v-if="form.success" class="f1-betting__alert f1-betting__alert--ok" role="status">
           <div class="f1-betting__success">
             <span>{{ form.success }}</span>
@@ -109,8 +111,12 @@ export default {
       activeEvent: null,
       // a szerver által leírt form (BettingFormPresenter)
       form: null,
+      // melyik eseményhez tartozik a megjelenített form (tabváltás közben még az előzőé)
+      formEventId: null,
       // mezőnév -> kiválasztott érték
       values: {},
+      // eseményazonosító -> {form, values}: visszaváltáskor azonnal megjelenik, a be nem küldött választásokkal
+      formCache: {},
       // sikeres tipp után ennyi idő múlva irányít át az Aktuális oldalra
       redirectDelay: 3000,
       redirectTimer: null,
@@ -128,7 +134,7 @@ export default {
       return !!this.form && !this.form.submitLabel && this.form.fields.length > 0;
     },
     canSubmit() {
-      return !this.processing && this.editableFields.length > 0 && this.missingCount === 0;
+      return !this.processing && !this.formLoading && this.editableFields.length > 0 && this.missingCount === 0;
     }
   },
   activated() {
@@ -167,15 +173,27 @@ export default {
   methods: {
     selectEvent(event) {
       this.cancelRedirect();
+      this.rememberForm();
+      if (this.form) {
+        this.form.success = null;
+      }
       this.activeEvent = event;
-      this.form = null;
       this.formErrorMessage = null;
       this.formLoading = true;
+
+      const cached = this.formCache[event.id];
+      if (cached) {
+        this.form = cached.form;
+        this.formEventId = event.id;
+        this.values = {...cached.values};
+      }
+
+      // a gyorsítótárazott formot is frissítjük (zárolás, CSRF token), a felhasználó választásait megtartva
       axios
           .get('/module/betting/form/' + event.id)
           .then(response => {
             if (this.activeEvent === event) {
-              this.applyForm(response.data);
+              this.applyForm(response.data, cached ? this.changedValues(cached.form) : {});
             }
           })
           .catch(error => {
@@ -189,13 +207,29 @@ export default {
             }
           })
     },
-    applyForm(form) {
+    applyForm(form, keep = {}) {
       this.form = form;
+      this.formEventId = this.activeEvent ? this.activeEvent.id : null;
       const values = {};
       form.fields.forEach(field => {
-        values[field.name] = field.value || '';
+        values[field.name] = !field.disabled && field.name in keep ? keep[field.name] : (field.value || '');
       });
       this.values = values;
+    },
+    rememberForm() {
+      if (this.form && this.formEventId !== null) {
+        this.formCache[this.formEventId] = {form: this.form, values: {...this.values}};
+      }
+    },
+    // a felhasználó által a szerver állapotához képest módosított értékek
+    changedValues(form) {
+      const changed = {};
+      form.fields.forEach(field => {
+        if (this.values[field.name] !== (field.value || '')) {
+          changed[field.name] = this.values[field.name];
+        }
+      });
+      return changed;
     },
     submit() {
       if (!this.canSubmit) {
