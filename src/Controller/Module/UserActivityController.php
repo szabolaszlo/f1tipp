@@ -22,6 +22,8 @@ use Symfony\Component\Routing\Attribute\Route;
  */
 class UserActivityController extends AbstractController
 {
+    private const ONLINE_WINDOW_SECONDS = 60;
+
     public function __construct(private readonly ManagerRegistry $doctrine)
     {
     }
@@ -48,7 +50,9 @@ class UserActivityController extends AbstractController
         /** @var User $user */
         foreach ($users as $user) {
             $timeStamp = $cache->get($user->getName() . 'Online');
-            if (reset($timeStamp) >= (time() - 20)) {
+            // a kliens 20 mp-enként kérdez (assets/js/app.js): az ablak ennél jóval nagyobb, hogy egy késve
+            // beérkező lekérés (háttérfül, lassú hálózat) miatt ne villogjon szürkére egy aktív user
+            if (reset($timeStamp) >= (time() - self::ONLINE_WINDOW_SECONDS)) {
                 $userNames[] = $user->getName();
             }
         }
