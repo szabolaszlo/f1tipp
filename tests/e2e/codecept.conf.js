@@ -3,11 +3,17 @@
 const BASE_URL = process.env.E2E_BASE_URL || 'http://127.0.0.1:8001';
 
 exports.config = {
-    tests: './specs/*_test.js',
-    // Gherkin (magyar nyelvű) forgatókönyvek; csak ezek: `--features`, csak a JS specek: `--tests`
+    // minden teszt magyar nyelvű Gherkin forgatókönyv (features/), a lépések a step_definitions/ alatt
     gherkin: {
         features: './features/*.feature',
-        steps: ['./step_definitions/weekend_steps.js'],
+        steps: [
+            './step_definitions/common_steps.js',
+            './step_definitions/betting_steps.js',
+            './step_definitions/actual_steps.js',
+            './step_definitions/standings_steps.js',
+            './step_definitions/admin_steps.js',
+            './step_definitions/pages_steps.js',
+        ],
     },
     output: './output',
     helpers: {

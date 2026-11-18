@@ -24,9 +24,11 @@ Jellemző: Sprint hétvége (3 esemény: sprint, időmérő, futam)
     Akkor még 8 helyezés hiányzik
     És nincs safety car kérdés
     Ha kitölti a helyezéseket: "NOR VER LEC PIA HAM RUS SAI ALO"
-    És elküldi a tippet
+    Akkor a tippküldés gomb aktív
+    Ha elküldi a tippet
     Akkor a tipp rögzítve
-    Ha az "Időmérő" fülre vált
+    Ha a "Maradok" gombra kattint
+    És az "Időmérő" fülre vált
     Akkor még 10 helyezés hiányzik
     Ha a "Futam" fülre vált
     Akkor még 11 helyezés hiányzik
@@ -45,7 +47,7 @@ Jellemző: Sprint hétvége (3 esemény: sprint, időmérő, futam)
       | Időmérő      | VER NOR LEC PIA HAM RUS SAI ALO GAS ALB |            |
       | Futam        | VER NOR LEC PIA HAM RUS SAI ALO GAS ALB | Nem        |
     És "E2E User2" belép
-    Akkor a "SPRINT FUTAM" táblán csak a tippelők neve látszik: "Tippesek: E2E User1"
+    Akkor a "SPRINT FUTAM" táblán nincs tipp, csak ez a megjegyzés: "Tippesek: E2E User1"
     Ha "E2E User2" leadja a tippjeit:
       | esemény      | helyezések                              | safety car |
       | Sprint Futam | NOR VER LEC PIA HAM RUS SAI ALO         |            |
@@ -65,8 +67,9 @@ Jellemző: Sprint hétvége (3 esemény: sprint, időmérő, futam)
       | E2E User1 | 4            |
       | E2E User2 | 8            |
       | E2E User3 | 0            |
-    És a "SPRINT FUTAM" táblán "E2E User1" tippjében csak az 5, 6, 7, 8. hely pontos, a többi jelöletlen
-    És a "SPRINT FUTAM" táblán "E2E User3" tippjében egyik hely sem pontos, a többi jelöletlen
+    # a sprintben nincs "bent van, de rossz helyen" pont: csak a pontos helyek jelöltek
+    És a "SPRINT FUTAM" táblán "E2E User1" tippjének jelölése: "nincs, nincs, nincs, nincs, pontos, pontos, pontos, pontos"
+    És a "SPRINT FUTAM" táblán "E2E User3" tippjének jelölése: "nincs, nincs, nincs, nincs, nincs, nincs, nincs, nincs"
     És még nincs hétvégi összesítő és kupa
 
     Ha az admin rögzíti az "Időmérő" eredményét: "VER NOR LEC PIA HAM RUS SAI ALO GAS ALB"
@@ -103,7 +106,7 @@ Jellemző: Sprint hétvége (3 esemény: sprint, időmérő, futam)
       | E2E User2 | 75   |
       | E2E User1 | 74   |
       | E2E User3 | 15   |
-    És az utolsó hétvége dobogója:
+    És a Kupák modulban az "E2E Nagydíj" dobogója:
       | kupa  | név       | pont |
       | arany | E2E User2 | 75   |
       | ezüst | E2E User1 | 74   |
@@ -136,7 +139,7 @@ Jellemző: Sprint hétvége (3 esemény: sprint, időmérő, futam)
       | E2E User1 | 78   |
       | E2E User2 | 71   |
       | E2E User3 | 15   |
-    És az utolsó hétvége dobogója:
+    És a Kupák modulban az "E2E Nagydíj" dobogója:
       | kupa  | név       | pont |
       | arany | E2E User1 | 78   |
       | ezüst | E2E User2 | 71   |

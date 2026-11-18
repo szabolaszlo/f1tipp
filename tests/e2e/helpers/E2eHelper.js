@@ -1,7 +1,7 @@
 const Helper = require('@codeceptjs/helper');
 const {execFileSync} = require('child_process');
 const path = require('path');
-const {PASSWORD} = require('../data/expected');
+const {PASSWORD} = require('../data/users');
 
 const REPO_ROOT = path.resolve(__dirname, '../../..');
 const CHART_JS_STUB = 'window.Chart = function Chart() { this.destroy = function () {}; this.update = function () {}; }; window.Chart.defaults = {};';
