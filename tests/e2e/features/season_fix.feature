@@ -3,7 +3,8 @@
 Jellemző: Késői eredményjavítás szezon közben
   Az 1. hétvége időmérő eredménye két másik hétvége után derül ki rosszul. Az admin átírja, és a pontoknak,
   a hétvégi összesítőnek, a bajnoki tabellának és a kupáknak újra kell számolódniuk – a többi hétvégét viszont
-  nem szabad érintenie.
+  nem szabad érintenie. Minden hétvége 2 eseményes (időmérő + futam); a sprintes hétvégét is tartalmazó
+  szezont a sprint_season_fix.feature fedi.
   A seed (src/E2e/E2eScenarios.php: season): 3 lezajlott hétvége, az eredmény mindig időmérő
   VER NOR LEC PIA HAM RUS SAI ALO GAS ALB, futam ugyanez + safety car: Igen; a 4. hétvége jövő héten.
     1. hétvége: User1 40 + 30 = 70, User2 34 + 33 = 67, User3 6 + 9 = 15

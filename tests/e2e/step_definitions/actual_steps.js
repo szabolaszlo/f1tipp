@@ -1,5 +1,5 @@
 const assert = require('assert');
-const {EVENTS, codes, list, rowsOf, entityCounts} = require('./context');
+const {ctx, EVENTS, codes, list, rowsOf, entityCounts} = require('./context');
 
 // Aktuális oldal (/#/actual): a hétvége eseménytáblái és összesítője. Az ellenőrző lépések maguk nyitják meg
 // az oldalt, kivéve az élő frissítésé, ahol épp az a lényeg, hogy újratöltés nélkül változzon.
@@ -49,9 +49,10 @@ Then('a/az {string} táblán ezek tippje látszik: {string}', async (tag, names)
     assert.deepStrictEqual((await actualPage.tipRowNames(tag)).sort(), list(names).sort());
 });
 
+// a seedelt hétvége minden eseménye (2 eseményes hétvégén nincs SPRINT FUTAM tábla)
 Then('minden eseménytáblán látszik a tippje: {string}', async names => {
     actualPage.open();
-    for (const {tag} of Object.values(EVENTS)) {
+    for (const {tag} of Object.values(EVENTS).filter(({key}) => ctx.events[key])) {
         assert.deepStrictEqual((await actualPage.tipRowNames(tag)).sort(), list(names).sort(), `${tag} tipp-sorai`);
     }
 });
@@ -76,7 +77,8 @@ Then('a/az {string} táblán {string} tippje pont és jelölés nélkül látszi
     I.dontSeeElement(locate(actualPage.row(tag, name)).withDescendant('.//*[contains(@class,"f1-tiprow__pts")]'));
 });
 
-// helyenként: pontos (pontos hely) / közeli (bent van, de rossz helyen) / nincs (nem ért pontot)
+// helyenként: pontos (pontos hely) / közeli (bent van, de rossz helyen) / nincs (nem ért pontot);
+// a futamnál a 11. a safety car tipp (eltalálva: pontos)
 Then('a/az {string} táblán {string} tippjének jelölése: {string}', async (tag, name, text) => {
     actualPage.open();
     const expected = list(text);

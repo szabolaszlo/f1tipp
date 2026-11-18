@@ -21,6 +21,7 @@ Given('vasárnap délelőtt van: az időmérő 20 órája volt, a futam 2 óra m
 Given('a hétvége futama 2 napja volt', () => seed('recent-weekend'));
 Given('a hétvége futama 4 napja volt', () => seed('finished-weekend'));
 Given('szezon közben vagyunk: 3 lezajlott hétvége eredménnyel, a 4. jövő héten', () => seed('season'));
+Given('szezon közben vagyunk: 3 lezajlott hétvége eredménnyel, az 1. sprintes, a 4. jövő héten', () => seed('sprint-season'));
 
 // --- belépés, kilépés
 

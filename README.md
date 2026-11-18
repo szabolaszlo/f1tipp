@@ -55,7 +55,7 @@ cd tests/e2e && npm install && npx playwright install chromium
 ```
 npm run e2e                                   # teljes csomag, headless
 npm --prefix tests/e2e run test:headed        # látható böngészővel
-npm --prefix tests/e2e test -- --grep @scoring   # csak egy csoport, lásd lent
+npm --prefix tests/e2e test -- --grep @weekend   # csak egy csoport, lásd lent
 E2E_BASE_URL=http://127.0.0.1:8001 npm run e2e   # más cím esetén
 (cd tests/e2e && npx codeceptjs dry-run)      # a forgatókönyvek listája futtatás nélkül
 ```
@@ -78,17 +78,19 @@ docker compose exec -u www-data -w /var/www/f1tipp_sf4 php php bin/console app:e
 Szenáriók (2 eseményes hétvége: időmérő + futam): `open-weekend`, `deadline-passed`, `about-to-close`,
 `bets-placed`, `results-entered`, `others-bet`, `others-bet-closed`, `race-closer`, `recent-weekend`,
 `finished-weekend`, `results-without-user3`, `season` (3 lezajlott hétvége eredménnyel + egy következő).
-Sprintes, 3 eseményes hétvége (sprint + időmérő + futam): `sprint-open-weekend`, `sprint-results-entered`.
+Sprintes, 3 eseményes hétvége (sprint + időmérő + futam): `sprint-open-weekend`, `sprint-results-entered`,
+`sprint-season` (mint a `season`, de az 1. hétvége sprintes).
 
 Csoportok (`--grep`):
 - `@login` belépés, kilépés, session; `@betting` tippleadás; `@deadline` határidő; `@display` mentett tipp
 - `@visibility` mások tippjei csak saját tipp (vagy a határidő) után láthatók
 - `@order` hétvégi sorrend (a legközelebbi esemény elöl, összesítő, váltás a következő hétvégére)
-- `@scoring` eredmény és pontszámítás; `@fix` eredmény javítása / törlése (2 eseményes hétvége)
-- `@sprint` sprintes, 3 eseményes hétvége végig: tippleadás
-  3 userrel, eredmények eseményenként, hétvégi összesítő, tabella, kupák, rekordok, majd sprint / időmérő
-  javítás és sprint eredmény törlése
-- `@season` késői javítás több hétvégével később (tabella, kupák, holtverseny)
+- `@weekend` (2 esemény: időmérő + futam) és `@sprint` (3 esemény: sprint + időmérő + futam) – ugyanaz a
+  forgatókönyv-készlet mindkét hétvégetípusra: tippleadás 3 userrel a felületen, eredmények eseményenként,
+  pontok és jelölések, hétvégi összesítő, VB tabella, rekordok, kupák, majd eredmény-javítás (időmérő, futam
+  safety carral, sprintesnél a sprint is) és eredmény törlése, mindegyik után újraszámolt pontokkal
+- `@season` (csak 2 eseményes hétvégék) és `@season-sprint` (az 1. hétvége sprintes): késői javítás több
+  hétvégével később (tabella, kupák, holtverseny), és az összes pont újraszámolása az adminból
 - `@admin` minden admin menüpont hatása a front oldalon; `@security` jogosultságok, tipp-felülírás, XSS
 - `@live` élő modulfrissítés két böngészővel; `@pages` oldalak, statisztika, hírek, online jelzés; `@smoke`, `@helper`
 

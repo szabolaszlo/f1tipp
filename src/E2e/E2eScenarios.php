@@ -86,7 +86,7 @@ class E2eScenarios
     public const NAMES = [
         'open-weekend', 'deadline-passed', 'about-to-close', 'bets-placed', 'results-entered',
         'others-bet', 'others-bet-closed', 'race-closer', 'recent-weekend', 'finished-weekend',
-        'sprint-open-weekend', 'sprint-results-entered', 'season', 'results-without-user3',
+        'sprint-open-weekend', 'sprint-results-entered', 'season', 'sprint-season', 'results-without-user3',
     ];
 
     private EntityManagerInterface $em;
@@ -120,8 +120,8 @@ class E2eScenarios
 
         $now = new \DateTimeImmutable();
 
-        if ($name === 'season') {
-            return $this->buildSeason($now);
+        if ($name === 'season' || $name === 'sprint-season') {
+            return $this->buildSeason($now, $name === 'sprint-season');
         }
 
         switch ($name) {
@@ -250,8 +250,10 @@ class E2eScenarios
     /**
      * Szezon közben: 3 lezajlott hétvége (3, 2 és 1 hete) eredménnyel, a 4. jövő héten.
      * Az eredményeket hétvégénként, időrendben számoljuk, ahogy élesben az admin rögzítené.
+     * $sprintFirst: az 1. hétvége sprintes (sprint + időmérő + futam), a sprint tippek és eredmény
+     * mint a sprint-results-entered szenárióban (SPRINT_BETS, SPRINT_RESULT).
      */
-    private function buildSeason(\DateTimeImmutable $now): array
+    private function buildSeason(\DateTimeImmutable $now, bool $sprintFirst = false): array
     {
         $events = [];
         foreach (self::SEASON_NAMES as $i => $weekendName) {
@@ -259,6 +261,9 @@ class E2eScenarios
             // 21, 14 és 7 napja, a 4. hétvége 7 nap múlva
             $daysAgo = $weekend <= 3 ? (4 - $weekend) * 7 : -7;
             $raceAt = $now->modify(sprintf('%+d days', -$daysAgo));
+            if ($sprintFirst && $weekend === 1) {
+                $events['w1_sprint_qualify'] = $this->event(new SprintQualify(), $weekend, $raceAt->modify('-1 day -4 hours'), $weekendName);
+            }
             $events['w' . $weekend . '_qualify'] = $this->event(new Qualify(), $weekend, $raceAt->modify('-1 day'), $weekendName);
             $events['w' . $weekend . '_race'] = $this->event(new Race(), $weekend, $raceAt, $weekendName);
         }
@@ -268,12 +273,21 @@ class E2eScenarios
 
         foreach (self::SEASON_BETS as $i => $bets) {
             $w = 'w' . ($i + 1);
+            $sprint = $events[$w . '_sprint_qualify'] ?? null;
             foreach ($bets as $username => [$qualifyTip, $raceTip, $safetyCar]) {
                 $user = $this->user($username);
+                if ($sprint) {
+                    $this->bet($user, $sprint, self::SPRINT_BETS[$username]);
+                }
                 $this->bet($user, $events[$w . '_qualify'], $qualifyTip);
                 $this->bet($user, $events[$w . '_race'], $raceTip, $safetyCar);
             }
             $this->em->flush();
+
+            if ($sprint) {
+                $info['results'][$w . '_sprint_qualify'] = $this->result($sprint, self::SPRINT_RESULT)->getId();
+                $this->calculator->calculate();
+            }
 
             $info['results'][$w . '_qualify'] = $this->result($events[$w . '_qualify'], self::Q)->getId();
             $this->calculator->calculate();

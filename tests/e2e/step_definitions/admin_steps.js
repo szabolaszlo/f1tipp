@@ -49,19 +49,21 @@ When(/^az admin rögzíti (?:a|az) "([^"]+)" eredményét: "([^"]+)"(?:, safety 
     ctx.results[key] = await adminResultPage.currentResultId();
 });
 
-const fixResult = async (resultKey, text) => {
+// sc: a futam safety car válaszának javítása ('Igen' | 'Nem'); ha nincs megadva, marad a korábbi
+const fixResult = async (resultKey, text, sc) => {
     await loginAs(ADMIN);
     adminResultPage.openEdit(ctx.results[resultKey]);
-    adminResultPage.fill(codes(text));
+    adminResultPage.fill(codes(text), sc || undefined);
     adminResultPage.save();
     adminResultPage.seeSaved();
 };
 
-When('az admin a/az {string} eredményét erre javítja: {string}', (label, text) => fixResult(eventOf(label).key, text));
+When(/^az admin (?:a|az) "([^"]+)" eredményét erre javítja: "([^"]+)"(?:, safety car: "([^"]+)")?$/, (label, text, sc) =>
+    fixResult(eventOf(label).key, text, sc));
 
-// a szezon szenárióban hétvégénként: w1_qualify, w1_race, ...
-When('az admin a/az {int}. hétvége {string} eredményét erre javítja: {string}', (weekend, label, text) =>
-    fixResult(`w${weekend}_${eventOf(label).key}`, text));
+// a szezon szenárióban hétvégénként: w1_sprint_qualify, w1_qualify, w1_race, ...
+When(/^az admin (?:a|az) (\d+)\. hétvége "([^"]+)" eredményét erre javítja: "([^"]+)"(?:, safety car: "([^"]+)")?$/, (weekend, label, text, sc) =>
+    fixResult(`w${weekend}_${eventOf(label).key}`, text, sc));
 
 When('az admin törli a/az {string} eredményét', async label => {
     await loginAs(ADMIN);
