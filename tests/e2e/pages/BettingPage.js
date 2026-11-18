@@ -27,7 +27,9 @@ module.exports = {
     selectTab(label) {
         I.click(this.tab(label));
         I.waitForElement(locate(this.tab(label)).withClassAttr('is-active'));
-        I.waitForElement('.f1-betting__form');
+        // tabváltáskor "fade" animáció fut (becsukódik/kinyílik): megvárjuk, míg csak az új form marad
+        I.waitForElement('.f1-betting__form:not(.fade-leave-active):not(.fade-enter-active)');
+        I.waitNumberOfVisibleElements('.f1-betting__form', 1);
     },
 
     trigger(position) {
@@ -42,6 +44,26 @@ module.exports = {
     openPicker(position) {
         I.click(this.trigger(position));
         I.waitForElement('.f1-select__panel');
+    },
+
+    clearButton(position) {
+        return {
+            xpath: `//button[contains(@class,"f1-select__trigger") and @aria-label=${xp(position + '. helyezett')}]`
+                + '/following-sibling::button[contains(@class,"f1-select__clear")]',
+        };
+    },
+
+    clearPick(position) {
+        I.click(this.clearButton(position));
+        I.waitForElement(locate(this.trigger(position)).withDescendant('.//span[contains(@class,"f1-select__placeholder")]'));
+    },
+
+    seeInPicker(code) {
+        I.seeElement(this.option(code));
+    },
+
+    dontSeeInPicker(code) {
+        I.dontSeeElement(this.option(code));
     },
 
     pickDriver(position, code) {
