@@ -49,7 +49,9 @@ class LoginController extends AbstractController
     public function isLoggedAction(): JsonResponse
     {
         return $this->json([
-            'userName' => $this->getUser() ? $this->getUser()->getUserIdentifier() : null
+            'userName' => $this->getUser() ? $this->getUser()->getUserIdentifier() : null,
+            // a role_hierarchy miatt a ROLE_SUPER_ADMIN is ide tartozik; a fejléc Admin gombja ebből dönt
+            'isAdmin' => $this->isGranted('ROLE_ADMIN'),
         ], $this->getUser() ? 200 : 401);
     }
 

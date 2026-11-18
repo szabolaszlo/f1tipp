@@ -13,6 +13,10 @@
           <span v-else>{{ $t('login.title') }}</span>
         </router-link>
         <template v-else>
+          <a v-if="isAdmin" href="/admin" class="f1-user__admin" :title="$t('login.admin')">
+            <i class="glyphicon glyphicon-cog"></i>
+            <span class="f1-user__admin-label">{{ $t('login.admin') }}</span>
+          </a>
           <span class="f1-user__avatar" aria-hidden="true">{{ username.charAt(0).toUpperCase() }}</span>
           <span class="f1-user__name" :title="username">{{ username }}</span>
           <a href="/logout" class="f1-user__logout" :title="$t('login.logout')">
@@ -42,6 +46,7 @@ export default {
   data() {
     return {
       username: '',
+      isAdmin: false,
       componentLoading: false,
       menu: [
         {to: '/betting', label: 'betting.title'},
@@ -66,9 +71,11 @@ export default {
           .get('/is_logged')
           .then(response => {
             this.username = response.data.userName;
+            this.isAdmin = response.data.isAdmin === true;
             this.isLoggedUser = true;
           })
           .catch(error => {
+            this.isAdmin = false;
             this.csrfToken = localStorage.getItem('f1tipp_csrf_token') || '';
           })
           .finally(() => {
@@ -152,6 +159,7 @@ export default {
 }
 
 .f1-user__login:focus-visible,
+.f1-user__admin:focus-visible,
 .f1-user__logout:focus-visible {
   border-color: var(--f1-muted);
 }
@@ -194,6 +202,7 @@ export default {
 }
 
 .f1-user__login,
+.f1-user__admin,
 .f1-user__logout {
   color: var(--f1-text);
   text-decoration: none;
@@ -202,7 +211,15 @@ export default {
   border-radius: 6px;
 }
 
+.f1-user__admin {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 4px;
+}
+
 .f1-user__login:hover,
+.f1-user__admin:hover,
 .f1-user__logout:hover {
   border-color: var(--f1-red);
   color: #fff;
@@ -239,6 +256,11 @@ export default {
 
   .f1-user__name {
     max-width: 90px;
+  }
+
+  /* keskeny fejlécben csak a fogaskerék ikon marad */
+  .f1-user__admin-label {
+    display: none;
   }
 }
 </style>
