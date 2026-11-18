@@ -90,9 +90,57 @@ const SEASON_AFTER_FIX = {
     trophyTable: [['E2E User2', 65], ['E2E User3', 55], ['E2E User1', 54]],
 };
 
+// --- sprint hétvége: 3 esemény (src/E2e/E2eScenarios.php: sprint-open-weekend, sprint-results-entered) ---
+// A sprint tipp p1–p8, pontos hely 1 pont, rossz helyen 0 (nincs "top 8-ban" pont, src/Rule/RuleType/SprintQualify.php).
+// Az időmérő és a futam tippje és eredménye ugyanaz, mint a 2 eseményes hétvégén (BETS, EXPECTED).
+// A sprint pontja nélkül User1 nyerne (70 > 67): a sprinttel User2 (75 > 74) – ez bizonyítja, hogy a hétvégébe beszámít.
+const SPRINT_RESULT = ['NOR', 'VER', 'LEC', 'PIA', 'HAM', 'RUS', 'SAI', 'ALO'];
+// javítás: a helyes sprint eredmény e2e_user tippje volt
+const SPRINT_FIXED_RESULT = ['LEC', 'PIA', 'VER', 'NOR', 'HAM', 'RUS', 'SAI', 'ALO'];
+const SPRINT_OUTSIDERS = ['TSU', 'STR', 'OCO', 'HUL', 'VER', 'NOR', 'LEC', 'PIA'];
+
+const SPRINT_BETS = {
+    e2e_user: {sprint: SPRINT_FIXED_RESULT, ...BETS.e2e_user},
+    e2e_user2: {sprint: SPRINT_RESULT, ...BETS.e2e_user2},
+    e2e_user3: {sprint: SPRINT_OUTSIDERS, ...BETS.e2e_user3},
+};
+
+//   sprint: User1 p5–p8 pontos = 4, User2 mind pontos = 8, User3 egy sem pontos = 0 (pedig 4 pilótája bent van)
+//   hétvége: User1 4 + 40 + 30 = 74, User2 8 + 34 + 33 = 75, User3 0 + 6 + 9 = 15
+const SPRINT_EXPECTED = {
+    e2e_user: {sprint: 4, qualify: 40, race: 30, weekend: 74, alt: 10, lag: '+ 4', trophy: 'silver'},
+    e2e_user2: {sprint: 8, qualify: 34, race: 33, weekend: 75, alt: 14, lag: '', trophy: 'gold'},
+    e2e_user3: {sprint: 0, qualify: 6, race: 9, weekend: 15, alt: 8, lag: '+ 6', trophy: 'bronze'},
+};
+
+// a sprint eredmény javítása után: User1 8, User2 p5–p8 = 4, User3 0
+//   hétvége: User1 8 + 40 + 30 = 78, User2 4 + 34 + 33 = 71, User3 15 -> a kupák helyet cserélnek
+const SPRINT_EXPECTED_AFTER_SPRINT_FIX = {
+    e2e_user: {sprint: 8, qualify: 40, race: 30, weekend: 78, alt: 14, lag: '', trophy: 'gold'},
+    e2e_user2: {sprint: 4, qualify: 34, race: 33, weekend: 71, alt: 10, lag: '+ 4', trophy: 'silver'},
+    e2e_user3: {sprint: 0, qualify: 6, race: 9, weekend: 15, alt: 8, lag: '+ 6', trophy: 'bronze'},
+};
+
+// az időmérő eredmény javítása (Q_SWAPPED) után: a sprint pontok változatlanok
+//   hétvége: User1 4 + 34 + 30 = 68, User2 8 + 40 + 33 = 81, User3 0 + 6 + 9 = 15
+const SPRINT_EXPECTED_AFTER_QUALIFY_FIX = {
+    e2e_user: {sprint: 4, qualify: 34, race: 30, weekend: 68, alt: 10, lag: '+ 4', trophy: 'silver'},
+    e2e_user2: {sprint: 8, qualify: 40, race: 33, weekend: 81, alt: 14, lag: '', trophy: 'gold'},
+    e2e_user3: {sprint: 0, qualify: 6, race: 9, weekend: 15, alt: 8, lag: '+ 6', trophy: 'bronze'},
+};
+
+// a sprint eredmény törlése után a hétvége csak az időmérőből és a futamból áll: ugyanaz, mint EXPECTED
+const SPRINT_EXPECTED_WITHOUT_SPRINT = EXPECTED;
+
+// kupatábla pontjai (arany 25, ezüst 18, bronz 15)
+const TROPHY_POINTS = {gold: 25, silver: 18, bronze: 15};
+
 module.exports = {
     SEASON_ROUNDS, SEASON, SEASON_AFTER_FIX,
     RECORD_QUALIFY, RECORD_WEEKEND, EXPECTED_RECORDS, EXPECTED_RECORDS_AFTER_FIX,
     PASSWORD, USERS, WEEKEND_NAME, Q_RESULT, Q_SWAPPED, Q_OUTSIDERS, BETS,
     EXPECTED, FIXED_QUALIFY_RESULT, EXPECTED_AFTER_FIX,
+    SPRINT_RESULT, SPRINT_FIXED_RESULT, SPRINT_OUTSIDERS, SPRINT_BETS, SPRINT_EXPECTED,
+    SPRINT_EXPECTED_AFTER_SPRINT_FIX, SPRINT_EXPECTED_AFTER_QUALIFY_FIX, SPRINT_EXPECTED_WITHOUT_SPRINT,
+    TROPHY_POINTS,
 };

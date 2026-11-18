@@ -31,6 +31,21 @@ module.exports = {
         }
     },
 
+    /** az űrlap a megadott eseményhez tartozik, és pontosan ennyi eredmény mezője (pozíciók + safety car) van */
+    async seeEventOffered(eventId, fieldCount) {
+        I.seeElementInDOM(`input[name="result[event]"][value="${eventId}"]`);
+        const count = await I.grabNumberOfVisibleElements('select[name^="result[attributes]"]');
+        if (count !== fieldCount) {
+            throw new Error(`az eredmény űrlapnak ${fieldCount} mezője kellene legyen, de ${count} van`);
+        }
+    },
+
+    /** mentés után a szerkesztő oldalra visz: az URL entityId paramétere a mentett eredmény id-ja */
+    async currentResultId() {
+        const url = new URL(await I.grabCurrentUrl());
+        return Number(url.searchParams.get('entityId'));
+    },
+
     save() {
         I.click('#result_submit');
     },

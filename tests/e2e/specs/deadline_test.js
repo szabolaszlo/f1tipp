@@ -33,8 +33,9 @@ Scenario('deadline passing while filling rejects the bet', async ({I, bettingPag
     I.dontSeeElement(actualPage.row('IDŐMÉRŐ', USERS.e2e_user.name));
 });
 
+// a sprintes (3 eseményes) hétvége fülei után a 2 eseményes hétvégéé kell látszódjanak
 Scenario('stale weekend cache is not reused between scenarios', async ({I, bettingPage}) => {
-    await I.seedScenario('open-weekend');
+    await I.seedScenario('sprint-open-weekend');
     await I.loginAs('e2e_user');
     bettingPage.open();
     assert.ok((await bettingPage.tabLabels()).includes('Sprint Futam'));

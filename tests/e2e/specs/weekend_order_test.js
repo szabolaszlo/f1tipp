@@ -12,11 +12,11 @@ Scenario('before qualifying the nearest event comes first', async ({I, actualPag
     await I.seedScenario('open-weekend');
     await I.loginAs('e2e_user');
     actualPage.open();
-    assert.deepStrictEqual(await actualPage.boardTags(), ['SPRINT FUTAM', 'IDŐMÉRŐ', 'FUTAM']);
+    assert.deepStrictEqual(await actualPage.boardTags(), ['IDŐMÉRŐ', 'FUTAM']);
 
     bettingPage.open();
-    assert.deepStrictEqual(await bettingPage.tabLabels(), ['Sprint Futam', 'Időmérő', 'Futam']);
-    I.seeElement(locate(bettingPage.tab('Sprint Futam')).withClassAttr('is-active'));
+    assert.deepStrictEqual(await bettingPage.tabLabels(), ['Időmérő', 'Futam']);
+    I.seeElement(locate(bettingPage.tab('Időmérő')).withClassAttr('is-active'));
 });
 
 Scenario('when the race is nearer than the past qualifying, the race comes first', async ({I, actualPage, bettingPage}) => {

@@ -60,6 +60,20 @@ module.exports = {
             .map(el => el.textContent.trim()));
     },
 
+    /**
+     * A HÉTVÉGE összesítő tábla (templates/extension/result_table/type/summary.html.twig):
+     * [név, hétvégi (gyűjtött) pont, bajnoki pont] sorok, a megjelenés sorrendjében.
+     * @returns {Promise<Array<[string, number, number]>>}
+     */
+    async weekendSummary() {
+        I.waitForElement('#main-component .f1-board--summary .f1-row');
+        return I.executeScript(() => Array.from(document.querySelectorAll('#main-component .f1-board--summary .f1-row')).map(row => [
+            row.querySelector('.f1-name').textContent.trim(),
+            Number(row.querySelector('.f1-num--dim').textContent.trim()),
+            Number(row.querySelector('.f1-num--main').textContent.trim().replace('+', '')),
+        ]));
+    },
+
     async heroTitle() {
         I.waitForElement('.f1-hero__title');
         return I.executeScript(() => document.querySelector('.f1-hero__title').textContent.trim());

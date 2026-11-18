@@ -62,41 +62,7 @@ Scenario('admin enters results and points, standings and trophies are calculated
         }
     });
 
-// Sprint hétvége: a sprint "időmérő" tipp p1–p8, pontos hely 1 pont, rossz helyen 0 (src/Rule/RuleType/SprintQualify.php).
-// A sprint pontja a hétvégi összpontszámba (kupák, bajnoki pont) is beszámít.
-Scenario('sprint weekend: sprint points count into the weekend total', async ({I, adminResultPage, actualPage, resultsPage}) => {
-    await I.seedScenario('sprint-bets-placed');
-    await I.loginAs('e2e_admin');
-
-    // az admin "új eredmény" űrlapja időrendben kínálja az eseményeket: sprint, időmérő, futam
-    adminResultPage.openNew();
-    I.see('Sprint');
-    adminResultPage.fill(Q_RESULT.slice(0, 8));
-    adminResultPage.save();
-    adminResultPage.seeSaved();
-
-    actualPage.open();
-    const sprint = {e2e_user: 8, e2e_user2: 6, e2e_user3: 0};
-    for (const user of PLAYERS) {
-        assert.strictEqual(await actualPage.pointsOf('SPRINT FUTAM', USERS[user].name), sprint[user], `${user} sprint pont`);
-    }
-
-    adminResultPage.openNew();
-    adminResultPage.fill(Q_RESULT);
-    adminResultPage.save();
-    adminResultPage.seeSaved();
-    adminResultPage.openNew();
-    adminResultPage.fill(Q_RESULT, 'Igen');
-    adminResultPage.save();
-    adminResultPage.seeSaved();
-
-    resultsPage.open();
-    assert.deepStrictEqual(await resultsPage.weekendSummary(1), [
-        [USERS.e2e_user.name, EXPECTED.e2e_user.weekend + 8, 14],
-        [USERS.e2e_user2.name, EXPECTED.e2e_user2.weekend + 6, 10],
-        [USERS.e2e_user3.name, EXPECTED.e2e_user3.weekend, 8],
-    ]);
-});
+// A sprintes, 3 eseményes hétvége pontszámítása: sprint_weekend_test.js
 
 // Aki nem tippelt, 0 pontos. Korábban a TrophyCalculator egy fantom (user nélküli) 0 pontos bejegyzéssel
 // indult, így a bronz mellé egy gazdátlan kupa is keletkezett.

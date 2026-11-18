@@ -34,8 +34,8 @@ Scenario('event: renaming and moving the deadline shows up for the players', asy
     actualPage.open();
     I.seeElement(locate(actualPage.board('IDŐMÉRŐ')).withDescendant(
         './/span[contains(@class,"f1-board__title") and normalize-space()="E2E Átnevezett Nagydíj"]'));
-    // a lejárt időmérő hátrébb kerül, a sprint maradt a legközelebbi
-    assert.deepStrictEqual(await actualPage.boardTags(), ['SPRINT FUTAM', 'IDŐMÉRŐ', 'FUTAM']);
+    // a most lejárt időmérő (1 órája) közelebb van, mint a holnapi futam
+    assert.deepStrictEqual(await actualPage.boardTags(), ['IDŐMÉRŐ', 'FUTAM']);
 
     bettingPage.open();
     bettingPage.selectTab('Időmérő');
@@ -56,7 +56,7 @@ Scenario('event: a postponed weekend gives way to the sooner one', async ({I, ad
     const info = await I.seedScenario('open-weekend');
     await I.loginAs('e2e_superadmin');
 
-    for (const key of ['sprint_qualify', 'qualify', 'race']) {
+    for (const key of ['qualify', 'race']) {
         adminPage.openEdit('Event', info.events[key].id);
         const current = await I.grabValueFrom('#Event_date_time');
         adminPage.setDateTime('#Event_date_time', shiftLocal(current, 14 * 24));

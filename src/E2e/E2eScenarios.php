@@ -61,6 +61,22 @@ class E2eScenarios
         ],
     ];
 
+    /**
+     * Sprint hétvége (3 esemény: sprint, időmérő, futam). A sprint tipp p1–p8, pontos hely 1 pont, rossz hely 0
+     * (src/Rule/RuleType/SprintQualify.php). Az időmérő és a futam tippje és eredménye ugyanaz, mint a BETS-ben.
+     */
+    public const SPRINT_RESULT = ['NOR', 'VER', 'LEC', 'PIA', 'HAM', 'RUS', 'SAI', 'ALO'];
+
+    /** a sprint eredményének javítása: e2e_user tippje volt a helyes */
+    public const SPRINT_FIXED_RESULT = ['LEC', 'PIA', 'VER', 'NOR', 'HAM', 'RUS', 'SAI', 'ALO'];
+
+    /** username => sprint tipp */
+    public const SPRINT_BETS = [
+        'e2e_user' => self::SPRINT_FIXED_RESULT,
+        'e2e_user2' => self::SPRINT_RESULT,
+        'e2e_user3' => ['TSU', 'STR', 'OCO', 'HUL', 'VER', 'NOR', 'LEC', 'PIA'],
+    ];
+
     /** akik a "mások tippjei" szenáriókban már leadták az időmérő tippjüket (e2e_user még nem) */
     public const OTHERS_QUALIFY_BETS = [
         'e2e_user2' => self::Q_SWAPPED,
@@ -70,7 +86,7 @@ class E2eScenarios
     public const NAMES = [
         'open-weekend', 'deadline-passed', 'about-to-close', 'bets-placed', 'results-entered',
         'others-bet', 'others-bet-closed', 'race-closer', 'recent-weekend', 'finished-weekend',
-        'sprint-bets-placed', 'season', 'results-without-user3',
+        'sprint-open-weekend', 'sprint-results-entered', 'season', 'results-without-user3',
     ];
 
     private EntityManagerInterface $em;
@@ -111,8 +127,14 @@ class E2eScenarios
         switch ($name) {
             case 'open-weekend':
                 $events = [
-                    'sprint_qualify' => $this->event(new SprintQualify(), 1, $now->modify('+1 hour')),
                     'qualify' => $this->event(new Qualify(), 1, $now->modify('+2 hours')),
+                    'race' => $this->event(new Race(), 1, $now->modify('+1 day')),
+                ];
+                break;
+            case 'sprint-open-weekend':
+                $events = [
+                    'sprint_qualify' => $this->event(new SprintQualify(), 1, $now->modify('+1 hour')),
+                    'qualify' => $this->event(new Qualify(), 1, $now->modify('+3 hours')),
                     'race' => $this->event(new Race(), 1, $now->modify('+1 day')),
                 ];
                 break;
@@ -159,7 +181,7 @@ class E2eScenarios
                     'race' => $this->event(new Race(), 1, $now->modify('-4 days')),
                 ];
                 break;
-            case 'sprint-bets-placed':
+            case 'sprint-results-entered':
                 $events = [
                     'sprint_qualify' => $this->event(new SprintQualify(), 1, $now->modify('-3 hours')),
                     'qualify' => $this->event(new Qualify(), 1, $now->modify('-2 hours')),
@@ -187,12 +209,19 @@ class E2eScenarios
             $this->placeBets($events['qualify'], $events['race']);
         }
 
-        if ($name === 'sprint-bets-placed') {
-            $this->placeBets($events['qualify'], $events['race']);
-            foreach (self::BETS as $username => [$qualifyTip]) {
-                $this->bet($this->user($username), $events['sprint_qualify'], array_slice($qualifyTip, 0, 8));
+        if ($name === 'sprint-results-entered') {
+            foreach (self::SPRINT_BETS as $username => $tip) {
+                $this->bet($this->user($username), $events['sprint_qualify'], $tip);
             }
-            $this->em->flush();
+            $this->placeBets($events['qualify'], $events['race']);
+
+            // időrendben, eseményenként számolva, ahogy az admin rögzítené
+            $info['results'] = ['sprint_qualify' => $this->result($events['sprint_qualify'], self::SPRINT_RESULT)->getId()];
+            $this->calculator->calculate();
+            $info['results']['qualify'] = $this->result($events['qualify'], self::Q)->getId();
+            $this->calculator->calculate();
+            $info['results']['race'] = $this->result($events['race'], self::Q, self::RACE_SAFETY_CAR)->getId();
+            $this->calculator->calculate();
         }
 
         if ($name === 'others-bet' || $name === 'others-bet-closed') {

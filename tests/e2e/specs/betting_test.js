@@ -10,7 +10,7 @@ Before(async ({I, bettingPage}) => {
 });
 
 Scenario('shows weekend events as tabs in time order', async ({bettingPage}) => {
-    assert.deepStrictEqual(await bettingPage.tabLabels(), ['Sprint Futam', 'Időmérő', 'Futam']);
+    assert.deepStrictEqual(await bettingPage.tabLabels(), ['Időmérő', 'Futam']);
 });
 
 Scenario('submit disabled until all positions filled', ({bettingPage}) => {
@@ -107,22 +107,22 @@ Scenario('stay button cancels redirect', async ({I, bettingPage}) => {
     I.seeInCurrentUrl('#/betting');
 });
 
-// A hétvége eseményeire külön-külön kell tippelni: a sprint tipp mentése után az időmérő még nyitott.
+// A hétvége eseményeire külön-külön kell tippelni: az időmérő tipp mentése után a futam még nyitott.
+// (3 eseményes, sprintes hétvége: sprint_weekend_test.js)
 Scenario('each weekend event is bet separately', ({I, bettingPage}) => {
-    bettingPage.selectTab('Sprint Futam');
-    bettingPage.seeMissing(8);
-    bettingPage.fillPositions(Q_RESULT.slice(0, 8));
+    bettingPage.selectTab('Időmérő');
+    bettingPage.fillPositions(Q_RESULT);
     bettingPage.submit();
     I.waitForText('Tipped sikeresen rögzítve!');
     I.click('Maradok');
 
-    bettingPage.selectTab('Időmérő');
-    bettingPage.seeMissing(10);
+    bettingPage.selectTab('Futam');
+    bettingPage.seeMissing(11);
     bettingPage.seeEmpty(1);
 
-    bettingPage.selectTab('Sprint Futam');
+    bettingPage.selectTab('Időmérő');
     bettingPage.seeLocked();
-    bettingPage.seeSelected(8, Q_RESULT[7]);
+    bettingPage.seeSelected(10, Q_RESULT[9]);
     // a rögzített tipp nem törölhető
     I.dontSeeElement('.f1-select__clear');
 });

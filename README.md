@@ -63,16 +63,19 @@ Kézi seedelés (csak `--env=e2e`-vel fut, más környezetben hibával kilép):
 ```
 docker compose exec -u www-data -w /var/www/f1tipp_sf4 php php bin/console app:e2e:scenario open-weekend --env=e2e
 ```
-Szenáriók: `open-weekend`, `deadline-passed`, `about-to-close`, `bets-placed`, `results-entered`,
-`others-bet`, `others-bet-closed`, `race-closer`, `recent-weekend`, `finished-weekend`, `sprint-bets-placed`,
-`results-without-user3`, `season` (3 lezajlott hétvége eredménnyel + egy következő).
+Szenáriók (2 eseményes hétvége: időmérő + futam): `open-weekend`, `deadline-passed`, `about-to-close`,
+`bets-placed`, `results-entered`, `others-bet`, `others-bet-closed`, `race-closer`, `recent-weekend`,
+`finished-weekend`, `results-without-user3`, `season` (3 lezajlott hétvége eredménnyel + egy következő).
+Sprintes, 3 eseményes hétvége (sprint + időmérő + futam): `sprint-open-weekend`, `sprint-results-entered`.
 A várt pontszámok és a tesztadat: `tests/e2e/data/expected.js`.
 
 Csoportok (`--grep`):
 - `@login` belépés, kilépés, session; `@betting` tippleadás; `@deadline` határidő; `@display` mentett tipp
 - `@visibility` mások tippjei csak saját tipp (vagy a határidő) után láthatók
 - `@order` hétvégi sorrend (a legközelebbi esemény elöl, összesítő, váltás a következő hétvégére)
-- `@scoring` eredmény és pontszámítás (sprint is); `@fix` eredmény javítása / törlése
+- `@scoring` eredmény és pontszámítás; `@fix` eredmény javítása / törlése (2 eseményes hétvége)
+- `@sprint` sprintes, 3 eseményes hétvége végig: tippleadás 3 userrel, eredmények eseményenként,
+  hétvégi összesítő, tabella, kupák, rekordok, majd sprint / időmérő javítás és sprint eredmény törlése
 - `@season` késői javítás több hétvégével később (tabella, kupák, holtverseny)
 - `@admin` minden admin menüpont hatása a front oldalon; `@security` jogosultságok, tipp-felülírás, XSS
 - `@live` élő modulfrissítés két böngészővel; `@pages` oldalak, statisztika, hírek, online jelzés; `@smoke`, `@helper`
