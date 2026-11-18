@@ -63,7 +63,7 @@
                           :placeholder="$t('betting.placeholder')"
                           :search-placeholder="$t('betting.search')"
                           :no-result-text="$t('betting.noResult')"
-                          :taken-title="$t('betting.alreadyTipped')"
+                          :clear-label="$t('betting.clear')"
                           :aria-label="field.label"/>
           </template>
           <template v-else>

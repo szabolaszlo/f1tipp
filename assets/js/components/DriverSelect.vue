@@ -1,5 +1,6 @@
 <template>
-  <div ref="root" class="f1-select" :class="{'is-open': open, 'is-disabled': disabled}" @focusout="onFocusOut">
+  <div ref="root" class="f1-select" :class="{'is-open': open, 'is-disabled': disabled, 'is-clearable': clearable}"
+       @focusout="onFocusOut">
     <button ref="trigger" type="button" class="f1-select__trigger" :disabled="disabled"
             aria-haspopup="listbox" :aria-expanded="open ? 'true' : 'false'" :aria-label="ariaLabel"
             @click="toggle" @keydown="onTriggerKeydown">
@@ -11,6 +12,11 @@
       <span v-else class="f1-select__placeholder">{{ placeholder }}</span>
       <span v-if="!disabled" class="f1-select__chevron" aria-hidden="true"></span>
     </button>
+    <!-- kiválasztás törlése: így a pilóta újra választható máshová (pl. két pilóta cseréjéhez) -->
+    <button v-if="clearable" type="button" class="f1-select__clear" :aria-label="clearLabel" :title="clearLabel"
+            @click="clear">
+      <span aria-hidden="true">&times;</span>
+    </button>
 
     <div v-if="open" class="f1-select__panel" :class="{'f1-select__panel--up': openUp}">
       <input ref="search" v-model="query" class="f1-select__search" type="text" autocomplete="off"
@@ -21,19 +27,11 @@
         <li v-for="(driver, index) in filtered" :id="optionId(index)" :key="driver.code"
             role="option" class="f1-select__option"
             :aria-selected="driver.code === modelValue ? 'true' : 'false'"
-            :aria-disabled="isTaken(driver) ? 'true' : 'false'"
-            :class="{
-              'is-active': index === activeIndex,
-              'is-selected': driver.code === modelValue,
-              'is-taken': isTaken(driver)
-            }"
+            :class="{'is-active': index === activeIndex, 'is-selected': driver.code === modelValue}"
             @mousemove="activeIndex = index" @click="choose(driver)">
           <span class="f1-stripe" :style="{background: driver.teamColor}"></span>
           <span class="f1-name">{{ driver.familyName }}<small v-if="driver.givenName">{{ driver.givenName }}</small></span>
-          <span class="f1-select__meta">
-            <span v-if="isTaken(driver)" class="f1-select__taken" :title="takenTitle">{{ takenBy[driver.code] }}</span>
-            <span class="f1-select__code">{{ driver.code }}</span>
-          </span>
+          <span class="f1-select__code">{{ driver.code }}</span>
         </li>
         <li v-if="!filtered.length" class="f1-select__empty">{{ noResultText }}</li>
       </ul>
@@ -51,20 +49,21 @@ const normalize = (text) => (text || '')
 
 /**
  * TV-grafikás pilótaválasztó: csapatszín-csík, NAGYBETŰS családnév, kisebb keresztnév.
- * A más helyezésre már kiválasztott pilóták látszanak, de nem választhatók (takenBy).
+ * A más helyezésre már kiválasztott pilóták (takenBy) nem szerepelnek a listában, így az rövidebb;
+ * a kiválasztás a × gombbal (vagy Delete/Backspace billentyűvel) törölhető, és a pilóta újra választható.
  */
 export default {
   name: "DriverSelect",
   props: {
     modelValue: {type: String, default: ''},
     drivers: {type: Array, required: true},
-    // pilótakód -> rövid címke ("P3") azokra, akiket másik helyre már kiválasztott
+    // pilótakód -> rövid címke ("P3") azokra, akiket másik helyre már kiválasztott: ezek kimaradnak a listából
     takenBy: {type: Object, default: () => ({})},
     disabled: {type: Boolean, default: false},
     placeholder: {type: String, default: ''},
     searchPlaceholder: {type: String, default: ''},
     noResultText: {type: String, default: ''},
-    takenTitle: {type: String, default: ''},
+    clearLabel: {type: String, default: ''},
     ariaLabel: {type: String, default: null}
   },
   emits: ['update:modelValue'],
@@ -81,22 +80,26 @@ export default {
     listId() {
       return 'f1-select-list-' + this.uid;
     },
+    clearable() {
+      return !this.disabled && !!this.modelValue;
+    },
     selected() {
       return this.drivers.find(driver => driver.code === this.modelValue) || null;
     },
     filtered() {
       const query = normalize(this.query.trim());
+      const available = this.drivers.filter(driver => !this.isTaken(driver));
       if (!query) {
-        return this.drivers;
+        return available;
       }
-      return this.drivers.filter(driver =>
+      return available.filter(driver =>
           normalize(driver.familyName + ' ' + driver.givenName + ' ' + driver.code).includes(query)
       );
     }
   },
   watch: {
     filtered() {
-      this.activeIndex = this.firstSelectable(0, 1);
+      this.activeIndex = this.filtered.length ? 0 : -1;
     }
   },
   beforeUnmount() {
@@ -125,7 +128,7 @@ export default {
       document.addEventListener('pointerdown', this.onDocumentPointerDown, true);
       this.$nextTick(() => {
         const selectedIndex = this.filtered.findIndex(driver => driver.code === this.modelValue);
-        this.activeIndex = selectedIndex >= 0 ? selectedIndex : this.firstSelectable(0, 1);
+        this.activeIndex = selectedIndex >= 0 ? selectedIndex : (this.filtered.length ? 0 : -1);
         // érintőképernyőn ne ugorjon fel a billentyűzet, ott görgetni kényelmesebb
         if (initialQuery || window.matchMedia('(pointer: fine)').matches) {
           this.$refs.search.focus();
@@ -142,27 +145,20 @@ export default {
       }
     },
     choose(driver) {
-      if (this.isTaken(driver)) {
-        return;
-      }
       this.$emit('update:modelValue', driver.code);
       this.close();
     },
-    firstSelectable(from, step) {
-      for (let i = from; i >= 0 && i < this.filtered.length; i += step) {
-        if (!this.isTaken(this.filtered[i])) {
-          return i;
-        }
-      }
-      return -1;
+    clear() {
+      this.$emit('update:modelValue', '');
+      this.close();
     },
     move(step) {
-      const start = this.activeIndex < 0 ? (step > 0 ? 0 : this.filtered.length - 1) : this.activeIndex + step;
-      const next = this.firstSelectable(start, step);
-      if (next >= 0) {
-        this.activeIndex = next;
-        this.scrollActiveIntoView();
+      if (!this.filtered.length) {
+        return;
       }
+      const start = this.activeIndex < 0 ? (step > 0 ? 0 : this.filtered.length - 1) : this.activeIndex + step;
+      this.activeIndex = Math.min(Math.max(start, 0), this.filtered.length - 1);
+      this.scrollActiveIntoView();
     },
     scrollActiveIntoView() {
       this.$nextTick(() => {
@@ -179,7 +175,10 @@ export default {
       });
     },
     onTriggerKeydown(event) {
-      if (['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(event.key)) {
+      if ((event.key === 'Delete' || event.key === 'Backspace') && this.clearable) {
+        event.preventDefault();
+        this.clear();
+      } else if (['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(event.key)) {
         event.preventDefault();
         this.openPanel();
       } else if (event.key.length === 1 && /\S/.test(event.key) && !event.ctrlKey && !event.metaKey && !event.altKey) {
