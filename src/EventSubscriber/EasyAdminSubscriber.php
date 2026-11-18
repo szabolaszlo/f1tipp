@@ -60,9 +60,10 @@ class EasyAdminSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return array(
-            AfterEntityPersistedEvent::class => [['calculateResults'], ['clearUserCaches']],
+            // új vagy törölt esemény is megváltoztatja a "következő esemény" / aktuális hétvége cache-t
+            AfterEntityPersistedEvent::class => [['calculateResults'], ['clearEventCaches'], ['clearUserCaches']],
             AfterEntityUpdatedEvent::class => [['reCalculateResults'], ['clearEventCaches'], ['clearUserCaches']],
-            AfterEntityDeletedEvent::class => [['reCalculateResults'], ['clearUserCaches']],
+            AfterEntityDeletedEvent::class => [['reCalculateResults'], ['clearEventCaches'], ['clearUserCaches']],
         );
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Calculator\Type;
 
+use App\Cache\ResultCache;
 use App\Entity\AlternativeChampionship;
 use App\Entity\User;
 
@@ -50,5 +51,9 @@ class AlternativePointSummaryCalculator extends ACalculator
         }
 
         $this->em->flush();
+
+        // az oldalsáv VB-sorrendje (UserChampionshipOrderResolver) ezekből a pontokból és a kupákból áll:
+        // minden számolás után frissülnie kell, a teljes újraszámolás (admin karbantartás) után is
+        ResultCache::of($this->em)->delete('userChampionshipTrophyAwareOrder');
     }
 }

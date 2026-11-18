@@ -18,6 +18,7 @@
         <button v-for="event in weekendEvents" :key="event.id" type="button" role="tab"
                 class="f1-betting__tab" :class="{'is-active': activeEvent && event.id === activeEvent.id}"
                 :aria-selected="activeEvent && event.id === activeEvent.id ? 'true' : 'false'"
+                :disabled="processing"
                 @click="selectEvent(event)">
           <span :class="'glyphicon glyphicon-' + getGlyphiconName(event.type)" aria-hidden="true"></span>
           {{ $t('general.' + event.type) }}
@@ -268,8 +269,12 @@ export default {
             }
           })
           .catch(error => {
-            if (error.response && error.response.status === 422 && error.response.data.fields) {
+            const status = error.response ? error.response.status : null;
+            // 422: hibás tipp, 409: már mentett tipp (pl. másik fülön) – mindkettő a zárolt/hibás formot adja vissza
+            if ((status === 422 || status === 409) && error.response.data.fields) {
               this.applyForm(error.response.data);
+            } else if (status === 401) {
+              this.formErrorMessage = this.$t("betting.needToSignIn");
             } else {
               this.formErrorMessage = error.message;
             }

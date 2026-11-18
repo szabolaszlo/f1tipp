@@ -125,6 +125,7 @@ class Betting extends AbstractController
 
         $events = $this->doctrine->getRepository(\App\Entity\Event::class)->getActualWeekendEvents();
 
+        $eventsData = [];
         foreach ($events as $event) {
             $eventsData[$this->getTimeDiff($event->getDateTime())] = [
                 'event' => $event,

@@ -41,6 +41,7 @@ export default {
       loading: true,
       errorMessage: null,
       renderedModule: null,
+      requestId: 0,
       currentYear: new Date().getFullYear(),
       years: [],
       colorTheme: colorTheme
@@ -63,6 +64,10 @@ export default {
   methods: {
     yearChosen(year) {
       this.loading = true
+      // egy korábbi hiba ne ragadjon be: a következő évválasztás újra próbálkozhasson
+      this.errorMessage = null
+      // gyors kattintgatásnál csak az utoljára választott év válasza jelenhet meg
+      const requestId = ++this.requestId
       let url =
           year === this.currentYear
               ? '/module/results'
@@ -70,10 +75,16 @@ export default {
       axios
           .get(url)
           .then(response => {
+            if (requestId !== this.requestId) {
+              return;
+            }
             this.renderedModule = response.data;
             this.loading = false;
           })
           .catch(error => {
+            if (requestId !== this.requestId) {
+              return;
+            }
             this.loading = false;
             this.errorMessage = error.message;
           })

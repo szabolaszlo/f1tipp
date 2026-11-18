@@ -93,10 +93,51 @@ class BettingFormJsonTest extends WebTestCase
         self::assertNull($response['success']);
     }
 
+    public function test_submitted_attribute_keys_and_extra_attributes_are_ignored(): void
+    {
+        [$client, $event] = $this->loggedInClientWithEvent(withoutBet: true);
+
+        $client->request('GET', '/module/betting/form/' . $event->getId());
+        $data = json_decode($client->getResponse()->getContent(), true);
+
+        $driverFields = array_values(array_filter($data['fields'], fn ($f) => $f['type'] === 'driver'));
+        if (count($driverFields) < 2 || $data['drivers'] === []) {
+            self::markTestSkipped('Nincs tippelhető esemény a lokális adatbázisban.');
+        }
+        if ($driverFields[0]['disabled']) {
+            self::markTestSkipped('A felhasználónak már van tippje a következő eseményre.');
+        }
+
+        $payload = [];
+        foreach ($data['hidden'] as $hidden) {
+            // a szabályban nem létező kulcs: korábban elmentődött, és az eredmény feltöltésekor
+            // TypeError-ral elszállt tőle a pontszámítás
+            $payload[$hidden['name']] = str_ends_with($hidden['name'], '[key]') ? 'zzz' : $hidden['value'];
+        }
+        // duplikált pilóták, hogy a kérés semmiképp ne mentsen tippet a lokális adatbázisba
+        foreach ($data['fields'] as $field) {
+            $payload[$field['name']] = $field['type'] === 'driver'
+                ? $data['drivers'][0]['code']
+                : ($data['questionChoices'][0]['value'] ?? '');
+        }
+        $payload['betting_form[attributes][99][key]'] = 'zzz';
+        $payload['betting_form[attributes][99][value]'] = '';
+
+        $client->request('POST', $data['action'], $this->nest($payload));
+
+        self::assertSame(422, $client->getResponse()->getStatusCode());
+        $response = json_decode($client->getResponse()->getContent(), true);
+        self::assertSame(
+            array_column($data['fields'], 'key'),
+            array_column($response['fields'], 'key'),
+            'a kulcsok a szabályból jönnek, nem a beküldött adatból'
+        );
+    }
+
     /**
      * @return array{0: KernelBrowser, 1: Event}
      */
-    private function loggedInClientWithEvent(): array
+    private function loggedInClientWithEvent(bool $withoutBet = false): array
     {
         $client = static::createClient();
         /** @var EntityManagerInterface $em */
@@ -104,6 +145,16 @@ class BettingFormJsonTest extends WebTestCase
 
         $user = $em->getRepository(User::class)->findOneBy([]);
         $event = $em->getRepository(Event::class)->getNextEvent();
+        if ($withoutBet && $event) {
+            // olyan felhasználó kell, akinek még nincs tippje: a mentett tipp minden beküldést 409-cel elutasít
+            $user = null;
+            foreach ($em->getRepository(User::class)->findAll() as $candidate) {
+                if (!$em->getRepository(\App\Entity\Bet::class)->getBetByUserAndEventNonCache($candidate, $event)) {
+                    $user = $candidate;
+                    break;
+                }
+            }
+        }
         if (!$user || !$event) {
             self::markTestSkipped('Nincs felhasználó vagy következő esemény a lokális adatbázisban.');
         }

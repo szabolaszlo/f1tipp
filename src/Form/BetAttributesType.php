@@ -52,7 +52,9 @@ class BetAttributesType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->add('key', HiddenType::class);
+        // a kulcsot (p1, p2…) a BetBuilder adja a szabályból; a beküldött értéket figyelmen kívül hagyjuk,
+        // különben egy ismeretlen kulcs (pl. "zzz") az eredmény feltöltésekor elszállítaná a pontszámítást
+        $builder->add('key', HiddenType::class, ['disabled' => true]);
         $builder->add('value', ChoiceType::class, [
             'choices' => []
         ]);

@@ -10,8 +10,8 @@ use Symfony\Component\Cache\Adapter\ArrayAdapter;
  * Kulcs-érték tár a Doctrine result cache poolja fölött (PSR-6).
  *
  * A korábbi `Configuration::getResultCacheImpl()` (doctrine/cache, Symfony DoctrineProvider) API-ját
- * adja vissza, ugyanazzal a szemantikával: a `save()` élettartama csak pozitív értéknél korlátoz,
- * 0 vagy negatív élettartam lejárat nélküli tárolást jelent.
+ * adja vissza: a `save()` 0 élettartama lejárat nélküli tárolást jelent, a pozitív korlátoz. A negatív
+ * élettartam (a régi API-ban szintén "örökre") itt már lejártnak számít, és nem kerül a cache-be.
  */
 class ResultCache
 {
@@ -38,6 +38,14 @@ class ResultCache
 
     public function save(string $key, mixed $data, int $lifeTime = 0): bool
     {
+        // pl. a szezon utolsó eseménye után számolt "következő esemény" (esemény + 3 nap már elmúlt):
+        // örökre eltéve az új szezon felvitele után is a tavalyi hétvégét mutatná
+        if ($lifeTime < 0) {
+            $this->pool->deleteItem($key);
+
+            return false;
+        }
+
         $item = $this->pool->getItem($key)->set($data);
         if ($lifeTime > 0) {
             $item->expiresAfter($lifeTime);

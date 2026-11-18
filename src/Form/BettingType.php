@@ -58,7 +58,8 @@ class BettingType extends AbstractType
         $builder->add('event', HiddenType::class);
         $builder->add('attributes', CollectionType::class, [
             'entry_type' => BetAttributesType::class,
-            'allow_add' => true,
+            // a tipp összes mezőjét a BetBuilder hozza létre: a kliens nem adhat hozzá újat
+            'allow_add' => false,
             'entry_options' => ['label' => false],
             'label' => false,
             'constraints'=> new UniqueBetAttributes()

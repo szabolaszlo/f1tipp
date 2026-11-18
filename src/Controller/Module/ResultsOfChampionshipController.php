@@ -12,6 +12,7 @@ namespace App\Controller\Module;
 use App\Cache\FileCache;
 use App\Display\TeamColorProvider;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use Psr\Cache\InvalidArgumentException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -44,6 +45,10 @@ class ResultsOfChampionshipController extends AbstractController
             $data = $this->getResults($cache);
         }
 
+        if ($data === null) {
+            return new JsonResponse(['error' => 'championship_result_unavailable'], Response::HTTP_SERVICE_UNAVAILABLE);
+        }
+
         foreach ($data['driverStandings'] ?? [] as $i => $standing) {
             $data['driverStandings'][$i]['teamColor'] = $teamColors->colorForDriver((string)($standing['Driver']['code'] ?? ''));
         }
@@ -65,31 +70,34 @@ class ResultsOfChampionshipController extends AbstractController
     #[Route(path: 'cron/championship_result_cache_warmer', name: 'championship_result_cache_warmer', methods: ['GET'])]
     public function getResultsAction(FileCache $cache): Response
     {
-        $this->getResults($cache);
+        if ($this->getResults($cache) === null) {
+            return new Response('RapidAPI error', Response::HTTP_SERVICE_UNAVAILABLE);
+        }
+
         return new Response('OK', 200);
     }
 
     /**
      * @param FileCache $cache
-     * @return mixed
+     * @return array|null null, ha az API hibát adott (ilyenkor a cache marad)
      * @throws InvalidArgumentException
      */
     protected function getResults(FileCache $cache)
     {
         $client = new Client();
 
-        $response = $client->request('GET', self::DRIVER_URL, [
-            'headers' => [
-                'x-rapidapi-host' => self::API_HOST,
-                'x-rapidapi-key' => $_ENV['RAPIDAPI_KEY'],
-            ],
-        ]);
+        // hibás / kvótán túli API-válasznál nem írjuk felül a cache-t üres tabellával (azt a következő
+        // cron-futásig szolgálnánk ki), a hívó pedig 503-at ad 500 helyett
+        $drivers = $this->fetchRanking($client, self::DRIVER_URL);
+        $teams = $this->fetchRanking($client, self::CONSTRUCT_URL);
 
-        $responseData = json_decode($response->getBody(), true);
+        if ($drivers === null || $teams === null) {
+            return null;
+        }
 
         $driverStandings = [];
 
-        foreach ($responseData['response'] as $item) {
+        foreach ($drivers as $item) {
             $driverStandings[] = [
                 'position' => $item['position'],
                 'points' => $item['points'],
@@ -107,16 +115,7 @@ class ResultsOfChampionshipController extends AbstractController
 
         $constructStandings = [];
 
-        $response = $client->request('GET', self::CONSTRUCT_URL, [
-            'headers' => [
-                'x-rapidapi-host' => self::API_HOST,
-                'x-rapidapi-key' => $_ENV['RAPIDAPI_KEY'],
-            ],
-        ]);
-
-        $responseData = json_decode($response->getBody(), true);
-
-        foreach ($responseData['response'] as $item) {
+        foreach ($teams as $item) {
             $constructStandings[] = [
                 'position' => $item['position'],
                 'points' => $item['points'],
@@ -135,5 +134,26 @@ class ResultsOfChampionshipController extends AbstractController
         $cache->save(self::RESULTS_CACHE_KEY, $data);
 
         return $data;
+    }
+
+    /**
+     * @return array|null a "response" lista, vagy null, ha az API hibát adott
+     */
+    private function fetchRanking(Client $client, string $url): ?array
+    {
+        try {
+            $response = $client->request('GET', $url, [
+                'headers' => [
+                    'x-rapidapi-host' => self::API_HOST,
+                    'x-rapidapi-key' => $_ENV['RAPIDAPI_KEY'],
+                ],
+            ]);
+        } catch (GuzzleException) {
+            return null;
+        }
+
+        $responseData = json_decode((string) $response->getBody(), true);
+
+        return is_array($responseData['response'] ?? null) ? $responseData['response'] : null;
     }
 }

@@ -39,6 +39,11 @@ class GoogleAuthenticator extends AbstractAuthenticator
     {
         $auth_code = $request->query->get('code');
 
+        // a Google hozzájárulás megszakításakor ?error=access_denied jön code nélkül
+        if (!is_string($auth_code) || $auth_code === '') {
+            throw new AuthenticationException('Missing Google authorization code.');
+        }
+
         return new SelfValidatingPassport(
             new UserBadge($auth_code, [$this, 'getUserFromGoogleAuthCode']),
             [new RememberMeBadge]
@@ -48,8 +53,13 @@ class GoogleAuthenticator extends AbstractAuthenticator
     public function getUserFromGoogleAuthCode($auth_code)
     {
         // Exchange an authorization code for an access token
-        $token = $this->provider->getAccessToken('authorization_code', ['code' => $auth_code]);
-        $owner_details = $this->provider->getResourceOwner($token);
+        try {
+            $token = $this->provider->getAccessToken('authorization_code', ['code' => $auth_code]);
+            $owner_details = $this->provider->getResourceOwner($token);
+        } catch (\Exception $e) {
+            // lejárt / már felhasznált code, Google hiba: login hibaoldal (onAuthenticationFailure) 500 helyett
+            throw new AuthenticationException('Google authentication failed.', 0, $e);
+        }
 
         $user_repo = $this->em->getRepository(User::class);
         $user = $user_repo->findOneBy(['email' => $owner_details->getEmail()]);

@@ -1,7 +1,7 @@
 {% extends 'controller/module/base_module.html.twig' %}
     {% block heading_tag %}VB{% endblock %}
     {% block body_content %}
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
         <div class="panel-body">
             <div style="position: relative;  margin: auto;  height: 60vh;">
                 <canvas id="myChart"></canvas>
@@ -27,7 +27,7 @@
             });
             const labels = [
                 {% for event in eventHistory %}
-                '{{ event }}',
+                '{{ event|e('js') }}',
                 {% endfor %}
             ];
 
@@ -59,7 +59,7 @@
                 datasets: [
                     {% for userName, points in pointHistory %}
                     {
-                        label: '{{ userName }}',
+                        label: '{{ userName|e('js') }}',
                         backgroundColor: lineColors[{{ loop.index0 }}],
                         borderColor: lineColors[{{ loop.index0 }}],
                         hidden: {{ (loop.index < 4  or userName == app.user.name) ? 'false' : 'true' }} ,

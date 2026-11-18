@@ -72,25 +72,13 @@ class MessageWall extends AbstractController
         //The Regular Expression filter
         $reg_exUrl = "/(?i)\b((?:https?:\/\/|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))/";
 
-        // Check if there is a url in the text
-        if (preg_match_all($reg_exUrl, $string, $url)) {
+        // egyetlen menetben cserélünk: a korábbi str_replace-es ciklus a már legenerált <a> tagekben is
+        // lecserélte az ismétlődő / egymás elejét adó URL-eket, ami kitört a href attribútumból (XSS)
+        return preg_replace_callback($reg_exUrl, function (array $match) {
+            $url = $match[0];
+            $link = strstr($url, ':') === false ? 'http://' . $url : $url;
 
-            // Loop through all matches
-            foreach ($url[0] as $newLinks) {
-                if (strstr($newLinks, ":") === false) {
-                    $link = 'http://' . $newLinks;
-                } else {
-                    $link = $newLinks;
-                }
-
-                // Create Search and Replace strings
-                $search = $newLinks;
-                $replace = '<a href="' . $link . '" title="' . $newLinks . '" target="_blank">' . $link . '</a>';
-                $string = str_replace($search, $replace, $string);
-            }
-        }
-
-        //Return result
-        return $string;
+            return '<a href="' . $link . '" title="' . $url . '" target="_blank">' . $link . '</a>';
+        }, $string);
     }
 }
