@@ -24,15 +24,15 @@
         </button>
       </div>
 
-      <div v-if="formErrorMessage" class="f1-board__body text-center">
+      <!-- tabváltáskor ugyanaz a becsukódó/kinyíló animáció, mint a menüs oldalváltásnál (MainComponent "fade") -->
+      <Transition name="fade" mode="out-in">
+      <div v-if="formErrorMessage" key="error" class="f1-board__body text-center">
         <strong class="color-two">{{ formErrorMessage }}</strong>
       </div>
-      <div v-else-if="!form" class="f1-board__body text-center">
+      <div v-else-if="!form" key="loading" class="f1-board__body text-center">
         <pulse-loader color="#e10600"></pulse-loader>
       </div>
-      <!-- tabváltáskor az előző form a helyén marad (halványítva), így a tábla nem esik össze egy pillanatra -->
-      <form v-else :key="formEventId" class="f1-betting__form" :class="{'is-switching': formLoading}"
-            :aria-busy="formLoading ? 'true' : 'false'" novalidate @submit.prevent="submit">
+      <form v-else :key="'form-' + formEventId" class="f1-betting__form" novalidate @submit.prevent="submit">
         <div v-if="form.success" class="f1-betting__alert f1-betting__alert--ok" role="status">
           <div class="f1-betting__success">
             <span>{{ form.success }}</span>
@@ -88,6 +88,7 @@
           </button>
         </div>
       </form>
+      </Transition>
     </template>
   </div>
 </template>
@@ -103,7 +104,8 @@ export default {
   data() {
     return {
       loading: true,
-      formLoading: false,
+      // a formlekérések sorszáma: egy elavult (közben felülírt) válasz ne írja vissza a formot
+      formRequestId: 0,
       processing: false,
       errorMessage: null,
       formErrorMessage: null,
@@ -134,7 +136,7 @@ export default {
       return !!this.form && !this.form.submitLabel && this.form.fields.length > 0;
     },
     canSubmit() {
-      return !this.processing && !this.formLoading && this.editableFields.length > 0 && this.missingCount === 0;
+      return !this.processing && this.editableFields.length > 0 && this.missingCount === 0;
     }
   },
   activated() {
@@ -159,6 +161,8 @@ export default {
           this.loading = false;
           if (this.weekendEvents.length) {
             this.selectEvent(this.weekendEvents[0]);
+            // a többi tabot előre betöltjük, hogy váltáskor ne kelljen töltésjelző
+            this.weekendEvents.slice(1).forEach(event => this.preloadForm(event));
           }
         })
         .catch(error => {
@@ -179,32 +183,46 @@ export default {
       }
       this.activeEvent = event;
       this.formErrorMessage = null;
-      this.formLoading = true;
 
       const cached = this.formCache[event.id];
       if (cached) {
         this.form = cached.form;
         this.formEventId = event.id;
         this.values = {...cached.values};
+      } else {
+        this.form = null;
       }
 
       // a gyorsítótárazott formot is frissítjük (zárolás, CSRF token), a felhasználó választásait megtartva
+      const requestId = ++this.formRequestId;
       axios
           .get('/module/betting/form/' + event.id)
           .then(response => {
-            if (this.activeEvent === event) {
-              this.applyForm(response.data, cached ? this.changedValues(cached.form) : {});
+            if (requestId === this.formRequestId) {
+              const current = this.formCache[event.id];
+              this.applyForm(response.data, this.form && current ? this.changedValues(current.form) : {});
             }
           })
           .catch(error => {
-            if (this.activeEvent === event) {
+            if (requestId === this.formRequestId && !this.form) {
               this.formErrorMessage = error.message;
             }
           })
-          .finally(() => {
-            if (this.activeEvent === event) {
-              this.formLoading = false;
+    },
+    preloadForm(event) {
+      axios
+          .get('/module/betting/form/' + event.id)
+          .then(response => {
+            if (!this.formCache[event.id] && this.formEventId !== event.id) {
+              const values = {};
+              response.data.fields.forEach(field => {
+                values[field.name] = field.value || '';
+              });
+              this.formCache[event.id] = {form: response.data, values};
             }
+          })
+          .catch(() => {
+            // nem baj: tabváltáskor újra lekérjük
           })
     },
     applyForm(form, keep = {}) {
@@ -240,6 +258,7 @@ export default {
       this.editableFields.forEach(field => payload.append(field.name, this.values[field.name]));
 
       this.processing = true;
+      this.formRequestId++;
       axios
           .post(this.form.action, payload)
           .then(response => {
