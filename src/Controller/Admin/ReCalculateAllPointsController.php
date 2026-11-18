@@ -6,7 +6,6 @@ use App\Cache\FileCache;
 use App\Calculator\Calculator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -17,21 +16,6 @@ use Symfony\Component\Routing\Attribute\Route;
 class ReCalculateAllPointsController extends AbstractController
 {
     //TODO Add some Loading animation becouse it is a heavy controller
-
-    /**
-     * @var Filesystem
-     */
-    protected $fileSystem = null;
-
-    /**
-     * @var string[]
-     */
-    protected $cacheDirs = [
-        'doctrine',
-        'twig',
-        'pool',
-        'profiler'
-    ];
 
     /**
      * @param Calculator $calculator

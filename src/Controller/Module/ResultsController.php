@@ -38,9 +38,9 @@ class ResultsController extends AbstractController
     #[Route(path: '/module/results', name: 'results', methods: ['GET'])]
     public function indexAction(ResultTable $resultTable, FileCache $cache): Response
     {
-        $results = $this->doctrine->getRepository(\App\Entity\Result::class)->findAll();
-
-        $cacheKey = 'results_v2_' . count($results);
+        // a kulcshoz elég a COUNT, a teljes listát csak cache-miss esetén töltjük be
+        $resultRepository = $this->doctrine->getRepository(\App\Entity\Result::class);
+        $cacheKey = 'results_v2_' . $resultRepository->getResultCount();
 
         $cacheData = $cache->get($cacheKey);
 
@@ -49,7 +49,7 @@ class ResultsController extends AbstractController
         $weekendNames = $cacheData[1] ?? [];
 
         if (empty($weekends)) {
-            foreach ($results as $result) {
+            foreach ($resultRepository->findAll() as $result) {
                 $weekends[$result->getEvent()->getWeekendOrder()][] = $resultTable
                     ->getTable($this->getUser(), $result->getEvent(), 'full')
                     ->renderTable($result->getEvent());

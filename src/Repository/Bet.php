@@ -24,7 +24,8 @@ class Bet extends EntityRepository
     {
         return $this->createQueryBuilder('betsByEvent')
             ->setCacheable(true)
-            ->where('betsByEvent.event_id = ' . $event->getId())
+            ->where('betsByEvent.event_id = :event')
+            ->setParameter('event', $event->getId())
             ->getQuery()
             ->getResult();
     }
@@ -46,8 +47,10 @@ class Bet extends EntityRepository
     {
         return $this->createQueryBuilder('betByUserAndEvent')
             ->setCacheable(true)
-            ->where('betByUserAndEvent.user_id = ' . $user->getId())
-            ->andWhere('betByUserAndEvent.event_id = ' . $event->getId())
+            ->where('betByUserAndEvent.user_id = :user')
+            ->andWhere('betByUserAndEvent.event_id = :event')
+            ->setParameter('user', $user->getId())
+            ->setParameter('event', $event->getId())
             ->getQuery()
             ->getResult();
     }

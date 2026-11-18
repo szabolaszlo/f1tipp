@@ -1,6 +1,5 @@
 import {createRouter} from 'vue-router'
 import {createWebHashHistory} from 'vue-router'
-import {createApp} from 'vue'
 
 const routes = [
     {
@@ -41,7 +40,7 @@ const routes = [
     {
         path: '/login',
         name: 'Login',
-        component: () => import(/* webpackChunkName: "trophies" */ '../components/Login.vue')
+        component: () => import(/* webpackChunkName: "login" */ '../components/Login.vue')
     },
     {
         path: "/",
@@ -57,11 +56,5 @@ const router = createRouter({
         return {top: 0, behavior: 'smooth'}
     }
 })
-
-// 5. Create and mount the root instance.
-const app = createApp()
-// Make sure to _use_ the router instance to make the
-// whole app router-aware.
-app.use(router)
 
 export default router

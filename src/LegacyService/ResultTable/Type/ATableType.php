@@ -34,11 +34,6 @@ abstract class ATableType implements ITableType
     protected $renderer;
 
     /**
-     * @var array
-     */
-    protected $data = array();
-
-    /**
      * @var string
      */
     protected $type = 'abstract_type';

@@ -34,13 +34,11 @@
 </template>
 
 <script>
-import Login from "./Login";
 import axios from "axios";
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
 
 export default {
   components: {
-    Login: Login,
     PulseLoader: PulseLoader
   },
   data() {
@@ -61,9 +59,6 @@ export default {
   mounted() {
     this.isLogged();
   },
-  activated() {
-    this.isLogged();
-  },
   methods: {
     isLogged() {
       this.componentLoading = true;
@@ -72,11 +67,9 @@ export default {
           .then(response => {
             this.username = response.data.userName;
             this.isAdmin = response.data.isAdmin === true;
-            this.isLoggedUser = true;
           })
-          .catch(error => {
+          .catch(() => {
             this.isAdmin = false;
-            this.csrfToken = localStorage.getItem('f1tipp_csrf_token') || '';
           })
           .finally(() => {
             this.componentLoading = false;

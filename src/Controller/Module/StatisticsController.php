@@ -52,15 +52,14 @@ class StatisticsController extends AbstractController
         $this->sorter = $sorter;
         $this->calculator = $calculator;
 
-        $bets = $this->doctrine->getRepository(\App\Entity\Bet::class)->findAll();
-        $results = $this->doctrine->getRepository(\App\Entity\Result::class)->findAll();
-
-        $cacheKey = 'statistics' . count($results);
+        // a kulcshoz elég a COUNT, a teljes listákat csak cache-miss esetén töltjük be
+        $resultRepository = $this->doctrine->getRepository(\App\Entity\Result::class);
+        $cacheKey = 'statistics' . $resultRepository->getResultCount();
         $data = $cache->get($cacheKey);
 
         if (empty($data)) {
-            $data['statistics']['bets'] = $this->getStatistics($bets);
-            $data['statistics']['results'] = $this->getStatistics($results);
+            $data['statistics']['bets'] = $this->getStatistics($this->doctrine->getRepository(\App\Entity\Bet::class)->findAll());
+            $data['statistics']['results'] = $this->getStatistics($resultRepository->findAll());
             $data['id'] = 'statistics';
             $cache->save($cacheKey, $data);
         }

@@ -84,7 +84,8 @@ class ResultsOfChampionshipController extends AbstractController
      */
     protected function getResults(FileCache $cache)
     {
-        $client = new Client();
+        // timeout nélkül egy lassú/lógó RapidAPI a PHP-FPM workert is megfogná
+        $client = new Client(['timeout' => 5, 'connect_timeout' => 3]);
 
         // hibás / kvótán túli API-válasznál nem írjuk felül a cache-t üres tabellával (azt a következő
         // cron-futásig szolgálnánk ki), a hívó pedig 503-at ad 500 helyett
@@ -145,7 +146,7 @@ class ResultsOfChampionshipController extends AbstractController
             $response = $client->request('GET', $url, [
                 'headers' => [
                     'x-rapidapi-host' => self::API_HOST,
-                    'x-rapidapi-key' => $_ENV['RAPIDAPI_KEY'],
+                    'x-rapidapi-key' => $_ENV['RAPIDAPI_KEY'] ?? '',
                 ],
             ]);
         } catch (GuzzleException) {

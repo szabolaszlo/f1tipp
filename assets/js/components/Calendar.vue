@@ -26,7 +26,7 @@
                   {{ $t('calendar.onlyRemaining') }}
                 </a>
               </div>
-              <div v-for="eventType in eventTypes" class="form-control-static">
+              <div v-for="eventType in eventTypes" :key="eventType.id" class="form-control-static">
                 <a class="btn btn-new" role="button" @click="eventType.state = !eventType.state; filterEvents();">
                   <input type="checkbox" v-model="eventType.state">
                   {{ $t('general.' + eventType.translatedName) }}
@@ -37,7 +37,7 @@
           <table class="table table-responsive table-striped">
             <tbody>
 
-            <tr v-for="event in filteredEvents">
+            <tr v-for="event in filteredEvents" :key="event.id">
               <td></td>
               <td>
                 <strong class="color-two">{{ event.name }}</strong>
@@ -75,12 +75,6 @@ export default {
         new EventType('qualify', 'qualify', true),
         new EventType('race', 'race', true),
         new EventType('sprint_qualify', 'sprintQualify', true)
-      ],
-      buttons: [
-        'qualify',
-        'race',
-        'sprint_qualify',
-        'onlyRemaining'
       ],
       errorMessage: '',
       onlyRemaining: true,

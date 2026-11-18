@@ -13,12 +13,6 @@
             {{ encore_entry_link_tags('app') }}
             {{ encore_entry_link_tags('main') }}
         {% endblock %}
-        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-        <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
         <!-- Google tag (gtag.js) -->
         <script async src="https://www.googletagmanager.com/gtag/js?id={{ ga4_measurement_id }}"></script>
         <script>
@@ -32,7 +26,6 @@
                 // Ezt betesszük a localStorage-be:
             localStorage.setItem('f1tipp_csrf_token', csrfToken);
             localStorage.setItem('f1tipp_username', '{{ app.user ? app.user.getUserName : '' }}');
-            localStorage.setItem('f1tipp_google_login_url', '{{ app.user ? app.user.getUserName : '' }}');
         </script>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

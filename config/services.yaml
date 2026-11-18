@@ -26,7 +26,6 @@ services:
   # as action arguments even if you don't extend any base controller class
   App\Controller\:
     resource: '../src/Controller/*'
-    exclude: '../src/Controller/Cron/*'
     tags: [ 'controller.service_arguments' ]
 
   # CompilerPass dependent services
@@ -37,12 +36,6 @@ services:
   App\Calculator\Type\:
     resource: '../src/Calculator/Type'
     tags: [ 'app.calculator_type' ]
-
-  app.controller.cron.feed_controller:
-    class: App\Controller\Cron\FeedController
-    tags: [ 'controller.service_arguments' ]
-    public: true
-    arguments: ['App\LegacyService\Feed\Handler']
 
   League\OAuth2\Client\Provider\Google:
     $options:

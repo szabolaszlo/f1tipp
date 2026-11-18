@@ -1,7 +1,7 @@
 <template>
   <div>
     <div style="text-align: center; padding: 15px;">
-      <button v-for="year in years" class="btn btn-new" role="button" style="margin: 5px;" @click="yearChosen(year)">
+      <button v-for="year in years" :key="year" class="btn btn-new" role="button" style="margin: 5px;" @click="yearChosen(year)">
         {{ year }}
       </button>
     </div>

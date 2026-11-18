@@ -2,15 +2,12 @@ export default {
     hu: {
         login: {
             title: 'Bejelentkezés',
-            userName: 'Fehasználónév',
             login: 'Bejelentkezés',
-            account: 'Fiókom',
             greeting: 'Üdvözöllek',
             logout: 'Kijelentkezés',
             admin: 'Admin',
             loginViaGoogle: 'Bejelentkezés Google fiókkal',
             loginErrorViaGoogle: 'Az email címed nem található a rendszerben, kérlek az adminnal vedd fel a kapcsolatot!',
-            password: 'Jelszó',
         },
         calendar: {
             title: 'Naptár',
@@ -63,9 +60,5 @@ export default {
             wins: 'Nyert'
         },
     },
-    en: {
-        message: {
-            hello: 'english'
-        }
-    }
+    en: {}
 }

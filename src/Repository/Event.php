@@ -86,25 +86,6 @@ class Event extends EntityRepository
     }
 
     /**
-     * @return array
-     */
-    public function getEventTypes(): array
-    {
-        $events = $this->createQueryBuilder('e')
-            ->setCacheable(true)
-            ->getQuery()
-            ->getResult();
-
-        $types = [];
-
-        foreach ($events as $event) {
-            $types[$event->getType()] = $event->getType();
-        }
-
-        return $types;
-    }
-
-    /**
      * @return array|mixed
      */
     public function getRemainEvents()
@@ -145,19 +126,6 @@ class Event extends EntityRepository
         return $this->findBy(
             ['weekendOrder' => $event->getWeekendOrder()]
         );
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAlternativeChampionshipRaces()
-    {
-        return $this->createQueryBuilder('race')
-            ->select('race')
-            ->innerJoin(\App\Entity\AlternativeChampionship::class, 'ac', Join::WITH, 'ac.race = race.id')
-            ->orderBy('race.weekendOrder', 'DESC')
-            ->getQuery()
-            ->getResult();
     }
 
     /**

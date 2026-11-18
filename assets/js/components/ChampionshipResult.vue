@@ -60,7 +60,6 @@
 <script>
 import axios from "axios";
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
-import colorTheme from "../classes/colorTheme/ColorTheme";
 
 export default {
   name: "ChampionshipResult",
@@ -68,9 +67,7 @@ export default {
   data() {
     return {
       errorMessage: '',
-      onlyRemaining: true,
       loading: true,
-      colorTheme: colorTheme,
       data: {
         event: {
           name: null

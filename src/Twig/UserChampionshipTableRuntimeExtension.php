@@ -5,7 +5,6 @@ namespace App\Twig;
 use App\Calculator\Provider\PointProvider;
 use App\Calculator\UserChampionshipOrderResolver\UserChampionshipOrderResolver;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;

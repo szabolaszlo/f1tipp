@@ -6,8 +6,6 @@ use App\Entity\AlternativeChampionship;
 use App\Entity\Event;
 use App\Entity\Race;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -31,7 +29,8 @@ class AlternativeChampionshipRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('alternative_championship')
             ->setCacheable(true)
-            ->where('alternative_championship.race = ' . $race->getId())
+            ->where('alternative_championship.race = :race')
+            ->setParameter('race', $race->getId())
             ->orderBy('alternative_championship.user', 'ASC')
             ->getQuery()
             ->getResult();
@@ -75,17 +74,5 @@ class AlternativeChampionshipRepository extends ServiceEntityRepository
             ->setParameter('e', $eventIds)
             ->getQuery()
             ->execute();
-    }
-
-    /**
-     * @throws NonUniqueResultException
-     * @throws NoResultException
-     */
-    public function getAlterCount()
-    {
-        return $this->createQueryBuilder('ac')
-                ->select('count(ac.id)')
-                ->getQuery()
-                ->getSingleScalarResult() ?? 0;
     }
 }

@@ -21,7 +21,6 @@
 <script>
 import axios from "axios";
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
-import colorTheme from "../classes/colorTheme/ColorTheme";
 
 export default {
   name: "Actual",
@@ -30,8 +29,7 @@ export default {
     return {
       loading: true,
       errorMessage: null,
-      renderedModule: null,
-      colorTheme: colorTheme
+      renderedModule: null
     }
   },
   mounted() {

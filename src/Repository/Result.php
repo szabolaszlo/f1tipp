@@ -10,7 +10,6 @@ namespace App\Repository;
 
 use App\Entity\Event;
 use Doctrine\ORM\EntityRepository;
-use App\Entity\Result as ResultEnt;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query\Expr\Join;
@@ -21,28 +20,6 @@ use Doctrine\ORM\Query\Expr\Join;
  */
 class Result extends EntityRepository
 {
-    /**
-     * @param string $type
-     * @return array
-     */
-    public function findByType($type = '')
-    {
-        $results = parent::findAll();
-
-        /**
-         * @var  integer $key
-         * @var  ResultEnt $result
-         */
-        foreach ($results as $key => $result) {
-            $event = $result->getEvent();
-            if ($event->getType() !== $type) {
-                unset($results[$key]);
-            }
-        }
-
-        return $results;
-    }
-
     /**
      * @return mixed
      */

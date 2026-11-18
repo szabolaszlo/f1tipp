@@ -62,13 +62,7 @@ class GoogleAuthenticator extends AbstractAuthenticator
         }
 
         $user_repo = $this->em->getRepository(User::class);
-        $user = $user_repo->findOneBy(['email' => $owner_details->getEmail()]);
-
-        if ($user) {
-            return $user;
-        }
-
-        return $user;
+        return $user_repo->findOneBy(['email' => $owner_details->getEmail()]);
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewall_name): ?Response

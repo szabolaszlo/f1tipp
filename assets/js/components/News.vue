@@ -27,7 +27,6 @@
 <script>
 import axios from "axios";
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
-import colorTheme from "../classes/colorTheme/ColorTheme";
 
 export default {
   name: "News",
@@ -35,10 +34,8 @@ export default {
   data() {
     return {
       errorMessage: '',
-      onlyRemaining: true,
       loading: true,
-      feeds: null,
-      colorTheme: colorTheme
+      feeds: null
     }
   },
   mounted() {

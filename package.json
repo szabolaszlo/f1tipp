@@ -7,8 +7,6 @@
     "bootstrap": "3.4.1",
     "core-js": "^3.25.2",
     "jquery": "^3.6.1",
-    "popper.js": "^1.15.0",
-    "regenerator-runtime": "^0.13.2",
     "webpack": "^5.100.0",
     "webpack-cli": "^6.0.1"
   },
@@ -22,7 +20,6 @@
     "e2e": "npm --prefix tests/e2e test"
   },
   "dependencies": {
-    "@vue/compat": "^3.2.39",
     "axios": "^1.21.1",
     "ckeditor-full": "^4.7.3",
     "vue": "^3.2.39",
