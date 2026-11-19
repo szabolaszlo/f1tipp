@@ -8,7 +8,6 @@
 
 namespace App\Entity;
 
-use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -30,7 +29,6 @@ class Information
     #[ORM\Column(name: 'news', type: 'boolean', nullable: true)]
     protected $news;
 
-    #[Gedmo\Slug(fields: ['title'])]
     #[ORM\Column(length: 45)]
     protected $slug;
 
