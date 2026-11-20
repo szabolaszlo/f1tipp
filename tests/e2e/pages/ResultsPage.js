@@ -1,6 +1,6 @@
 const {I} = inject();
 
-// Eredmények oldal (/#/results, templates/controller/module/results.html.twig): hétvégénként (forduló)
+// Eredmények oldal (/#/results, templates/controller/module/results.html.twig): hétvégénként (nagydíj, data-round)
 // az összesítő tábla (.f1-board--summary), majd az eseménytáblák.
 module.exports = {
     open() {
@@ -19,8 +19,7 @@ module.exports = {
      */
     async weekendSummary(round) {
         return I.executeScript(round => {
-            const section = Array.from(document.querySelectorAll('#results .f1-weekend'))
-                .find(s => s.querySelector('.f1-weekend__round').textContent.trim() === `${round}. forduló`);
+            const section = document.querySelector(`#results .f1-weekend[data-round="${round}"]`);
             if (!section) {
                 return null;
             }
@@ -35,8 +34,7 @@ module.exports = {
     /** egy hétvége egy eseménytáblájában a user pontja (tag: IDŐMÉRŐ / FUTAM / SPRINT FUTAM) */
     async eventPoints(round, tag, userName) {
         return I.executeScript(({round, tag, userName}) => {
-            const section = Array.from(document.querySelectorAll('#results .f1-weekend'))
-                .find(s => s.querySelector('.f1-weekend__round').textContent.trim() === `${round}. forduló`);
+            const section = document.querySelector(`#results .f1-weekend[data-round="${round}"]`);
             const board = Array.from(section.querySelectorAll('.f1-board--event'))
                 .find(b => b.querySelector('.f1-board__tag').textContent.trim() === tag);
             const row = Array.from(board.querySelectorAll('.f1-tiprow'))

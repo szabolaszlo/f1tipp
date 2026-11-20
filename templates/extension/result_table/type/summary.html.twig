@@ -17,7 +17,7 @@
         {% for ac in result %}
             {% set rank = ranks[loop.index0] %}
             <div class="f1-row">
-                <div class="f1-pos{{ rank <= 3 ? ' f1-pos--p' ~ rank : '' }}">{{ rank }}</div>
+                <div class="f1-pos{{ rank == 1 ? ' f1-pos--leader' : (rank <= 3 ? ' f1-pos--p' ~ rank : '') }}">{{ rank }}</div>
                 <div class="f1-name">{{ ac.getUser.getName }}</div>
                 <div class="f1-nums">
                     <span class="f1-num f1-num--wide f1-num--dim">{{ ac.getCollectedPoints }}</span>

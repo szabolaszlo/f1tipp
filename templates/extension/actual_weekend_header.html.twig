@@ -1,9 +1,9 @@
-{# Aktuális hétvége fejléce. Változó: events (Event[]) – csak meglévő adatból: forduló, név, dátumtartomány #}
+{# Aktuális hétvége fejléce. Változó: events (Event[]) – csak meglévő adatból: nagydíj sorszáma, név, dátumtartomány #}
 {% if events is not empty %}
     {% set first = events|first %}
     {% set dates = events|map(e => e.getDateTime()|date('U'))|sort %}
     <header class="f1-hero">
-        <span class="f1-hero__round">{{ first.getWeekendOrder() }}. forduló</span>
+        <span class="f1-hero__round">{{ first.getWeekendOrder() }}. nagydíj</span>
         <h1 class="f1-hero__title">{{ first.getName()|split(' - ').0 }}</h1>
         <span class="f1-hero__when">{{ (dates|first)|date('M. d.') }}{% if (dates|first)|date('Y-m-d') != (dates|last)|date('Y-m-d') %} – {{ (dates|last)|date('M. d.') }}{% endif %}</span>
     </header>

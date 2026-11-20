@@ -2,9 +2,9 @@
 <div id="results" class="f1-results">
     {% if weekends %}
         {% for key, weekend in weekends %}
-            <section class="f1-weekend">
+            <section class="f1-weekend" data-round="{{ key }}">
                 <h2 class="f1-weekend__title">
-                    <span class="f1-weekend__round">{{ key }}. forduló</span>
+                    <span class="f1-weekend__round">{{ key }}. nagydíj</span>
                     {{ weekendNames[key] }}
                 </h2>
                 {% if weekend.summary is defined %}

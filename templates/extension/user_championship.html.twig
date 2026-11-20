@@ -3,34 +3,37 @@
 {% block heading_tag %}VB{% endblock %}
 {% block body_content %}
     {% set maxPoints = maths.remaining_weekends|length * pointProvider.placePoint(1) %}
-    <div class="f1-board__colhead">
+    {# rács: hely | név | kupák (arany/ezüst/bronz fix helyen) | hátrány | pont – a fejléc ugyanazt a rácsot használja #}
+    <div class="f1-vb f1-vb--head">
+        <span></span>
         <span>{{ 'alternativeChampionship_name'|trans }}</span>
-        <span class="f1-nums">
-            <span class="f1-num">{{ 'alternativeChampionship_lag'|trans }}</span>
-            <span class="f1-num">{{ 'result_point'|trans }}</span>
-        </span>
+        <span class="f1-vb__cups">{{ 'userChampionship_trophies'|trans }}</span>
+        <span class="f1-vb__num">{{ 'alternativeChampionship_lag'|trans }}</span>
+        <span class="f1-vb__num">{{ 'result_point'|trans }}</span>
     </div>
     {% for user in users %}
         {% set podiumTrophies = user.getPodiumTrophies() %}
-        <div class="f1-row f1-row--user">
-            <div class="f1-pos{{ loop.index <= 3 ? ' f1-pos--p' ~ loop.index : '' }}">{{ loop.index }}</div>
-            <div class="f1-name">{{ user.getName() }}</div>
-            <span class="user-activity online-dot" data-user="{{ user.getName() }}" title="online"></span>
-            {% if user.alternativePointDifference() > maxPoints %}
-                <img class="f1-flag" src="{{ asset('build/images/checkered-flag.png') }}" height="16" alt=""
-                     title="{{ (id ~ '_checkered_flag')|trans }}">
-            {% endif %}
-            <span class="f1-trophies">
+        <div class="f1-row f1-row--user f1-vb">
+            <div class="f1-pos{{ loop.index == 1 ? ' f1-pos--leader' : (loop.index <= 3 ? ' f1-pos--p' ~ loop.index : '') }}">{{ loop.index }}</div>
+            <div class="f1-vb__who">
+                <span class="f1-name">{{ user.getName() }}</span>
+                <span class="user-activity online-dot" data-user="{{ user.getName() }}" title="online"></span>
+                {% if user.alternativePointDifference() > maxPoints %}
+                    <img class="f1-flag" src="{{ asset('build/images/checkered-flag.png') }}" height="16" alt=""
+                         title="{{ (id ~ '_checkered_flag')|trans }}">
+                {% endif %}
+            </div>
+            <span class="f1-trophies f1-vb__cups">
                 {% for type, trophies in podiumTrophies %}
                     {% if trophies is not empty %}
                         {{ trophy.icon(type, trophies|length, ('trophy_type_' ~ type)|trans) }}
+                    {% else %}
+                        <span class="f1-trophy-slot"></span>
                     {% endif %}
                 {% endfor %}
             </span>
-            <div class="f1-nums">
-                <span class="f1-num f1-num--dim">{{ user.alternativePointDifference() ? '+ ' ~ user.alternativePointDifference() : '' }}</span>
-                <span class="f1-num f1-num--main">{{ user.alternativePointSummary }}</span>
-            </div>
+            <span class="f1-num f1-num--dim f1-vb__num">{{ user.alternativePointDifference() ? '+ ' ~ user.alternativePointDifference() : '' }}</span>
+            <span class="f1-num f1-num--main f1-vb__num">{{ user.alternativePointSummary }}</span>
         </div>
     {% endfor %}
 

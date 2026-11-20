@@ -14,27 +14,27 @@ Jellemző: Késői eredményjavítás szezon közben, sprintes hétvégével
   Forgatókönyv: A sprintes hétvégét is tartalmazó szezon állása hétvégénként számolódik
     Amennyiben szezon közben vagyunk: 3 lezajlott hétvége eredménnyel, az 1. sprintes, a 4. jövő héten
     És "E2E User1" belép
-    Akkor az Eredmények oldal fordulói:
-      | forduló | név            |
+    Akkor az Eredmények oldal nagydíjai:
+      | nagydíj | név            |
       | 1       | E2E 1. Nagydíj |
       | 2       | E2E 2. Nagydíj |
       | 3       | E2E 3. Nagydíj |
-    És a pontok az Eredmények oldalon az 1. fordulóban:
+    És a pontok az Eredmények oldalon az 1. nagydíjon:
       | név       | SPRINT FUTAM | IDŐMÉRŐ | FUTAM |
       | E2E User1 | 4            | 40      | 30    |
       | E2E User2 | 8            | 34      | 33    |
       | E2E User3 | 0            | 6       | 9     |
-    És az Eredmények oldalon az 1. forduló összesítője:
+    És az Eredmények oldalon az 1. nagydíj összesítője:
       | név       | hétvégi pont | bajnoki pont |
       | E2E User2 | 75           | 14           |
       | E2E User1 | 74           | 10           |
       | E2E User3 | 15           | 8            |
-    És az Eredmények oldalon a 2. forduló összesítője:
+    És az Eredmények oldalon a 2. nagydíj összesítője:
       | név       | hétvégi pont | bajnoki pont |
       | E2E User2 | 73           | 14           |
       | E2E User1 | 64           | 10           |
       | E2E User3 | 15           | 8            |
-    És az Eredmények oldalon a 3. forduló összesítője:
+    És az Eredmények oldalon a 3. nagydíj összesítője:
       | név       | hétvégi pont | bajnoki pont |
       | E2E User3 | 73           | 14           |
       | E2E User1 | 64           | 10           |
@@ -61,23 +61,23 @@ Jellemző: Késői eredményjavítás szezon közben, sprintes hétvégével
     Amennyiben szezon közben vagyunk: 3 lezajlott hétvége eredménnyel, az 1. sprintes, a 4. jövő héten
     Ha az admin az 1. hétvége "Sprint Futam" eredményét erre javítja: "LEC PIA VER NOR HAM RUS SAI ALO"
     És "E2E User1" belép
-    Akkor a pontok az Eredmények oldalon az 1. fordulóban:
+    Akkor a pontok az Eredmények oldalon az 1. nagydíjon:
       | név       | SPRINT FUTAM | IDŐMÉRŐ | FUTAM |
       | E2E User1 | 8            | 40      | 30    |
       | E2E User2 | 4            | 34      | 33    |
       | E2E User3 | 0            | 6       | 9     |
     # az 1. hétvége változik, a 2. és a 3. nem
-    És az Eredmények oldalon az 1. forduló összesítője:
+    És az Eredmények oldalon az 1. nagydíj összesítője:
       | név       | hétvégi pont | bajnoki pont |
       | E2E User1 | 78           | 14           |
       | E2E User2 | 71           | 10           |
       | E2E User3 | 15           | 8            |
-    És az Eredmények oldalon a 2. forduló összesítője:
+    És az Eredmények oldalon a 2. nagydíj összesítője:
       | név       | hétvégi pont | bajnoki pont |
       | E2E User2 | 73           | 14           |
       | E2E User1 | 64           | 10           |
       | E2E User3 | 15           | 8            |
-    És az Eredmények oldalon a 3. forduló összesítője:
+    És az Eredmények oldalon a 3. nagydíj összesítője:
       | név       | hétvégi pont | bajnoki pont |
       | E2E User3 | 73           | 14           |
       | E2E User1 | 64           | 10           |
@@ -99,7 +99,7 @@ Jellemző: Késői eredményjavítás szezon közben, sprintes hétvégével
     Amennyiben szezon közben vagyunk: 3 lezajlott hétvége eredménnyel, az 1. sprintes, a 4. jövő héten
     Ha az admin újraszámolja az összes pontot
     Akkor megjelenik az admin üzenet: "Sikeresen újraszámolva a pontok"
-    És a pontok az Eredmények oldalon az 1. fordulóban:
+    És a pontok az Eredmények oldalon az 1. nagydíjon:
       | név       | SPRINT FUTAM | IDŐMÉRŐ | FUTAM |
       | E2E User1 | 4            | 40      | 30    |
       | E2E User2 | 8            | 34      | 33    |
@@ -109,17 +109,17 @@ Jellemző: Késői eredményjavítás szezon közben, sprintes hétvégével
       | E2E User2 | 36   |           | 2 arany, 1 bronz |
       | E2E User3 | 30   | + 6       | 1 arany, 2 bronz |
       | E2E User1 | 30   | + 6       | 3 ezüst          |
-    És az Eredmények oldalon az 1. forduló összesítője:
+    És az Eredmények oldalon az 1. nagydíj összesítője:
       | név       | hétvégi pont | bajnoki pont |
       | E2E User2 | 75           | 14           |
       | E2E User1 | 74           | 10           |
       | E2E User3 | 15           | 8            |
-    És az Eredmények oldalon a 2. forduló összesítője:
+    És az Eredmények oldalon a 2. nagydíj összesítője:
       | név       | hétvégi pont | bajnoki pont |
       | E2E User2 | 73           | 14           |
       | E2E User1 | 64           | 10           |
       | E2E User3 | 15           | 8            |
-    És az Eredmények oldalon a 3. forduló összesítője:
+    És az Eredmények oldalon a 3. nagydíj összesítője:
       | név       | hétvégi pont | bajnoki pont |
       | E2E User3 | 73           | 14           |
       | E2E User1 | 64           | 10           |

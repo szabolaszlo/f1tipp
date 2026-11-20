@@ -28,7 +28,7 @@
           </span>
         </div>
         <div v-for="(driver, index) in data.driverStandings" :key="'d' + index" class="f1-row">
-          <div class="f1-pos">{{ driver.position || index + 1 }}</div>
+          <div class="f1-pos" :class="{'f1-pos--leader': Number(driver.position || index + 1) === 1}">{{ driver.position || index + 1 }}</div>
           <div class="f1-stripe" :style="{background: driver.teamColor}"></div>
           <div class="f1-name">{{ driver.Driver.familyName }}<small>{{ driver.Driver.givenName }}</small></div>
           <div class="f1-nums">
@@ -47,7 +47,7 @@
           <span class="f1-nums"><span class="f1-num">{{ $t('championshipResult.point') }}</span></span>
         </div>
         <div v-for="(construct, index) in data.constructStandings" :key="'c' + index" class="f1-row">
-          <div class="f1-pos">{{ construct.position || index + 1 }}</div>
+          <div class="f1-pos" :class="{'f1-pos--leader': Number(construct.position || index + 1) === 1}">{{ construct.position || index + 1 }}</div>
           <div class="f1-stripe" :style="{background: construct.teamColor}"></div>
           <div class="f1-name">{{ construct.Constructor.name }}</div>
           <div class="f1-nums"><span class="f1-num f1-num--main">{{ construct.points }}</span></div>

@@ -37,11 +37,11 @@
         </div>
         {% for bet in bets %}
             <div class="f1-tiprow">
-                <div class="f1-pos">{{ ranks[loop.index0] }}</div>
+                <div class="f1-pos{{ ranks[loop.index0] == 1 ? ' f1-pos--leader' : '' }}">{{ ranks[loop.index0] }}</div>
                 <div class="f1-name">{{ bet.getUser().getName() }}</div>
                 <div class="{{ chipsClass }}" style="{{ gridStyle }}">
                     {% for attribute in bet.getAttributes() %}
-                        {% set mark = attribute.getClass() == 'bet-high' ? ' f1-chip--exact' : (attribute.getClass() == 'bet-low' ? ' f1-chip--near' : '') %}
+                        {% set mark = attribute.getClass() == 'bet-high' ? ' f1-chip--exact' : (attribute.getClass() == 'bet-low' ? ' f1-chip--near' : ' f1-chip--miss') %}
                         <div class="f1-chip{{ mark }}{{ loop.index0 >= legend.positions ? ' f1-chip--q' : '' }}">{{ attribute.getValue() }}</div>
                     {% endfor %}
                 </div>
@@ -53,7 +53,7 @@
             {% if legend.near > 0 %}
                 <span><span class="f1-chip f1-chip--near">NOR</span>Top {{ legend.positions }}-ben, rossz helyen · {{ legend.near }} pont</span>
             {% endif %}
-            <span><span class="f1-chip">GAS</span>Nem talált · 0 pont</span>
+            <span><span class="f1-chip f1-chip--miss">GAS</span>Nem talált · 0 pont</span>
             {% if legend.question is not null %}
                 <span><span class="f1-chip f1-chip--plain">SC</span>Biztonsági autó kérdés · {{ legend.question }} pont</span>
             {% endif %}

@@ -20,17 +20,17 @@ const summaryRows = table => rowsOf(table).map(r => [r['név'], Number(r['hétv�
 
 // --- Eredmények oldal
 
-Then('a pontok az Eredmények oldalon a/az {int}. fordulóban:', async (round, table) => {
+Then('a pontok az Eredmények oldalon a/az {int}. nagydíjon:', async (round, table) => {
     resultsPage.open();
     for (const row of rowsOf(table)) {
         for (const tag of Object.keys(row).filter(k => k !== 'név')) {
             assert.strictEqual(await resultsPage.eventPoints(round, tag, row['név']), Number(row[tag]),
-                `Eredmények ${round}. forduló: ${row['név']} ${tag} pont`);
+                `Eredmények ${round}. nagydíj: ${row['név']} ${tag} pont`);
         }
     }
 });
 
-// táblázat: név | <táblacímke> | ... – az Aktuális oldalon és az Eredmények oldal 1. fordulójában is
+// táblázat: név | <táblacímke> | ... – az Aktuális oldalon és az Eredmények oldal 1. nagydíján is
 Then('a pontok az Aktuális és az Eredmények oldalon:', async table => {
     const cells = rowsOf(table).flatMap(row => Object.keys(row).filter(k => k !== 'név')
         .map(tag => ({name: row['név'], tag, points: Number(row[tag])})));
@@ -51,14 +51,14 @@ Then('a hétvégi összesítő az Aktuális és az Eredmények oldalon:', async 
     assert.deepStrictEqual(await resultsPage.weekendSummary(1), summaryRows(table), 'Eredmények hétvégi összesítő');
 });
 
-Then('az Eredmények oldalon a/az {int}. forduló összesítője:', async (round, table) => {
+Then('az Eredmények oldalon a/az {int}. nagydíj összesítője:', async (round, table) => {
     resultsPage.open();
-    assert.deepStrictEqual(await resultsPage.weekendSummary(round), summaryRows(table), `${round}. forduló összesítője`);
+    assert.deepStrictEqual(await resultsPage.weekendSummary(round), summaryRows(table), `${round}. nagydíj összesítője`);
 });
 
-Then('az Eredmények oldal fordulói:', async table => {
+Then('az Eredmények oldal nagydíjai:', async table => {
     resultsPage.open();
-    assert.deepStrictEqual(await resultsPage.weekendTitles(), rowsOf(table).map(r => `${r['forduló']}. forduló ${r['név']}`));
+    assert.deepStrictEqual(await resultsPage.weekendTitles(), rowsOf(table).map(r => `${r['nagydíj']}. nagydíj ${r['név']}`));
 });
 
 When('az Eredmények oldalon a/az {string} évre kattint', year => {

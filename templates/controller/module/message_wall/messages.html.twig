@@ -1,16 +1,19 @@
-<table class="table table-striped">
+{# Csapatrádió: az üzenetek az F1-közvetítés „team radio” grafikájára hajaznak – név, rádióhullám, idézet.
+   Minden tippelő a user id-ja alapján kap egy állandó „csapatszínt” a bal oldali csíkhoz (piros nincs köztük: az a logóé/gomboké/hibáké). #}
+{% set radioColors = ['#3671c6', '#f0d787', '#27f4d2', '#ff8000', '#229971', '#ff87bc', '#64c4ff', '#b6babd', '#52e252', '#6692ff'] %}
+<div class="f1-radio">
     {% for message in messages %}
-        {% set userName = message.getUser().getName() %}
-        <tr>
-            <td>
-                <strong class="color-one ">{{ userName }}:</strong>
-            </td>
-            <td>
-                <strong>{{ message.getContent()|raw }}</strong>
-            </td>
-            <td class="visible-lg visible-md visible-sm">
-                <small><i class="color-two">({{ message.getDateTime()|date("G:i/M.j") }})</i></small>
-            </td>
-        </tr>
+        {% set user = message.getUser() %}
+        <div class="f1-radio__msg{{ app.user and app.user.getId() == user.getId() ? ' f1-radio__msg--own' : '' }}"
+             style="--radio-color: {{ radioColors[user.getId() % radioColors|length] }}">
+            <div class="f1-radio__head">
+                <span class="f1-radio__wave" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+                <span class="f1-radio__name">{{ user.getName() }}</span>
+                <time class="f1-radio__time" datetime="{{ message.getDateTime()|date('c') }}">{{ message.getDateTime()|date('M. j. G:i') }}</time>
+            </div>
+            <div class="f1-radio__text">{{ message.getContent()|raw }}</div>
+        </div>
+    {% else %}
+        <div class="f1-board__note">Még csend van a rádióban.</div>
     {% endfor %}
-</table>
+</div>

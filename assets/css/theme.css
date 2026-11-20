@@ -20,9 +20,10 @@
     /* kiválasztott menüpont/fül/opció jelölése: Red Bull sárga */
     --f1-select: #ffc906;
     --f1-on-select: #14141b;
-    /* F1 szektoridő-színek: lila = telitalálat, sárga = mellétalálat */
+    /* F1 szektoridő-színek: lila = telitalálat, zöld = mellétalálat, sárga = nem talált */
     --f1-exact: #b44cf2;
-    --f1-near: #f5d000;
+    --f1-near: #22c55e;
+    --f1-miss: #f5d000;
     --f1-p1: #d9b44a;
     --f1-p2: #b9b9c4;
     --f1-p3: #c08655;
@@ -158,7 +159,7 @@ a:hover, a:focus {
 .f1-board__colhead {
     display: flex;
     align-items: center;
-    padding: 6px 10px 4px 40px;
+    padding: 6px 0 4px 40px;
     font-size: 10px;
     letter-spacing: 1px;
     text-transform: uppercase;
@@ -205,6 +206,27 @@ a:hover, a:focus {
 .f1-pos--p1 { color: var(--f1-p1); }
 .f1-pos--p2 { color: var(--f1-p2); }
 .f1-pos--p3 { color: var(--f1-p3); }
+
+/* eredménytáblák élcsapata: mint a közvetítés köridő-tornyában, az 1. hely száma piros dobozban
+   (a doboz kisebb a sornál, az oszlop szélessége nem változik) */
+.f1-pos--leader {
+    position: relative;
+    z-index: 0;
+    color: #fff;
+    opacity: 1;
+}
+
+.f1-pos--leader::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: -1;
+    width: 22px;
+    height: 20px;
+    transform: translate(-50%, -50%);
+    background: var(--f1-red);
+}
 
 .f1-stripe {
     width: 4px;
@@ -267,6 +289,11 @@ a:hover, a:focus {
 .f1-num--main {
     font-weight: 700;
     color: #fff;
+}
+
+/* hétvégi összesítő: a két pontoszlop a hosszú fejléc alá középre kerül, így egyértelmű, melyik szám melyik oszlopé */
+.f1-board--summary .f1-num {
+    text-align: center;
 }
 
 .f1-num--dim {
@@ -371,15 +398,21 @@ a:hover, a:focus {
 }
 
 .f1-chip--exact {
-    border-color: rgba(180, 76, 242, .32);
+    border-color: rgba(180, 76, 242, .34);
     color: #b9a3d1;
-    background: rgba(180, 76, 242, .04);
+    background: rgba(180, 76, 242, .05);
 }
 
 .f1-chip--near {
-    border-color: rgba(245, 208, 0, .17);
-    border-style: dashed;
-    color: #aca78f;
+    border-color: rgba(34, 197, 94, .25);
+    color: #88b496;
+    background: rgba(34, 197, 94, .02);
+}
+
+/* nem talált: halvány sárga, hogy a lila/zöld találatok ugorjanak ki */
+.f1-chip--miss {
+    border-color: rgba(245, 208, 0, .15);
+    color: #a2976a;
 }
 
 .f1-chip--plain {
@@ -711,8 +744,38 @@ hr {
     white-space: normal;
 }
 
-.f1-row--user {
-    gap: 0;
+/* VB egyéni pontverseny: közös rács a fejlécnek és a soroknak, így a kupák / hátrány / pont oszlopok egy vonalban vannak */
+.f1-vb {
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr) 60px 56px 48px;
+    align-items: center;
+    column-gap: 6px;
+    padding-right: 10px;
+}
+
+.f1-vb--head {
+    min-height: 26px;
+    padding-top: 4px;
+    font-size: 10px;
+    letter-spacing: .6px;
+    text-transform: uppercase;
+    color: var(--f1-muted);
+    white-space: nowrap;
+}
+
+.f1-vb__who {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+}
+
+.f1-vb__cups {
+    text-align: center;
+}
+
+.f1-vb__num {
+    width: auto;
+    text-align: right;
 }
 
 .f1-row--user .online-dot {
@@ -731,26 +794,19 @@ hr {
     opacity: .75;
 }
 
+/* három fix kupahely (arany, ezüst, bronz): az azonos színű kupák egymás alá kerülnek */
 .f1-row--user .f1-trophies {
-    flex: none;
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(3, 18px);
+    justify-content: center;
     gap: 3px;
-    margin-left: auto;
-    padding-left: 6px;
+    margin: 0;
 }
 
 .f1-row--user .f1-trophy,
 .f1-row--user .f1-trophy svg {
     width: 18px;
     height: 18px;
-}
-
-.f1-row--user .f1-nums {
-    margin-left: 4px;
-}
-
-.f1-row--user .f1-num {
-    width: 48px;
 }
 
 .f1-legend-list p {
@@ -793,9 +849,93 @@ hr {
     padding: 0 5px;
 }
 
+/* ---------- csapatrádió (üzenőfal) ---------- */
 #messages-list {
-    max-height: 220px;
+    max-height: 320px;
     overflow-y: auto;
+}
+
+.f1-radio {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px 12px;
+}
+
+.f1-radio__msg {
+    position: relative;
+    padding: 4px 8px 5px 10px;
+    background: var(--f1-row);
+    border-radius: 0 6px 6px 0;
+    border-left: 3px solid var(--radio-color, var(--f1-faint));
+}
+
+/* a saját üzenet a kiválasztás-sárgával kap egy finom keretet */
+.f1-radio__msg--own {
+    box-shadow: inset 0 0 0 1px rgba(255, 201, 6, .18);
+}
+
+.f1-radio__head {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+}
+
+.f1-radio__name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    color: #fff;
+}
+
+.f1-radio__time {
+    flex: none;
+    margin-left: auto;
+    font-size: 10px;
+    color: var(--f1-faint);
+}
+
+/* a közvetítés rádiógrafikájának hullámformája, a feladó színében */
+.f1-radio__wave {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    height: 10px;
+}
+
+.f1-radio__wave i {
+    display: block;
+    width: 2px;
+    border-radius: 1px;
+    background: var(--radio-color, var(--f1-faint));
+}
+
+.f1-radio__wave i:nth-child(1) { height: 4px; }
+.f1-radio__wave i:nth-child(2) { height: 9px; }
+.f1-radio__wave i:nth-child(3) { height: 6px; }
+.f1-radio__wave i:nth-child(4) { height: 8px; }
+
+.f1-radio__text {
+    margin-top: 1px;
+    font-size: 13px;
+    line-height: 1.35;
+    color: var(--f1-text);
+    overflow-wrap: anywhere;
+}
+
+.f1-radio__text a {
+    color: var(--f1-accent-text);
+}
+
+#messages-send-form-div {
+    border-top: 1px solid var(--f1-line);
 }
 
 #message-send {
@@ -933,22 +1073,21 @@ hr {
 /* ---------- archív szezonok (information_content HTML) régi tippjelölései ---------- */
 .table > tbody > tr > td.bet-high {
     color: #b9a3d1;
-    background: rgba(180, 76, 242, .04);
-    box-shadow: inset 0 0 0 1px rgba(180, 76, 242, .32);
+    background: rgba(180, 76, 242, .05);
+    box-shadow: inset 0 0 0 1px rgba(180, 76, 242, .34);
     border-radius: 3px;
 }
 
 .table > tbody > tr > td.bet-low {
-    color: #aca78f;
-    background: transparent;
-    outline: 1px dashed rgba(245, 208, 0, .17);
-    outline-offset: -2px;
+    color: #88b496;
+    background: rgba(34, 197, 94, .02);
+    box-shadow: inset 0 0 0 1px rgba(34, 197, 94, .25);
     border-radius: 3px;
 }
 
 .table > tbody > tr > td.bet-empty,
 .bet-empty-font {
-    color: var(--f1-faint);
+    color: #a2976a;
 }
 
 .bet-high-font,
@@ -962,8 +1101,14 @@ hr {
 
 /* ---------- egyéni pontverseny keskeny képernyőn: a név férjen ki ---------- */
 @media (max-width: 480px) {
-    .f1-row--user .f1-pos {
-        width: 28px;
+    .f1-vb {
+        grid-template-columns: 28px minmax(0, 1fr) 54px 46px 38px;
+        column-gap: 4px;
+        padding-right: 8px;
+    }
+
+    .f1-vb--head {
+        letter-spacing: 0;
     }
 
     .f1-row--user .f1-name {
@@ -981,17 +1126,17 @@ hr {
     }
 
     .f1-row--user .f1-trophies {
+        grid-template-columns: repeat(3, 16px);
         gap: 2px;
-        padding-left: 4px;
     }
 
-    .f1-row--user .f1-nums {
-        gap: 4px;
-        padding-right: 8px;
+    .f1-row--user .f1-trophy,
+    .f1-row--user .f1-trophy svg {
+        width: 16px;
+        height: 16px;
     }
 
     .f1-row--user .f1-num {
-        width: 38px;
         font-size: 14px;
     }
 

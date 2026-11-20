@@ -1,9 +1,8 @@
 {% extends 'controller/module/base_module.html.twig' %}
-{% block heading_tag %}Fal{% endblock %}
+{% block heading_tag %}{{ 'messageWall_tag'|trans }}{% endblock %}
 {% block body_content %}
     <div id="messages-list"
-         class="panel-body reload-able-module"
-         style="max-height: 200px;overflow-y: auto;"
+         class="reload-able-module"
          data-module-route="messages/list"
          data-module-entities='{"0": "messages"}'
          data-module-no-animation="1"

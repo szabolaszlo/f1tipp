@@ -6,7 +6,12 @@ const {I} = inject();
 // a főoldal a belépett usernek több modult mutat: üzenőfal, nyeremény, pontszámítás
 const MEMBER_ONLY = () => ['#message-input', locate('.f1-board__tag').withText('Nyeremény'), locate('.f1-board__tag').withText('Pontok')];
 
-Then('látszik a hír: {string}', title => I.waitForElement(locate('.f1-news__title').withText(title), 10));
+// a hírek lustán töltődnek (News.vue: IntersectionObserver), ezért előbb oda kell görgetni, mint egy felhasználónak
+Then('látszik a hír: {string}', title => {
+    I.waitForElement('.f1-news', 10);
+    I.scrollTo('.f1-news');
+    I.waitForElement(locate('.f1-news__title').withText(title), 10);
+});
 
 Then('nem látszanak a csak tagoknak szóló modulok', () => MEMBER_ONLY().forEach(el => I.dontSeeElement(el)));
 
