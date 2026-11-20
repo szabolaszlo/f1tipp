@@ -744,12 +744,19 @@ hr {
     white-space: normal;
 }
 
-/* VB egyéni pontverseny: közös rács a fejlécnek és a soroknak, így a kupák / hátrány / pont oszlopok egy vonalban vannak */
-.f1-vb {
+/* VB egyéni pontverseny: egy közös rács a fejlécnek és a soroknak (subgrid), így az oszlopok egy vonalban vannak.
+   A névoszlop a leghosszabb névig nő (ha kifér), utána jön a zászlóoszlop, a maradék helyet az tölti ki. */
+.f1-vb-table {
     display: grid;
-    grid-template-columns: 40px minmax(0, 1fr) 60px 56px 48px;
-    align-items: center;
+    grid-template-columns: 40px minmax(0, max-content) minmax(16px, 1fr) 60px 56px 48px;
     column-gap: 6px;
+}
+
+.f1-vb {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: subgrid;
+    align-items: center;
     padding-right: 10px;
 }
 
@@ -788,10 +795,23 @@ hr {
     border-radius: 50%;
 }
 
+/* leintve: mint a közvetítés köridő-tornyában a célba ért versenyzőnél, kis kockás zászló a név után
+   (itt: akinek már nincs matematikai esélye a győzelemre). CSS-sel rajzolva, hogy minden méretben éles legyen. */
+.f1-vb__mark {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+}
+
 .f1-flag {
+    --flag-cell: 4px;
     flex: none;
-    margin-left: 6px;
-    opacity: .75;
+    display: inline-block;
+    width: calc(var(--flag-cell) * 4);
+    height: calc(var(--flag-cell) * 3);
+    background: repeating-conic-gradient(#f2f2f2 0 25%, #14141b 0 50%) 0 0 / calc(var(--flag-cell) * 2) calc(var(--flag-cell) * 2);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, .25);
+    border-radius: 1px;
 }
 
 /* három fix kupahely (arany, ezüst, bronz): az azonos színű kupák egymás alá kerülnek */
@@ -1101,10 +1121,17 @@ hr {
 
 /* ---------- egyéni pontverseny keskeny képernyőn: a név férjen ki ---------- */
 @media (max-width: 480px) {
-    .f1-vb {
-        grid-template-columns: 28px minmax(0, 1fr) 54px 46px 38px;
+    .f1-vb-table {
+        grid-template-columns: 28px minmax(0, max-content) minmax(12px, 1fr) 54px 46px 38px;
         column-gap: 4px;
+    }
+
+    .f1-vb {
         padding-right: 8px;
+    }
+
+    .f1-row--user .f1-flag {
+        --flag-cell: 3px;
     }
 
     .f1-vb--head {
@@ -1117,11 +1144,6 @@ hr {
     }
 
     .f1-row--user .online-dot {
-        margin-left: 4px;
-    }
-
-    .f1-row--user .f1-flag {
-        height: 13px;
         margin-left: 4px;
     }
 
