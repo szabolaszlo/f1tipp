@@ -26,8 +26,8 @@ use Symfony\Component\Routing\Attribute\Route;
 class ResultsOfChampionshipController extends AbstractController
 {
     const RESULTS_CACHE_KEY = 'result_of_championship';
-    const DRIVER_URL = 'https://api-formula-1.p.rapidapi.com/rankings/drivers?season=2025';
-    const CONSTRUCT_URL = 'https://api-formula-1.p.rapidapi.com/rankings/teams?season=2025';
+    const DRIVER_URL = 'https://api-formula-1.p.rapidapi.com/rankings/drivers?season=%d';
+    const CONSTRUCT_URL = 'https://api-formula-1.p.rapidapi.com/rankings/teams?season=%d';
     const API_HOST = 'api-formula-1.p.rapidapi.com';
 
     /**
@@ -89,8 +89,16 @@ class ResultsOfChampionshipController extends AbstractController
 
         // hibás / kvótán túli API-válasznál nem írjuk felül a cache-t üres tabellával (azt a következő
         // cron-futásig szolgálnánk ki), a hívó pedig 503-at ad 500 helyett
-        $drivers = $this->fetchRanking($client, self::DRIVER_URL);
-        $teams = $this->fetchRanking($client, self::CONSTRUCT_URL);
+        // az aktuális szezon; az első futam előtt (üres tabella) még a tavalyit mutatjuk
+        $season = (int) date('Y');
+        $drivers = $this->fetchRanking($client, sprintf(self::DRIVER_URL, $season));
+
+        if ($drivers === []) {
+            $season--;
+            $drivers = $this->fetchRanking($client, sprintf(self::DRIVER_URL, $season));
+        }
+
+        $teams = $this->fetchRanking($client, sprintf(self::CONSTRUCT_URL, $season));
 
         if ($drivers === null || $teams === null) {
             return null;
