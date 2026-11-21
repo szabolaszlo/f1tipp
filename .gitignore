@@ -30,3 +30,8 @@ yarn-error.log
 ###< phpunit/phpunit ###
 
 /.superpowers/
+
+# local tooling / scratch
+/.playwright-mcp/
+/assets/images/drivers/
+/download_drivers.py
