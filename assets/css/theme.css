@@ -86,6 +86,24 @@ a:hover, a:focus {
         padding: 12px 10px 30px;
         gap: 0;
     }
+
+    /* egy oszlopban a két oszlop elemei közös rácsba kerülnek, így a hírek
+       a jobb oldali modulok után, de a VB állás elé sorolhatók (mint régen) */
+    .f1-main, .f1-aside {
+        display: contents;
+    }
+
+    .f1-main > *, .f1-aside > * {
+        min-width: 0;
+    }
+
+    #news {
+        order: 1;
+    }
+
+    #championship-result {
+        order: 2;
+    }
 }
 
 /* ---------- panel ("board") ---------- */
