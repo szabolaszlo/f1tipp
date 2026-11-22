@@ -10,6 +10,7 @@
 namespace App\Controller\Module;
 
 use App\Cache\FileCache;
+use App\Display\DriverName;
 use App\Display\TeamColorProvider;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
@@ -107,14 +108,15 @@ class ResultsOfChampionshipController extends AbstractController
         $driverStandings = [];
 
         foreach ($drivers as $item) {
+            $name = DriverName::split((string) $item['driver']['name']);
             $driverStandings[] = [
                 'position' => $item['position'],
                 'points' => $item['points'],
                 'wins' => $item['wins'],
                 'Driver' => [
                     'driverId' => $item['driver']['id'],
-                    'givenName' => explode(' ', $item['driver']['name'])[0],
-                    'familyName' => implode(' ', array_slice(explode(' ', $item['driver']['name']), 1)),
+                    'givenName' => $name['givenName'],
+                    'familyName' => $name['familyName'],
                     'code' => $item['driver']['abbr'],
                     'permanentNumber' => $item['driver']['number'],
                     'image' => $item['driver']['image'],
