@@ -3,7 +3,9 @@
     <div id="app">
     </div>
     {{ messageWallExtension(app.user ? 1 : 0 ) }}
-    {{ pointSummaryChartExtension() }}
+    <div class="f1-point-chart">
+        {{ pointSummaryChartExtension() }}
+    </div>
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}

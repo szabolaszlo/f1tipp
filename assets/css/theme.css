@@ -97,12 +97,27 @@ a:hover, a:focus {
         min-width: 0;
     }
 
-    #news {
+    /* sorrend: SPA tartalom, üzenőfal, trófeák, VB tabella, pontgrafikon,
+       a többi jobb oldali modul, hírek, VB állás */
+    .f1-aside > * {
         order: 1;
     }
 
-    #championship-result {
+    .f1-aside > [data-module-route="trophies"],
+    .f1-aside > [data-module-route="user_championship"] {
+        order: 0;
+    }
+
+    .f1-point-chart {
+        order: 1;
+    }
+
+    #news {
         order: 2;
+    }
+
+    #championship-result {
+        order: 3;
     }
 }
 
