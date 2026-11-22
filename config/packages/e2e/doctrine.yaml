@@ -21,5 +21,8 @@ framework:
         pools:
             doctrine.result_cache_pool:
                 adapter: cache.app
+            # nem cache.system (PhpFilesAdapter): azt a PHP-FPM OPcache-ből olvassa, a seedelő CLI-parancs
+            # törlése/újraírása után revalidate_freq (2 mp) ideig még a régi entitásokat adná vissza (2LC),
+            # és az így számolt tabella a result cache-be is bekerülne
             doctrine.system_cache_pool:
-                adapter: cache.system
+                adapter: cache.adapter.filesystem
