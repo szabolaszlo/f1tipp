@@ -28,7 +28,7 @@ class Summary extends ATableType
      */
     public function renderTable(Event $event): string
     {
-        $data['result'] = $this->em->getRepository('App:AlternativeChampionship')->findBy(
+        $data['result'] = $this->em->getRepository(\App\Entity\AlternativeChampionship::class)->findBy(
             ['race' => $event->getId()],
             [
                 'points' => 'DESC',

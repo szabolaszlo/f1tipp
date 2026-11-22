@@ -27,13 +27,13 @@ class UserPointSummaryCalculator extends ACalculator
      */
     public function calculate()
     {
-        $users = $this->em->getRepository('App:User')->findAll();
+        $users = $this->em->getRepository(\App\Entity\User::class)->findAll();
         $sortMap = array();
 
         foreach ($users as $user) {
             $userPoints = 0;
             //TODO Change this foreach, mysql SUM
-            $bets = $this->em->getRepository('App:Bet')->getBetsByUser($user);
+            $bets = $this->em->getRepository(\App\Entity\Bet::class)->getBetsByUser($user);
             /** @var Bet $bet */
             foreach ($bets as $bet) {
                 $userPoints += $bet->getPointSummary();

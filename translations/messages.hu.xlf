@@ -55,6 +55,7 @@
       <trans-unit id="calendar_time"><source>calendar_time</source><target>Idő</target></trans-unit>
       <trans-unit id="betting_no_login"><source>betting_no_login</source><target>Kérlek jelentkezz be, ha tippelni szeretnél!</target></trans-unit>
       <trans-unit id="betting_time_out"><source>betting_time_out</source><target>Sajnos lejárt a tippelési időszak, legközelebb legyél gyorsabb!</target></trans-unit>
+      <trans-unit id="betting_already_saved"><source>betting_already_saved</source><target>A tipped már rögzítve van, nem módosítható.</target></trans-unit>
       <trans-unit id="betting_success"><source>betting_success</source><target>Tipped sikeresen rögzítve!</target></trans-unit>
       <trans-unit id="betting_default_option"><source>betting_default_option</source><target>Válassz, Tippelj, Mákolj!</target></trans-unit>
       <trans-unit id="betting_submit_qualify"><source>betting_submit_qualify</source><target>Időmérő Tipp Rögzítése</target></trans-unit>
@@ -92,6 +93,7 @@
       <trans-unit id="result_no_betting_users"><source>result_no_betting_users</source><target>Tippnélküliek: </target></trans-unit>
       <trans-unit id="results_title"><source>results_title</source><target>Eredmények</target></trans-unit>
       <trans-unit id="trophies_title"><source>trophies_title</source><target>KUPÁK</target></trans-unit>
+      <trans-unit id="userChampionship_trophies"><source>userChampionship_trophies</source><target>Kupák</target></trans-unit>
       <trans-unit id="userChampionship_title"><source>userChampionship_title</source><target>EGYÉNI PONTVERSENY</target></trans-unit>
       <trans-unit id="userChampionship_best_of_race_bets"><source>userChampionship_best_of_race_bets</source><target>Futamok Legjobbjai (TOP 3):</target></trans-unit>
       <trans-unit id="userChampionship_best_of_qualify_bets"><source>userChampionship_best_of_qualify_bets</source><target>Időmérők Legjobbjai (TOP 3):</target></trans-unit>
@@ -100,8 +102,8 @@
       <trans-unit id="userChampionship_place"><source>userChampionship_place</source><target>Hétvégi helyezés</target></trans-unit>
       <trans-unit id="userChampionship_converted_points"><source>userChampionship_converted_points</source><target>Bajnokság pont</target></trans-unit>
       <trans-unit id="userChampionship_maths"><source>userChampionship_maths</source><target>Bajnokság Matek</target></trans-unit>
-      <trans-unit id="userChampionship_remaining_races"><source>userChampionship_remaining_races</source><target>Hátralévő Hétvégék</target></trans-unit>
-      <trans-unit id="userChampionship_remaining_points"><source>userChampionship_remaining_points</source><target>Még Szerezhető Pontok</target></trans-unit>
+      <trans-unit id="userChampionship_remaining_races"><source>userChampionship_remaining_races</source><target>hátralévő nagydíjhétvége</target></trans-unit>
+      <trans-unit id="userChampionship_remaining_points"><source>userChampionship_remaining_points</source><target>pont szerezhető még</target></trans-unit>
       <trans-unit id="userChampionship_checkered_flag"><source>userChampionship_checkered_flag</source><target>Sajnos már nincs matematikai esély a győzelemre</target></trans-unit>
       <trans-unit id="resultsOfChampionship_title"><source>resultsOfChampionship_title</source><target>VB ÁLLÁS</target></trans-unit>
       <trans-unit id="resultsOfChampionship_construct"><source>resultsOfChampionship_construct</source><target>Csapat</target></trans-unit>
@@ -157,7 +159,9 @@
       <trans-unit id="admin_success_message"><source>admin_success_message</source><target>Sikeres Módosítás</target></trans-unit>
       <trans-unit id="admin_driver"><source>admin_driver</source><target>Pilóták</target></trans-unit>
       <trans-unit id="admin_information"><source>admin_information</source><target>Szöveges Tartalmak</target></trans-unit>
-      <trans-unit id="messageWall_title"><source>messageWall_title</source><target>ÜZENŐFAL</target></trans-unit>
+      <trans-unit id="messageWall_title"><source>messageWall_title</source><target>CSAPATRÁDIÓ</target></trans-unit>
+      <trans-unit id="messageWall_tag"><source>messageWall_tag</source><target>Közösség</target></trans-unit>
+      <trans-unit id="messageWall_placeholder"><source>messageWall_placeholder</source><target>Rádióüzenet a csapatnak…</target></trans-unit>
       <trans-unit id="messageWall_submit"><source>messageWall_submit</source><target>Beleugatok</target></trans-unit>
       <trans-unit id="messageWall_not_logged_in"><source>messageWall_not_logged_in</source><target>Nem vagy bejelentkezve!</target></trans-unit>
       <trans-unit id="messageWall_empty_message"><source>messageWall_empty_message</source><target>Ne küldözgess üres üzenetet!</target></trans-unit>
@@ -182,7 +186,7 @@
       <trans-unit id="alternativeChampionship_description"><source>alternativeChampionship_description</source><target>Az alternatív pontverseny lényege, hogy az adott hétvége alatt összegyűjtött pontokat összeadjuk. Tehát az időmérőn és a futamon szerzett pontok összege szerint felállítunk egy sorrendet és ez alapján F1 pontokat kapunk. Az F1 pontokat a lenti táblázatban találod, hogy adott helyezéshez hány pont jár. Azonos pontok esetén, az azonos pontot szerzők az annak megfelelő F1 pontot kapják, viszont így a mögöttük lévő helyezések értelemszerűen tolódnak és az annak megfelelő F1 pontot kapják. Például ha a 2. helyen két azonos pont lesz, akkor nincs 3. hely, hanem a 4. hely fogja követni őket, mert igazából a 2. és 3. helyen van holtverseny.</target></trans-unit>
       <trans-unit id="alternativeChampionship_goal"><source>alternativeChampionship_goal</source><target>Ezzel a pontrendszerrel talán megszűnnének a helyben toporgások, illetve talán jobban tudnánk egymást oda vissza előzni.</target></trans-unit>
       <trans-unit id="alternativeChampionship_test"><source>alternativeChampionship_test</source><target>Egyenlőre CSAK TESZT jelleggel üzemel az alternatív pontozás majd meglátjuk hogyan fog tetszeni.</target></trans-unit>
-      <trans-unit id="alternativeChampionship_lag"><source>alternativeChampionship_lag</source><target>Lemaradás</target></trans-unit>
+      <trans-unit id="alternativeChampionship_lag"><source>alternativeChampionship_lag</source><target>Hátrány</target></trans-unit>
       <trans-unit id="no_results_yet"><source>no_results_yet</source><target>Még nincsenek eredmények, nézz vissza az első futam után!</target></trans-unit>
       <trans-unit id="pointCalculatingInfo_place"><source>pointCalculatingInfo_place</source><target>Helyezés</target></trans-unit>
       <trans-unit id="pointCalculatingInfo_title"><source>pointCalculatingInfo_title</source><target>Pontszámítás</target></trans-unit>

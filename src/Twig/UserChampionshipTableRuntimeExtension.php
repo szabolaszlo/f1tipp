@@ -5,7 +5,6 @@ namespace App\Twig;
 use App\Calculator\Provider\PointProvider;
 use App\Calculator\UserChampionshipOrderResolver\UserChampionshipOrderResolver;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -52,12 +51,12 @@ class UserChampionshipTableRuntimeExtension implements RuntimeExtensionInterface
                     ->userChampionshipOrderResolver
                     ->getUserChampionShipOrder(),
                 'records' => [
-                    'qualify_bets' => $this->entityManager->getRepository('App:Bet')->getTopQualifyBets(),
-                    'race_bets' => $this->entityManager->getRepository('App:Bet')->getTopRaceBets(),
-                    'weekend_bets' => $this->entityManager->getRepository('App:Trophy')->getTopWeekendUsers()
+                    'qualify_bets' => $this->entityManager->getRepository(\App\Entity\Bet::class)->getTopQualifyBets(),
+                    'race_bets' => $this->entityManager->getRepository(\App\Entity\Bet::class)->getTopRaceBets(),
+                    'weekend_bets' => $this->entityManager->getRepository(\App\Entity\Trophy::class)->getTopWeekendUsers()
                 ],
                 'maths' => [
-                    'remaining_weekends' => $this->entityManager->getRepository('App:Race')->getRemainEvents()
+                    'remaining_weekends' => $this->entityManager->getRepository(\App\Entity\Race::class)->getRemainEvents()
                 ],
                 'details_link' => '/#/results',
                 'pointProvider' => new PointProvider(),

@@ -1,46 +1,18 @@
-<div class="panel panel-default">
-    <div class="panel-heading text-center">
-        <strong>NYEREMÉNY</strong>
+<div class="f1-board">
+    <div class="f1-board__head">
+        <span class="f1-board__tag">Nyeremény</span>
+        <span class="f1-board__title">Összesített helyezés</span>
     </div>
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th><strong class="color-two">Összesített helyezés</strong></th>
-                <th><strong class="color-two">Összeg</strong></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td class="text-center">
-                    <strong class="color-one">1.</strong>
-                </td>
-                <td>
-                    <strong class="color-one">22,500</strong>
-                </td>
-            </tr>
-            <tr>
-                <td class="text-center">
-                    <strong class="color-one">2.</strong>
-                </td>
-                <td>
-                    <strong class="color-one">13,500</strong>
-                </td>
-            </tr>
-            <tr>
-                <td class="text-center">
-                    <strong class="color-one">3.</strong>
-                </td>
-                <td>
-                    <strong class="color-one">9,000</strong>
-                </td>
-            </tr>
-            <tr>
-                <td class="text-center" colspan="11">
-                    <strong class="color-one">11 résztvevő X 5000 = 55000 - 10000(üzemeltetés) = 45000</strong>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+    <div class="f1-board__colhead">
+        <span>Helyezés</span>
+        <span class="f1-nums"><span class="f1-num f1-num--wide">Összeg</span></span>
     </div>
+    {% for place, amount in {1: '24,000', 2: '14,400', 3: '9,600'} %}
+        <div class="f1-row">
+            <div class="f1-pos f1-pos--p{{ place }}">{{ place }}</div>
+            <div class="f1-name"></div>
+            <div class="f1-nums"><span class="f1-num f1-num--wide f1-num--main">{{ amount }}</span></div>
+        </div>
+    {% endfor %}
+    <div class="f1-board__note">12 résztvevő X 5000 = 60000 - 12000(üzemeltetés) = 48000</div>
 </div>

@@ -107,10 +107,8 @@ export default {
       colorTheme: colorTheme
     }
   },
+  // a Login a <keep-alive>-on belül van, az activated() az első megjelenéskor is lefut
   activated() {
-    this.isLogged();
-  },
-  mounted() {
     this.isLogged();
   },
   methods: {
@@ -161,11 +159,9 @@ export default {
             _remember_me: 1
           })
           .then(response => {
-            this.loading = false;
             location.href = '/';
           })
           .catch(error => {
-            this.loading = false;
             this.errorMessage = error.response?.data?.error || error.message;
           })
           .finally(() => {

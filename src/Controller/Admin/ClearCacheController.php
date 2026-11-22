@@ -6,7 +6,7 @@ use App\Cache\FileCache;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * Class ClearCacheController
@@ -15,11 +15,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class ClearCacheController extends AbstractController
 {
     /**
-     * @Route(path = "/admin/maintenance/cache_clear", name = "cache_clear")
      * @param FileCache $fileCache
      * @return RedirectResponse
      * @throws \Exception
      */
+    #[Route(path: '/admin/maintenance/cache_clear', name: 'cache_clear')]
     public function indexAction(FileCache $fileCache)
     {
         $fileCache->clearAll();
@@ -34,8 +34,6 @@ class ClearCacheController extends AbstractController
         $fs->remove($this->getParameter('kernel.cache_dir'). '2');
 
         $this->addFlash('success', 'admin_maintenance_clear_cache_success');
-        header("Location: /admin");
-
         return $this->redirect('/admin');
     }
 }

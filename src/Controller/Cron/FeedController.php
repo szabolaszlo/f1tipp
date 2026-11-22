@@ -14,7 +14,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * Class FeedController
@@ -36,11 +36,11 @@ class FeedController extends AbstractController
     }
 
     /**
-     * @Route("cron/collect_feeds", name="cron_collect_feeds", methods={"GET"})
      * @param ManagerRegistry $managerRegistry
      * @return Response
      * @throws Exception
      */
+    #[Route(path: 'cron/collect_feeds', name: 'cron_collect_feeds', methods: ['GET'])]
     public function collectAction(ManagerRegistry $managerRegistry): Response
     {
         $feedsEntity = $managerRegistry
@@ -48,6 +48,11 @@ class FeedController extends AbstractController
             ->findBy(array(), array('id' => 'DESC'), 1);
 
         $feeds = $this->feedHandler->getItems();
+
+        // elérhetetlen / hibás feed: a meglévő híreket nem bántjuk
+        if (empty($feeds)) {
+            return new Response('NO FEED ITEMS', 200);
+        }
 
         if ($this->getLastFeedId($feedsEntity) != $this->getLastFeedId($feeds)) {
             $this->feedHandler->saveItems($feeds);

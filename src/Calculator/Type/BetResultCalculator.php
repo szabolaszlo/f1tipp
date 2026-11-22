@@ -2,6 +2,7 @@
 
 namespace App\Calculator\Type;
 
+use App\Cache\ResultCache;
 use App\Entity\Bet;
 use App\Entity\BetAttribute;
 use App\Entity\Event;
@@ -55,7 +56,7 @@ class BetResultCalculator extends ACalculator
      */
     public function isNeedCalculate()
     {
-        $this->notCalculatedEvents = $this->em->getRepository("App:Result")->getNotCalculatedEvents();
+        $this->notCalculatedEvents = $this->em->getRepository(\App\Entity\Result::class)->getNotCalculatedEvents();
         return (bool)(count($this->notCalculatedEvents));
     }
 
@@ -65,8 +66,8 @@ class BetResultCalculator extends ACalculator
     public function calculate()
     {
         foreach ($this->notCalculatedEvents as $event) {
-            $bets = $this->em->getRepository('App:Bet')->getBetsByEvent($event);
-            $result = $this->em->getRepository('App:Result')->getResultByEvent($event);
+            $bets = $this->em->getRepository(\App\Entity\Bet::class)->getBetsByEvent($event);
+            $result = $this->em->getRepository(\App\Entity\Result::class)->getResultByEvent($event);
 
             /** @var Bet $bet */
             foreach ($bets as $bet) {
@@ -80,7 +81,7 @@ class BetResultCalculator extends ACalculator
         }
 
         $this->em->flush();
-        $resultCache = $this->em->getConfiguration()->getResultCacheImpl();
+        $resultCache = ResultCache::of($this->em);
         $resultCache->delete('topRaceBets');
         $resultCache->delete('topQualifyBets');
     }

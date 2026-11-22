@@ -14,7 +14,7 @@ use League\OAuth2\Client\Provider\Google;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 /**
@@ -24,10 +24,10 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class LoginController extends AbstractController
 {
     /**
-     * @Route("/login", name="app_login")
      * @param AuthenticationUtils $authenticationUtils
      * @return JsonResponse
      */
+    #[Route(path: '/login', name: 'app_login')]
     public function indexAction(AuthenticationUtils $authenticationUtils): JsonResponse
     {
         /** @var User $loggedUser */
@@ -45,19 +45,17 @@ class LoginController extends AbstractController
         );
     }
 
-    /**
-     * @Route("is_logged", name="is_logged")
-     */
+    #[Route(path: 'is_logged', name: 'is_logged')]
     public function isLoggedAction(): JsonResponse
     {
         return $this->json([
-            'userName' => $this->getUser() ? $this->getUser()->getUsername() : null
+            'userName' => $this->getUser() ? $this->getUser()->getUserIdentifier() : null,
+            // a role_hierarchy miatt a ROLE_SUPER_ADMIN is ide tartozik; a fejléc Admin gombja ebből dönt
+            'isAdmin' => $this->isGranted('ROLE_ADMIN'),
         ], $this->getUser() ? 200 : 401);
     }
 
-    /**
-     * @Route("get_google_oauth_url", name="get_google_oauth_url")
-     */
+    #[Route(path: 'get_google_oauth_url', name: 'get_google_oauth_url')]
     public function getGoogleAuthLinkAction(Google $google): JsonResponse
     {
         return $this->json(
@@ -66,18 +64,18 @@ class LoginController extends AbstractController
     }
 
     /**
-     * @Route ("auth/google", name="auth_google")
      * @return Response
      */
+    #[Route(path: 'auth/google', name: 'auth_google')]
     public function authGoogleAction()
     {
         throw new \LogicException('All google authentication should be handled in GoogleAuthenticator.');
     }
 
     /**
-     * @Route("logout", name="app_logout")
      * @throws \Exception
      */
+    #[Route(path: 'logout', name: 'app_logout')]
     public function logout()
     {
         throw new \Exception('This method can be blank - it will be intercepted by the logout key on your firewall');

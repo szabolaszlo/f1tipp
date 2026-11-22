@@ -9,6 +9,7 @@
 
 namespace App\Repository;
 
+use App\Cache\ResultCache;
 use App\Entity\Event as EventEnt;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityRepository;
@@ -25,7 +26,7 @@ class Event extends EntityRepository
      */
     public function getActualWeekendEvents()
     {
-        $resultCache = $this->_em->getConfiguration()->getResultCacheImpl();
+        $resultCache = ResultCache::of($this->getEntityManager());
         $cacheKey = str_replace("\\", '', $this->_entityName) . 'ActualWeekendEvents';
 
         if ($resultCache->contains($cacheKey)) {
@@ -52,7 +53,7 @@ class Event extends EntityRepository
      */
     public function getNextEvent()
     {
-        $resultCache = $this->_em->getConfiguration()->getResultCacheImpl();
+        $resultCache = ResultCache::of($this->getEntityManager());
         $cacheKey = str_replace("\\", '', $this->_entityName) . 'NextEvent';
 
         if ($resultCache->contains($cacheKey)) {
@@ -62,8 +63,10 @@ class Event extends EntityRepository
         $date = new \DateTime();
         $date->sub(new \DateInterval('P3D'));
 
+        // időrendben: id-sorrendben egy elhalasztott (későbbre tett) hétvége megelőzné a valóban következőt
         $nextEvent = $this->createQueryBuilder('e')
             ->where('e.date_time > :time')
+            ->orderBy('e.date_time', 'ASC')
             ->setMaxResults(1)
             ->setParameter('time', $date)
             ->getQuery()
@@ -83,30 +86,11 @@ class Event extends EntityRepository
     }
 
     /**
-     * @return array
-     */
-    public function getEventTypes(): array
-    {
-        $events = $this->createQueryBuilder('e')
-            ->setCacheable(true)
-            ->getQuery()
-            ->getResult();
-
-        $types = [];
-
-        foreach ($events as $event) {
-            $types[$event->getType()] = $event->getType();
-        }
-
-        return $types;
-    }
-
-    /**
      * @return array|mixed
      */
     public function getRemainEvents()
     {
-        $resultCache = $this->_em->getConfiguration()->getResultCacheImpl();
+        $resultCache = ResultCache::of($this->getEntityManager());
         $cacheKey = str_replace("\\", '', $this->_entityName) . 'Remain';
 
         if ($resultCache->contains($cacheKey)) {
@@ -118,6 +102,7 @@ class Event extends EntityRepository
 
         $remainEvents = $this->createQueryBuilder('e')
             ->where('e.date_time > :time')
+            ->orderBy('e.date_time', 'ASC')
             ->setParameter('time', $date)
             ->getQuery()
             ->getResult();
@@ -146,24 +131,11 @@ class Event extends EntityRepository
     /**
      * @return mixed
      */
-    public function getAlternativeChampionshipRaces()
-    {
-        return $this->createQueryBuilder('race')
-            ->select('race')
-            ->innerJoin('App:AlternativeChampionship', 'ac', Join::WITH, 'ac.race = race.id')
-            ->orderBy('race.weekendOrder', 'DESC')
-            ->getQuery()
-            ->getResult();
-    }
-
-    /**
-     * @return mixed
-     */
     public function getNextEventForResult()
     {
         $lastResultedEvent = $this->createQueryBuilder('event')
             ->select('event')
-            ->innerJoin('App:Result', 'result', Join::WITH, 'result.event = event.id')
+            ->innerJoin(\App\Entity\Result::class, 'result', Join::WITH, 'result.event = event.id')
             ->orderBy('event.date_time', 'DESC')
             ->setMaxResults(1)
             ->getQuery()

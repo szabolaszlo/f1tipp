@@ -1,15 +1,15 @@
 {% extends 'controller/module/base_module.html.twig' %}
+{% block heading_tag %}{{ 'messageWall_tag'|trans }}{% endblock %}
 {% block body_content %}
     <div id="messages-list"
-         class="panel-body custom-scrollbar reload-able-module"
-         style="max-height: 200px;overflow-y: scroll;"
+         class="reload-able-module"
          data-module-route="messages/list"
          data-module-entities='{"0": "messages"}'
          data-module-no-animation="1"
          data-module-count="{{ messages|length }}">
         {% include('controller/module/message_wall/messages.html.twig') %}
     </div>
-    <div id="messages-send-form-div" class="bg-one" style="padding: 5px">
+    <div id="messages-send-form-div" class="f1-board__body">
         {% include('controller/module/message_wall/form.html.twig') %}
     </div>
 {% endblock %}

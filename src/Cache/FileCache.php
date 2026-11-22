@@ -25,7 +25,7 @@ class FileCache
         $this->fileSystemAdapter = new FilesystemAdapter(
             '',
             0,
-            $parameterBag->get('kernel.project_dir') . '/var/cache/file-cache');
+            $parameterBag->get('app.file_cache_dir'));
     }
 
     /**

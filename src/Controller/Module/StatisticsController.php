@@ -14,9 +14,10 @@ use App\LegacyService\Statistics\ObjectSorter;
 use App\LegacyService\Statistics\StatisticsCalculator;
 use Exception;
 use Psr\Cache\InvalidArgumentException;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * Class StatisticsController
@@ -24,6 +25,10 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class StatisticsController extends AbstractController
 {
+    public function __construct(private readonly ManagerRegistry $doctrine)
+    {
+    }
+
     /**
      * @var ObjectSorter
      */
@@ -35,27 +40,26 @@ class StatisticsController extends AbstractController
     protected $calculator;
 
     /**
-     * @Route("/module/statistics", name="statistics", methods={"GET"})
      * @param ObjectSorter $sorter
      * @param StatisticsCalculator $calculator
      * @param FileCache $cache
      * @return Response
      * @throws InvalidArgumentException
      */
+    #[Route(path: '/module/statistics', name: 'statistics', methods: ['GET'])]
     public function indexAction(ObjectSorter $sorter, StatisticsCalculator $calculator, FileCache $cache)
     {
         $this->sorter = $sorter;
         $this->calculator = $calculator;
 
-        $bets = $this->getDoctrine()->getRepository('App:Bet')->findAll();
-        $results = $this->getDoctrine()->getRepository('App:Result')->findAll();
-
-        $cacheKey = 'statistics' . count($results);
+        // a kulcshoz elég a COUNT, a teljes listákat csak cache-miss esetén töltjük be
+        $resultRepository = $this->doctrine->getRepository(\App\Entity\Result::class);
+        $cacheKey = 'statistics' . $resultRepository->getResultCount();
         $data = $cache->get($cacheKey);
 
         if (empty($data)) {
-            $data['statistics']['bets'] = $this->getStatistics($bets);
-            $data['statistics']['results'] = $this->getStatistics($results);
+            $data['statistics']['bets'] = $this->getStatistics($this->doctrine->getRepository(\App\Entity\Bet::class)->findAll());
+            $data['statistics']['results'] = $this->getStatistics($resultRepository->findAll());
             $data['id'] = 'statistics';
             $cache->save($cacheKey, $data);
         }

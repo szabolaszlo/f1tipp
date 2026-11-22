@@ -4,10 +4,8 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\Event")
- * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
- */
+#[ORM\Entity(repositoryClass: \App\Repository\Event::class)]
+#[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
 class SprintQualify extends Event
 {
     /**

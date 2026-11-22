@@ -1,6 +1,6 @@
 <form id="message-send" class="form-inline">
     <input id="message-input" type="text" class="form-group smile-replaceable form-input" name="message"
-           style="width: 65%">
+           placeholder="{{ (id ~ '_placeholder')|trans }}" autocomplete="off">
     <button id="message-submit" type="submit"
             class="btn btn-new form-group">{{ (id ~ '_submit')|trans }}
     </button>

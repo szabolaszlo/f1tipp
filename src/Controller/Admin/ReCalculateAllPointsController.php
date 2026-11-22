@@ -6,9 +6,8 @@ use App\Cache\FileCache;
 use App\Calculator\Calculator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * Class ReCalculateAllPointsController
@@ -19,27 +18,12 @@ class ReCalculateAllPointsController extends AbstractController
     //TODO Add some Loading animation becouse it is a heavy controller
 
     /**
-     * @var Filesystem
-     */
-    protected $fileSystem = null;
-
-    /**
-     * @var string[]
-     */
-    protected $cacheDirs = [
-        'doctrine',
-        'twig',
-        'pool',
-        'profiler'
-    ];
-
-    /**
-     * @Route(path = "/admin/maintenance/re_calculate_points", name = "re_calculate_points")
      * @param Calculator $calculator
      * @param FileCache $fileCache
      * @return RedirectResponse
      * @throws \Exception
      */
+    #[Route(path: '/admin/maintenance/re_calculate_points', name: 're_calculate_points')]
     public function indexAction(EntityManagerInterface $entityManager, Calculator $calculator, FileCache $fileCache)
     {
         $sql = '

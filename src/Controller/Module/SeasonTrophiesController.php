@@ -2,13 +2,18 @@
 
 namespace App\Controller\Module;
 
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use App\Entity\User;
 use Symfony\Component\HttpFoundation\Response;
 
 class SeasonTrophiesController extends AbstractController
 {
+    public function __construct(private readonly ManagerRegistry $doctrine)
+    {
+    }
+
     /**
      * @var array
      */
@@ -19,14 +24,13 @@ class SeasonTrophiesController extends AbstractController
     );
 
     /**
-     * @Route("/module/season-trophies", name="trophies", methods={"GET"})
      * @return string|Response
      */
+    #[Route(path: '/module/season-trophies', name: 'trophies', methods: ['GET'])]
     public function indexAction()
     {
-        $users = $this
-            ->getDoctrine()
-            ->getRepository('App:User')
+        $users = $this->doctrine
+            ->getRepository(\App\Entity\User::class)
             ->getAlternativeChampionshipUsers();
 
         $userTrophies = array();

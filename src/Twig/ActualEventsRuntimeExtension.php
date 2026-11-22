@@ -52,7 +52,7 @@ class ActualEventsRuntimeExtension implements RuntimeExtensionInterface
     public function renderActualEvents($user): string
     {
 
-        $events = $this->entityManager->getRepository('App:Event')->getActualWeekendEvents();
+        $events = $this->entityManager->getRepository(\App\Entity\Event::class)->getActualWeekendEvents();
 
         $tables = [];
 
@@ -81,7 +81,8 @@ class ActualEventsRuntimeExtension implements RuntimeExtensionInterface
         ksort($tables);
 
         return $this->twig->render('extension/actual_events_results.html.twig', [
-            'tables' => $tables
+            'tables' => $tables,
+            'events' => $events
         ]);
     }
 }

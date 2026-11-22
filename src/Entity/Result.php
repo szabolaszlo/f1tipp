@@ -11,36 +11,26 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\Result")
- * @ORM\Table(name="`result`")
- * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
- */
+#[ORM\Entity(repositoryClass: \App\Repository\Result::class)]
+#[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
+#[ORM\Table(name: '`result`')]
 class Result
 {
-    /**
-     * @ORM\Column(name="id", type="integer", length=2, nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer', length: 2, nullable: false)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected $id;
 
-    /**
-     * @ORM\OneToOne(targetEntity="Event")
-     * @ORM\JoinColumn(name="event", referencedColumnName="id")
-     * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
-     */
+    #[ORM\OneToOne(targetEntity: Event::class)]
+    #[ORM\JoinColumn(name: 'event', referencedColumnName: 'id')]
+    #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
     protected $event;
     
-    /**
-     * @ORM\OneToMany(targetEntity="ResultAttribute", mappedBy="result", cascade={"persist","remove"})
-     * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
-     */
+    #[ORM\OneToMany(targetEntity: ResultAttribute::class, mappedBy: 'result', cascade: ['persist', 'remove'])]
+    #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
     protected $attributes;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: 'boolean')]
     private $isCalculated = 0;
 
     /**

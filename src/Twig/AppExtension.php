@@ -19,16 +19,8 @@ class AppExtension extends AbstractExtension
     {
         return [
             new TwigFunction(
-                'result_table',
-                [ResultTableRuntimeExtension::class, 'renderResultTable'],
-                ['is_safe' => ['html']]),
-            new TwigFunction(
                 'pointSummaryChartExtension',
                 [PointSummaryChartRuntimeExtension::class, 'renderPointSummaryChart'],
-                ['is_safe' => ['html']]),
-            new TwigFunction(
-                'countDownExtension',
-                [CountDownRuntimeExtension::class, 'renderCountDown'],
                 ['is_safe' => ['html']]),
             new TwigFunction(
                 'messageWallExtension',

@@ -5,36 +5,26 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\Event")
- * @ORM\Table(name="`event`")
- * @ORM\InheritanceType("SINGLE_TABLE")
- * @ORM\DiscriminatorColumn(name="event_type", type="string"))
- * @ORM\DiscriminatorMap({"event" = "Event", "race" = "Race", "qualify" = "Qualify", "sprint_qualify" = "SprintQualify"})
- * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
- */
+#[ORM\Entity(repositoryClass: \App\Repository\Event::class)]
+#[ORM\InheritanceType('SINGLE_TABLE')]
+#[ORM\DiscriminatorColumn(name: 'event_type', type: 'string')]
+#[ORM\DiscriminatorMap(['event' => Event::class, 'race' => Race::class, 'qualify' => Qualify::class, 'sprint_qualify' => SprintQualify::class])]
+#[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
+#[ORM\Table(name: '`event`')]
 class Event implements JsonSerializable
 {
-    /**
-     * @ORM\Column(name="id", type="integer", length=11, nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer', length: 11, nullable: false)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected $id;
 
-    /**
-     * @ORM\Column(name="weekend_order", type="integer", length=2, nullable=false)
-     */
+    #[ORM\Column(name: 'weekend_order', type: 'integer', length: 2, nullable: false)]
     protected $weekendOrder = 1;
 
-    /**
-     * @ORM\Column(name="name", type="string", length=45, nullable=false)
-     */
+    #[ORM\Column(name: 'name', type: 'string', length: 45, nullable: false)]
     protected $name;
 
-    /**
-     * @ORM\Column(name="date_time", type="datetime", nullable=false)
-     */
+    #[ORM\Column(name: 'date_time', type: 'datetime', nullable: false)]
     protected $date_time;
 
     /**
@@ -109,7 +99,7 @@ class Event implements JsonSerializable
         return 'event';
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'id' => $this->getId(),

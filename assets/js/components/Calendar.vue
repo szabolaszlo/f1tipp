@@ -14,19 +14,19 @@
         </div>
       </div>
       <div v-else-if="!loading">
-        <div class="panel panel-default">
+        <div class="panel panel-default f1-calendar">
           <div class="panel-heading text-center">
             <strong>{{ $t("calendar.title").toUpperCase() }}</strong>
           </div>
           <div class="form form-inline">
-            <div class="row text-center">
-              <div class="col-sm form-control-static" style="padding: 5px;">
+            <div class="f1-calendar__filters">
+              <div class="form-control-static">
                 <a class="btn btn-new" role="button" @click="onlyRemaining = !onlyRemaining; filterEvents();">
                   <input type="checkbox" v-model="onlyRemaining">
                   {{ $t('calendar.onlyRemaining') }}
                 </a>
               </div>
-              <div v-for="eventType in eventTypes" class="col-sm form-control-static" style="padding: 5px;">
+              <div v-for="eventType in eventTypes" :key="eventType.id" class="form-control-static">
                 <a class="btn btn-new" role="button" @click="eventType.state = !eventType.state; filterEvents();">
                   <input type="checkbox" v-model="eventType.state">
                   {{ $t('general.' + eventType.translatedName) }}
@@ -37,7 +37,7 @@
           <table class="table table-responsive table-striped">
             <tbody>
 
-            <tr v-for="event in filteredEvents">
+            <tr v-for="event in filteredEvents" :key="event.id">
               <td></td>
               <td>
                 <strong class="color-two">{{ event.name }}</strong>
@@ -75,12 +75,6 @@ export default {
         new EventType('qualify', 'qualify', true),
         new EventType('race', 'race', true),
         new EventType('sprint_qualify', 'sprintQualify', true)
-      ],
-      buttons: [
-        'qualify',
-        'race',
-        'sprint_qualify',
-        'onlyRemaining'
       ],
       errorMessage: '',
       onlyRemaining: true,

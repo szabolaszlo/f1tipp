@@ -10,34 +10,24 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="`result_attribute`")
- * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
- */
+#[ORM\Entity]
+#[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
+#[ORM\Table(name: '`result_attribute`')]
 class ResultAttribute
 {
-    /**
-     * @ORM\Column(name="id", type="integer", length=11, nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer', length: 11, nullable: false)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected $id;
-    /**
-     * @ORM\ManyToOne(targetEntity="Result", inversedBy="attributes")
-     * @ORM\JoinColumn(name="result_id", referencedColumnName="id", onDelete="CASCADE")
-     * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
-     */
+    #[ORM\ManyToOne(targetEntity: Result::class, inversedBy: 'attributes')]
+    #[ORM\JoinColumn(name: 'result_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
     protected $result;
 
-    /**
-     * @ORM\Column(name="`key`", type="string", length=16, nullable=false)
-     */
+    #[ORM\Column(name: '`key`', type: 'string', length: 16, nullable: false)]
     protected $key;
 
-    /**
-     * @ORM\Column(name="`value`", type="string", length=4, nullable=false)
-     */
+    #[ORM\Column(name: '`value`', type: 'string', length: 4, nullable: false)]
     protected $value;
 
     /**

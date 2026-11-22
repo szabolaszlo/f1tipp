@@ -12,21 +12,15 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\Event")
- * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
- */
+#[ORM\Entity(repositoryClass: \App\Repository\Event::class)]
+#[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
 class Race extends Event
 {
-    /**
-     * @ORM\OneToMany(targetEntity="Trophy", mappedBy="event", cascade={"persist","remove"})
-     */
+    #[ORM\OneToMany(targetEntity: Trophy::class, mappedBy: 'event', cascade: ['persist', 'remove'])]
     protected $trophies;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\AlternativeChampionship", mappedBy="race", orphanRemoval=true)
-     * @ORM\OrderBy({"points" = "DESC"})
-     */
+    #[ORM\OneToMany(targetEntity: AlternativeChampionship::class, mappedBy: 'race', orphanRemoval: true)]
+    #[ORM\OrderBy(['points' => 'DESC'])]
     private $alternativeChampionships;
 
     /**

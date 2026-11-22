@@ -10,54 +10,46 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\Feed")
- * @ORM\Table(name="`feed`")
- * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
- */
+#[ORM\Entity(repositoryClass: \App\Repository\Feed::class)]
+#[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
+#[ORM\Table(name: '`feed`')]
 class Feed
 {
     /**
      * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
      */
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
     private $id;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="title", type="text")
      */
+    #[ORM\Column(name: 'title', type: 'text')]
     private $title;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="description", type="text")
      */
+    #[ORM\Column(name: 'description', type: 'text')]
     private $description;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="link", type="text")
      */
+    #[ORM\Column(name: 'link', type: 'text')]
     private $link;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="publishDate", type="datetime")
      */
+    #[ORM\Column(name: 'publishDate', type: 'datetime')]
     private $publishDate;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="image", type="text")
      */
+    #[ORM\Column(name: 'image', type: 'text')]
     private $image;
 
     /**

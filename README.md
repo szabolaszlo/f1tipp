@@ -7,6 +7,7 @@ The original project based on own framework, I decide to change it to symfony.
 So there is some legacy code from the original code, like src\LegacyService, but If I have time I will refactoring it one by one.
 
 Used technologies:
+- PHP 8.4 (Docker: `.docker/php84/`)
 - Symfony 4.4 https://symfony.com/doc/current/setup.html
 - WebPack https://symfony.com/doc/current/frontend.html
 
@@ -34,9 +35,68 @@ php bin/console doctrine:database:create
 php bin/console doctrine:database:create
 ```
 
+# E2E tesztek (CodeceptJS + Playwright)
+
+A tesztek böngészőben kattintják végig az appot, egy külön `e2e` Symfony környezeten
+(`http://127.0.0.1:8001`, nginx 81-es server blokk, `.env.e2e`). Ez a környezet külön
+`f1tipp_e2e` adatbázist és saját cache-t használ, a dev adatokat nem érinti. Minden teszt nulláról
+építi fel a saját adatait (`app:e2e:scenario`): teszt-userek (`e2e_user`, `e2e_user2`, `e2e_user3`,
+`e2e_admin` – ROLE_ADMIN, `e2e_superadmin` – ROLE_SUPER_ADMIN; jelszó: `e2e-pass`), a mostani időponthoz
+relatív események, tippek, eredmények.
+
+### Előfeltétel
+```
+docker compose up -d          # a web konténer a 8001-es portot is kiajánlja
+npm run dev                   # buildelt assetek (vagy fusson a watch)
+cd tests/e2e && npm install && npx playwright install chromium
+```
+
+### Futtatás
+```
+npm run e2e                                   # teljes csomag, headless
+npm --prefix tests/e2e run test:headed        # látható böngészővel
+npm --prefix tests/e2e test -- --grep @weekend   # csak egy csoport, lásd lent
+E2E_BASE_URL=http://127.0.0.1:8001 npm run e2e   # más cím esetén
+(cd tests/e2e && npx codeceptjs dry-run)      # a forgatókönyvek listája futtatás nélkül
+```
+
+A tesztek magyar nyelvű Gherkin forgatókönyvek (`# language: hu`):
+- `tests/e2e/features/*.feature` – a forgatókönyvek; a tippek, eredmények és a várt pontok a táblázataikban
+  (a seedelt tippeket a feature leírása sorolja fel)
+- `tests/e2e/step_definitions/` – a lépések megvalósítása területenként (`common`, `betting`, `actual`,
+  `standings`, `admin`, `pages`); a közös állapot a `context.js`, minden forgatókönyv előtt nullázódik
+- `tests/e2e/pages/` – oldal-objektumok (kattintás, kiolvasás), a lépések ezekre épülnek
+- `tests/e2e/data/users.js` – a seedelt felhasználók; a feature fájlok a nevükkel hivatkoznak rájuk ("E2E User1")
+
+A Scenario Outline (`Forgatókönyv vázlat`) magyar kulcsszóval nem működik a CodeceptJS 3.7-ben: több adatsor
+helyett külön forgatókönyveket vagy táblázatos lépést használunk.
+
+Kézi seedelés (csak `--env=e2e`-vel fut, más környezetben hibával kilép):
+```
+docker compose exec -u www-data -w /var/www/f1tipp_sf4 php php bin/console app:e2e:scenario open-weekend --env=e2e
+```
+Szenáriók (2 eseményes hétvége: időmérő + futam): `open-weekend`, `deadline-passed`, `about-to-close`,
+`bets-placed`, `results-entered`, `others-bet`, `others-bet-closed`, `race-closer`, `recent-weekend`,
+`finished-weekend`, `results-without-user3`, `season` (3 lezajlott hétvége eredménnyel + egy következő).
+Sprintes, 3 eseményes hétvége (sprint + időmérő + futam): `sprint-open-weekend`, `sprint-results-entered`,
+`sprint-season` (mint a `season`, de az 1. hétvége sprintes).
+
+Csoportok (`--grep`):
+- `@login` belépés, kilépés, session; `@betting` tippleadás; `@deadline` határidő; `@display` mentett tipp
+- `@visibility` mások tippjei csak saját tipp (vagy a határidő) után láthatók
+- `@order` hétvégi sorrend (a legközelebbi esemény elöl, összesítő, váltás a következő hétvégére)
+- `@weekend` (2 esemény: időmérő + futam) és `@sprint` (3 esemény: sprint + időmérő + futam) – ugyanaz a
+  forgatókönyv-készlet mindkét hétvégetípusra: tippleadás 3 userrel a felületen, eredmények eseményenként,
+  pontok és jelölések, hétvégi összesítő, VB tabella, rekordok, kupák, majd eredmény-javítás (időmérő, futam
+  safety carral, sprintesnél a sprint is) és eredmény törlése, mindegyik után újraszámolt pontokkal
+- `@season` (csak 2 eseményes hétvégék) és `@season-sprint` (az 1. hétvége sprintes): késői javítás több
+  hétvégével később (tabella, kupák, holtverseny), és az összes pont újraszámolása az adminból
+- `@admin` minden admin menüpont hatása a front oldalon; `@security` jogosultságok, tipp-felülírás, XSS
+- `@live` élő modulfrissítés két böngészővel; `@pages` oldalak, statisztika, hírek, online jelzés; `@smoke`, `@helper`
+
 # Project Production Details
 
 ## Cron
 - `/cron/search_cover_photo` This cron is try to check new cover image from facebook/boxutca. Recommend refresh hourly.
-- `/cron/collect_feeds` This cron is try to refresh news with motorsport.com feed. Recommend refersh every 15 minutes.
+- `/cron/collect_feeds` This cron is try to refresh news with the f1vilag.hu feed (https://f1vilag.hu/feed/). Recommend refersh every 15 minutes.
 - `/cron/championship_result_cache_warmer` This cron is try to refresh results of championship. Recommend refersh every 15 minutes.

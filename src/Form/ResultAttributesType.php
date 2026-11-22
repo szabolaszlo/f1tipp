@@ -52,7 +52,7 @@ class ResultAttributesType extends AbstractType
      * @param FormBuilderInterface $builder
      * @param array $options
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('key', HiddenType::class);
         $builder->add('value', ChoiceType::class, [
@@ -91,7 +91,7 @@ class ResultAttributesType extends AbstractType
 
         //TODO Make some provider or something instead of this wtf
         if ($ruleAttribute->getType() == 'driver') {
-            return array_merge($choices, $this->em->getRepository('App:Driver')->getDriverChoices());
+            return array_merge($choices, $this->em->getRepository(\App\Entity\Driver::class)->getDriverChoices());
         }
 
         return [
@@ -103,7 +103,7 @@ class ResultAttributesType extends AbstractType
     /**
      * @param OptionsResolver $resolver
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => ResultAttribute::class

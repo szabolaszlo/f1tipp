@@ -2,6 +2,7 @@
 
 namespace App\Calculator\Type;
 
+use App\Cache\ResultCache;
 use App\Entity\AlternativeChampionship;
 use App\Entity\User;
 
@@ -21,14 +22,14 @@ class AlternativePointSummaryCalculator extends ACalculator
 
     public function calculate()
     {
-        $users = $this->em->getRepository('App:User')->getAlternativeChampionshipUsers();
+        $users = $this->em->getRepository(\App\Entity\User::class)->getAlternativeChampionshipUsers();
         $sortMap = array();
 
         /** @var User $user */
         foreach ($users as $key => $user) {
             $userPoints = 0;
             //TODO Change this foreach, mysql SUM
-            $acs = $this->em->getRepository('App:AlternativeChampionship')->getBetsByUser($user);
+            $acs = $this->em->getRepository(\App\Entity\AlternativeChampionship::class)->getBetsByUser($user);
             /** @var AlternativeChampionship $ac */
             foreach ($acs as $ac) {
                 $userPoints += $ac->getPoints();
@@ -50,5 +51,9 @@ class AlternativePointSummaryCalculator extends ACalculator
         }
 
         $this->em->flush();
+
+        // az oldalsáv VB-sorrendje (UserChampionshipOrderResolver) ezekből a pontokból és a kupákból áll:
+        // minden számolás után frissülnie kell, a teljes újraszámolás (admin karbantartás) után is
+        ResultCache::of($this->em)->delete('userChampionshipTrophyAwareOrder');
     }
 }

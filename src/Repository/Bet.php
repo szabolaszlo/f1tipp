@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Cache\ResultCache;
 use App\Entity\Event;
 use App\Entity\User;
 use Doctrine\ORM\EntityRepository;
@@ -23,7 +24,8 @@ class Bet extends EntityRepository
     {
         return $this->createQueryBuilder('betsByEvent')
             ->setCacheable(true)
-            ->where('betsByEvent.event_id = ' . $event->getId())
+            ->where('betsByEvent.event_id = :event')
+            ->setParameter('event', $event->getId())
             ->getQuery()
             ->getResult();
     }
@@ -45,8 +47,10 @@ class Bet extends EntityRepository
     {
         return $this->createQueryBuilder('betByUserAndEvent')
             ->setCacheable(true)
-            ->where('betByUserAndEvent.user_id = ' . $user->getId())
-            ->andWhere('betByUserAndEvent.event_id = ' . $event->getId())
+            ->where('betByUserAndEvent.user_id = :user')
+            ->andWhere('betByUserAndEvent.event_id = :event')
+            ->setParameter('user', $user->getId())
+            ->setParameter('event', $event->getId())
             ->getQuery()
             ->getResult();
     }
@@ -85,7 +89,7 @@ class Bet extends EntityRepository
      */
     public function getTopRaceBets()
     {
-        $resultCache = $this->_em->getConfiguration()->getResultCacheImpl();
+        $resultCache = ResultCache::of($this->getEntityManager());
         $cacheKey = 'topRaceBets';
 
         if ($resultCache->contains($cacheKey)) {
@@ -94,8 +98,8 @@ class Bet extends EntityRepository
 
         $result = $this->createQueryBuilder('topRaceBet')
             ->setCacheable(true)
-            ->innerJoin('App:Race', 'race', Join::WITH, 'topRaceBet.event_id = race.id')
-            ->innerJoin('App:User', 'user', Join::WITH, 'topRaceBet.user_id = user.id AND user.isAlterChamps = 1')
+            ->innerJoin(\App\Entity\Race::class, 'race', Join::WITH, 'topRaceBet.event_id = race.id')
+            ->innerJoin(\App\Entity\User::class, 'user', Join::WITH, 'topRaceBet.user_id = user.id AND user.isAlterChamps = 1')
             ->where('topRaceBet.pointSummary > 0')
             ->orderBy('topRaceBet.pointSummary', 'DESC')
             ->getQuery()
@@ -129,7 +133,7 @@ class Bet extends EntityRepository
      */
     public function getTopQualifyBets()
     {
-        $resultCache = $this->_em->getConfiguration()->getResultCacheImpl();
+        $resultCache = ResultCache::of($this->getEntityManager());
         $cacheKey = 'topQualifyBets';
 
         if ($resultCache->contains($cacheKey)) {
@@ -138,8 +142,8 @@ class Bet extends EntityRepository
 
         $result = $this->createQueryBuilder('topQualifyBet')
             ->setCacheable(true)
-            ->innerJoin('App:Qualify', 'qualify', Join::WITH, 'topQualifyBet.event_id = qualify.id')
-            ->innerJoin('App:User', 'user', Join::WITH, 'topQualifyBet.user_id = user.id AND user.isAlterChamps = 1')
+            ->innerJoin(\App\Entity\Qualify::class, 'qualify', Join::WITH, 'topQualifyBet.event_id = qualify.id')
+            ->innerJoin(\App\Entity\User::class, 'user', Join::WITH, 'topQualifyBet.user_id = user.id AND user.isAlterChamps = 1')
             ->where('topQualifyBet.pointSummary > 0')
             ->orderBy('topQualifyBet.pointSummary', 'DESC')
             ->getQuery()
@@ -175,7 +179,7 @@ class Bet extends EntityRepository
     public function clearBetPointsByEvent(Event $event)
     {
         return $this->createQueryBuilder('bet')
-            ->update('App:Bet', 'b')
+            ->update(\App\Entity\Bet::class, 'b')
             ->set('b.pointSummary', 'NULL')
             ->where('b.event_id = :e')
             ->setParameter('e', $event->getId())

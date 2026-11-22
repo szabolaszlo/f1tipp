@@ -1,21 +1,23 @@
-{% extends 'controller/module/base_module.html.twig' %}
-{% block body_content %}
-    <div id="results">
-        {% if weekends %}
-            {% for key, weekend in weekends %}
-                <div class="panel panel-group panel-collapse">
-                    <div class="panel-heading text-center">
-                        <strong class="color-one">{{ weekendNames[key] }} - {{ 'general_weekend'|trans }}</strong>
-                    </div>
-                    <div class="panel panel-default">
-                        {% for key, table in weekend %}
-                            {{ table|raw }}
-                        {% endfor %}
-                    </div>
-                </div>
-            {% endfor %}
-        {% else %}
-            {% include('controller/module/no_results.html.twig') %}
-        {% endif %}
-    </div>
-{% endblock %}
+{# Eredmények oldal: hétvégénként az összesítő, majd az eseménytáblák (ugyanaz a sorrend, mint az Aktuális oldalon) #}
+<div id="results" class="f1-results">
+    {% if weekends %}
+        {% for key, weekend in weekends %}
+            <section class="f1-weekend" data-round="{{ key }}">
+                <h2 class="f1-weekend__title">
+                    <span class="f1-weekend__round">{{ key }}. nagydíj</span>
+                    {{ weekendNames[key] }}
+                </h2>
+                {% if weekend.summary is defined %}
+                    {{ weekend.summary|raw }}
+                {% endif %}
+                {% for tableKey, table in weekend %}
+                    {% if tableKey is not same as('summary') %}
+                        {{ table|raw }}
+                    {% endif %}
+                {% endfor %}
+            </section>
+        {% endfor %}
+    {% else %}
+        {% include('controller/module/no_results.html.twig') %}
+    {% endif %}
+</div>

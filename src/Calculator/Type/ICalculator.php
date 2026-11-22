@@ -2,7 +2,6 @@
 
 namespace App\Calculator\Type;
 
-use App\Entity\Event;
 
 /**
  * Interface ICalculator

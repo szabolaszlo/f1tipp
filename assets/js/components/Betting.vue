@@ -1,91 +1,158 @@
 <template>
-  <div>
-    <Transition name="fade" mode="out-in" @after-enter="afterFormLoaded">
-      <div v-if="errorMessage">
-        <div class="panel panel-default">
-          <div class="panel-heading text-center">
-            <strong>{{ $t("betting.title").toUpperCase() }}</strong>
-          </div>
-          <div class="text-center" style="padding: 30px;">
-            <strong class="text-center color-two">{{ errorMessage }}</strong>
-          </div>
-        </div>
+  <div ref="board" class="f1-board f1-betting">
+    <div class="f1-board__head">
+      <span class="f1-board__tag">TIPP</span>
+      <span class="f1-board__title">
+        {{ $t('betting.title') }}<template v-if="activeEvent"> · {{ activeEvent.name }}</template>
+      </span>
+    </div>
+
+    <div v-if="errorMessage" class="f1-board__body text-center">
+      <strong class="color-two">{{ errorMessage }}</strong>
+    </div>
+    <div v-else-if="loading" class="f1-board__body text-center">
+      <pulse-loader color="#e10600"></pulse-loader>
+    </div>
+    <template v-else>
+      <div class="f1-betting__tabs" role="tablist">
+        <button v-for="event in weekendEvents" :key="event.id" type="button" role="tab"
+                class="f1-betting__tab" :class="{'is-active': activeEvent && event.id === activeEvent.id}"
+                :aria-selected="activeEvent && event.id === activeEvent.id ? 'true' : 'false'"
+                :disabled="processing"
+                @click="selectEvent(event)">
+          <span :class="'glyphicon glyphicon-' + getGlyphiconName(event.type)" aria-hidden="true"></span>
+          {{ $t('general.' + event.type) }}
+        </button>
       </div>
-      <div v-else-if="!loading">
-        <div class="form form-inline">
-          <div class="row text-center">
-            <div v-for="event in weekendEvents" class="col-sm form-control-static" style="padding: 15px;">
-              <a class="btn btn-new" role="button"
-                 @click="getForm(event.id); eventName = event.name; eventType = event.type;">
-                <span :class="'glyphicon glyphicon-' + getGlyphiconName(event.type)" aria-hidden="false"></span>
-                {{ $t('general.' + event.type).toUpperCase() }}
-              </a>
+
+      <!-- tabváltáskor ugyanaz a becsukódó/kinyíló animáció, mint a menüs oldalváltásnál (MainComponent "fade") -->
+      <Transition name="fade" mode="out-in">
+      <div v-if="formErrorMessage" key="error" class="f1-board__body text-center">
+        <strong class="color-two">{{ formErrorMessage }}</strong>
+      </div>
+      <div v-else-if="!form" key="loading" class="f1-board__body text-center">
+        <pulse-loader color="#e10600"></pulse-loader>
+      </div>
+      <form v-else :key="'form-' + formEventId" class="f1-betting__form" novalidate @submit.prevent="submit">
+        <div v-if="form.success" class="f1-betting__alert f1-betting__alert--ok" role="status">
+          <div class="f1-betting__success">
+            <span>{{ form.success }}</span>
+            <button v-if="redirecting" type="button" class="f1-betting__stay" @click="cancelRedirect">
+              {{ $t('betting.stay') }}
+            </button>
+          </div>
+          <template v-if="redirecting">
+            <div class="f1-betting__redirect">{{ $t('betting.redirecting') }}</div>
+            <div class="f1-betting__progress" aria-hidden="true">
+              <span :style="{animationDuration: redirectDelay + 'ms'}"></span>
             </div>
-            <div>
-              <Transition name="fade" mode="out-in" @after-enter="afterFormLoaded">
-                <div v-if="formErrorMessage">
-                  <div class="text-center" style="padding: 30px;">
-                    <strong class="text-center color-two">{{ formErrorMessage }}</strong>
-                  </div>
-                </div>
-                <div v-else-if="!formLoading">
-                  <div class="panel panel-default">
-                    <div class="panel-heading text-center">
-                      <strong>{{ $t("betting.title").toUpperCase() }} - {{ eventName }} -
-                        {{ $t('general.' + eventType).toUpperCase() }}</strong>
-                    </div>
-                    <div v-if="processingForm" class="text-center">
-                      <pulse-loader color="#B8211DE5"></pulse-loader>
-                    </div>
-                    <div id="betting-form-closure" v-html="form"></div>
-                  </div>
-                </div>
-                <div v-else class="text-center">
-                  <pulse-loader color="#B8211DE5"></pulse-loader>
-                </div>
-              </Transition>
-            </div>
-          </div>
+          </template>
         </div>
-      </div>
-      <div v-else class="text-center">
-        <pulse-loader :color="colorTheme.f1TippColor5"></pulse-loader>
-      </div>
-    </Transition>
+        <div v-for="error in form.errors" :key="error" class="f1-betting__alert f1-betting__alert--error" role="alert">
+          {{ error }}
+        </div>
+        <div v-if="isLocked" class="f1-betting__note">{{ $t('betting.locked') }}</div>
+
+        <div v-for="field in form.fields" :key="field.name" class="f1-betting__row"
+             :class="{'f1-betting__row--question': field.type !== 'driver'}">
+          <template v-if="field.type === 'driver'">
+            <div class="f1-pos" :class="positionClass(field)" :title="field.label">{{ positionText(field) }}</div>
+            <DriverSelect v-model="values[field.name]"
+                          :drivers="form.drivers"
+                          :taken-by="takenFor(field)"
+                          :disabled="field.disabled || processing"
+                          :placeholder="$t('betting.placeholder')"
+                          :search-placeholder="$t('betting.search')"
+                          :no-result-text="$t('betting.noResult')"
+                          :clear-label="$t('betting.clear')"
+                          :aria-label="field.label"/>
+          </template>
+          <template v-else>
+            <div class="f1-betting__question">{{ field.label }}</div>
+            <div class="f1-betting__choices" role="radiogroup" :aria-label="field.label">
+              <button v-for="choice in form.questionChoices" :key="choice.value" type="button" role="radio"
+                      class="f1-betting__choice" :class="{'is-active': values[field.name] === choice.value}"
+                      :aria-checked="values[field.name] === choice.value ? 'true' : 'false'"
+                      :disabled="field.disabled || processing"
+                      @click="values[field.name] = choice.value">
+                {{ choice.label }}
+              </button>
+            </div>
+          </template>
+        </div>
+
+        <div v-if="form.submitLabel" class="f1-betting__footer">
+          <span v-if="missingCount" class="f1-betting__hint">{{ $t('betting.missing', {count: missingCount}) }}</span>
+          <button type="submit" class="btn f1-betting__submit" :disabled="!canSubmit">
+            <pulse-loader v-if="processing" color="#fff" size="6px"></pulse-loader>
+            <template v-else>{{ form.submitLabel }}</template>
+          </button>
+        </div>
+      </form>
+      </Transition>
+    </template>
   </div>
 </template>
 
 <script>
 import axios from "axios"
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
-import "select2/dist/js/select2.full.min"
-import JQuery from 'jquery'
-import DriverImages from "../classes/driver-images/driver-images"
-import colorTheme from "../classes/colorTheme/ColorTheme";
-
-
-window.$ = JQuery
+import DriverSelect from "./DriverSelect.vue"
 
 export default {
   name: "Betting",
-  components: {PulseLoader},
+  components: {PulseLoader, DriverSelect},
   data() {
     return {
-      eventName: null,
-      eventType: null,
       loading: true,
-      formLoading: true,
-      processingForm: false,
+      // a formlekérések sorszáma: egy elavult (közben felülírt) válasz ne írja vissza a formot
+      formRequestId: 0,
+      processing: false,
       errorMessage: null,
       formErrorMessage: null,
-      weekendEvents: null,
+      weekendEvents: [],
+      activeEvent: null,
+      // a szerver által leírt form (BettingFormPresenter)
       form: null,
-      colorTheme: colorTheme
+      // melyik eseményhez tartozik a megjelenített form (tabváltás közben még az előzőé)
+      formEventId: null,
+      // mezőnév -> kiválasztott érték
+      values: {},
+      // eseményazonosító -> {form, values}: visszaváltáskor azonnal megjelenik, a be nem küldött választásokkal
+      formCache: {},
+      // sikeres tipp után ennyi idő múlva irányít át az Aktuális oldalra
+      redirectDelay: 3000,
+      redirectTimer: null,
+      redirecting: false
+    }
+  },
+  computed: {
+    editableFields() {
+      return this.form ? this.form.fields.filter(field => !field.disabled) : [];
+    },
+    missingCount() {
+      return this.editableFields.filter(field => !this.values[field.name]).length;
+    },
+    isLocked() {
+      return !!this.form && !this.form.submitLabel && this.form.fields.length > 0;
+    },
+    canSubmit() {
+      return !this.processing && this.editableFields.length > 0 && this.missingCount === 0;
     }
   },
   activated() {
     document.title = 'F1Tipp - Tippelek'
     gtag('event', 'page_view')
+  },
+  deactivated() {
+    // keep-alive: ha közben elnavigál, ne ugorjon át később, és visszatéréskor ne a régi üzenet fogadja
+    this.cancelRedirect();
+    if (this.form) {
+      this.form.success = null;
+    }
+  },
+  beforeUnmount() {
+    this.cancelRedirect();
   },
   mounted() {
     axios
@@ -93,127 +160,170 @@ export default {
         .then(response => {
           this.weekendEvents = response.data;
           this.loading = false;
-          this.getForm(this.weekendEvents[0].id)
-          this.eventName = this.weekendEvents[0].name;
-          this.eventType = this.weekendEvents[0].type;
+          if (this.weekendEvents.length) {
+            this.selectEvent(this.weekendEvents[0]);
+            // a többi tabot előre betöltjük, hogy váltáskor ne kelljen töltésjelző
+            this.weekendEvents.slice(1).forEach(event => this.preloadForm(event));
+          }
         })
         .catch(error => {
           this.loading = false;
-          if (error.response.status === 401) {
+          if (error.response && error.response.status === 401) {
             this.errorMessage = this.$t("betting.needToSignIn")
           } else {
             this.errorMessage = error.message;
           }
         })
-
   },
   methods: {
-    afterFormLoaded() {
+    selectEvent(event) {
+      this.cancelRedirect();
+      this.rememberForm();
+      if (this.form) {
+        this.form.success = null;
+      }
+      this.activeEvent = event;
+      this.formErrorMessage = null;
 
-      var vueInstance = this
-
-      $('#betting_form_submit').prop('disabled', true);
-
-      window.afterFormLoaded = function () {
-        $(document).on('select2:open', () => {
-          document.querySelector('.select2-search__field').focus();
-        });
-
-        $('#betting_form_submit').click(function () {
-          $('#betting_form_submit').prop('disabled', true);
-          window.scrollTo(0, 0);
-          const $form = $('#betting-form');
-          vueInstance.processingForm = true;
-          $.ajax({
-            url: $form.prop('action'),
-            method: $form.prop('method'),
-            data: $form.serialize(),
-          }).done(function (html) {
-            $("#betting-form-closure").html(html);
-            vueInstance.processingForm = false;
-            afterFormLoaded();
-          })
-        });
-
-        $('.select2').select2({
-          placeholder: "Tippelj, Mákolj! Tippelj, Mákolj!",
-          containerCssClass: "custom-select2",
-          theme: "bootstrap",
-          dropdownAutoWidth: true,
-          templateResult: window.formatSelectDropDown
-        });
-
-        $('.select2').on('select2:select', function (e) {
-          window.selectedValues = []
-
-          $('select.select2').each(function () {
-            $(this).parent().css('background-color', 'transparent');
-            window.selectedValues.push($(this).val());
-          });
-
-          let error = false;
-          let empty = false;
-
-          $('select.select2').each(function () {
-            let counter = 0
-
-            if ($(this).val() === '') {
-              empty = true
-            }
-
-            for (let value of window.selectedValues) {
-              if (value === $(this).val() && value !== '') {
-                counter++
-              }
-            }
-
-            if (counter > 1) {
-              error = true;
-              $(this).parent().css('background-color', 'rgba(255, 25, 25, .5)');
-            }
-          });
-
-          if (error || empty) {
-            $('#betting_form_submit').prop('disabled', true);
-          } else {
-            $('#betting_form_submit').prop('disabled', false);
-          }
-        });
+      const cached = this.formCache[event.id];
+      if (cached) {
+        this.form = cached.form;
+        this.formEventId = event.id;
+        this.values = {...cached.values};
+      } else {
+        this.form = null;
       }
 
-      window.selectedValues = []
-
-      window.formatSelectDropDown = function (item) {
-        if (!item.id || window.selectedValues.includes(item.id)) {
-          return null;
-        }
-        if (DriverImages[item.id.toLowerCase()]) {
-          var $state = $(
-              '<span><img height="70px" src="' + DriverImages[item.id.toLowerCase()] + '" class="img-flag" /> ' + item.text + '</span>'
-          );
-        } else {
-          var $state = $(
-              '<span>' + item.text + '</span>'
-          );
-        }
-        return $state;
-      };
-
-      afterFormLoaded();
-    },
-    getForm(eventId) {
-      this.form = null;
-      this.formLoading = true;
+      // a gyorsítótárazott formot is frissítjük (zárolás, CSRF token), a felhasználó választásait megtartva
+      const requestId = ++this.formRequestId;
       axios
-          .get('/module/betting/form/' + eventId)
+          .get('/module/betting/form/' + event.id)
           .then(response => {
-            this.form = response.data;
-            this.formLoading = false;
+            if (requestId === this.formRequestId) {
+              const current = this.formCache[event.id];
+              this.applyForm(response.data, this.form && current ? this.changedValues(current.form) : {});
+            }
           })
           .catch(error => {
-            this.formLoading = false;
-            this.formErrorMessage = error.message
+            if (requestId === this.formRequestId && !this.form) {
+              this.formErrorMessage = error.message;
+            }
           })
+    },
+    preloadForm(event) {
+      axios
+          .get('/module/betting/form/' + event.id)
+          .then(response => {
+            if (!this.formCache[event.id] && this.formEventId !== event.id) {
+              const values = {};
+              response.data.fields.forEach(field => {
+                values[field.name] = field.value || '';
+              });
+              this.formCache[event.id] = {form: response.data, values};
+            }
+          })
+          .catch(() => {
+            // nem baj: tabváltáskor újra lekérjük
+          })
+    },
+    applyForm(form, keep = {}) {
+      this.form = form;
+      this.formEventId = this.activeEvent ? this.activeEvent.id : null;
+      const values = {};
+      form.fields.forEach(field => {
+        values[field.name] = !field.disabled && field.name in keep ? keep[field.name] : (field.value || '');
+      });
+      this.values = values;
+    },
+    rememberForm() {
+      if (this.form && this.formEventId !== null) {
+        this.formCache[this.formEventId] = {form: this.form, values: {...this.values}};
+      }
+    },
+    // a felhasználó által a szerver állapotához képest módosított értékek
+    changedValues(form) {
+      const changed = {};
+      form.fields.forEach(field => {
+        if (this.values[field.name] !== (field.value || '')) {
+          changed[field.name] = this.values[field.name];
+        }
+      });
+      return changed;
+    },
+    submit() {
+      if (!this.canSubmit) {
+        return;
+      }
+      const payload = new URLSearchParams();
+      this.form.hidden.forEach(field => payload.append(field.name, field.value));
+      this.editableFields.forEach(field => payload.append(field.name, this.values[field.name]));
+
+      this.processing = true;
+      this.formRequestId++;
+      axios
+          .post(this.form.action, payload)
+          .then(response => {
+            this.applyForm(response.data);
+            if (response.data.success) {
+              this.startRedirect();
+            }
+          })
+          .catch(error => {
+            const status = error.response ? error.response.status : null;
+            // 422: hibás tipp, 409: már mentett tipp (pl. másik fülön) – mindkettő a zárolt/hibás formot adja vissza
+            if ((status === 422 || status === 409) && error.response.data.fields) {
+              this.applyForm(error.response.data);
+            } else if (status === 401) {
+              this.formErrorMessage = this.$t("betting.needToSignIn");
+            } else {
+              this.formErrorMessage = error.message;
+            }
+          })
+          .finally(() => {
+            this.processing = false;
+            this.$refs.board.scrollIntoView({behavior: 'smooth', block: 'start'});
+          })
+    },
+    startRedirect() {
+      this.cancelRedirect();
+      this.redirecting = true;
+      this.redirectTimer = setTimeout(() => {
+        this.redirectTimer = null;
+        this.redirecting = false;
+        this.$router.push('/actual');
+      }, this.redirectDelay);
+    },
+    cancelRedirect() {
+      clearTimeout(this.redirectTimer);
+      this.redirectTimer = null;
+      this.redirecting = false;
+    },
+    // a többi helyezésre már kiválasztott pilóták: kód -> "P3"
+    takenFor(current) {
+      const taken = {};
+      this.form.fields.forEach(field => {
+        const value = this.values[field.name];
+        if (field !== current && field.type === 'driver' && value) {
+          taken[value] = this.positionLabel(field);
+        }
+      });
+      return taken;
+    },
+    positionNumber(field) {
+      const match = /^p(\d+)$/.exec(field.key);
+      return match ? parseInt(match[1], 10) : null;
+    },
+    positionText(field) {
+      const number = this.positionNumber(field);
+      return number !== null ? number : field.label;
+    },
+    positionLabel(field) {
+      const number = this.positionNumber(field);
+      return number !== null ? 'P' + number : field.label;
+    },
+    positionClass(field) {
+      const number = this.positionNumber(field);
+      return number !== null && number <= 3 ? 'f1-pos--p' + number : '';
     },
     getGlyphiconName(type) {
       if (type === 'qualify') {
@@ -229,8 +339,3 @@ export default {
   }
 }
 </script>
-<style>
-@import 'select2/dist/css/select2.min.css';
-@import 'select2-bootstrap-theme/dist/select2-bootstrap.min.css';
-@import "../../../assets/css/bet.css";
-</style>

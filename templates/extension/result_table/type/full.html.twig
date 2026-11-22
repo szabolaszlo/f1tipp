@@ -1,72 +1,68 @@
-{% set no_betting_users = (usersCount/2 < countableBets|length) and not (usersCount == countableBets|length) %}
-{% set bet_counter %}
-    {% if (usersCount/2 < countableBets|length) %}
-        <div class="pull-right" style="margin-right: 10px">
-            {{ ('result_bets')|trans ~ countableBets|length ~ '/' ~ usersCount }}
+{# Eseménytábla eredménnyel ("TV-grafika"). Változók: result, bets, usersCount, noBettingUsers, countableBets #}
+{% set event = result is defined and result ? result.getEvent() : event %}
+{% set legend = bet_legend(event.getType()) %}
+{% set gridStyle = '--cols: ' ~ legend.positions %}
+{# A kérdés (SC) oszlop külön osztály: repeat(0, ...) érvénytelen CSS lenne és szétesne a rács #}
+{% set chipsClass = 'f1-chips' ~ (legend.question is null ? '' : ' f1-chips--q') %}
+{# Mint a régi sablonban: a számláló és a nem tippelők listája csak akkor látszik, ha a tippelők több mint fele már tippelt #}
+{% set majorityTipped = usersCount is defined and countableBets is defined and usersCount / 2 < countableBets|length %}
+
+<div class="f1-board f1-board--event">
+    {% include 'extension/result_table/_board_head.html.twig' %}
+    {% block body_content %}
+        {% set ranks = competition_ranks(bets|map(b => b.getPointSummary())) %}
+        <div class="f1-tiprow f1-tiprow--head">
+            <div></div>
+            <div class="f1-name">{{ 'result_name'|trans }}</div>
+            <div class="{{ chipsClass }}" style="{{ gridStyle }}">
+                {% for attribute in result.getAttributes() %}
+                    <div>{{ ('result_' ~ attribute.getKey())|trans }}</div>
+                {% endfor %}
+            </div>
+            <div class="f1-tiprow__pts">{{ 'result_point'|trans }}</div>
         </div>
-    {% endif %}
-{% endset %}
-
-{% import 'macro/icon.html.twig' as iconProvider %}
-
-<div class="panel panel-weekend">
-    <div class="panel-heading text-center">
-        <div class="row">
-            {% block heading_title %}
-                <div class="pull-right panel-heading-icon"
-                     style="padding-right: 10px;">{{ iconProvider.getIcon(result.getEvent().getType()) }}</div>
-                <div class="pull-left panel-heading-icon"
-                     style="padding-left: 10px;">{{ iconProvider.getIcon(result.getEvent().getType()) }}</div>
-                {% set titletext = ('general_' ~ result.getEvent().getType)|trans %}
-                <strong class="color-one">{{ result.getEvent().getName() ~ ' - ' ~ titletext }} - {{ result.getEvent().getDateTime()|date("M. d. H:i") }}</strong>
-            {% endblock %}
-            {% if not no_betting_users %}
-                {{ bet_counter }}
+        <div class="f1-tiprow f1-tiprow--result">
+            <div></div>
+            <div class="f1-name">{{ 'general_result'|trans }}</div>
+            <div class="{{ chipsClass }}" style="{{ gridStyle }}">
+                {% for attribute in result.getAttributes() %}
+                    {% if loop.index0 < legend.positions %}
+                        <div class="f1-chip f1-chip--res" style="border-left-color: {{ team_color(attribute.getValue()) }}">{{ attribute.getValue() }}</div>
+                    {% else %}
+                        <div class="f1-chip f1-chip--res f1-chip--q">{{ attribute.getValue() }}</div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div></div>
+        </div>
+        {% for bet in bets %}
+            <div class="f1-tiprow">
+                <div class="f1-pos{{ ranks[loop.index0] == 1 ? ' f1-pos--leader' : '' }}">{{ ranks[loop.index0] }}</div>
+                <div class="f1-name">{{ bet.getUser().getName() }}</div>
+                <div class="{{ chipsClass }}" style="{{ gridStyle }}">
+                    {% for attribute in bet.getAttributes() %}
+                        {% set mark = attribute.getClass() == 'bet-high' ? ' f1-chip--exact' : (attribute.getClass() == 'bet-low' ? ' f1-chip--near' : ' f1-chip--miss') %}
+                        <div class="f1-chip{{ mark }}{{ loop.index0 >= legend.positions ? ' f1-chip--q' : '' }}">{{ attribute.getValue() }}</div>
+                    {% endfor %}
+                </div>
+                <div class="f1-tiprow__pts">{{ bet.getPointSummary() }}</div>
+            </div>
+        {% endfor %}
+        <div class="f1-legend">
+            <span><span class="f1-chip f1-chip--exact">VER</span>Pontos hely · {{ legend.exact }} pont</span>
+            {% if legend.near > 0 %}
+                <span><span class="f1-chip f1-chip--near">NOR</span>Top {{ legend.positions }}-ben, rossz helyen · {{ legend.near }} pont</span>
+            {% endif %}
+            <span><span class="f1-chip f1-chip--miss">GAS</span>Nem talált · 0 pont</span>
+            {% if legend.question is not null %}
+                <span><span class="f1-chip f1-chip--plain">SC</span>Biztonsági autó kérdés · {{ legend.question }} pont</span>
             {% endif %}
         </div>
-        {% if no_betting_users %}
-            <div class="row">
-                <div class="pull-left" style="margin-left: 10px">
-                    {{ ('result_no_betting_users')|trans ~ noBettingUsers|join(', ') }}
-                </div>
-                {{ bet_counter }}
-            </div>
-        {% endif %}
-    </div>
-    {% block body_content %}
-        <div class="table-responsive">
-            <table class="table result-striped">
-                <thead>
-                <tr>
-                    <th><strong class="bets-table-head">{{ 'result_name'|trans }}</strong></th>
-                    <th class="text-center"><strong class="bets-table-head">{{ 'result_point'|trans }}</strong></th>
-                    {% for resultAttribute in result.getAttributes() %}
-                        <th class="text-center"><strong
-                                    class="bets-table-head">{{ ('result_' ~ resultAttribute.getKey())|trans }}</strong></th>
-                    {% endfor %}
-                </tr>
-                </thead>
-                <tbody>
-                {% for bet in bets %}
-                    <tr>
-                        <td class="text-left"><strong class="color-one">{{ bet.getUser().getName() }}</strong></td>
-                        <td class="text-center"><strong class="color-one">{{ bet.getPointSummary() }}</strong></td>
-                        {% for betAttribute in bet.getAttributes() %}
-                            <td class="text-center {{ betAttribute.getClass() ? betAttribute.getClass() : 'bet-empty' }}">
-                                <span class="{{ betAttribute.getClass() ? betAttribute.getClass() ~ '-font' : 'bet-empty-font' }}">{{ betAttribute.getValue() }}</span>
-                            </td>
-                        {% endfor %}
-                    </tr>
-                {% endfor %}
-                <tr class="result-table-result-row">
-                    <td><strong class="bets-table-head">{{ 'general_result'|trans }}</strong></td>
-                    <td></td>
-                    {% for resultAttribute in result.getAttributes() %}
-                        <td class="text-center"><strong class="bets-table-head">{{ resultAttribute.getValue() }}</strong></td>
-                    {% endfor %}
-                </tr>
-                </tbody>
-            </table>
-        </div>
     {% endblock %}
+    {# A blokkon kívül: eredmény előtt (only_bets / only_users) is látszódjon, ki nem tippelt még #}
+    {% if majorityTipped and usersCount != countableBets|length and noBettingUsers is defined and noBettingUsers is not empty %}
+        <div class="f1-board__note">
+            <strong>{{ 'result_no_betting_users'|trans }}</strong>{{ noBettingUsers|join(', ') }}
+        </div>
+    {% endif %}
 </div>

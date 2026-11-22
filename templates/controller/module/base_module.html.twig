@@ -1,24 +1,19 @@
-<div class="panel panel-default">
-    <div class="panel-heading text-center">
-        {% block heading_title %}
-            <strong>{{ (id ~ '_title')|trans|upper }}</strong>
-        {% endblock %}
+{# Közös modulkeret ("TV-grafika" panel). Blokkok: heading_tag, heading_title, button_details, body_content #}
+<div class="f1-board">
+    <div class="f1-board__head">
+        <span class="f1-board__tag">{% block heading_tag %}{% endblock %}</span>
+        <span class="f1-board__title">
+            {% block heading_title %}{{ (id ~ '_title')|trans }}{% endblock %}
+        </span>
         {% block button_details %}
-            {% if details_link is defined and details_link%}
-                <div class="btn-group pull-right" style="margin-top: -2px">
-                    <a id="{{ id }}"
-                       href="{{ details_link }}"
-                       title="{{ 'module_details'|trans }}"
-                       class="text-right glyphicon glyphicon-new-window"
-                       aria-hidden=true>
-                    </a>
-                </div>
+            {% if details_link is defined and details_link %}
+                <a id="{{ id }}" class="f1-board__meta" href="{{ details_link }}" title="{{ 'module_details'|trans }}">
+                    <span class="glyphicon glyphicon-new-window" aria-hidden="true"></span>
+                </a>
             {% endif %}
         {% endblock %}
     </div>
-    <div>
-        {% block body_content %}{% endblock %}
-    </div>
+    {% block body_content %}{% endblock %}
 </div>
 {% block javascripts %}
 {% endblock %}

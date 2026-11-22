@@ -11,7 +11,7 @@ namespace App\Controller\Page;
 use App\Entity\Setting;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
@@ -21,10 +21,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ActualController extends AbstractController
 {
     /**
-     * @Route(path="/", name="home", methods={"GET"})
      * @param ManagerRegistry $managerRegistry
      * @return Response
      */
+    #[Route(path: '/', name: 'home', methods: ['GET'])]
     public function indexAction(ManagerRegistry $managerRegistry): Response
     {
         $ga4MeasurementId = $managerRegistry

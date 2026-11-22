@@ -10,45 +10,33 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\BetAttribute")
- * @ORM\Table(name="`bet_attribute`")
- * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
- */
+#[ORM\Entity(repositoryClass: \App\Repository\BetAttribute::class)]
+#[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
+#[ORM\Table(name: '`bet_attribute`')]
 class BetAttribute
 {
-    /**
-     * @ORM\Column(name="id", type="integer", length=11, nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer', length: 11, nullable: false)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected $id;
-    /**
-     * @ORM\ManyToOne(targetEntity="Bet", inversedBy="attributes")
-     * @ORM\JoinColumn(name="bet_id", referencedColumnName="id", onDelete="CASCADE")
-     * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
-     */
+    #[ORM\ManyToOne(targetEntity: Bet::class, inversedBy: 'attributes')]
+    #[ORM\JoinColumn(name: 'bet_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
     protected $bet;
 
     /**
      * @var string
-     * @ORM\Column(name="`key`", type="string", length=16, nullable=false)
      */
+    #[ORM\Column(name: '`key`', type: 'string', length: 16, nullable: false)]
     protected $key;
 
-    /**
-     * @ORM\Column(name="`value`", type="string", length=4, nullable=false)
-     */
+    #[ORM\Column(name: '`value`', type: 'string', length: 4, nullable: false)]
     protected $value;
 
-    /**
-     * @ORM\Column(name="`point`", type="integer", length=2, nullable=true)
-     */
+    #[ORM\Column(name: '`point`', type: 'integer', length: 2, nullable: true)]
     protected $point = 0;
 
-    /**
-     * @ORM\Column(name="`class`", type="string", length=20, nullable=true)
-     */
+    #[ORM\Column(name: '`class`', type: 'string', length: 20, nullable: true)]
     protected $class = '';
 
     /**

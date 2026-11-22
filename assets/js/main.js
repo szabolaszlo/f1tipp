@@ -9,6 +9,7 @@ import messages from './translations'
 
 window.onload = function () {
     const i18n = createI18n({
+        legacy: false,
         locale: 'hu',
         fallbackLocale: 'en',
         messages
@@ -28,11 +29,6 @@ window.onload = function () {
     newsComponent.use(Router);
     newsComponent.use(i18n);
     newsComponent.mount('#news')
-
-    const newsComponentOnMobile = createApp(News);
-    newsComponentOnMobile.use(Router);
-    newsComponentOnMobile.use(i18n);
-    newsComponentOnMobile.mount('#news-on-mobile')
 
     const ChampionshipResultComponent = createApp(ChampionshipResult);
     ChampionshipResultComponent.use(Router);

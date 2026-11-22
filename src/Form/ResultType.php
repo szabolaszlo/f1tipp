@@ -55,7 +55,7 @@ class ResultType extends AbstractType
      * @param FormBuilderInterface $builder
      * @param array $options
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('event', HiddenType::class);
         $builder->add('isCalculated', HiddenType::class, [
@@ -77,7 +77,7 @@ class ResultType extends AbstractType
             },
             function ($eventId) {
                 // transform the integer back to Event Object
-                return $this->em->getRepository('App:Event')->find($eventId);
+                return $this->em->getRepository(\App\Entity\Event::class)->find($eventId);
             }
         ));
 
@@ -99,7 +99,7 @@ class ResultType extends AbstractType
     /**
      * @param OptionsResolver $resolver
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Result::class,

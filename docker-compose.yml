@@ -1,10 +1,9 @@
-version: '2'
-
 services:
   web:
     image: nginx:latest
     ports:
       - "80:80"
+      - "8001:81"
     volumes:
       - ./.docker/nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
       - ./:/var/www/f1tipp_sf4
@@ -13,7 +12,7 @@ services:
   php:
     build:
       context: .
-      dockerfile: ./.docker/php74/PHP.Dockerfile
+      dockerfile: ./.docker/php84/PHP.Dockerfile
     volumes:
       - ./:/var/www/f1tipp_sf4
     links:
@@ -26,7 +25,7 @@ services:
       - .docker/data/db:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: f1tipp
+      MYSQL_DATABASE: f1tippelek
       MYSQL_USER: sf4
       MYSQL_PASSWORD: sf4
     ports:

@@ -50,9 +50,11 @@ class BetAttributesType extends AbstractType
      * @param FormBuilderInterface $builder
      * @param array $options
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->add('key', HiddenType::class);
+        // a kulcsot (p1, p2…) a BetBuilder adja a szabályból; a beküldött értéket figyelmen kívül hagyjuk,
+        // különben egy ismeretlen kulcs (pl. "zzz") az eredmény feltöltésekor elszállítaná a pontszámítást
+        $builder->add('key', HiddenType::class, ['disabled' => true]);
         $builder->add('value', ChoiceType::class, [
             'choices' => []
         ]);
@@ -69,7 +71,6 @@ class BetAttributesType extends AbstractType
                         $form->get('key')->getData()),
                     'label' => 'betting_' . $form->get('key')->getData(),
                     'attr' => [
-                        'class' => 'select2 event-' . $betAttribute->getBet()->getEvent()->getId(),
                         'disabled' => $betAttribute->getId() ? true : false
                     ]
                 ]);
@@ -87,7 +88,7 @@ class BetAttributesType extends AbstractType
 
         //TODO Make some provider or something instead of this wtf
         if ($ruleAttribute->getType() == 'driver') {
-            return array_merge($choices, $this->em->getRepository('App:Driver')->getDriverChoices());
+            return array_merge($choices, $this->em->getRepository(\App\Entity\Driver::class)->getDriverChoices());
         }
 
         return [
@@ -96,7 +97,7 @@ class BetAttributesType extends AbstractType
         ];
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => BetAttribute::class

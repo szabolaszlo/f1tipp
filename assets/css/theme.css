@@ -1,0 +1,1617 @@
+/*
+ * F1Tipp „TV-grafika” téma (2026-11-15)
+ * Spec: docs/superpowers/specs/2026-11-15-aktualis-redesign-design.md
+ * Betöltés: Bootstrap 3 + app.css UTÁN (assets/js/app.js).
+ */
+
+:root {
+    --f1-bg: #14141b;
+    --f1-panel: #1b1b24;
+    --f1-row: #1f1f29;
+    --f1-line: #2a2a35;
+    --f1-chip: #24242f;
+    --f1-text: #e6e6ec;
+    --f1-muted: #9a9aa8;
+    --f1-faint: #686876;
+    --f1-red: #e10600;
+    /* panelcímkék kiemelőszíne: Red Bull kék (fekete alapon kevésbé bántó, mint a piros) */
+    --f1-accent: #3671c6;
+    --f1-accent-text: #6b9be6;
+    /* kiválasztott menüpont/fül/opció jelölése: Red Bull sárga */
+    --f1-select: #ffc906;
+    --f1-on-select: #14141b;
+    /* F1 szektoridő-színek: lila = telitalálat, zöld = mellétalálat, sárga = nem talált */
+    --f1-exact: #b44cf2;
+    --f1-near: #22c55e;
+    --f1-miss: #f5d000;
+    --f1-p1: #d9b44a;
+    --f1-p2: #b9b9c4;
+    --f1-p3: #c08655;
+    --f1-font: 'Titillium Web', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+/* ---------- alap ---------- */
+html, body {
+    background: var(--f1-bg);
+}
+
+/* a böngésző natív vezérlői (görgetősávok, checkboxok) sötét változatban */
+:root {
+    color-scheme: dark;
+}
+
+body {
+    font-family: var(--f1-font);
+    color: var(--f1-text);
+    padding-top: 0;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+
+a {
+    color: var(--f1-text);
+}
+
+a:hover, a:focus {
+    color: #fff;
+}
+
+/* ---------- elrendezés ---------- */
+.f1-layout {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 24px 16px 40px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 380px;
+    gap: 24px;
+    align-items: start;
+}
+
+.f1-main, .f1-aside {
+    min-width: 0;
+}
+
+.f1-footer {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 16px 16px 32px;
+    border-top: 1px solid var(--f1-line);
+    color: var(--f1-faint);
+    font-size: 13px;
+}
+
+@media (max-width: 900px) {
+    .f1-layout {
+        grid-template-columns: minmax(0, 1fr);
+        padding: 12px 10px 30px;
+        gap: 0;
+    }
+
+    /* egy oszlopban a két oszlop elemei közös rácsba kerülnek, így a hírek
+       a jobb oldali modulok után, de a VB állás elé sorolhatók (mint régen) */
+    .f1-main, .f1-aside {
+        display: contents;
+    }
+
+    .f1-main > *, .f1-aside > * {
+        min-width: 0;
+    }
+
+    #news {
+        order: 1;
+    }
+
+    #championship-result {
+        order: 2;
+    }
+}
+
+/* ---------- panel ("board") ---------- */
+.f1-board {
+    background: var(--f1-panel);
+    border: 1px solid var(--f1-line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 18px;
+    color: var(--f1-text);
+}
+
+.f1-board__head {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    background: linear-gradient(90deg, #2a2a36, #22222c 60%);
+    color: #fff;
+    border-bottom: 1px solid #34343f;
+    padding-right: 12px;
+}
+
+.f1-board__tag {
+    flex: none;
+    display: flex;
+    align-items: center;
+    height: 20px;
+    margin-left: 10px;
+    padding-left: 8px;
+    border-left: 4px solid var(--f1-accent);
+    color: var(--f1-accent-text);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.f1-board__tag:empty {
+    padding-left: 0;
+}
+
+.f1-board__title {
+    flex: 1;
+    min-width: 0;
+    padding-left: 10px;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.f1-board__meta {
+    flex: none;
+    font-size: 12px;
+    opacity: .5;
+    white-space: nowrap;
+    margin-left: 8px;
+}
+
+.f1-board__meta a {
+    color: inherit;
+}
+
+.f1-board__body {
+    padding: 12px;
+}
+
+.f1-board__colhead {
+    display: flex;
+    align-items: center;
+    padding: 6px 0 4px 40px;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--f1-muted);
+}
+
+.f1-board__colhead .f1-nums {
+    margin-left: auto;
+}
+
+.f1-board__note {
+    padding: 10px 12px;
+    font-size: 13px;
+    color: var(--f1-muted);
+    border-top: 1px solid var(--f1-line);
+}
+
+.f1-board__note strong {
+    color: var(--f1-text);
+    font-weight: 600;
+}
+
+/* ---------- sorok ---------- */
+.f1-row {
+    display: flex;
+    align-items: center;
+    min-height: 38px;
+    border-top: 1px solid var(--f1-line);
+}
+
+.f1-row:nth-child(even) {
+    background: var(--f1-row);
+}
+
+.f1-pos {
+    width: 40px;
+    flex: none;
+    text-align: center;
+    font-weight: 700;
+    font-size: 15px;
+    opacity: .9;
+}
+
+.f1-pos--p1 { color: var(--f1-p1); }
+.f1-pos--p2 { color: var(--f1-p2); }
+.f1-pos--p3 { color: var(--f1-p3); }
+
+/* eredménytáblák élcsapata: mint a közvetítés köridő-tornyában, az 1. hely száma piros dobozban
+   (a doboz kisebb a sornál, az oszlop szélessége nem változik) */
+.f1-pos--leader {
+    position: relative;
+    z-index: 0;
+    color: #fff;
+    opacity: 1;
+}
+
+.f1-pos--leader::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: -1;
+    width: 22px;
+    height: 20px;
+    transform: translate(-50%, -50%);
+    background: var(--f1-red);
+}
+
+.f1-stripe {
+    width: 4px;
+    height: 22px;
+    flex: none;
+    border-radius: 2px;
+    margin-right: 10px;
+    background: var(--f1-faint);
+}
+
+.f1-name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: .3px;
+    text-transform: uppercase;
+}
+
+.f1-name small {
+    font-weight: 400;
+    text-transform: none;
+    opacity: .6;
+    font-size: 12px;
+    margin-left: 5px;
+}
+
+.f1-nums {
+    margin-left: auto;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex: none;
+    padding-right: 10px;
+}
+
+.f1-num {
+    width: 56px;
+    text-align: right;
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.f1-num--wide {
+    width: 104px;
+}
+
+@media (max-width: 420px) {
+    .f1-num--wide {
+        width: 86px;
+    }
+
+    .f1-board__colhead .f1-num {
+        letter-spacing: 0;
+    }
+}
+
+.f1-num--main {
+    font-weight: 700;
+    color: #fff;
+}
+
+/* hétvégi összesítő: a két pontoszlop a hosszú fejléc alá középre kerül, így egyértelmű, melyik szám melyik oszlopé */
+.f1-board--summary .f1-num {
+    text-align: center;
+}
+
+.f1-num--dim {
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--f1-muted);
+}
+
+.f1-board__colhead .f1-num {
+    white-space: nowrap;
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--f1-muted);
+}
+
+.f1-muted {
+    color: var(--f1-muted);
+    font-size: 12px;
+}
+
+/* ---------- tipptábla ---------- */
+.f1-tiprow {
+    display: grid;
+    grid-template-columns: 40px 130px minmax(0, 1fr) 52px;
+    align-items: center;
+    min-height: 40px;
+    border-top: 1px solid var(--f1-line);
+}
+
+.f1-tiprow:nth-child(even) {
+    background: var(--f1-row);
+}
+
+.f1-tiprow > .f1-name {
+    padding-left: 4px;
+}
+
+.f1-tiprow__pts {
+    text-align: right;
+    padding-right: 12px;
+    font-weight: 700;
+    font-size: 15px;
+    color: #fff;
+}
+
+.f1-tiprow--head {
+    min-height: 26px;
+    background: none !important;
+    border-top: none;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--f1-muted);
+}
+
+.f1-tiprow--head .f1-chips > div {
+    text-align: center;
+}
+
+.f1-tiprow--head > .f1-name,
+.f1-tiprow--head > .f1-tiprow__pts {
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--f1-muted);
+    letter-spacing: 1px;
+}
+
+.f1-tiprow--result {
+    background: #17171f !important;
+}
+
+.f1-tiprow--result > .f1-name {
+    color: var(--f1-muted);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.f1-chips {
+    display: grid;
+    grid-template-columns: repeat(var(--cols, 10), minmax(0, 1fr));
+    gap: 3px;
+    min-width: 0;
+}
+
+.f1-chips--q {
+    grid-template-columns: repeat(var(--cols, 10), minmax(0, 1fr)) minmax(0, 1.15fr);
+}
+
+.f1-chip {
+    min-width: 0;
+    overflow: hidden;
+    font-size: 11px;
+    font-weight: 600;
+    text-align: center;
+    padding: 4px 0 3px;
+    border-radius: 3px;
+    background: transparent;
+    color: var(--f1-faint);
+    border: 1px solid var(--f1-line);
+    white-space: nowrap;
+}
+
+.f1-chip--exact {
+    border-color: rgba(180, 76, 242, .34);
+    color: #b9a3d1;
+    background: rgba(180, 76, 242, .05);
+}
+
+.f1-chip--near {
+    border-color: rgba(34, 197, 94, .25);
+    color: #88b496;
+    background: rgba(34, 197, 94, .02);
+}
+
+/* nem talált: halvány sárga, hogy a lila/zöld találatok ugorjanak ki */
+.f1-chip--miss {
+    border-color: rgba(245, 208, 0, .15);
+    color: #a2976a;
+}
+
+.f1-chip--plain {
+    color: #b8b8c4;
+}
+
+.f1-chip--res {
+    color: var(--f1-text);
+    background: var(--f1-chip);
+    border-color: transparent;
+    border-left: 2px solid var(--f1-faint);
+    border-radius: 2px;
+}
+
+.f1-chip--q {
+    margin-left: 4px;
+}
+
+.f1-legend {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 16px;
+    padding: 10px 12px 12px;
+    font-size: 12px;
+    color: var(--f1-muted);
+    border-top: 1px solid var(--f1-line);
+}
+
+.f1-legend > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 20px;
+    white-space: nowrap;
+    line-height: 1;
+}
+
+.f1-legend .f1-chip {
+    display: inline-block;
+    flex: none;
+    width: 34px;
+    margin: 0;
+    padding: 3px 0;
+    font-size: 10px;
+    line-height: 1;
+}
+
+@media (max-width: 900px) {
+    .f1-tiprow {
+        grid-template-columns: 40px minmax(0, 1fr) 48px;
+        grid-template-areas: "pos name pts" "chips chips chips";
+        row-gap: 5px;
+        padding: 6px 0 8px;
+    }
+
+    .f1-tiprow > .f1-pos { grid-area: pos; }
+    .f1-tiprow > .f1-name { grid-area: name; }
+    .f1-tiprow > .f1-tiprow__pts { grid-area: pts; }
+
+    .f1-tiprow > .f1-chips {
+        grid-area: chips;
+        padding: 0 8px;
+        gap: 2px;
+    }
+
+    .f1-tiprow--head {
+        grid-template-areas: "chips chips chips";
+        padding: 4px 0 0;
+    }
+
+    .f1-tiprow--head > :not(.f1-chips) {
+        display: none;
+    }
+
+    .f1-chip {
+        font-size: 10px;
+        padding: 3px 0 2px;
+    }
+
+    .f1-chip--q {
+        margin-left: 2px;
+    }
+
+    .f1-board__meta .f1-hide-mobile {
+        display: none;
+    }
+}
+
+/* ---------- kupák, statisztika ---------- */
+.f1-trophies {
+    display: inline-flex;
+    gap: 3px;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+.f1-trophy {
+    position: relative;
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+}
+
+.f1-trophy svg {
+    display: block;
+    width: 24px;
+    height: 24px;
+}
+
+.f1-trophy b {
+    /* darabszám a kupa öblében */
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 10px;
+    line-height: 11px;
+    font-weight: 600;
+    color: #15151c;
+}
+
+.f1-trophy--gold { color: #cfae4f; }
+.f1-trophy--silver { color: #b4b4be; }
+.f1-trophy--bronze { color: #b98252; }
+
+.f1-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--f1-line);
+}
+
+.f1-stat {
+    padding: 12px;
+}
+
+.f1-stat b {
+    display: block;
+    font-size: 22px;
+    font-weight: 900;
+    color: #fff;
+}
+
+.f1-stat span {
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--f1-muted);
+}
+
+/* ---------- Bootstrap 3 illesztés a többi oldalhoz (compat) ---------- */
+.color-one {
+    color: var(--f1-text);
+    font-weight: 700;
+}
+
+.color-two {
+    color: var(--f1-muted);
+}
+
+.color-three {
+    color: #fff;
+}
+
+.panel,
+.panel-default,
+.panel-weekend {
+    background: var(--f1-panel);
+    border: 1px solid var(--f1-line);
+    border-radius: 8px;
+    color: var(--f1-text);
+    box-shadow: none;
+    margin-bottom: 18px;
+    overflow-x: auto;
+}
+
+.panel-default > .panel-heading,
+.panel-weekend > .panel-heading {
+    background: linear-gradient(90deg, #2a2a36, #22222c 60%);
+    color: #fff;
+    border-bottom: 1px solid #34343f;
+    border-radius: 0;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+}
+
+.panel-group {
+    background: transparent;
+    padding: 0;
+    color: var(--f1-text);
+}
+
+.table > thead > tr > th,
+.table > tbody > tr > th,
+.table > tfoot > tr > th,
+.table > thead > tr > td,
+.table > tbody > tr > td,
+.table > tfoot > tr > td {
+    color: var(--f1-text);
+    border-top: 1px solid var(--f1-line);
+    vertical-align: middle;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: var(--f1-row);
+}
+
+.bets-table-head {
+    color: var(--f1-muted);
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.form-control,
+.form-control:focus {
+    color: var(--f1-text);
+    background-color: var(--f1-chip);
+    border: 1px solid var(--f1-line);
+    box-shadow: none;
+}
+
+.form-control:disabled,
+.form-control[readonly] {
+    color: var(--f1-muted);
+    background-color: var(--f1-row);
+}
+
+.btn-default,
+.btn-new {
+    color: var(--f1-text);
+    background-color: #2a2a36;
+    border-color: var(--f1-line);
+}
+
+.btn-new:hover,
+.btn-new:focus,
+.btn-default:hover,
+.btn-default:focus {
+    color: #fff;
+    background-color: var(--f1-red);
+    border-color: var(--f1-red);
+}
+
+.btn-primary,
+.btn-success {
+    background-color: var(--f1-red);
+    border-color: var(--f1-red);
+    color: #fff;
+}
+
+hr {
+    border-top-color: var(--f1-line);
+}
+
+.well {
+    background: var(--f1-panel);
+    border-color: var(--f1-line);
+    color: var(--f1-text);
+}
+
+/* ---------- Eredmények oldal / hétvégi fejléc ---------- */
+.f1-weekend {
+    margin-bottom: 28px;
+}
+
+.f1-weekend__title,
+.f1-hero__title {
+    margin: 0 0 12px;
+    font-size: 24px;
+    font-weight: 900;
+    line-height: 1.1;
+    text-transform: uppercase;
+    color: #fff;
+}
+
+.f1-weekend__round,
+.f1-hero__round {
+    display: block;
+    margin-bottom: 2px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--f1-muted);
+}
+
+.f1-hero {
+    padding: 4px 2px 14px;
+}
+
+.f1-hero__title {
+    font-size: 34px;
+    margin: 0;
+}
+
+.f1-hero__when {
+    font-size: 14px;
+    color: var(--f1-muted);
+}
+
+@media (max-width: 900px) {
+    .f1-hero__title {
+        font-size: 26px;
+    }
+}
+
+/* ---------- oldalsáv modulok ---------- */
+.f1-board__subhead {
+    padding: 10px 12px 4px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--f1-accent-text);
+    border-top: 1px solid var(--f1-line);
+}
+
+.f1-row--compact {
+    min-height: 32px;
+    padding-left: 12px;
+    border-top: none;
+}
+
+.f1-name--plain {
+    text-transform: none;
+    font-weight: 600;
+    white-space: normal;
+}
+
+/* VB egyéni pontverseny: egy közös rács a fejlécnek és a soroknak (subgrid), így az oszlopok egy vonalban vannak.
+   A névoszlop a leghosszabb névig nő (ha kifér), utána jön a zászlóoszlop, a maradék helyet az tölti ki. */
+.f1-vb-table {
+    display: grid;
+    grid-template-columns: 40px minmax(0, max-content) minmax(16px, 1fr) 60px 56px 48px;
+    column-gap: 6px;
+}
+
+.f1-vb {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: subgrid;
+    align-items: center;
+    padding-right: 10px;
+}
+
+.f1-vb--head {
+    min-height: 26px;
+    padding-top: 4px;
+    font-size: 10px;
+    letter-spacing: .6px;
+    text-transform: uppercase;
+    color: var(--f1-muted);
+    white-space: nowrap;
+}
+
+.f1-vb__who {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+}
+
+.f1-vb__cups {
+    text-align: center;
+}
+
+.f1-vb__num {
+    width: auto;
+    text-align: right;
+}
+
+.f1-row--user .online-dot {
+    position: static;
+    display: inline-block;
+    flex: none;
+    width: 8px;
+    height: 8px;
+    margin-left: 6px;
+    border-radius: 50%;
+}
+
+/* leintve: mint a közvetítés köridő-tornyában a célba ért versenyzőnél, kis kockás zászló a név után
+   (itt: akinek már nincs matematikai esélye a győzelemre). CSS-sel rajzolva, hogy minden méretben éles legyen. */
+.f1-vb__mark {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+}
+
+.f1-flag {
+    --flag-cell: 4px;
+    flex: none;
+    display: inline-block;
+    width: calc(var(--flag-cell) * 4);
+    height: calc(var(--flag-cell) * 3);
+    background: repeating-conic-gradient(#f2f2f2 0 25%, #14141b 0 50%) 0 0 / calc(var(--flag-cell) * 2) calc(var(--flag-cell) * 2);
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, .25);
+    border-radius: 1px;
+}
+
+/* három fix kupahely (arany, ezüst, bronz): az azonos színű kupák egymás alá kerülnek */
+.f1-row--user .f1-trophies {
+    display: grid;
+    grid-template-columns: repeat(3, 18px);
+    justify-content: center;
+    gap: 3px;
+    margin: 0;
+}
+
+.f1-row--user .f1-trophy,
+.f1-row--user .f1-trophy svg {
+    width: 18px;
+    height: 18px;
+}
+
+.f1-legend-list p {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 6px;
+    font-size: 12px;
+}
+
+.f1-legend-list .online-dot-meaning {
+    flex: none;
+    margin: 0;
+    width: 8px;
+    height: 8px;
+}
+
+.f1-pos .f1-trophy {
+    vertical-align: middle;
+}
+
+/* hétvégi kupák panel: a kupa 20%-kal kisebb (24px -> 19px) */
+.f1-pos > .f1-trophy,
+.f1-pos > .f1-trophy svg {
+    width: 19px;
+    height: 19px;
+}
+
+/* naptár: a tartalom mindig befér, így tört DPI-s kerekítés (pl. Windows 125%) se hozzon elő vízszintes görgetősávot */
+.f1-calendar.panel {
+    overflow-x: hidden;
+}
+
+/* naptár szűrőgombjai: a Bootstrap .row negatív margója kilógott a panelből -> vízszintes görgetősáv */
+.f1-calendar__filters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0 10px;
+    padding: 0 5px;
+}
+
+/* ---------- csapatrádió (üzenőfal) ---------- */
+#messages-list {
+    max-height: 320px;
+    overflow-y: auto;
+}
+
+.f1-radio {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px 12px;
+}
+
+.f1-radio__msg {
+    position: relative;
+    padding: 4px 8px 5px 10px;
+    background: var(--f1-row);
+    border-radius: 0 6px 6px 0;
+    border-left: 3px solid var(--radio-color, var(--f1-faint));
+}
+
+/* a saját üzenet a kiválasztás-sárgával kap egy finom keretet */
+.f1-radio__msg--own {
+    box-shadow: inset 0 0 0 1px rgba(255, 201, 6, .18);
+}
+
+.f1-radio__head {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+}
+
+.f1-radio__name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    color: #fff;
+}
+
+.f1-radio__time {
+    flex: none;
+    margin-left: auto;
+    font-size: 10px;
+    color: var(--f1-faint);
+}
+
+/* a közvetítés rádiógrafikájának hullámformája, a feladó színében */
+.f1-radio__wave {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    height: 10px;
+}
+
+.f1-radio__wave i {
+    display: block;
+    width: 2px;
+    border-radius: 1px;
+    background: var(--radio-color, var(--f1-faint));
+}
+
+.f1-radio__wave i:nth-child(1) { height: 4px; }
+.f1-radio__wave i:nth-child(2) { height: 9px; }
+.f1-radio__wave i:nth-child(3) { height: 6px; }
+.f1-radio__wave i:nth-child(4) { height: 8px; }
+
+.f1-radio__text {
+    margin-top: 1px;
+    font-size: 13px;
+    line-height: 1.35;
+    color: var(--f1-text);
+    overflow-wrap: anywhere;
+}
+
+.f1-radio__text a {
+    color: var(--f1-accent-text);
+}
+
+#messages-send-form-div {
+    border-top: 1px solid var(--f1-line);
+}
+
+#message-send {
+    display: flex;
+    gap: 8px;
+}
+
+#message-send #message-input {
+    flex: 1;
+    min-width: 0;
+    width: auto !important;
+    height: 34px;
+    padding: 0 10px;
+    color: var(--f1-text);
+    background: var(--f1-chip);
+    border: 1px solid var(--f1-line);
+    border-radius: 6px;
+}
+
+#message-send #message-input:focus {
+    outline: none;
+    border-color: var(--f1-accent);
+}
+
+/* ---------- hírek ---------- */
+/* a hírek csak díszítik az oldalt: kompakt sorok, kis bélyegképpel.
+   A kép a sor magasságát kitölti (cover), így a különböző méretű feedképekből egyforma sorok lesznek;
+   a cím és a leírás legfeljebb 2-2 sor. */
+.f1-news__item {
+    display: grid;
+    grid-template-columns: 120px minmax(0, 1fr);
+    gap: 12px;
+    padding: 10px 12px;
+    border-top: 1px solid var(--f1-line);
+}
+
+.f1-news__img-link {
+    display: block;
+    min-height: 84px;
+    overflow: hidden;
+    border-radius: 4px;
+}
+
+.f1-news__img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 84px;
+    border-radius: 4px;
+    object-fit: cover;
+    object-position: center 30%;
+    background: var(--f1-chip);
+}
+
+.f1-news__text {
+    min-width: 0;
+}
+
+.f1-news__meta {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 12px;
+}
+
+.f1-news__title {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    margin: 2px 0 3px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.3;
+    color: #fff;
+}
+
+.f1-news__desc {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    font-size: 13px;
+    line-height: 1.4;
+    color: #a9a9b6;
+}
+
+.f1-news__desc img {
+    max-width: 100%;
+    height: auto;
+}
+
+.f1-news__title a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.f1-news__title a:hover,
+.f1-news__title a:focus-visible {
+    text-decoration: underline;
+}
+
+.f1-news__more {
+    flex-shrink: 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--f1-accent-text);
+    text-decoration: none;
+}
+
+.f1-news__more:hover,
+.f1-news__more:focus-visible {
+    text-decoration: underline;
+}
+
+/* mobilon csak bélyegkép + dátum + cím */
+@media (max-width: 600px) {
+    .f1-news__item {
+        grid-template-columns: 84px minmax(0, 1fr);
+        gap: 10px;
+        padding: 8px 12px;
+    }
+
+    .f1-news__img-link,
+    .f1-news__img {
+        min-height: 60px;
+    }
+
+    .f1-news__desc {
+        display: none;
+    }
+}
+
+/* ---------- archív szezonok (information_content HTML) régi tippjelölései ---------- */
+.table > tbody > tr > td.bet-high {
+    color: #b9a3d1;
+    background: rgba(180, 76, 242, .05);
+    box-shadow: inset 0 0 0 1px rgba(180, 76, 242, .34);
+    border-radius: 3px;
+}
+
+.table > tbody > tr > td.bet-low {
+    color: #88b496;
+    background: rgba(34, 197, 94, .02);
+    box-shadow: inset 0 0 0 1px rgba(34, 197, 94, .25);
+    border-radius: 3px;
+}
+
+.table > tbody > tr > td.bet-empty,
+.bet-empty-font {
+    color: #a2976a;
+}
+
+.bet-high-font,
+.bet-low-font {
+    font-weight: 600;
+}
+
+.result-table-result-row {
+    background: #17171f;
+}
+
+/* ---------- egyéni pontverseny keskeny képernyőn: a név férjen ki ---------- */
+@media (max-width: 480px) {
+    .f1-vb-table {
+        grid-template-columns: 28px minmax(0, max-content) minmax(12px, 1fr) 54px 46px 38px;
+        column-gap: 4px;
+    }
+
+    .f1-vb {
+        padding-right: 8px;
+    }
+
+    .f1-row--user .f1-flag {
+        --flag-cell: 3px;
+    }
+
+    .f1-vb--head {
+        letter-spacing: 0;
+    }
+
+    .f1-row--user .f1-name {
+        font-size: 14px;
+        letter-spacing: 0;
+    }
+
+    .f1-row--user .online-dot {
+        margin-left: 4px;
+    }
+
+    .f1-row--user .f1-trophies {
+        grid-template-columns: repeat(3, 16px);
+        gap: 2px;
+    }
+
+    .f1-row--user .f1-trophy,
+    .f1-row--user .f1-trophy svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .f1-row--user .f1-num {
+        font-size: 14px;
+    }
+
+    .f1-row--user .f1-num--dim {
+        font-size: 12px;
+    }
+}
+
+/* ---------- tippelés: TV-grafikás pilótaválasztó ---------- */
+.f1-betting {
+    /* a legördülő panel kilóghat a tábla aljánál */
+    overflow: visible;
+}
+
+.f1-betting > .f1-board__head {
+    border-radius: 8px 8px 0 0;
+}
+
+.f1-betting__tabs {
+    display: flex;
+    border-bottom: 1px solid var(--f1-line);
+}
+
+.f1-betting__tab {
+    flex: 1;
+    padding: 10px 12px;
+    border: 0;
+    border-bottom: 3px solid transparent;
+    background: transparent;
+    color: var(--f1-muted);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.f1-betting__tab:hover,
+.f1-betting__tab:focus-visible {
+    color: var(--f1-text);
+    background: var(--f1-row);
+    outline: none;
+}
+
+.f1-betting__tab.is-active {
+    color: #fff;
+    border-bottom-color: var(--f1-select);
+}
+
+.f1-betting__tab .glyphicon {
+    margin-right: 4px;
+}
+
+.f1-betting__form {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 12px 12px 16px;
+}
+
+.f1-betting__alert {
+    margin-bottom: 10px;
+    padding: 9px 12px;
+    border-radius: 4px;
+    border-left: 3px solid;
+    font-weight: 600;
+}
+
+.f1-betting__alert--ok {
+    background: rgba(82, 226, 82, .1);
+    border-color: #52e252;
+    color: #b6f5b6;
+}
+
+.f1-betting__alert--error {
+    background: rgba(225, 6, 0, .12);
+    border-color: var(--f1-red);
+    color: #ffb3b0;
+}
+
+.f1-betting__note {
+    margin-bottom: 10px;
+    font-size: 13px;
+    color: var(--f1-muted);
+    text-align: center;
+}
+
+.f1-betting__row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+
+.f1-betting__row > .f1-pos {
+    width: 34px;
+}
+
+.f1-betting__row--question {
+    justify-content: space-between;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--f1-line);
+}
+
+.f1-betting__question {
+    font-weight: 600;
+}
+
+.f1-betting__choices {
+    display: flex;
+    border: 1px solid var(--f1-line);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.f1-betting__choice {
+    min-width: 64px;
+    padding: 7px 14px;
+    border: 0;
+    background: var(--f1-chip);
+    color: var(--f1-muted);
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.f1-betting__choice + .f1-betting__choice {
+    border-left: 1px solid var(--f1-line);
+}
+
+.f1-betting__choice:hover:not(:disabled) {
+    color: var(--f1-text);
+}
+
+.f1-betting__choice.is-active {
+    background: var(--f1-select);
+    color: var(--f1-on-select);
+}
+
+.f1-betting__choice:disabled {
+    cursor: default;
+}
+
+.f1-betting__choice:disabled:not(.is-active) {
+    opacity: .5;
+}
+
+.f1-betting__footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 14px;
+}
+
+.f1-betting__hint {
+    font-size: 12px;
+    color: var(--f1-muted);
+}
+
+.f1-betting__submit,
+.f1-betting__submit:focus {
+    min-width: 200px;
+    min-height: 38px;
+    border: 0;
+    background: var(--f1-red);
+    color: #fff;
+    font-weight: 700;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+}
+
+.f1-betting__submit:hover:not(:disabled) {
+    background: #ff1a14;
+    color: #fff;
+}
+
+.f1-betting__submit:disabled {
+    background: #3a3a46;
+    color: var(--f1-muted);
+    opacity: 1;
+}
+
+.f1-select {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+}
+
+.f1-select__trigger {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: 40px;
+    padding: 0 10px 0 8px;
+    border: 1px solid var(--f1-line);
+    border-radius: 4px;
+    background: var(--f1-chip);
+    color: var(--f1-text);
+    text-align: left;
+}
+
+.f1-select__trigger:hover:not(:disabled),
+.f1-select__trigger:focus-visible,
+.f1-select.is-open .f1-select__trigger {
+    border-color: #4a4a58;
+    outline: none;
+}
+
+.f1-select__trigger:focus-visible {
+    box-shadow: 0 0 0 2px rgba(255, 201, 6, .45);
+}
+
+.f1-select.is-disabled .f1-select__trigger {
+    background: var(--f1-row);
+    cursor: default;
+}
+
+.f1-select__trigger .f1-stripe,
+.f1-select__option .f1-stripe {
+    margin-right: 10px;
+}
+
+.f1-select__placeholder {
+    color: var(--f1-faint);
+    font-weight: 600;
+}
+
+.f1-select__code {
+    margin-left: auto;
+    padding-left: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--f1-muted);
+}
+
+.f1-select__chevron {
+    flex: none;
+    width: 8px;
+    height: 8px;
+    margin-left: 10px;
+    border-right: 2px solid var(--f1-muted);
+    border-bottom: 2px solid var(--f1-muted);
+    transform: translateY(-2px) rotate(45deg);
+    transition: transform .15s;
+}
+
+.f1-select__placeholder + .f1-select__chevron {
+    margin-left: auto;
+}
+
+.f1-select.is-open .f1-select__chevron {
+    transform: translateY(2px) rotate(-135deg);
+}
+
+.f1-select__panel {
+    position: absolute;
+    z-index: 30;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: var(--f1-panel);
+    border: 1px solid #3a3a46;
+    border-radius: 6px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, .55);
+    overflow: hidden;
+}
+
+.f1-select__panel--up {
+    top: auto;
+    bottom: calc(100% + 4px);
+}
+
+.f1-select__search {
+    display: block;
+    width: 100%;
+    padding: 8px 12px;
+    border: 0;
+    border-bottom: 1px solid var(--f1-line);
+    background: var(--f1-bg);
+    color: var(--f1-text);
+    font-size: 14px;
+    outline: none;
+}
+
+.f1-select__search::placeholder {
+    color: var(--f1-faint);
+}
+
+.f1-select__list {
+    max-height: 300px;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    list-style: none;
+    overscroll-behavior: contain;
+}
+
+.f1-select__option {
+    display: flex;
+    align-items: center;
+    min-height: 38px;
+    padding: 0 10px 0 8px;
+    border-top: 1px solid var(--f1-line);
+    cursor: pointer;
+}
+
+.f1-select__option:first-child {
+    border-top: 0;
+}
+
+.f1-select__option:nth-child(even) {
+    background: var(--f1-row);
+}
+
+.f1-select__option.is-active {
+    background: #2e2e3a;
+}
+
+.f1-select__option.is-selected {
+    box-shadow: inset 3px 0 0 var(--f1-select);
+}
+
+/* kiválasztás törlése: a választó jobb szélén, a nyíl után; mobilon is elég nagy érintési felület */
+.f1-select.is-clearable .f1-select__trigger {
+    padding-right: 44px;
+}
+
+.f1-select__clear {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    padding: 0;
+    border: 0;
+    border-left: 1px solid var(--f1-line);
+    border-radius: 0 4px 4px 0;
+    background: transparent;
+    color: var(--f1-muted);
+    font-size: 22px;
+    line-height: 1;
+}
+
+.f1-select__clear:hover,
+.f1-select__clear:focus-visible {
+    background: #2e2e3a;
+    color: var(--f1-text);
+    outline: none;
+}
+
+.f1-select__clear:focus-visible {
+    box-shadow: inset 0 0 0 2px rgba(255, 201, 6, .45);
+}
+
+.f1-select__empty {
+    padding: 12px;
+    color: var(--f1-muted);
+    text-align: center;
+}
+
+@media (max-width: 480px) {
+    .f1-betting__form {
+        padding: 10px 8px 14px;
+    }
+
+    .f1-betting__footer {
+        flex-direction: column-reverse;
+        align-items: stretch;
+        text-align: center;
+    }
+
+    .f1-betting__submit {
+        width: 100%;
+    }
+}
+
+/* ---------- sikeres tipp: visszaszámlálás az átirányításig ---------- */
+@keyframes f1-countdown {
+    from { transform: scaleX(1); }
+    to { transform: scaleX(0); }
+}
+
+.f1-betting__success {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.f1-betting__stay {
+    flex: none;
+    padding: 3px 12px;
+    border: 1px solid rgba(182, 245, 182, .4);
+    border-radius: 3px;
+    background: transparent;
+    color: #b6f5b6;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.f1-betting__stay:hover,
+.f1-betting__stay:focus-visible {
+    background: rgba(82, 226, 82, .15);
+    outline: none;
+}
+
+.f1-betting__redirect {
+    margin-top: 4px;
+    font-size: 12px;
+    font-weight: 400;
+    opacity: .8;
+}
+
+.f1-betting__progress {
+    height: 3px;
+    margin-top: 8px;
+    border-radius: 2px;
+    background: rgba(82, 226, 82, .15);
+    overflow: hidden;
+}
+
+.f1-betting__progress span {
+    display: block;
+    height: 100%;
+    background: #52e252;
+    transform-origin: left center;
+    animation: f1-countdown linear forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .f1-betting__progress span {
+        animation: none;
+    }
+}

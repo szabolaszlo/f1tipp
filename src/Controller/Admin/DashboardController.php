@@ -2,20 +2,13 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Driver;
-use App\Entity\Event;
-use App\Entity\Information;
-use App\Entity\Message;
-use App\Entity\Result;
-use App\Entity\Setting;
-use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class DashboardController extends AbstractDashboardController
 {
@@ -32,9 +25,7 @@ class DashboardController extends AbstractDashboardController
         $this->urlGenerator = $urlGenerator;
     }
 
-    /**
-     * @Route("/admin")
-     */
+    #[Route(path: '/admin')]
     public function index(): Response
     {
         return $this->redirect(
@@ -62,13 +53,13 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToRoute('admin_maintenance_cache_clear', 'fas fa-trash-alt', 'cache_clear'),
         ];
 
-        yield MenuItem::linkToCrud('admin_result', 'fas fa-flag-checkered', Result::class);
-        yield MenuItem::linkToCrud('admin_events', 'fas fa-calendar-alt', Event::class);
-        yield MenuItem::linkToCrud('admin_menu_users', 'fas fa-users', User::class);
-        yield MenuItem::linkToCrud('admin_messages', 'fas fa-envelope', Message::class);
-        yield MenuItem::linkToCrud('admin_driver', 'fas fa-car', Driver::class);
-        yield MenuItem::linkToCrud('admin_information', 'fas fa-newspaper', Information::class);
-        yield MenuItem::linkToCrud('admin_setting', 'fas fa-tools', Setting::class);
+        yield MenuItem::linkTo(ResultCrudController::class, 'admin_result', 'fas fa-flag-checkered');
+        yield MenuItem::linkTo(EventCrudController::class, 'admin_events', 'fas fa-calendar-alt');
+        yield MenuItem::linkTo(UserCrudController::class, 'admin_menu_users', 'fas fa-users');
+        yield MenuItem::linkTo(MessageCrudController::class, 'admin_messages', 'fas fa-envelope');
+        yield MenuItem::linkTo(DriverCrudController::class, 'admin_driver', 'fas fa-car');
+        yield MenuItem::linkTo(InformationCrudController::class, 'admin_information', 'fas fa-newspaper');
+        yield MenuItem::linkTo(SettingCrudController::class, 'admin_setting', 'fas fa-tools');
         yield MenuItem::linkToUrl('back_to_home', 'fas fa-globe-americas', '/');
         yield MenuItem::subMenu('admin_maintenance', 'fas fa-tools')->setSubItems($submenu1);
     }

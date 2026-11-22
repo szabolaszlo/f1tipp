@@ -20,7 +20,7 @@ class BetAttribute extends EntityRepository
     {
         $result = $this->createQueryBuilder('betAttribute')
             ->select('betAttribute.id')
-            ->innerJoin('App:Bet', 'b', Join::WITH, 'betAttribute.bet = b.id')
+            ->innerJoin(\App\Entity\Bet::class, 'b', Join::WITH, 'betAttribute.bet = b.id')
             ->where('b.event_id = :e')
             ->setParameter('e', $event->getId())
             ->getQuery()
@@ -32,7 +32,7 @@ class BetAttribute extends EntityRepository
 
         if (!empty($ids)) {
             $this->createQueryBuilder('betAttribute')
-                ->update('App:BetAttribute', 'b')
+                ->update(\App\Entity\BetAttribute::class, 'b')
                 ->set('b.point', 'NULL')
                 ->set('b.class', 'NULL')
                 ->where('b.id IN (:ids)')

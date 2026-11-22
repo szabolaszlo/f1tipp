@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
-use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
+use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 
 class GoogleAuthenticator extends AbstractAuthenticator
@@ -35,9 +35,14 @@ class GoogleAuthenticator extends AbstractAuthenticator
         return $request->get('_route') == 'auth_google';
     }
 
-    public function authenticate(Request $request): PassportInterface
+    public function authenticate(Request $request): Passport
     {
         $auth_code = $request->query->get('code');
+
+        // a Google hozzájárulás megszakításakor ?error=access_denied jön code nélkül
+        if (!is_string($auth_code) || $auth_code === '') {
+            throw new AuthenticationException('Missing Google authorization code.');
+        }
 
         return new SelfValidatingPassport(
             new UserBadge($auth_code, [$this, 'getUserFromGoogleAuthCode']),
@@ -48,17 +53,16 @@ class GoogleAuthenticator extends AbstractAuthenticator
     public function getUserFromGoogleAuthCode($auth_code)
     {
         // Exchange an authorization code for an access token
-        $token = $this->provider->getAccessToken('authorization_code', ['code' => $auth_code]);
-        $owner_details = $this->provider->getResourceOwner($token);
-
-        $user_repo = $this->em->getRepository(User::class);
-        $user = $user_repo->findOneBy(['email' => $owner_details->getEmail()]);
-
-        if ($user) {
-            return $user;
+        try {
+            $token = $this->provider->getAccessToken('authorization_code', ['code' => $auth_code]);
+            $owner_details = $this->provider->getResourceOwner($token);
+        } catch (\Exception $e) {
+            // lejárt / már felhasznált code, Google hiba: login hibaoldal (onAuthenticationFailure) 500 helyett
+            throw new AuthenticationException('Google authentication failed.', 0, $e);
         }
 
-        return $user;
+        $user_repo = $this->em->getRepository(User::class);
+        return $user_repo->findOneBy(['email' => $owner_details->getEmail()]);
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewall_name): ?Response

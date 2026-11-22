@@ -9,9 +9,7 @@
 namespace App\Repository;
 
 use App\Entity\Event;
-use App\Entity\Race;
 use Doctrine\ORM\EntityRepository;
-use App\Entity\Result as ResultEnt;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query\Expr\Join;
@@ -23,47 +21,20 @@ use Doctrine\ORM\Query\Expr\Join;
 class Result extends EntityRepository
 {
     /**
-     * @param string $type
-     * @return array
-     */
-    public function findByType($type = '')
-    {
-        $results = parent::findAll();
-
-        /**
-         * @var  integer $key
-         * @var  ResultEnt $result
-         */
-        foreach ($results as $key => $result) {
-            $event = $result->getEvent();
-            if ($event->getType() !== $type) {
-                unset($results[$key]);
-            }
-        }
-
-        return $results;
-    }
-
-    /**
      * @return mixed
      */
     public function getCalculatedRacesWithoutTrophies()
     {
-        $result = $this->createQueryBuilder('result')
+        // adatbázisból döntjük el, nem a Race::$trophies gyűjteményből: az egy EntityManageren belül
+        // nem frissül az új kupákkal, így egy második calculate() hívás duplán osztaná ki őket
+        return $this->createQueryBuilder('result')
             ->select('race')
-            ->innerJoin('App:Race', 'race', Join::WITH, 'result.event = race.id')
+            ->innerJoin(\App\Entity\Race::class, 'race', Join::WITH, 'result.event = race.id')
+            ->leftJoin(\App\Entity\Trophy::class, 'trophy', Join::WITH, 'trophy.event = race.id')
             ->where('result.isCalculated = 1')
+            ->andWhere('trophy.id IS NULL')
             ->getQuery()
             ->getResult();
-
-        /** @var Race $race */
-        foreach ($result as $key => $race) {
-            if (!$race->getTrophies()->isEmpty()) {
-                unset($result[$key]);
-            }
-        }
-
-        return $result;
     }
 
     /**
@@ -71,21 +42,14 @@ class Result extends EntityRepository
      */
     public function getCalculatedRacesWithoutAlternativeChampionship()
     {
-        $result = $this->createQueryBuilder('result')
+        return $this->createQueryBuilder('result')
             ->select('race')
-            ->innerJoin('App:Race', 'race', Join::WITH, 'result.event = race.id')
+            ->innerJoin(\App\Entity\Race::class, 'race', Join::WITH, 'result.event = race.id')
+            ->leftJoin(\App\Entity\AlternativeChampionship::class, 'ac', Join::WITH, 'ac.race = race.id')
             ->where('result.isCalculated = 1')
+            ->andWhere('ac.id IS NULL')
             ->getQuery()
             ->getResult();
-
-        /** @var Race $race */
-        foreach ($result as $key => $race) {
-            if (!$race->getAlternativeChampionships()->isEmpty()) {
-                unset($result[$key]);
-            }
-        }
-
-        return $result;
     }
 
     /**
@@ -95,7 +59,7 @@ class Result extends EntityRepository
     {
         return $this->createQueryBuilder('result')
             ->select('event')
-            ->innerJoin('App:Event', 'event', Join::WITH, 'result.event = event.id')
+            ->innerJoin(\App\Entity\Event::class, 'event', Join::WITH, 'result.event = event.id')
             ->where('result.isCalculated != 1')
             ->getQuery()
             ->getResult();

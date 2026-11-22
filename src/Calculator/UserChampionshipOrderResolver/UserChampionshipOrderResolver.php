@@ -2,6 +2,7 @@
 
 namespace App\Calculator\UserChampionshipOrderResolver;
 
+use App\Cache\ResultCache;
 use App\Repository\UserRepository;
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
@@ -50,7 +51,7 @@ class UserChampionshipOrderResolver
      */
     private function getTrophyAwareOrder()
     {
-        $cache = $this->entityManager->getConfiguration()->getResultCacheImpl();
+        $cache = ResultCache::of($this->entityManager);
 
         if ($cache->contains($this->cacheKey)) {
             return $cache->fetch($this->cacheKey);

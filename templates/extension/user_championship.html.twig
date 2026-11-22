@@ -1,113 +1,75 @@
 {% extends 'controller/module/base_module.html.twig' %}
+{% import 'macro/trophy.html.twig' as trophy %}
+{% block heading_tag %}VB{% endblock %}
 {% block body_content %}
-    <div class="panel-body center-block">
-        <div class="center-block">
-            <table class="table table-striped">
-                <tbody>
-                {% for user in users %}
-                    {% set podiumTrophies = user.getPodiumTrophies() %}
-                    <tr>
-                        <td class="text-right">
-                            <strong class="color-one">{{ loop.index }}.</strong>
-                        </td>
-                        <td>
-                            <div class="user-container">
-                                <strong>{{ user.getName() }}</strong>
-                                <div class="user-activity user-{{ user.getName() }} online-dot" title="online"></div>
-                                <div class="has-checkered-flag" title="{{ (id ~ '_checkered_flag')|trans }}">
-                                    {% if user.alternativePointDifference() > maths.remaining_weekends|length * pointProvider.placePoint(1) %}
-                                        <img src="{{ asset('build/images/checkered-flag.png') }}"
-                                             height="18"
-                                        >
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            {% for type, trophies in podiumTrophies %}
-                                {% if trophies is not empty %}
-                                    <span class="user-championship-trophy"
-                                          title="{{ ('trophy_type_' ~ type)|trans }}">
-                                        <img class="user-championship-trophy-image"
-                                             src="{{ asset('build/images/trophy/trophy_' ~ type ~ '.svg') }}">
-                                        <span class="small user-championship-trophy-number">{{ trophies|length }}</span>
-                                      </span>
-                                {% endif %}
-                            {% endfor %}
-                        </td>
-                        <td><strong class="color-one">{{ user.alternativePointSummary }}</strong></td>
-                        <td>
-                            <span class="small color-two">{{ user.alternativePointDifference() ? '+ ' ~ user.alternativePointDifference() : '' }}</span>
-                        </td>
-                    </tr>
-                {% endfor %}
-                <tr>
-                    <td colspan="5" style="padding: 10px;">
-                        <span class="small color-two">Pontegyenlőség esetén a több arany kupát szerző játékos végez előrébb. Amennyiben az egyenlő, akkor az ezüst, majd a bronz kupák száma dönt.</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="text-right" style="vertical-align: middle;">
-                        <div class="online-dot-meaning"></div>
-                    </td>
-                    <td colspan="3">
-                        <span class="small color-two">A felhasználó éppen online</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="text-center" style="vertical-align: middle;">
-                        <img alt="" src="{{ asset('build/images/checkered-flag.png') }}" height="18">
-                    </td>
-                    <td colspan="4">
-                        <span class="small color-two">Az adott felhasználónak sajnos már nincs matematikai esélye a győzelemre, de a többi helyezésért még természetesen versenyezhet</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="5">
-                        <div class="divider"></div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <table class="table table-striped border-primary">
-                <tbody>
-                <tr>
-                    <td class="text-center" colspan="3"
-                        style="border-top: 1px; border-top-color: white;">
-                        <strong class="color-one">{{ (id ~ '_maths')|trans }}:</strong>
-                    </td>
-                </tr>
-                <tr class="text-left">
-                    <td><strong>{{ (id ~ '_remaining_races')|trans }}</strong></td>
-                    <td class="text-center"><strong class="color-one">{{ maths.remaining_weekends|length }}</strong>
-                    </td>
-                </tr>
-                <tr class="text-left">
-                    <td><strong>
-                            {{ (id ~ '_remaining_points')|trans }}
-                            ({{ maths.remaining_weekends|length }}X{{ pointProvider.placePoint(1) }})</strong></td>
-                    <td class="text-center">
-                        <strong class="color-one">{{ maths.remaining_weekends|length * pointProvider.placePoint(1) }}</strong>
-                    </td>
-                </tr>
-                {% for key, record in records %}
-                    {% if record is not empty %}
-                        <tr>
-                            <td class="text-center" colspan="3"
-                                style="border-top: 1px; border-top-color: white;">
-                                <strong class="color-one">{{ (id ~ '_best_of_' ~ key)|trans }}</strong>
-                            </td>
-                        </tr>
-                        {% for point, name in record %}
-                            <tr class="text-center">
-                                <td><strong>{{ name }}</strong></td>
-                                <td><strong class="color-one">{{ point }}</strong></td>
-                            </tr>
-                        {% endfor %}
+    {% set maxPoints = maths.remaining_weekends|length * pointProvider.placePoint(1) %}
+    {# közös rács (subgrid): hely | név | zászló | kupák (arany/ezüst/bronz fix helyen) | hátrány | pont.
+       A névoszlop a leghosszabb névhez igazodik, így a leintett zászlók a nevek után egy vonalban állnak. #}
+    <div class="f1-vb-table">
+        <div class="f1-vb f1-vb--head">
+            <span></span>
+            <span>{{ 'alternativeChampionship_name'|trans }}</span>
+            <span></span>
+            <span class="f1-vb__cups">{{ 'userChampionship_trophies'|trans }}</span>
+            <span class="f1-vb__num">{{ 'alternativeChampionship_lag'|trans }}</span>
+            <span class="f1-vb__num">{{ 'result_point'|trans }}</span>
+        </div>
+        {% for user in users %}
+            {% set podiumTrophies = user.getPodiumTrophies() %}
+            <div class="f1-row f1-row--user f1-vb">
+                <div class="f1-pos{{ loop.index == 1 ? ' f1-pos--leader' : (loop.index <= 3 ? ' f1-pos--p' ~ loop.index : '') }}">{{ loop.index }}</div>
+                <div class="f1-vb__who">
+                    <span class="f1-name">{{ user.getName() }}</span>
+                    <span class="user-activity online-dot" data-user="{{ user.getName() }}" title="online"></span>
+                </div>
+                <div class="f1-vb__mark">
+                    {# leintve: nincs már matematikai esélye a győzelemre, mint a célba ért versenyzőnél a kockás zászló #}
+                    {% if user.alternativePointDifference() > maxPoints %}
+                        <span class="f1-flag" role="img" aria-label="{{ (id ~ '_checkered_flag')|trans }}"
+                              title="{{ (id ~ '_checkered_flag')|trans }}"></span>
                     {% endif %}
-                {% endfor %}
-                </tbody>
-            </table>
+                </div>
+                <span class="f1-trophies f1-vb__cups">
+                    {% for type, trophies in podiumTrophies %}
+                        {% if trophies is not empty %}
+                            {{ trophy.icon(type, trophies|length, ('trophy_type_' ~ type)|trans) }}
+                        {% else %}
+                            <span class="f1-trophy-slot"></span>
+                        {% endif %}
+                    {% endfor %}
+                </span>
+                <span class="f1-num f1-num--dim f1-vb__num">{{ user.alternativePointDifference() ? '+ ' ~ user.alternativePointDifference() : '' }}</span>
+                <span class="f1-num f1-num--main f1-vb__num">{{ user.alternativePointSummary }}</span>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="f1-board__note f1-legend-list">
+        <p>Pontegyenlőség esetén a több arany kupát szerző játékos végez előrébb. Amennyiben az egyenlő, akkor az ezüst, majd a bronz kupák száma dönt.</p>
+        <p><span class="online-dot-meaning"></span>A felhasználó éppen online</p>
+        <p><span class="f1-flag" aria-hidden="true"></span>Az adott felhasználónak sajnos már nincs matematikai esélye a győzelemre, de a többi helyezésért még természetesen versenyezhet</p>
+    </div>
+
+    <div class="f1-stats">
+        <div class="f1-stat">
+            <b>{{ maths.remaining_weekends|length }}</b>
+            <span>{{ (id ~ '_remaining_races')|trans }}</span>
+        </div>
+        <div class="f1-stat">
+            <b>{{ maxPoints }}</b>
+            <span>{{ (id ~ '_remaining_points')|trans }} ({{ maths.remaining_weekends|length }}×{{ pointProvider.placePoint(1) }})</span>
         </div>
     </div>
+
+    {% for key, record in records %}
+        {% if record is not empty %}
+            <div class="f1-board__subhead">{{ (id ~ '_best_of_' ~ key)|trans }}</div>
+            {% for point, name in record %}
+                <div class="f1-row f1-row--compact">
+                    <div class="f1-name f1-name--plain">{{ name }}</div>
+                    <div class="f1-nums"><span class="f1-num f1-num--main">{{ point }}</span></div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
 {% endblock %}

@@ -10,38 +10,26 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\Driver")
- * @ORM\Table(name="`driver`")
- * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
- */
+#[ORM\Entity(repositoryClass: \App\Repository\Driver::class)]
+#[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
+#[ORM\Table(name: '`driver`')]
 class Driver
 {
-    /**
-     * @ORM\Column(name="id", type="integer", length=2, nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     */
+    #[ORM\Column(name: 'id', type: 'integer', length: 2, nullable: false)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
     protected $id;
 
-    /**
-     * @ORM\Column(name="name", type="string", length=45, nullable=false)
-     */
+    #[ORM\Column(name: 'name', type: 'string', length: 45, nullable: false)]
     protected $name;
 
-    /**
-     * @ORM\Column(name="short", type="string", length=3, nullable=false)
-     */
+    #[ORM\Column(name: 'short', type: 'string', length: 3, nullable: false)]
     protected $short;
 
-    /**
-     * @ORM\Column(name="point", type="integer", length=3, nullable=false)
-     */
+    #[ORM\Column(name: 'point', type: 'integer', length: 3, nullable: false)]
     protected $point;
 
-    /**
-     * @ORM\Column(name="status", type="boolean", nullable=true)
-     */
+    #[ORM\Column(name: 'status', type: 'boolean', nullable: true)]
     protected $status;
 
     /**

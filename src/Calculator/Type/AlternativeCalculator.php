@@ -50,7 +50,7 @@ class AlternativeCalculator extends ACalculator
     public function isNeedCalculate()
     {
         $this->calcedRacesWoutAlterChamps = $this->em
-            ->getRepository('App:Result')
+            ->getRepository(\App\Entity\Result::class)
             ->getCalculatedRacesWithoutAlternativeChampionship();
         return (bool)(count($this->calcedRacesWoutAlterChamps));
     }
@@ -73,7 +73,7 @@ class AlternativeCalculator extends ACalculator
      */
     protected function calculateUsersWeekendPoints(Race $race)
     {
-        $weekendEvents = $this->em->getRepository("App:Event")->getWeekendEvents($race);
+        $weekendEvents = $this->em->getRepository(\App\Entity\Event::class)->getWeekendEvents($race);
         $users = $this->em->getRepository('App\Entity\User')->getAlternativeChampionshipUsers();
 
         foreach ($users as $user) {
@@ -101,7 +101,7 @@ class AlternativeCalculator extends ACalculator
      */
     protected function calculateUsersAlternativePoints(Race $race)
     {
-        $alterChamps = $this->em->getRepository("App:AlternativeChampionship")->getByRaceCollectedPointsOrdered($race);
+        $alterChamps = $this->em->getRepository(\App\Entity\AlternativeChampionship::class)->getByRaceCollectedPointsOrdered($race);
 
         $place = 1;
         $lastPoint = 0;

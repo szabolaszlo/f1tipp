@@ -7,6 +7,8 @@ imports:
   - { resource: legacy_services.xml }
   - { resource: rule.xml }
 parameters:
+  # FileCache könyvtára; az e2e környezet a services_e2e.yaml-ben felülírja
+  app.file_cache_dir: '%kernel.project_dir%/var/cache/file-cache'
 
 services:
   # default configuration for services in *this* file
@@ -18,13 +20,12 @@ services:
   # this creates a service per class whose id is the fully-qualified class name
   App\:
     resource: '../src/*'
-    exclude: ['../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}', '../src/LegacyService/Feed/Handler.php']
+    exclude: ['../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}', '../src/LegacyService/Feed/Handler.php', '../src/Cache/ResultCache.php']
 
   # controllers are imported separately to make sure services can be injected
   # as action arguments even if you don't extend any base controller class
   App\Controller\:
     resource: '../src/Controller/*'
-    exclude: '../src/Controller/Cron/*'
     tags: [ 'controller.service_arguments' ]
 
   # CompilerPass dependent services
@@ -35,12 +36,6 @@ services:
   App\Calculator\Type\:
     resource: '../src/Calculator/Type'
     tags: [ 'app.calculator_type' ]
-
-  app.controller.cron.feed_controller:
-    class: App\Controller\Cron\FeedController
-    tags: [ 'controller.service_arguments' ]
-    public: true
-    arguments: ['App\LegacyService\Feed\Handler']
 
   League\OAuth2\Client\Provider\Google:
     $options:
@@ -57,3 +52,24 @@ services:
 
   # add more service definitions when explicit configuration is needed
   # please note that last definitions always *replace* previous ones
+
+  App\Display\TeamColorProvider:
+    arguments:
+      $teams: '%f1tipp.teams%'
+
+  App\Display\BetLegendProvider:
+    public: true
+
+  # E2E (csak --env=e2e alatt futnak, lásd App\Command\E2e\E2eGuard)
+  App\E2e\E2eFixtures:
+    arguments:
+      $kernelEnv: '%kernel.environment%'
+  App\Command\E2e\E2eResetCommand:
+    arguments:
+      $kernelEnv: '%kernel.environment%'
+  App\E2e\E2eScenarios:
+    arguments:
+      $kernelEnv: '%kernel.environment%'
+  App\Command\E2e\E2eScenarioCommand:
+    arguments:
+      $kernelEnv: '%kernel.environment%'

@@ -21,8 +21,8 @@ Encore
         // if versioning is enabled, add the file hash too
         to: 'images/[path][name].[hash:8].[ext]',
 
-        // only copy files matching this pattern
-        //pattern: /\.(png|jpg|jpeg)$/
+        // a rule_images/ és trophy/ mappát lent hash nélkül másoljuk (az archív szezon-HTML fix URL-lel hivatkozik rájuk)
+        pattern: /^(?!rule_images\/|trophy\/)/
     })
 
     .copyFiles([
@@ -61,7 +61,13 @@ Encore
     .addEntry('messages', './assets/js/messages.js')
     .addEntry('main', './assets/js/main.js')
 
-    .enableVueLoader()
+    .enableVueLoader(() => {}, {runtimeCompilerBuild: false})
+    // a Vue esm-bundler build ezeket fordítási időben várja (különben konzol warning)
+    .configureDefinePlugin(options => {
+        options.__VUE_OPTIONS_API__ = JSON.stringify(true);
+        options.__VUE_PROD_DEVTOOLS__ = JSON.stringify(false);
+        options.__VUE_PROD_HYDRATION_MISMATCH_DETAILS__ = JSON.stringify(false);
+    })
     //.addEntry('page1', './assets/js/page1.js')
     //.addEntry('page2', './assets/js/page2.js')
 
@@ -80,10 +86,9 @@ Encore
      * https://symfony.com/doc/current/frontend.html#adding-more-features
      */
     .cleanupOutputBeforeBuild()
-    .enableBuildNotifications()
     .enableSourceMaps(!Encore.isProduction())
-    // enables hashed filenames (e.g. app.abc123.css)
-    .enableVersioning(Encore.isProduction())
+    // hashed filenames (e.g. app.abc123.css) dev buildben is, hogy a böngésző ne ragadjon be régi chunkon
+    .enableVersioning()
 
     // enables @babel/preset-env polyfills
     .configureBabel(() => {}, {

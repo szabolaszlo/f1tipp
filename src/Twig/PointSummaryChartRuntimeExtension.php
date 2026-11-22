@@ -38,7 +38,7 @@ class PointSummaryChartRuntimeExtension implements RuntimeExtensionInterface
      */
     public function renderPointSummaryChart(): string
     {
-        $races = $this->entityManager->getRepository('App:Race')->findAll();
+        $races = $this->entityManager->getRepository(\App\Entity\Race::class)->findAll();
 
         $pointHistory = [];
         $eventHistory = ['Start'];
@@ -46,7 +46,7 @@ class PointSummaryChartRuntimeExtension implements RuntimeExtensionInterface
         foreach ($races as $race) {
             $alter = $this
                 ->entityManager
-                ->getRepository('App:AlternativeChampionship')
+                ->getRepository(\App\Entity\AlternativeChampionship::class)
                 ->getAlternativeChampionshipResultByRace($race);
             if (!empty($alter)) {
                 $eventHistory[] = $race->getWeekendOrder() . ' - ' . $race->getName();
@@ -61,7 +61,7 @@ class PointSummaryChartRuntimeExtension implements RuntimeExtensionInterface
             array_unshift($pointHistory[$key], 0);
         }
 
-        $users = $this->entityManager->getRepository('App:User')->getAlternativeChampionshipUsers();
+        $users = $this->entityManager->getRepository(\App\Entity\User::class)->getAlternativeChampionshipUsers();
 
         $sortMap = [];
         foreach ($users as $user) {

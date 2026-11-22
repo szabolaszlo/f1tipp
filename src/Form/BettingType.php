@@ -12,7 +12,6 @@ use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
@@ -52,13 +51,14 @@ class BettingType extends AbstractType
      * @param FormBuilderInterface $builder
      * @param array $options
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('user', HiddenType::class);
         $builder->add('event', HiddenType::class);
         $builder->add('attributes', CollectionType::class, [
             'entry_type' => BetAttributesType::class,
-            'allow_add' => true,
+            // a tipp összes mezőjét a BetBuilder hozza létre: a kliens nem adhat hozzá újat
+            'allow_add' => false,
             'entry_options' => ['label' => false],
             'label' => false,
             'constraints'=> new UniqueBetAttributes()
@@ -71,7 +71,7 @@ class BettingType extends AbstractType
             },
             function ($userId) {
                 // transform the integer back to User Object
-                return $this->em->getRepository('App:User')->find($userId);
+                return $this->em->getRepository(\App\Entity\User::class)->find($userId);
             }
         ));
 
@@ -82,7 +82,7 @@ class BettingType extends AbstractType
             },
             function ($eventId) {
                 // transform the integer back to Event Object
-                return $this->em->getRepository('App:Event')->find($eventId);
+                return $this->em->getRepository(\App\Entity\Event::class)->find($eventId);
             }
         ));
 
@@ -108,7 +108,7 @@ class BettingType extends AbstractType
         });
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'attr' => [

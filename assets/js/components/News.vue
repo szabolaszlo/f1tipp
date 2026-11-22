@@ -1,60 +1,32 @@
 <template>
-  <div>
-    <Transition name="fade" mode="out-in">
-      <div class="panel panel-default">
-        <div class="panel-heading text-center">
-          <div class="pull-left">
-            <a class="feed_source small" href="https://hu.motorsport.com/f1/"
-               target="_blank">{{ $t("news.source") }}</a>
-          </div>
-          <strong>{{ $t("news.title").toUpperCase() }}</strong>
+  <div class="f1-board f1-news">
+    <div class="f1-board__head">
+      <span class="f1-board__tag">{{ $t("news.title") }}</span>
+      <span class="f1-board__title">F1VILÁG.HU</span>
+      <a class="f1-board__meta" href="https://f1vilag.hu/" target="_blank" rel="noopener">{{ $t("news.source") }}</a>
+    </div>
+    <div v-if="errorMessage" class="f1-board__note">{{ $t('general.errorOnComponentLoad') }} – {{ errorMessage }}</div>
+    <div v-else-if="loading" class="f1-board__body text-center"><pulse-loader color="#e10600"></pulse-loader></div>
+    <article v-else v-for="(feed, index) in feeds" :key="index" class="f1-news__item">
+      <a v-if="feed.image" class="f1-news__img-link" :href="feed.link" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
+        <img class="f1-news__img" :src="feed.image" alt="" loading="lazy">
+      </a>
+      <div v-else class="f1-news__img" aria-hidden="true"></div>
+      <div class="f1-news__text">
+        <div class="f1-news__meta">
+          <span class="f1-muted">{{ new Date(feed.publishDate).toLocaleString() }}</span>
+          <a class="f1-news__more" :href="feed.link" target="_blank" rel="noopener">{{ $t("news.readMore") }} ›</a>
         </div>
-        <div v-if="errorMessage">
-          <div class="text-center" style="padding: 30px;">
-            <strong class="text-center color-one">{{ $t('general.errorOnComponentLoad') }}</strong>
-            <hr/>
-            <strong class="text-center color-two">{{ errorMessage }}</strong>
-          </div>
-        </div>
-        <div v-else-if="!loading">
-          <table class="table table-striped">
-            <tbody>
-            <template v-for="feed in feeds">
-              <tr>
-                <td class="visible-lg visible-md visible-sm"
-                    style="vertical-align: middle;width: 20%;text-align: center">
-                  <img height="130" :src="feed.image" style="padding: 5px">
-                  <div>
-                    <span class="color-two small">{{ new Date(feed.publishDate).toLocaleString() }}</span>
-                  </div>
-                </td>
-                <td>
-                  <div class="text-center"><strong class="color-one">{{ feed.title }}</strong></div>
-                  <div class="visible-xs text-center"><img class="img-responsive" :src="feed.image"
-                                                           style="padding: 5px">
-                    <span class="color-two small">{{ new Date(feed.publishDate).toLocaleString() }}</span>
-                  </div>
-                  <div class="text-justify" style="padding: 5px">
-                    <strong v-html="feed.description"></strong>
-                  </div>
-                </td>
-              </tr>
-            </template>
-            </tbody>
-          </table>
-        </div>
-        <div v-else class="text-center">
-          <pulse-loader :color="colorTheme.f1TippColor5"></pulse-loader>
-        </div>
+        <h3 class="f1-news__title"><a :href="feed.link" target="_blank" rel="noopener">{{ feed.title }}</a></h3>
+        <div class="f1-news__desc" v-html="feed.description"></div>
       </div>
-    </Transition>
+    </article>
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
-import colorTheme from "../classes/colorTheme/ColorTheme";
 
 export default {
   name: "News",
@@ -62,10 +34,8 @@ export default {
   data() {
     return {
       errorMessage: '',
-      onlyRemaining: true,
       loading: true,
-      feeds: null,
-      colorTheme: colorTheme
+      feeds: null
     }
   },
   mounted() {

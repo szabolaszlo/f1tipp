@@ -4,7 +4,5 @@
     {{ form(edit_form) }}
 {% endblock edit_form %}
 {% block content_title %}
-    {% apply spaceless %}
-        {{ edit_form.vars.value.event.name }} {{ edit_form.vars.value.event.type|trans|capitalize  }}
-    {% endapply %}
+    {{- edit_form.vars.value.event.name }} {{ edit_form.vars.value.event.type|trans|capitalize -}}
 {% endblock %}

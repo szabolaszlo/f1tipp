@@ -13,9 +13,10 @@ use App\Cache\FileCache;
 use App\LegacyService\ResultTable\ResultTable;
 use Exception;
 use Psr\Cache\InvalidArgumentException;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * Class Results
@@ -23,19 +24,23 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ResultsController extends AbstractController
 {
+    public function __construct(private readonly ManagerRegistry $doctrine)
+    {
+    }
+
     /**
-     * @Route(path="/module/results", name="results", methods={"GET"})
      * @param ResultTable $resultTable
      * @param FileCache $cache
      * @return Response
      * @throws InvalidArgumentException
      * @throws Exception
      */
+    #[Route(path: '/module/results', name: 'results', methods: ['GET'])]
     public function indexAction(ResultTable $resultTable, FileCache $cache): Response
     {
-        $results = $this->getDoctrine()->getRepository('App:Result')->findAll();
-
-        $cacheKey = 'results' . count($results);
+        // a kulcshoz elég a COUNT, a teljes listát csak cache-miss esetén töltjük be
+        $resultRepository = $this->doctrine->getRepository(\App\Entity\Result::class);
+        $cacheKey = 'results_v2_' . $resultRepository->getResultCount();
 
         $cacheData = $cache->get($cacheKey);
 
@@ -44,7 +49,7 @@ class ResultsController extends AbstractController
         $weekendNames = $cacheData[1] ?? [];
 
         if (empty($weekends)) {
-            foreach ($results as $result) {
+            foreach ($resultRepository->findAll() as $result) {
                 $weekends[$result->getEvent()->getWeekendOrder()][] = $resultTable
                     ->getTable($this->getUser(), $result->getEvent(), 'full')
                     ->renderTable($result->getEvent());
