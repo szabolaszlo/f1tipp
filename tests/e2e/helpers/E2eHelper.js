@@ -102,8 +102,17 @@ class E2eHelper extends Helper {
         this._console(['app:e2e:reset']);
     }
 
-    /** Belépés a /login JSON végponton (a Login UI-t a login_test nyomkodja végig). */
+    /**
+     * Belépés a /login JSON végponton (a Login UI-t a login_test nyomkodja végig).
+     *
+     * Felhasználóváltás előtt elnavigálunk a nyitott oldalról: a pollingjai (app.js: /get_online_user,
+     * module_reload.js) különben a régi session cookie-val és a régi REMEMBERME cookie-val futhatnak a
+     * login alatt. A session-zár miatt ezek a login után futnak le, a migrált (már nem létező) régi session
+     * helyett a remember-me visszalépteti a régi usert, és a válasz Set-Cookie-ja felülírja az új belépést.
+     * Az about:blank-re navigálás leállítja az oldal JS-ét, és a még úton lévő kérések válaszát eldobatja.
+     */
     async loginAs(username) {
+        await this.pw.page.goto('about:blank');
         const response = await this.pw.page.request.post(new URL('/login', this.baseUrl).href, {data: {username, password: PASSWORD}});
         if (!response.ok()) {
             throw new Error(`loginAs(${username}) failed: HTTP ${response.status()}`);
