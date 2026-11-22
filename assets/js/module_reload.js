@@ -1,3 +1,5 @@
+import visibleInterval from './classes/refresh/visibleInterval';
+
 function reloadModules() {
     $.getJSON("/module/entity_counts", function (data) {
         $('.reload-able-module').each(function () {
@@ -28,5 +30,5 @@ function reloadModules() {
 }
 
 $(document).ready(function () {
-    setInterval(reloadModules, 10000);
+    visibleInterval(reloadModules, 10000);
 });

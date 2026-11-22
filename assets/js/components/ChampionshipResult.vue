@@ -60,6 +60,9 @@
 <script>
 import axios from "axios";
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
+import visibleInterval from '../classes/refresh/visibleInterval';
+
+const REFRESH_INTERVAL_MS = 60 * 1000;
 
 export default {
   name: "ChampionshipResult",
@@ -87,17 +90,31 @@ export default {
     });
     observer.observe(this.$el);
   },
+  beforeUnmount() {
+    if (this.stopRefresh) {
+      this.stopRefresh();
+    }
+  },
   methods: {
     loadResult() {
       axios
           .get('/module/championship_result')
           .then(response => {
             this.data = response.data;
+            this.errorMessage = '';
             this.loading = false;
+            // csak sikeres első betöltés után frissítünk: üres szerver-cache-nél minden kérés
+            // RapidAPI-hívást indítana, azt nem akarjuk percenként, kliensenként
+            if (!this.stopRefresh) {
+              this.stopRefresh = visibleInterval(() => this.loadResult(), REFRESH_INTERVAL_MS);
+            }
           })
           .catch(error => {
             this.loading = false;
-            this.errorMessage = error.message;
+            // háttérfrissítés hibájánál marad a korábbi tabella
+            if (!this.stopRefresh) {
+              this.errorMessage = error.message;
+            }
           })
     }
   }

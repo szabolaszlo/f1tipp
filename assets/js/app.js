@@ -12,6 +12,7 @@ require('../css/theme.css');
 const $ = require('jquery');
 global.$ = global.jQuery = $;
 require('bootstrap');
+const visibleInterval = require('./classes/refresh/visibleInterval').default;
 
 function refreshOnlineUsers() {
     $.getJSON("/get_online_user", function (data) {
@@ -27,5 +28,5 @@ function refreshOnlineUsers() {
 
 $(document).ready(function () {
     setTimeout(refreshOnlineUsers, 1000);
-    setInterval(refreshOnlineUsers, 20000);
+    visibleInterval(refreshOnlineUsers, 20000);
 });

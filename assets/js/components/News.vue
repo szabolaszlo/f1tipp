@@ -7,7 +7,7 @@
     </div>
     <div v-if="errorMessage" class="f1-board__note">{{ $t('general.errorOnComponentLoad') }} – {{ errorMessage }}</div>
     <div v-else-if="loading" class="f1-board__body text-center"><pulse-loader color="#e10600"></pulse-loader></div>
-    <article v-else v-for="(feed, index) in feeds" :key="index" class="f1-news__item">
+    <article v-else v-for="feed in feeds" :key="feed.id" class="f1-news__item">
       <a v-if="feed.image" class="f1-news__img-link" :href="feed.link" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
         <img class="f1-news__img" :src="feed.image" alt="" loading="lazy">
       </a>
@@ -27,6 +27,9 @@
 <script>
 import axios from "axios";
 import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
+import visibleInterval from '../classes/refresh/visibleInterval';
+
+const REFRESH_INTERVAL_MS = 60 * 1000;
 
 export default {
   name: "News",
@@ -40,27 +43,40 @@ export default {
   },
   mounted() {
     if (!('IntersectionObserver' in window)) {
-      this.loadFeeds()
+      this.startFeeds()
       return;
     }
     const observer = new IntersectionObserver((entries) => {
       if (entries[0].intersectionRatio <= 0) return;
       observer.unobserve(this.$el);
-      this.loadFeeds()
+      this.startFeeds()
     });
     observer.observe(this.$el);
   },
+  beforeUnmount() {
+    if (this.stopRefresh) {
+      this.stopRefresh();
+    }
+  },
   methods: {
+    startFeeds() {
+      this.loadFeeds();
+      this.stopRefresh = visibleInterval(() => this.loadFeeds(), REFRESH_INTERVAL_MS);
+    },
     loadFeeds() {
       axios
           .get('/api/feeds')
           .then(response => {
             this.feeds = response.data;
+            this.errorMessage = '';
             this.loading = false;
           })
           .catch(error => {
             this.loading = false;
-            this.errorMessage = error.message;
+            // háttérfrissítés hibájánál (pl. mobil ébredés, épp nincs net) marad a korábbi lista
+            if (!this.feeds) {
+              this.errorMessage = error.message;
+            }
           })
     }
   }
