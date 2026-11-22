@@ -26,25 +26,25 @@ Jellemző: Késői eredményjavítás szezon közben, sprintes hétvégével
       | E2E User3 | 0            | 6       | 9     |
     És az Eredmények oldalon az 1. nagydíj összesítője:
       | név       | hétvégi pont | bajnoki pont |
-      | E2E User2 | 75           | 14           |
-      | E2E User1 | 74           | 10           |
-      | E2E User3 | 15           | 8            |
+      | E2E User2 | 75           | 15           |
+      | E2E User1 | 74           | 11           |
+      | E2E User3 | 15           | 9            |
     És az Eredmények oldalon a 2. nagydíj összesítője:
       | név       | hétvégi pont | bajnoki pont |
-      | E2E User2 | 73           | 14           |
-      | E2E User1 | 64           | 10           |
-      | E2E User3 | 15           | 8            |
+      | E2E User2 | 73           | 15           |
+      | E2E User1 | 64           | 11           |
+      | E2E User3 | 15           | 9            |
     És az Eredmények oldalon a 3. nagydíj összesítője:
       | név       | hétvégi pont | bajnoki pont |
-      | E2E User3 | 73           | 14           |
-      | E2E User1 | 64           | 10           |
-      | E2E User2 | 12           | 8            |
-    # User1 és User3 30-30 ponton: a több arany (User3: 1, User1: 0) dönt
+      | E2E User3 | 73           | 15           |
+      | E2E User1 | 64           | 11           |
+      | E2E User2 | 12           | 9            |
+    # User1 és User3 33-33 ponton: a több arany (User3: 1, User1: 0) dönt
     És a VB tabella:
       | név       | pont | lemaradás | kupák            |
-      | E2E User2 | 36   |           | 2 arany, 1 bronz |
-      | E2E User3 | 30   | + 6       | 1 arany, 2 bronz |
-      | E2E User1 | 30   | + 6       | 3 ezüst          |
+      | E2E User2 | 39   |           | 2 arany, 1 bronz |
+      | E2E User3 | 33   | + 6       | 1 arany, 2 bronz |
+      | E2E User1 | 33   | + 6       | 3 ezüst          |
     És a Kupák modulban az "E2E 3. Nagydíj" dobogója:
       | kupa  | név       | pont |
       | arany | E2E User3 | 73   |
@@ -69,24 +69,24 @@ Jellemző: Késői eredményjavítás szezon közben, sprintes hétvégével
     # az 1. hétvége változik, a 2. és a 3. nem
     És az Eredmények oldalon az 1. nagydíj összesítője:
       | név       | hétvégi pont | bajnoki pont |
-      | E2E User1 | 78           | 14           |
-      | E2E User2 | 71           | 10           |
-      | E2E User3 | 15           | 8            |
+      | E2E User1 | 78           | 15           |
+      | E2E User2 | 71           | 11           |
+      | E2E User3 | 15           | 9            |
     És az Eredmények oldalon a 2. nagydíj összesítője:
       | név       | hétvégi pont | bajnoki pont |
-      | E2E User2 | 73           | 14           |
-      | E2E User1 | 64           | 10           |
-      | E2E User3 | 15           | 8            |
+      | E2E User2 | 73           | 15           |
+      | E2E User1 | 64           | 11           |
+      | E2E User3 | 15           | 9            |
     És az Eredmények oldalon a 3. nagydíj összesítője:
       | név       | hétvégi pont | bajnoki pont |
-      | E2E User3 | 73           | 14           |
-      | E2E User1 | 64           | 10           |
-      | E2E User2 | 12           | 8            |
+      | E2E User3 | 73           | 15           |
+      | E2E User1 | 64           | 11           |
+      | E2E User2 | 12           | 9            |
     És a VB tabella:
       | név       | pont | lemaradás | kupák                     |
-      | E2E User1 | 34   |           | 1 arany, 2 ezüst          |
-      | E2E User2 | 32   | + 2       | 1 arany, 1 ezüst, 1 bronz |
-      | E2E User3 | 30   | + 4       | 1 arany, 2 bronz          |
+      | E2E User1 | 37   |           | 1 arany, 2 ezüst          |
+      | E2E User2 | 35   | + 2       | 1 arany, 1 ezüst, 1 bronz |
+      | E2E User3 | 33   | + 4       | 1 arany, 2 bronz          |
     # az 1. hétvége javítása nem írja felül a "legutóbbi hétvége" dobogóját
     És a Kupák modul az "E2E 3. Nagydíj" dobogóját mutatja
     És a Trófeák oldal kupatáblája:
@@ -106,21 +106,21 @@ Jellemző: Késői eredményjavítás szezon közben, sprintes hétvégével
       | E2E User3 | 0            | 6       | 9     |
     És a VB tabella:
       | név       | pont | lemaradás | kupák            |
-      | E2E User2 | 36   |           | 2 arany, 1 bronz |
-      | E2E User3 | 30   | + 6       | 1 arany, 2 bronz |
-      | E2E User1 | 30   | + 6       | 3 ezüst          |
+      | E2E User2 | 39   |           | 2 arany, 1 bronz |
+      | E2E User3 | 33   | + 6       | 1 arany, 2 bronz |
+      | E2E User1 | 33   | + 6       | 3 ezüst          |
     És az Eredmények oldalon az 1. nagydíj összesítője:
       | név       | hétvégi pont | bajnoki pont |
-      | E2E User2 | 75           | 14           |
-      | E2E User1 | 74           | 10           |
-      | E2E User3 | 15           | 8            |
+      | E2E User2 | 75           | 15           |
+      | E2E User1 | 74           | 11           |
+      | E2E User3 | 15           | 9            |
     És az Eredmények oldalon a 2. nagydíj összesítője:
       | név       | hétvégi pont | bajnoki pont |
-      | E2E User2 | 73           | 14           |
-      | E2E User1 | 64           | 10           |
-      | E2E User3 | 15           | 8            |
+      | E2E User2 | 73           | 15           |
+      | E2E User1 | 64           | 11           |
+      | E2E User3 | 15           | 9            |
     És az Eredmények oldalon a 3. nagydíj összesítője:
       | név       | hétvégi pont | bajnoki pont |
-      | E2E User3 | 73           | 14           |
-      | E2E User1 | 64           | 10           |
-      | E2E User2 | 12           | 8            |
+      | E2E User3 | 73           | 15           |
+      | E2E User1 | 64           | 11           |
+      | E2E User2 | 12           | 9            |

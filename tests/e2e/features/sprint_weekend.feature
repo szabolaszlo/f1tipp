@@ -6,7 +6,7 @@ Jellemző: Sprint hétvége (3 esemény: sprint, időmérő, futam)
     - Sprint Futam: 1–8. hely, pontos hely 1 pont, rossz helyen 0 – nincs "bent van, de rossz helyen" pont
     - Időmérő: 1–10. hely, pontos hely 4 pont, top 10-ben de rossz helyen 1 pont
     - Futam: 1–10. hely, pontos hely 3 pont, top 10-ben de rossz helyen 1 pont, eltalált safety car 3 pont
-  A hétvégi pont a három esemény összege. A hétvégi sorrend adja a bajnoki pontot (14, 10, 8, …)
+  A hétvégi pont a három esemény összege. A hétvégi sorrend adja a bajnoki pontot (15, 11, 9, …)
   és a kupákat (arany, ezüst, bronz; a Trófeák oldalon 25, 18, 15 pont).
   A sprint nélküli, 2 eseményes hétvége ugyanezeket a forgatókönyveket a weekend.feature-ben futja végig.
 
@@ -88,14 +88,14 @@ Jellemző: Sprint hétvége (3 esemény: sprint, időmérő, futam)
       | E2E User3 | 0            | 6       | 9     |
     És a hétvégi összesítő az Aktuális és az Eredmények oldalon:
       | név       | hétvégi pont | bajnoki pont |
-      | E2E User2 | 75           | 14           |
-      | E2E User1 | 74           | 10           |
-      | E2E User3 | 15           | 8            |
+      | E2E User2 | 75           | 15           |
+      | E2E User1 | 74           | 11           |
+      | E2E User3 | 15           | 9            |
     És a VB tabella:
       | név       | pont | lemaradás | kupa  |
-      | E2E User2 | 14   |           | arany |
-      | E2E User1 | 10   | + 4       | ezüst |
-      | E2E User3 | 8    | + 6       | bronz |
+      | E2E User2 | 15   |           | arany |
+      | E2E User1 | 11   | + 4       | ezüst |
+      | E2E User3 | 9    | + 6       | bronz |
     És az "Időmérők Legjobbjai (TOP 3):" rekord:
       | név       | pont |
       | E2E User1 | 40   |
@@ -131,14 +131,14 @@ Jellemző: Sprint hétvége (3 esemény: sprint, időmérő, futam)
       | E2E User3 | 0            | 6       | 9     |
     És a hétvégi összesítő az Aktuális és az Eredmények oldalon:
       | név       | hétvégi pont | bajnoki pont |
-      | E2E User1 | 78           | 14           |
-      | E2E User2 | 71           | 10           |
-      | E2E User3 | 15           | 8            |
+      | E2E User1 | 78           | 15           |
+      | E2E User2 | 71           | 11           |
+      | E2E User3 | 15           | 9            |
     És a VB tabella:
       | név       | pont | lemaradás | kupa  |
-      | E2E User1 | 14   |           | arany |
-      | E2E User2 | 10   | + 4       | ezüst |
-      | E2E User3 | 8    | + 6       | bronz |
+      | E2E User1 | 15   |           | arany |
+      | E2E User2 | 11   | + 4       | ezüst |
+      | E2E User3 | 9    | + 6       | bronz |
     És a "Hétvégék Legjobbjai (TOP 3):" rekord:
       | név       | pont |
       | E2E User1 | 78   |
@@ -164,9 +164,9 @@ Jellemző: Sprint hétvége (3 esemény: sprint, időmérő, futam)
     Akkor az Aktuális oldal táblái sorban: "HÉTVÉGE, FUTAM, IDŐMÉRŐ, SPRINT FUTAM"
     És a hétvégi összesítő az Aktuális oldalon:
       | név       | hétvégi pont | bajnoki pont |
-      | E2E User2 | 75           | 14           |
-      | E2E User1 | 74           | 10           |
-      | E2E User3 | 15           | 8            |
+      | E2E User2 | 75           | 15           |
+      | E2E User1 | 74           | 11           |
+      | E2E User3 | 15           | 9            |
 
   Forgatókönyv: Az időmérő javítása után a sprint pontjai megmaradnak és beszámítanak a hétvégébe
     Amennyiben lezajlott sprint hétvége van eredményekkel
@@ -178,14 +178,14 @@ Jellemző: Sprint hétvége (3 esemény: sprint, időmérő, futam)
       | E2E User3 | 0            | 6       | 9     |
     És a hétvégi összesítő az Aktuális és az Eredmények oldalon:
       | név       | hétvégi pont | bajnoki pont |
-      | E2E User2 | 81           | 14           |
-      | E2E User1 | 68           | 10           |
-      | E2E User3 | 15           | 8            |
+      | E2E User2 | 81           | 15           |
+      | E2E User1 | 68           | 11           |
+      | E2E User3 | 15           | 9            |
     És a VB tabella:
       | név       | pont | lemaradás | kupa  |
-      | E2E User2 | 14   |           | arany |
-      | E2E User1 | 10   | + 4       | ezüst |
-      | E2E User3 | 8    | + 6       | bronz |
+      | E2E User2 | 15   |           | arany |
+      | E2E User1 | 11   | + 4       | ezüst |
+      | E2E User3 | 9    | + 6       | bronz |
     És az "Időmérők Legjobbjai (TOP 3):" rekord:
       | név       | pont |
       | E2E User2 | 40   |
@@ -216,14 +216,14 @@ Jellemző: Sprint hétvége (3 esemény: sprint, időmérő, futam)
     És a "FUTAM" táblán "E2E User1" tippjének jelölése: "közeli, közeli, pontos, pontos, pontos, pontos, pontos, pontos, pontos, pontos, pontos"
     És a hétvégi összesítő az Aktuális és az Eredmények oldalon:
       | név       | hétvégi pont | bajnoki pont |
-      | E2E User1 | 73           | 14           |
-      | E2E User2 | 68           | 10           |
-      | E2E User3 | 12           | 8            |
+      | E2E User1 | 73           | 15           |
+      | E2E User2 | 68           | 11           |
+      | E2E User3 | 12           | 9            |
     És a VB tabella:
       | név       | pont | lemaradás | kupa  |
-      | E2E User1 | 14   |           | arany |
-      | E2E User2 | 10   | + 4       | ezüst |
-      | E2E User3 | 8    | + 6       | bronz |
+      | E2E User1 | 15   |           | arany |
+      | E2E User2 | 11   | + 4       | ezüst |
+      | E2E User3 | 9    | + 6       | bronz |
     És az "Időmérők Legjobbjai (TOP 3):" rekord:
       | név       | pont |
       | E2E User1 | 40   |
@@ -263,14 +263,14 @@ Jellemző: Sprint hétvége (3 esemény: sprint, időmérő, futam)
       | E2E User3 | 0            | 9     |
     És a hétvégi összesítő az Aktuális és az Eredmények oldalon:
       | név       | hétvégi pont | bajnoki pont |
-      | E2E User2 | 41           | 14           |
-      | E2E User1 | 34           | 10           |
-      | E2E User3 | 9            | 8            |
+      | E2E User2 | 41           | 15           |
+      | E2E User1 | 34           | 11           |
+      | E2E User3 | 9            | 9            |
     És a VB tabella:
       | név       | pont | lemaradás | kupa  |
-      | E2E User2 | 14   |           | arany |
-      | E2E User1 | 10   | + 4       | ezüst |
-      | E2E User3 | 8    | + 6       | bronz |
+      | E2E User2 | 15   |           | arany |
+      | E2E User1 | 11   | + 4       | ezüst |
+      | E2E User3 | 9    | + 6       | bronz |
     És a Trófeák oldal kupatáblája:
       | név       | kupa  | pont |
       | E2E User2 | arany | 25   |
@@ -290,14 +290,14 @@ Jellemző: Sprint hétvége (3 esemény: sprint, időmérő, futam)
       | E2E User3 | 6       | 9     |
     És a hétvégi összesítő az Aktuális és az Eredmények oldalon:
       | név       | hétvégi pont | bajnoki pont |
-      | E2E User1 | 70           | 14           |
-      | E2E User2 | 67           | 10           |
-      | E2E User3 | 15           | 8            |
+      | E2E User1 | 70           | 15           |
+      | E2E User2 | 67           | 11           |
+      | E2E User3 | 15           | 9            |
     És a VB tabella:
       | név       | pont | lemaradás | kupa  |
-      | E2E User1 | 14   |           | arany |
-      | E2E User2 | 10   | + 4       | ezüst |
-      | E2E User3 | 8    | + 6       | bronz |
+      | E2E User1 | 15   |           | arany |
+      | E2E User2 | 11   | + 4       | ezüst |
+      | E2E User3 | 9    | + 6       | bronz |
     És a Trófeák oldal kupatáblája:
       | név       | kupa  | pont |
       | E2E User1 | arany | 25   |

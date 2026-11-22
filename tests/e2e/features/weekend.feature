@@ -6,7 +6,7 @@ Jellemző: Hagyományos hétvége (2 esemény: időmérő, futam)
   Pontozás (src/Rule/RuleType):
     - Időmérő: 1–10. hely, pontos hely 4 pont, top 10-ben de rossz helyen 1 pont
     - Futam: 1–10. hely, pontos hely 3 pont, top 10-ben de rossz helyen 1 pont, eltalált safety car 3 pont
-  A hétvégi pont a két esemény összege. A hétvégi sorrend adja a bajnoki pontot (14, 10, 8, …)
+  A hétvégi pont a két esemény összege. A hétvégi sorrend adja a bajnoki pontot (15, 11, 9, …)
   és a kupákat (arany, ezüst, bronz; a Trófeák oldalon 25, 18, 15 pont).
 
   Forgatókönyv: A hétvége két eseménye időrendben jelenik meg
@@ -73,15 +73,15 @@ Jellemző: Hagyományos hétvége (2 esemény: időmérő, futam)
       | E2E User3 | 6       | 9     |
     És a hétvégi összesítő az Aktuális és az Eredmények oldalon:
       | név       | hétvégi pont | bajnoki pont |
-      | E2E User1 | 70           | 14           |
-      | E2E User2 | 67           | 10           |
-      | E2E User3 | 15           | 8            |
+      | E2E User1 | 70           | 15           |
+      | E2E User2 | 67           | 11           |
+      | E2E User3 | 15           | 9            |
     # az admin nem tagja a bajnokságnak: nincs a tabellában
     És a VB tabella:
       | név       | pont | lemaradás | kupa  |
-      | E2E User1 | 14   |           | arany |
-      | E2E User2 | 10   | + 4       | ezüst |
-      | E2E User3 | 8    | + 6       | bronz |
+      | E2E User1 | 15   |           | arany |
+      | E2E User2 | 11   | + 4       | ezüst |
+      | E2E User3 | 9    | + 6       | bronz |
     És az "Időmérők Legjobbjai (TOP 3):" rekord:
       | név       | pont |
       | E2E User1 | 40   |
@@ -118,14 +118,14 @@ Jellemző: Hagyományos hétvége (2 esemény: időmérő, futam)
       | E2E User3 | 6       | 9     |
     És a hétvégi összesítő az Aktuális és az Eredmények oldalon:
       | név       | hétvégi pont | bajnoki pont |
-      | E2E User2 | 73           | 14           |
-      | E2E User1 | 64           | 10           |
-      | E2E User3 | 15           | 8            |
+      | E2E User2 | 73           | 15           |
+      | E2E User1 | 64           | 11           |
+      | E2E User3 | 15           | 9            |
     És a VB tabella:
       | név       | pont | lemaradás | kupa  |
-      | E2E User2 | 14   |           | arany |
-      | E2E User1 | 10   | + 4       | ezüst |
-      | E2E User3 | 8    | + 6       | bronz |
+      | E2E User2 | 15   |           | arany |
+      | E2E User1 | 11   | + 4       | ezüst |
+      | E2E User3 | 9    | + 6       | bronz |
     És az "Időmérők Legjobbjai (TOP 3):" rekord:
       | név       | pont |
       | E2E User2 | 40   |
@@ -157,9 +157,9 @@ Jellemző: Hagyományos hétvége (2 esemény: időmérő, futam)
     Akkor az Aktuális oldal táblái sorban: "HÉTVÉGE, FUTAM, IDŐMÉRŐ"
     És a hétvégi összesítő az Aktuális oldalon:
       | név       | hétvégi pont | bajnoki pont |
-      | E2E User1 | 70           | 14           |
-      | E2E User2 | 67           | 10           |
-      | E2E User3 | 15           | 8            |
+      | E2E User1 | 70           | 15           |
+      | E2E User2 | 67           | 11           |
+      | E2E User3 | 15           | 9            |
 
   # Futam javítva: NOR VER … + safety car Nem. Futam: User1 8×3 + 2 + 3 (SC) = 29, User2 26, User3 6.
   Forgatókönyv: A futam eredmény és a safety car javítása után az időmérő pontjai megmaradnak, a hétvége újraszámolódik
@@ -173,14 +173,14 @@ Jellemző: Hagyományos hétvége (2 esemény: időmérő, futam)
     És a "FUTAM" táblán "E2E User1" tippjének jelölése: "közeli, közeli, pontos, pontos, pontos, pontos, pontos, pontos, pontos, pontos, pontos"
     És a hétvégi összesítő az Aktuális és az Eredmények oldalon:
       | név       | hétvégi pont | bajnoki pont |
-      | E2E User1 | 69           | 14           |
-      | E2E User2 | 60           | 10           |
-      | E2E User3 | 12           | 8            |
+      | E2E User1 | 69           | 15           |
+      | E2E User2 | 60           | 11           |
+      | E2E User3 | 12           | 9            |
     És a VB tabella:
       | név       | pont | lemaradás | kupa  |
-      | E2E User1 | 14   |           | arany |
-      | E2E User2 | 10   | + 4       | ezüst |
-      | E2E User3 | 8    | + 6       | bronz |
+      | E2E User1 | 15   |           | arany |
+      | E2E User2 | 11   | + 4       | ezüst |
+      | E2E User3 | 9    | + 6       | bronz |
     És az "Időmérők Legjobbjai (TOP 3):" rekord:
       | név       | pont |
       | E2E User1 | 40   |
@@ -208,7 +208,7 @@ Jellemző: Hagyományos hétvége (2 esemény: időmérő, futam)
       | E2E User3 | bronz | 15   |
     És a hétvégén pontosan 3 kupát osztottak ki
 
-  # futam: User1 30, User2 33, User3 9 -> bajnoki pont User2 14, User1 10, User3 8
+  # futam: User1 30, User2 33, User3 9 -> bajnoki pont User2 15, User1 11, User3 9
   Forgatókönyv: Az időmérő eredmény törlése után a hétvége csak a futamból áll
     Amennyiben lezajlott hétvége van eredményekkel
     Ha az admin törli az "Időmérő" eredményét
@@ -221,14 +221,14 @@ Jellemző: Hagyományos hétvége (2 esemény: időmérő, futam)
       | E2E User3 | 9     |
     És a hétvégi összesítő az Aktuális és az Eredmények oldalon:
       | név       | hétvégi pont | bajnoki pont |
-      | E2E User2 | 33           | 14           |
-      | E2E User1 | 30           | 10           |
-      | E2E User3 | 9            | 8            |
+      | E2E User2 | 33           | 15           |
+      | E2E User1 | 30           | 11           |
+      | E2E User3 | 9            | 9            |
     És a VB tabella:
       | név       | pont | lemaradás | kupa  |
-      | E2E User2 | 14   |           | arany |
-      | E2E User1 | 10   | + 4       | ezüst |
-      | E2E User3 | 8    | + 6       | bronz |
+      | E2E User2 | 15   |           | arany |
+      | E2E User1 | 11   | + 4       | ezüst |
+      | E2E User3 | 9    | + 6       | bronz |
     És a Trófeák oldal kupatáblája:
       | név       | kupa  | pont |
       | E2E User2 | arany | 25   |
@@ -244,8 +244,8 @@ Jellemző: Hagyományos hétvége (2 esemény: időmérő, futam)
     # 0 gyűjtött pont -> 0 bajnoki pont; a bronz (a jelenlegi szabály szerint) a 0 pontos harmadiké
     És a VB tabella:
       | név       | pont | kupa  |
-      | E2E User1 | 14   | arany |
-      | E2E User2 | 10   | ezüst |
+      | E2E User1 | 15   | arany |
+      | E2E User2 | 11   | ezüst |
       | E2E User3 | 0    | bronz |
     És a Trófeák oldal kupatáblája:
       | név       | kupa  |
