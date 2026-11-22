@@ -77,6 +77,37 @@ Four entry points defined in `webpack.config.js`: app.js, module_reload.js, mess
 - **App:** http://127.0.0.1:8000/ (nginx container maps port 80 → host 8000)
 - **PHPMyAdmin:** http://localhost:8080/ (root/root)
 
+## Deploy (production package)
+
+Production is hosted on Nethely and updated by the user via FTP sync (only changed files). Claude builds the package into `deploy/` (excluded via `.git/info/exclude`) from the latest committed `master`; the dev `vendor/` and `public/build` stay untouched. Don't use `.github/workflows/main.yml` (outdated: PHP 7.4, Node 14). From the repo root:
+
+```bash
+rm -rf deploy && mkdir deploy
+git archive HEAD | tar -x -C deploy        # committed state only
+
+docker exec -e COMPOSER_ALLOW_SUPERUSER=1 -w /var/www/f1tipp_sf4/deploy f1tipp-php-1 \
+  composer install --no-dev --optimize-autoloader --no-scripts --no-interaction
+docker exec -e APP_ENV=prod -e APP_DEBUG=0 -w /var/www/f1tipp_sf4/deploy f1tipp-php-1 \
+  php bin/console assets:install public --no-interaction      # public/bundles (EasyAdmin)
+(cd deploy && ln -s ../node_modules node_modules && npx encore production)
+```
+
+Smoke test before cleanup (local DB, `pkill` is missing in the container, stop it via `/proc/*/cmdline`):
+```bash
+docker exec -d -e APP_ENV=prod -e APP_DEBUG=0 -e DATABASE_URL=mysql://root:root@mysql_db:3306/f1tippelek \
+  -w /var/www/f1tipp_sf4/deploy f1tipp-php-1 php -S 127.0.0.1:8099 -t public public/index.php
+docker exec f1tipp-php-1 curl -s -o /dev/null -w "%{http_code}\n" http://127.0.0.1:8099/
+```
+
+Cleanup, so only production files remain (~8 640 files, ~123 MB; `vendor/` ~8 000 of it):
+```bash
+docker exec -w /var/www/f1tipp_sf4/deploy f1tipp-php-1 sh -c 'rm -rf var && mkdir var && chown -R 1000:1000 .'
+cd deploy && rm -rf .docker .env.e2e .env.test .github .npmrc .gitignore README.md CLAUDE.md assets docker-compose.yml \
+  docs node_modules package-lock.json package.json phpunit.xml.dist tests webpack.config.js bin/phpunit
+```
+
+Result: `.env`, `bin/console`, `composer.json/.lock`, `symfony.lock`, `config/`, `public/` (`index.php`, `.htaccess`, `build/`, `bundles/`), `src/`, `templates/`, `translations/`, empty `var/`, `vendor/`. Secrets live only in the server's own `.env.local`, never upload the local one. After upload the prod cache must be cleared (`var/cache/prod`).
+
 ## Production Cron Jobs
 
 - `/cron/collect_feeds` - Refresh f1vilag.hu news feed (every 15 min)
