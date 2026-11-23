@@ -108,6 +108,8 @@ cd deploy && rm -rf .docker .env.e2e .env.test .github .npmrc .gitignore README.
 
 Result: `.env`, `bin/console`, `composer.json/.lock`, `symfony.lock`, `config/`, `public/` (`index.php`, `.htaccess`, `build/`, `bundles/`), `src/`, `templates/`, `translations/`, empty `var/`, `vendor/`. Secrets live only in the server's own `.env.local`, never upload the local one. After upload the prod cache must be cleared (`var/cache/prod`).
 
+Schema changes: if `docs/sql/` gained files since the last deploy (`git diff --name-only <last deployed commit> HEAD -- docs/sql`), hand them to the user to run on the prod DB **before** the upload; the new code expects the new tables (e.g. a missing `championship_point` table breaks every page, since the sidebar VB module renders on all of them).
+
 ## Production Cron Jobs
 
 - `/cron/collect_feeds` - Refresh f1vilag.hu news feed (every 15 min)
