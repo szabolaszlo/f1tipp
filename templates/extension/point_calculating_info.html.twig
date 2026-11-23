@@ -1,12 +1,13 @@
 {% extends 'controller/module/base_module.html.twig' %}
 {% block heading_tag %}Pontok{% endblock %}
 {% block body_content %}
+    {% set placePoints = pointProvider.getPlacePoints %}
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
             <tr>
                 <th><strong class="color-two">{{ (id ~ '_place')|trans }}</strong></th>
-                {% for place, point in pointProvider.getPlacePoints %}
+                {% for place, point in placePoints %}
                     <th class="text-center"><strong class="color-two">{{ place }}.</strong></th>
                 {% endfor %}
             </tr>
@@ -16,17 +17,17 @@
                 <td>
                     <strong class="color-one">{{ (id ~ '_converted_points')|trans }}</strong>
                 </td>
-                {% for place, point in pointProvider.getPlacePoints %}
+                {% for place, point in placePoints %}
                     <td class="text-center"><strong class="color-one">{{ point }}</strong></td>
                 {% endfor %}
             </tr>
             <tr>
-                <td class="text-center" colspan="11">
-                    <strong class="color-one">Összpont = 12 résztvevő X 5 = 60 pont</strong>
+                <td class="text-center" colspan="{{ placePoints|length + 1 }}">
+                    <strong class="color-one">Összpont = {{ placePoints|reduce((sum, point) => sum + point, 0) }} pont</strong>
                 </td>
             </tr>
             <tr>
-                <td class="text-center" colspan="11">
+                <td class="text-center" colspan="{{ placePoints|length + 1 }}">
                     <strong class="color-two center">Pont Eloszlás = Arányaiban megfelel annak, ahogyan az F1ben
                         eloszlanak a
                         pontok.</strong>

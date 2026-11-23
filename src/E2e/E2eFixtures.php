@@ -6,6 +6,7 @@ use App\Cache\ResultCache;
 use App\Cache\FileCache;
 use App\Command\E2e\E2eGuard;
 use App\Controller\Module\ResultsOfChampionshipController;
+use App\Entity\ChampionshipPoint;
 use App\Entity\Driver;
 use App\Entity\Feed;
 use App\Entity\User;
@@ -13,7 +14,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 
 /**
- * E2E tesztek alapadatai: séma újraépítése, pilóták, felhasználók, szabályok oldal, pilóta-VB cache.
+ * E2E tesztek alapadatai: séma újraépítése, pilóták, felhasználók, bajnoki pontozási tábla, szabályok oldal, pilóta-VB cache.
  * Csak az e2e környezetben használható (a hívó parancs ellenőrzi az E2eGuard-dal).
  */
 class E2eFixtures
@@ -50,6 +51,9 @@ class E2eFixtures
     ];
 
     public const RULES_INFORMATION_ID = 23;
+
+    /** bajnoki pontozási tábla (helyezés => pont): az éles kezdő értékek (docs/sql/2026-11-23-championship-point.sql) */
+    public const POINT_TABLE = [1 => 15, 2 => 11, 3 => 9, 4 => 7, 5 => 6, 6 => 5, 7 => 4, 8 => 2, 9 => 1, 10 => 0];
 
     private EntityManagerInterface $em;
     private FileCache $fileCache;
@@ -99,6 +103,10 @@ class E2eFixtures
             $user->setPassword(self::PASSWORD_HASH);
             $user->setIsAlterChamps($isAlterChamps);
             $this->em->persist($user);
+        }
+
+        foreach (self::POINT_TABLE as $place => $points) {
+            $this->em->persist((new ChampionshipPoint())->setPlace($place)->setPoints($points));
         }
 
         // hír a főoldal hírfolyamába (élesben a /cron/collect_feeds tölti az f1vilag.hu-ról)

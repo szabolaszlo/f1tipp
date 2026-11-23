@@ -1,60 +1,32 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: szabolaszlo
- * Date: 2017.12.29.
- * Time: 17:29
- */
 
 namespace App\Calculator\Provider;
 
+use App\Repository\ChampionshipPointRepository;
+
 /**
- * Class PointProvider
- * @package App\Calculator\Provider
+ * A bajnoki pontozási tábla (hétvégi helyezés => bajnoki pont), a championship_point táblából,
+ * second-level cache-ből. Adminban szerkeszthető ("Bajnoki pontok").
  */
 class PointProvider
 {
-
-    const PLACE_1 = 15;
-    const PLACE_2 = 11;
-    const PLACE_3 = 9;
-    const PLACE_4 = 7;
-    const PLACE_5 = 6;
-    const PLACE_6 = 5;
-    const PLACE_7 = 4;
-    const PLACE_8 = 2;
-    const PLACE_9 = 1;
-    const PLACE_10 = 0;
-
-    protected $placePoints = array(
-        1 => self::PLACE_1,
-        2 => self::PLACE_2,
-        3 => self::PLACE_3,
-        4 => self::PLACE_4,
-        5 => self::PLACE_5,
-        6 => self::PLACE_6,
-        7 => self::PLACE_7,
-        8 => self::PLACE_8,
-        9 => self::PLACE_9,
-        10 => self::PLACE_10
-    );
-
-    /**
-     * @param $place
-     * @return int
-     */
-    public function getPlacePoint($place)
+    public function __construct(private readonly ChampionshipPointRepository $repository)
     {
-        return isset($this->placePoints[$place])
-            ? $this->placePoints[$place]
-            : 0;
     }
 
     /**
-     * @return array
+     * @return int a helyezésért járó bajnoki pont; a táblában nem szereplő helyezés 0
      */
-    public function getPlacePoints()
+    public function getPlacePoint(int $place): int
     {
-        return $this->placePoints;
+        return $this->getPlacePoints()[$place] ?? 0;
+    }
+
+    /**
+     * @return array<int, int> helyezés => bajnoki pont, helyezés szerint növekvő
+     */
+    public function getPlacePoints(): array
+    {
+        return $this->repository->getPlacePoints();
     }
 }
