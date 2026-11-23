@@ -21,14 +21,16 @@ Encore
         // if versioning is enabled, add the file hash too
         to: 'images/[path][name].[hash:8].[ext]',
 
-        // a rule_images/ és trophy/ mappát lent hash nélkül másoljuk (az archív szezon-HTML fix URL-lel hivatkozik rájuk)
-        pattern: /^(?!rule_images\/|trophy\/)/
+        // a rule_images/, trophy/ mappát és a checkered-flag.png-t lent hash nélkül másoljuk
+        // (az archív szezon-HTML fix URL-lel hivatkozik rájuk, egy hashváltozás eltörné)
+        pattern: /^(?!rule_images\/|trophy\/|checkered-flag\.png$)/
     })
 
     .copyFiles([
         {from: './node_modules/ckeditor-full/', to: 'ckeditor/[path][name].[ext]', pattern: /\.(js|css)$/, includeSubdirectories: false},
         {from: './assets/images/rule_images', to: 'images/rule_images/[path][name].[ext]'},
         {from: './assets/images/trophy', to: 'images/trophy/[path][name].[ext]'},
+        {from: './assets/images', to: 'images/[name].[ext]', pattern: /(^|\/)checkered-flag\.png$/, includeSubdirectories: false},
         {from: './node_modules/ckeditor-full/adapters', to: 'ckeditor/adapters/[path][name].[ext]'},
         {from: './node_modules/ckeditor-full/lang', to: 'ckeditor/lang/[path][name].[ext]'},
         {from: './node_modules/ckeditor-full/plugins', to: 'ckeditor/plugins/[path][name].[ext]'},
