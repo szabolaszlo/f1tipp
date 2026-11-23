@@ -77,6 +77,13 @@ class E2eScenarios
         'e2e_user3' => ['TSU', 'STR', 'OCO', 'HUL', 'VER', 'NOR', 'LEC', 'PIA'],
     ];
 
+    /** holtverseny: e2e_user2 ugyanazt tippeli, mint e2e_user (mindketten 70), e2e_user3 15 */
+    public const TIE_BETS = [
+        'e2e_user' => [self::Q, self::Q, 'Nem'],
+        'e2e_user2' => [self::Q, self::Q, 'Nem'],
+        'e2e_user3' => [self::Q_OUTSIDERS, self::Q_OUTSIDERS, 'Igen'],
+    ];
+
     /** akik a "mások tippjei" szenáriókban már leadták az időmérő tippjüket (e2e_user még nem) */
     public const OTHERS_QUALIFY_BETS = [
         'e2e_user2' => self::Q_SWAPPED,
@@ -87,6 +94,7 @@ class E2eScenarios
         'open-weekend', 'deadline-passed', 'about-to-close', 'bets-placed', 'results-entered',
         'others-bet', 'others-bet-closed', 'race-closer', 'recent-weekend', 'finished-weekend',
         'sprint-open-weekend', 'sprint-results-entered', 'season', 'sprint-season', 'results-without-user3',
+        'results-tie',
     ];
 
     private EntityManagerInterface $em;
@@ -188,7 +196,7 @@ class E2eScenarios
                     'race' => $this->event(new Race(), 1, $now->modify('-1 hour')),
                 ];
                 break;
-            default: // bets-placed, results-entered, results-without-user3
+            default: // bets-placed, results-entered, results-without-user3, results-tie
                 $events = [
                     'qualify' => $this->event(new Qualify(), 1, $now->modify('-2 hours')),
                     'race' => $this->event(new Race(), 1, $now->modify('-1 hour')),
@@ -236,7 +244,11 @@ class E2eScenarios
             $this->placeBets($events['qualify'], $events['race'], ['e2e_user', 'e2e_user2']);
         }
 
-        if (in_array($name, ['results-entered', 'recent-weekend', 'finished-weekend', 'results-without-user3'], true)) {
+        if ($name === 'results-tie') {
+            $this->placeBets($events['qualify'], $events['race'], null, self::TIE_BETS);
+        }
+
+        if (in_array($name, ['results-entered', 'recent-weekend', 'finished-weekend', 'results-without-user3', 'results-tie'], true)) {
             $info['results'] = [
                 'qualify' => $this->result($events['qualify'], self::Q)->getId(),
                 'race' => $this->result($events['race'], self::Q, self::RACE_SAFETY_CAR)->getId(),
@@ -324,9 +336,9 @@ class E2eScenarios
         return $event;
     }
 
-    private function placeBets(Event $qualify, Event $race, ?array $onlyUsers = null): void
+    private function placeBets(Event $qualify, Event $race, ?array $onlyUsers = null, array $bets = self::BETS): void
     {
-        foreach (self::BETS as $username => [$qualifyTip, $raceTip, $safetyCar]) {
+        foreach ($bets as $username => [$qualifyTip, $raceTip, $safetyCar]) {
             if ($onlyUsers !== null && !in_array($username, $onlyUsers, true)) {
                 continue;
             }

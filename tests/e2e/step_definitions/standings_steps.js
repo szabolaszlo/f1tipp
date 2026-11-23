@@ -69,7 +69,7 @@ When('az Eredmények oldalon a/az {string} évre kattint', year => {
 // --- oldalsáv
 
 // oszlopok: név, és tetszőlegesen pont | lemaradás | kupa ("arany", több is vesszővel) | kupák ("1 arany, 2 ezüst")
-Then('a VB tabella:', async table => {
+const seeStandings = async (table, ignoreOrder) => {
     I.amOnPage('/');
     const rows = rowsOf(table);
     const columns = Object.keys(rows[0] || {});
@@ -89,7 +89,25 @@ Then('a VB tabella:', async table => {
         if (columns.includes('kupák')) out.kupák = trophyCounts(r['kupák']);
         return out;
     });
-    assert.deepStrictEqual((await sidebarPage.standings()).map(pick), expected);
+    const byName = (a, b) => a.név.localeCompare(b.név);
+    const actual = (await sidebarPage.standings()).map(pick);
+    assert.deepStrictEqual(ignoreOrder ? actual.sort(byName) : actual, ignoreOrder ? expected.sort(byName) : expected);
+};
+
+Then('a VB tabella:', table => seeStandings(table, false));
+
+// teljes holtversenynél (azonos pont és kupák) a tabella sorrendje nincs meghatározva
+Then('a VB tabella, sorrendtől függetlenül:', table => seeStandings(table, true));
+
+// "Pontok" modul: "helyezés:pont" párok, és az összpont sora
+Then('a pontszámítás táblázata: {string}, összesen {int} pont', async (pairs, total) => {
+    I.amOnPage('/');
+    assert.deepStrictEqual(await sidebarPage.pointTable(), {pairs, total: `Összpont = ${total} pont`});
+});
+
+Then('a VB modulban a hátralévő pontok: {string}', async text => {
+    I.amOnPage('/');
+    assert.strictEqual(await sidebarPage.remainingPoints(), text);
 });
 
 Then('a VB tabellában szerepel: {string}', async name => {

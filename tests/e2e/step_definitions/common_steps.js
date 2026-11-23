@@ -14,6 +14,7 @@ Given('az időmérő határideje {int} másodperc múlva lejár', seconds => see
 Given('mindhárom játékos tippelt, de még nincs eredmény', () => seed('bets-placed'));
 Given('lezajlott hétvége van eredményekkel', () => seed('results-entered'));
 Given('lezajlott hétvége van eredményekkel, de E2E User3 nem tippelt', () => seed('results-without-user3'));
+Given('lezajlott hétvége van eredményekkel, E2E User1 és E2E User2 holtversenyben', () => seed('results-tie'));
 Given('lezajlott sprint hétvége van eredményekkel', () => seed('sprint-results-entered'));
 Given('E2E User2 és E2E User3 már tippelt az időmérőre, E2E User1 még nem', () => seed('others-bet'));
 Given('E2E User2 és E2E User3 tippelt az időmérőre, E2E User1 nem, és a határidő lejárt', () => seed('others-bet-closed'));

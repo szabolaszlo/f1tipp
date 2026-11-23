@@ -59,6 +59,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkTo(MessageCrudController::class, 'admin_messages', 'fas fa-envelope');
         yield MenuItem::linkTo(DriverCrudController::class, 'admin_driver', 'fas fa-car');
         yield MenuItem::linkTo(InformationCrudController::class, 'admin_information', 'fas fa-newspaper');
+        yield MenuItem::linkTo(ChampionshipPointCrudController::class, 'admin_championship_points', 'fas fa-list-ol');
         yield MenuItem::linkTo(SettingCrudController::class, 'admin_setting', 'fas fa-tools');
         yield MenuItem::linkToUrl('back_to_home', 'fas fa-globe-americas', '/');
         yield MenuItem::subMenu('admin_maintenance', 'fas fa-tools')->setSubItems($submenu1);

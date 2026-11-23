@@ -184,6 +184,35 @@ When('a szuperadmin felvesz egy új beállítást: {string} = {string}', async (
     adminPage.saveAndReturn();
 });
 
+// --- szuperadmin: bajnoki pontozási tábla (a seed sorainak id-ja a helyezés, src/E2e/E2eFixtures.php: POINT_TABLE)
+
+When('a szuperadmin átírja a bajnoki pontokat:', async table => {
+    for (const row of rowsOf(table)) {
+        await openEdit('ChampionshipPoint', Number(row['helyezés']));
+        I.fillField('#ChampionshipPoint_points', row['pont']);
+        adminPage.saveAndReturn();
+    }
+});
+
+When('a szuperadmin törli a/az {int}. helyezés bajnoki pontját', async place => {
+    await loginAs(SUPERADMIN);
+    adminPage.deleteRow('ChampionshipPoint', place);
+});
+
+// mentés várakozás nélkül: a következő lépés a validációs hibát keresi
+When('a szuperadmin felvesz egy bajnoki pontot: {int}. helyezés, {int} pont', async (place, points) => {
+    await loginAs(SUPERADMIN);
+    adminPage.openNew('ChampionshipPoint');
+    I.fillField('#ChampionshipPoint_place', place);
+    I.fillField('#ChampionshipPoint_points', points);
+    I.click('.action-saveAndReturn');
+});
+
+Then('a mentés hibát jelez: {string}', text => {
+    I.waitForText(text, 10, 'form');
+    I.dontSeeElement('table.datagrid');
+});
+
 Then('az oldal fejlécében benne van: {string}', async text => {
     const html = await I.executeScript(() => document.head.innerHTML);
     assert.ok(html.includes(text), `a <head>-ben: ${text}`);
