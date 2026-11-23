@@ -34,6 +34,16 @@ class Prize
     #[Assert\PositiveOrZero(message: 'Az összeg nem lehet negatív.')]
     private ?int $amount = null;
 
+    /** az admin kollekció elemeinek fejléce és a részletek oldal, pl. "1. helyezés: 24,000 Ft" (új, üres sornál üres) */
+    public function __toString(): string
+    {
+        if ($this->place === null) {
+            return '';
+        }
+
+        return sprintf('%d. helyezés: %s Ft', $this->place, number_format((int) $this->amount, 0, '.', ','));
+    }
+
     public function getId(): ?int
     {
         return $this->id;

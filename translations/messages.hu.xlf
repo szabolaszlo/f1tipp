@@ -124,6 +124,16 @@
       <trans-unit id="admin_championship_point_place"><source>admin_championship_point_place</source><target>Hétvégi helyezés</target></trans-unit>
       <trans-unit id="admin_championship_point_points"><source>admin_championship_point_points</source><target>Bajnoki pont</target></trans-unit>
       <trans-unit id="admin_championship_points_help"><source>admin_championship_points_help</source><target>A hétvégi helyezésért járó bajnoki pont. A táblában nem szereplő helyezés 0 pontot ér. Mentéskor vagy törléskor a már kiszámolt %count% hétvége bajnoki pontjai az új tábla szerint újraszámolódnak.</target></trans-unit>
+      <trans-unit id="admin_prize_draw"><source>admin_prize_draw</source><target>Nyeremény</target></trans-unit>
+      <trans-unit id="admin_prize_draw_help"><source>admin_prize_draw_help</source><target>Ha a nevezés még nyitott, a modul csak a résztvevők számát mutatja.</target></trans-unit>
+      <trans-unit id="admin_prize_draw_entry_open"><source>admin_prize_draw_entry_open</source><target>Még nyitott a nevezés</target></trans-unit>
+      <trans-unit id="admin_prize_draw_entry_open_help"><source>admin_prize_draw_entry_open_help</source><target>Bepipálva a modul csak ennyit ír: „Jelenleg X résztvevő van, a díjazás még nincs kiszámolva.” (X = a bajnokság tagjai). A nevezés lezárásakor vedd ki, és töltsd ki az összegeket.</target></trans-unit>
+      <trans-unit id="admin_prize_draw_note"><source>admin_prize_draw_note</source><target>Megjegyzés</target></trans-unit>
+      <trans-unit id="admin_prize_draw_prizes"><source>admin_prize_draw_prizes</source><target>Helyezések és összegek</target></trans-unit>
+      <trans-unit id="admin_prize_draw_save"><source>admin_prize_draw_save</source><target>Mentés</target></trans-unit>
+      <trans-unit id="admin_prize_draw_saved"><source>admin_prize_draw_saved</source><target>Nyeremény mentve</target></trans-unit>
+      <trans-unit id="admin_prize_place"><source>admin_prize_place</source><target>Helyezés</target></trans-unit>
+      <trans-unit id="admin_prize_amount"><source>admin_prize_amount</source><target>Összeg (Ft)</target></trans-unit>
       <trans-unit id="admin_setting"><source>admin_setting</source><target>Beállítások</target></trans-unit>
       <trans-unit id="admin_maintenance_recalculete_points"><source>admin_maintenance_recalculate_points</source><target>Pontok Újraszámolása</target></trans-unit>
       <trans-unit id="admin_maintenance_recalculete_points_success"><source>admin_maintenance_recalculete_points_success</source><target>Sikeresen újraszámolva a pontok</target></trans-unit>

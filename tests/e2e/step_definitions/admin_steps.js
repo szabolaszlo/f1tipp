@@ -208,6 +208,59 @@ When('a szuperadmin felvesz egy bajnoki pontot: {int}. helyezés, {int} pont', a
     I.click('.action-saveAndReturn');
 });
 
+// --- szuperadmin: nyeremény (egyetlen beállítás, id = 1; a sorok az EasyAdmin CollectionField elemei,
+// mezőik id-ja PrizeDraw_prizes_<index>_place / _amount)
+
+const PRIZE_DRAW_ID = 1;
+
+const prizeIndexOf = async place => {
+    const index = await I.executeScript(place => {
+        const input = Array.from(document.querySelectorAll('input[id^="PrizeDraw_prizes_"][id$="_place"]'))
+            .find(i => i.value.trim() === String(place));
+        return input ? input.id.replace(/^PrizeDraw_prizes_(\d+)_place$/, '$1') : null;
+    }, place);
+    assert.ok(index !== null, `nincs nyeremény sor a(z) ${place}. helyezéssel`);
+    return index;
+};
+
+When('a szuperadmin megnyitja a nyeremény beállításait', () => openEdit('PrizeDraw', PRIZE_DRAW_ID));
+
+When('az {int}. helyezés összegét átírja erre: {int}', async (place, amount) => {
+    I.fillField(`#PrizeDraw_prizes_${await prizeIndexOf(place)}_amount`, amount);
+});
+
+When('a nyeremény megjegyzését átírja erre: {string}', note => I.fillField('#PrizeDraw_note', note));
+
+// az új sor a lista végére kerül, a legnagyobb indexszel
+When('felvesz egy nyeremény sort: {int}. helyezés, {int} Ft', async (place, amount) => {
+    const before = await I.grabNumberOfVisibleElements('input[id^="PrizeDraw_prizes_"][id$="_place"]');
+    I.click('.field-collection-add-button');
+    I.waitNumberOfVisibleElements('input[id^="PrizeDraw_prizes_"][id$="_place"]', before + 1);
+    const index = await I.executeScript(() => Math.max(...Array.from(document.querySelectorAll('input[id^="PrizeDraw_prizes_"][id$="_place"]'))
+        .map(i => Number(i.id.replace(/^PrizeDraw_prizes_(\d+)_place$/, '$1')))));
+    I.fillField(`#PrizeDraw_prizes_${index}_place`, place);
+    I.fillField(`#PrizeDraw_prizes_${index}_amount`, amount);
+});
+
+When('törli a/az {int}. helyezés nyeremény sorát', async place => {
+    const field = `#PrizeDraw_prizes_${await prizeIndexOf(place)}_place`;
+    I.click(locate('.field-collection-delete-button').inside(locate('.field-collection-item').withDescendant(field)));
+    I.waitForInvisible(field, 5);
+});
+
+When('bepipálja: {string}', label => I.checkOption(label));
+
+When('kiveszi a pipát: {string}', label => I.uncheckOption(label));
+
+When('elmenti a nyeremény beállításait', () => {
+    I.click('.action-saveAndContinue');
+    I.waitForElement('form#edit-PrizeDraw-form');
+    I.waitForElement('.alert-success');
+});
+
+// mentés várakozás nélkül: a következő lépés a validációs hibát keresi
+When('menteni próbálja a nyeremény beállításait', () => I.click('.action-saveAndContinue'));
+
 Then('a mentés hibát jelez: {string}', text => {
     I.waitForText(text, 10, 'form');
     I.dontSeeElement('table.datagrid');
@@ -228,11 +281,11 @@ Then('nem látszik az admin felület', () => {
 });
 
 // táblázat: metódus | útvonal | státusz. Az útvonalban {időmérő} az időmérő esemény id-ja;
-// "admin <Entitás> <művelet> <id>" alakban az EasyAdmin CRUD URL-je.
+// "admin <Entitás> <művelet> [<id>]" alakban az EasyAdmin CRUD URL-je.
 Then('a kérések válasza:', async table => {
     const rows = rowsOf(table).map(r => {
         const path = r['útvonal'].replace('{időmérő}', ctx.events.qualify && ctx.events.qualify.id);
-        const crud = path.match(/^admin (\w+) (\w+) (\d+)$/);
+        const crud = path.match(/^admin (\w+) (\w+)(?: (\d+))?$/);
         return {method: r['metódus'], url: crud ? adminPage.crudUrl(crud[1], crud[2], crud[3]) : path, status: Number(r['státusz'])};
     });
     const statuses = await I.executeScript(async rows => {

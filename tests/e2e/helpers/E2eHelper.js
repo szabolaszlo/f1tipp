@@ -136,6 +136,14 @@ class E2eHelper extends Helper {
         }
     }
 
+    /** csak a saját host 5xx válaszai (a validációs hibás űrlap 422-je, és az általa naplózott konzolhiba, rendben van) */
+    async seeNoServerErrors() {
+        const errors = this.problems.filter(p => p.startsWith('HTTP 5'));
+        if (errors.length) {
+            throw new Error(`Server errors:\n  ${errors.join('\n  ')}`);
+        }
+    }
+
     async seeNoConsoleErrors() {
         if (this.problems.length) {
             throw new Error(`Browser problems:\n  ${this.problems.join('\n  ')}`);

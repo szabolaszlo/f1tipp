@@ -94,6 +94,8 @@ Then('a/az {string} oldal hiba nélkül betöltődik', async path => {
 
 Then('nincs böngészőhiba', () => I.seeNoConsoleErrors());
 
+Then('nem volt szerverhiba', () => I.seeNoServerErrors());
+
 // az E2eHelper hibagyűjtésének önellenőrzése
 When('az oldal lekér egy nem létező saját fájlt: {string}', path => {
     I.executeScript(path => fetch(path), path);

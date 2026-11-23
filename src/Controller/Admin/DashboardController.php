@@ -2,6 +2,8 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\PrizeDraw;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -60,6 +62,10 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkTo(DriverCrudController::class, 'admin_driver', 'fas fa-car');
         yield MenuItem::linkTo(InformationCrudController::class, 'admin_information', 'fas fa-newspaper');
         yield MenuItem::linkTo(ChampionshipPointCrudController::class, 'admin_championship_points', 'fas fa-list-ol');
+        // egyetlen beállítás: a menüpont közvetlenül a szerkesztő oldalra visz
+        yield MenuItem::linkTo(PrizeDrawCrudController::class, 'admin_prize_draw', 'fas fa-trophy')
+            ->setAction(Action::EDIT)
+            ->setEntityId(PrizeDraw::ID);
         yield MenuItem::linkTo(SettingCrudController::class, 'admin_setting', 'fas fa-tools');
         yield MenuItem::linkToUrl('back_to_home', 'fas fa-globe-americas', '/');
         yield MenuItem::subMenu('admin_maintenance', 'fas fa-tools')->setSubItems($submenu1);
