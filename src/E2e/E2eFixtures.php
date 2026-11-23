@@ -9,12 +9,15 @@ use App\Controller\Module\ResultsOfChampionshipController;
 use App\Entity\ChampionshipPoint;
 use App\Entity\Driver;
 use App\Entity\Feed;
+use App\Entity\Prize;
+use App\Entity\PrizeDraw;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 
 /**
- * E2E tesztek alapadatai: séma újraépítése, pilóták, felhasználók, bajnoki pontozási tábla, szabályok oldal, pilóta-VB cache.
+ * E2E tesztek alapadatai: séma újraépítése, pilóták, felhasználók, bajnoki pontozási tábla, nyeremény, szabályok oldal,
+ * pilóta-VB cache.
  * Csak az e2e környezetben használható (a hívó parancs ellenőrzi az E2eGuard-dal).
  */
 class E2eFixtures
@@ -54,6 +57,10 @@ class E2eFixtures
 
     /** bajnoki pontozási tábla (helyezés => pont): az éles kezdő értékek (docs/sql/2026-11-23-championship-point.sql) */
     public const POINT_TABLE = [1 => 15, 2 => 11, 3 => 9, 4 => 7, 5 => 6, 6 => 5, 7 => 4, 8 => 2, 9 => 1, 10 => 0];
+
+    /** nyeremény (helyezés => összeg) és megjegyzés, lezárt nevezéssel: az éles kezdő értékek (docs/sql/2026-11-23-prize-draw.sql) */
+    public const PRIZES = [1 => 24000, 2 => 14400, 3 => 9600];
+    public const PRIZE_NOTE = '12 résztvevő X 5000 = 60000 - 12000(üzemeltetés) = 48000';
 
     private EntityManagerInterface $em;
     private FileCache $fileCache;
@@ -108,6 +115,13 @@ class E2eFixtures
         foreach (self::POINT_TABLE as $place => $points) {
             $this->em->persist((new ChampionshipPoint())->setPlace($place)->setPoints($points));
         }
+
+        // az első és egyetlen sor: id = PrizeDraw::ID
+        $prizeDraw = (new PrizeDraw())->setEntryOpen(false)->setNote(self::PRIZE_NOTE);
+        foreach (self::PRIZES as $place => $amount) {
+            $prizeDraw->addPrize((new Prize())->setPlace($place)->setAmount($amount));
+        }
+        $this->em->persist($prizeDraw);
 
         // hír a főoldal hírfolyamába (élesben a /cron/collect_feeds tölti az f1vilag.hu-ról)
         $feed = new Feed();

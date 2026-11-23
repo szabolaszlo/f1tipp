@@ -105,6 +105,18 @@ Then('a pontszámítás táblázata: {string}, összesen {int} pont', async (pai
     assert.deepStrictEqual(await sidebarPage.pointTable(), {pairs, total: `Összpont = ${total} pont`});
 });
 
+// Nyeremény modul: "helyezés:összeg" párok és a megjegyzés sora (lezárt nevezés)
+Then('a Nyeremény modul: {string}, megjegyzés: {string}', async (rows, note) => {
+    I.amOnPage('/');
+    assert.deepStrictEqual(await sidebarPage.prizeDraw(), {rows, note});
+});
+
+// nyitott nevezés: nincs helyezés-sor, csak a résztvevők száma
+Then('a Nyeremény modulban csak ez látszik: {string}', async note => {
+    I.amOnPage('/');
+    assert.deepStrictEqual(await sidebarPage.prizeDraw(), {rows: '', note});
+});
+
 Then('a VB modulban a hátralévő pontok: {string}', async text => {
     I.amOnPage('/');
     assert.strictEqual(await sidebarPage.remainingPoints(), text);

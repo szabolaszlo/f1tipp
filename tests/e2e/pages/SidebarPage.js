@@ -85,6 +85,26 @@ module.exports = {
         });
     },
 
+    /**
+     * A "Nyeremény" modul (templates/extension/prize_draw.html.twig): helyezés => összeg, és a megjegyzés sora.
+     * Nyitott nevezésnél nincs sor, a megjegyzés helyén a résztvevők száma.
+     * @returns {Promise<{rows: string, note: string}>} pl. {rows: '1:24,000 2:14,400 3:9,600', note: '12 résztvevő X 5000 …'}
+     */
+    async prizeDraw() {
+        I.waitForElement(locate('.f1-aside .f1-board__tag').withText('Nyeremény'));
+        return I.executeScript(() => {
+            const board = Array.from(document.querySelectorAll('.f1-aside .f1-board'))
+                .find(b => b.querySelector('.f1-board__tag').textContent.trim() === 'Nyeremény');
+            const note = board.querySelector('.f1-board__note');
+            return {
+                rows: Array.from(board.querySelectorAll('.f1-row'))
+                    .map(row => `${row.querySelector('.f1-pos').textContent.trim()}:${row.querySelector('.f1-num--main').textContent.trim()}`)
+                    .join(' '),
+                note: note ? note.textContent.trim() : '',
+            };
+        });
+    },
+
     /** a VB modul alatti második statisztika: "25 pont szerezhető még (1×25)" */
     async remainingPoints() {
         I.waitForElement('.f1-aside .f1-stats');
