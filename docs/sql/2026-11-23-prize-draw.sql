@@ -11,13 +11,13 @@ CREATE TABLE `prize_draw` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- A helyezés egyediségét az admin validátora őrzi, nem egyedi index (lásd src/Entity/Prize.php).
 CREATE TABLE `prize` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `prize_draw_id` int(11) NOT NULL,
   `place` int(11) NOT NULL,
   `amount` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `UNIQ_PRIZE_DRAW_PLACE` (`prize_draw_id`, `place`),
   KEY `IDX_51C88BC1DF58A3C6` (`prize_draw_id`),
   CONSTRAINT `FK_51C88BC1DF58A3C6` FOREIGN KEY (`prize_draw_id`) REFERENCES `prize_draw` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

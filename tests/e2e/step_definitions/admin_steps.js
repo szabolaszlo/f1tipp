@@ -229,6 +229,16 @@ When('az {int}. helyezés összegét átírja erre: {int}', async (place, amount
     I.fillField(`#PrizeDraw_prizes_${await prizeIndexOf(place)}_amount`, amount);
 });
 
+When('a/az {int}. helyezést átírja erre: {int}', async (place, newPlace) => {
+    I.fillField(`#PrizeDraw_prizes_${await prizeIndexOf(place)}_place`, newPlace);
+});
+
+When('felcseréli a/az {int}. és a/az {int}. helyezést', async (a, b) => {
+    const [indexA, indexB] = [await prizeIndexOf(a), await prizeIndexOf(b)];
+    I.fillField(`#PrizeDraw_prizes_${indexA}_place`, b);
+    I.fillField(`#PrizeDraw_prizes_${indexB}_place`, a);
+});
+
 When('a nyeremény megjegyzését átírja erre: {string}', note => I.fillField('#PrizeDraw_note', note));
 
 // az új sor a lista végére kerül, a legnagyobb indexszel

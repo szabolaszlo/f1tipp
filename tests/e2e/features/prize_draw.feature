@@ -36,6 +36,26 @@ Jellemző: Nyeremény modul az adminból
     Amennyiben "E2E User1" belép
     Akkor a Nyeremény modul: "1:24,000 2:14,400 4:5,000", megjegyzés: "12 résztvevő X 5000 = 60000 - 12000(üzemeltetés) = 48000"
 
+  # egy mentésben: a Doctrine előbb beszúr és módosít, csak utána töröl, ezért ezek nem ütközhetnek a régi sorokkal
+  Forgatókönyv: Törölt helyezés újrafelvétele, átsorszámozás és csere egy-egy mentésben
+    Ha a szuperadmin megnyitja a nyeremény beállításait
+    És törli a 3. helyezés nyeremény sorát
+    És felvesz egy nyeremény sort: 3. helyezés, 9000 Ft
+    És elmenti a nyeremény beállításait
+    Amennyiben "E2E User1" belép
+    Akkor a Nyeremény modul: "1:24,000 2:14,400 3:9,000", megjegyzés: "12 résztvevő X 5000 = 60000 - 12000(üzemeltetés) = 48000"
+    Ha a szuperadmin megnyitja a nyeremény beállításait
+    És felcseréli az 1. és a 2. helyezést
+    És elmenti a nyeremény beállításait
+    Amennyiben "E2E User1" belép
+    Akkor a Nyeremény modul: "1:14,400 2:24,000 3:9,000", megjegyzés: "12 résztvevő X 5000 = 60000 - 12000(üzemeltetés) = 48000"
+    Ha a szuperadmin megnyitja a nyeremény beállításait
+    És törli a 2. helyezés nyeremény sorát
+    És a 3. helyezést átírja erre: 2
+    És elmenti a nyeremény beállításait
+    Amennyiben "E2E User1" belép
+    Akkor a Nyeremény modul: "1:14,400 2:9,000", megjegyzés: "12 résztvevő X 5000 = 60000 - 12000(üzemeltetés) = 48000"
+
   Forgatókönyv: Nyitott nevezésnél csak a résztvevők száma látszik
     Ha a szuperadmin megnyitja a nyeremény beállításait
     És bepipálja: "Még nyitott a nevezés"

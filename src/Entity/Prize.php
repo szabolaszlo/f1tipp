@@ -7,11 +7,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * A Nyeremény modul egy sora: a helyezésért járó összeg (forint). A PrizeDraw-val együtt szerkeszthető.
+ *
+ * A helyezés egyediségét szándékosan nem DB-index, hanem a PrizeDraw validátora (validateUniquePlaces) őrzi:
+ * a Doctrine egy mentésben előbb beszúr és módosít, csak utána töröl, így egy (prize_draw_id, place) egyedi index
+ * mellett a törölt helyezés újrafelvétele, az átsorszámozás vagy két helyezés cseréje is 500-at adna.
  */
 #[ORM\Entity]
 #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
 #[ORM\Table(name: 'prize')]
-#[ORM\UniqueConstraint(name: 'UNIQ_PRIZE_DRAW_PLACE', columns: ['prize_draw_id', 'place'])]
 class Prize
 {
     #[ORM\Column(name: 'id', type: 'integer')]
