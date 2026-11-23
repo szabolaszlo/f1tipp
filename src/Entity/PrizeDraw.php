@@ -19,7 +19,7 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 #[ORM\Table(name: 'prize_draw')]
 class PrizeDraw
 {
-    /** az egyetlen sor id-ja (docs/sql/2026-11-23-prize-draw.sql) */
+    /** az egyetlen sor id-ja (az éles SQL ezzel szúrja be: docs/sql/pending.sql, ill. élesítés után docs/sql/applied/) */
     public const ID = 1;
 
     #[ORM\Column(name: 'id', type: 'integer')]

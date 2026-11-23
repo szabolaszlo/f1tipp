@@ -55,10 +55,10 @@ class E2eFixtures
 
     public const RULES_INFORMATION_ID = 23;
 
-    /** bajnoki pontozási tábla (helyezés => pont): az éles kezdő értékek (docs/sql/2026-11-23-championship-point.sql) */
+    /** bajnoki pontozási tábla (helyezés => pont): az éles kezdő értékek (docs/sql/pending.sql, ill. élesítés után docs/sql/applied/) */
     public const POINT_TABLE = [1 => 15, 2 => 11, 3 => 9, 4 => 7, 5 => 6, 6 => 5, 7 => 4, 8 => 2, 9 => 1, 10 => 0];
 
-    /** nyeremény (helyezés => összeg) és megjegyzés, lezárt nevezéssel: az éles kezdő értékek (docs/sql/2026-11-23-prize-draw.sql) */
+    /** nyeremény (helyezés => összeg) és megjegyzés, lezárt nevezéssel: az éles kezdő értékek (docs/sql/pending.sql, ill. élesítés után docs/sql/applied/) */
     public const PRIZES = [1 => 24000, 2 => 14400, 3 => 9600];
     public const PRIZE_NOTE = '12 résztvevő X 5000 = 60000 - 12000(üzemeltetés) = 48000';
 
