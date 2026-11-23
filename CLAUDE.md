@@ -117,3 +117,4 @@ Result: `.env`, `bin/console`, `composer.json/.lock`, `symfony.lock`, `config/`,
 
 - Read-only JSON endpoints for the Vue SPA live in `src/Controller/Api/ContentApiController.php` (`/api/events`, `/api/feeds`, `/api/information/{id}`); API Platform was removed
 - Legacy code exists in `src/LegacyService/` namespace, being refactored incrementally
+- The weekend place → championship point table lives in the `championship_point` table (entity `ChampionshipPoint`, admin menu "Bajnoki pontok", ROLE_SUPER_ADMIN), read through `PointProvider` from the second-level cache. Saving or deleting a row rescores every already calculated weekend from the stored weekend totals (`ChampionshipPointSubscriber` → `ChampionshipPointRecalculator`). The e2e seed loads the initial values (`E2eFixtures::POINT_TABLE`); hand-written prod schema changes go in `docs/sql/`
