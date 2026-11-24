@@ -97,3 +97,121 @@ WHERE `content` LIKE '%checkered-flag.6fb7dbeb.png%';
 SELECT `slug` FROM `information`
 WHERE `content` LIKE '%/src/view/image/%'
    OR `content` REGEXP 'build/images/(trophy_[a-z]+|checkered-flag)\\.[0-9a-f]{8}\\.png';
+
+-- ============================================================================
+-- 4. Szabályzat új szövege (extract-static-points branch, 2026-11-23)
+-- ============================================================================
+-- Az information 23-as sora (Szabályzat menü) tömörebb, a mostani pontozáshoz igazított szöveget kap (a régi
+-- létszámarányos pontozás és az elavult példaképek kikerültek). Fix szélességek nélkül, a mobilos megjelenést
+-- a .f1-prose stílus adja. Utána az adminban szerkeszthető marad. Ha élesben a futtatás előtt az adminban
+-- módosítják a szabályzatot, ez felülírja. Utána a prod cache-t üríteni kell (2LC).
+
+UPDATE `information` SET `content` = '<p><strong>Röviden:</strong> minden versenyhétvégén megtippeled az időmérő, a sprint és a futam sorrendjét. A találataidért hétvégi pontokat kapsz. A hétvégi pontok sorrendje alapján jár a bajnoki pont, és az éves bajnokságot a legtöbb bajnoki pontot gyűjtő tippelő nyeri.</p>
+
+<h3>Mire tippelsz?</h3>
+
+<table>
+	<thead>
+		<tr>
+			<th>Esemény</th>
+			<th>Telitalálat</th>
+			<th>Mellétalálat</th>
+			<th>Max.</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Időmérő (első 10)</td>
+			<td>4</td>
+			<td>1</td>
+			<td>40</td>
+		</tr>
+		<tr>
+			<td>Sprint (első 8)</td>
+			<td>1</td>
+			<td>0</td>
+			<td>8</td>
+		</tr>
+		<tr>
+			<td>Futam (első 10)</td>
+			<td>3</td>
+			<td>1</td>
+			<td>30</td>
+		</tr>
+		<tr>
+			<td>Safety Car (igen/nem)</td>
+			<td>3</td>
+			<td>0</td>
+			<td>3</td>
+		</tr>
+	</tbody>
+</table>
+
+<ul>
+	<li><strong>Telitalálat:</strong> a versenyző pontosan azon a helyen végzett, ahová tippelted.</li>
+	<li><strong>Mellétalálat:</strong> a versenyző bekerült a tippelt első 10-be, csak más helyen.</li>
+	<li>Tippelni az adott esemény kezdetéig lehet.</li>
+	<li>A hivatalos végeredmény számít, nem a rajtsorrend. Ha utólag változik (pl. büntetés miatt), nálunk is változik. Forrás: <a href="https://www.formula1.com/en/results.html">formula1.com</a>.</li>
+</ul>
+
+<h3>Safety Car</h3>
+
+<p>Arra tippelsz, hogy a futamon kiküldik-e a biztonsági autót. Hogy hányszor, az mindegy. Csak a valódi Safety Car számít, a virtuális (VSC) nem.</p>
+
+<ul>
+	<li><strong>Számít:</strong> ha a Safety Car mögött mennek és számolódnak a körök, vagy ha a futam a Safety Car mögül indul.</li>
+	<li><strong>Nem számít:</strong> ha piros zászlós megszakítás alatt, csak pályaellenőrzésre küldik ki (pl. nagy esőben).</li>
+</ul>
+
+<h3>Hétvégi és bajnoki pontok</h3>
+
+<p>A hétvége végén összeadjuk mindenki hétvégi pontjait. Ebből sorrend lesz, és a helyezésed (felső sor) alapján kapsz bajnoki pontot (alsó sor):</p>
+
+<table>
+	<thead>
+		<tr>
+			<th style="text-align:center">1.</th>
+			<th>2.</th>
+			<th>3.</th>
+			<th>4.</th>
+			<th>5.</th>
+			<th>6.</th>
+			<th>7.</th>
+			<th>8.</th>
+			<th>9.</th>
+			<th>10.</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td style="text-align:center">15</td>
+			<td>11</td>
+			<td>9</td>
+			<td>7</td>
+			<td>6</td>
+			<td>5</td>
+			<td>4</td>
+			<td>2</td>
+			<td>1</td>
+			<td>0</td>
+		</tr>
+	</tbody>
+</table>
+
+<ul>
+	<li>Az éves bajnokságba csak a bajnoki pontok számítanak. A hétvégi pontok csak a hétvégi sorrendet döntik el.</li>
+	<li>A 10. helytől hátrébb nem jár bajnoki pont, és 0 hétvégi ponttal sem.</li>
+	<li><strong>Holtverseny:</strong> azonos hétvégi pontszám azonos helyezést ér, a következő helyezések kimaradnak. Pl. ha ketten holtversenyben 3.-ok, mindketten 9 pontot kapnak, az utánuk következő tippelő pedig 5., és 6 pontot kap.</li>
+</ul>
+
+<h3>Kupák</h3>
+
+<p>A hétvége legtöbb hétvégi pontját gyűjtő tippelő arany, a második ezüst, a harmadik bronz kupát kap. Holtversenyben mindenki megkapja ugyanazt a kupát, és a következő pontszám kapja a következő kupát.</p>
+
+<h3>Bajnokság és nyeremény</h3>
+
+<ul>
+	<li>Pontegyenlőségnél a több arany kupa dönt, utána az ezüst, végül a bronz kupák száma.</li>
+	<li>Ha a pontok és a kupák is egyeznek, a holtversenyben lévők összeadják az általuk elfoglalt helyek nyereményét, és egyenlően elosztják. Pl. ha az első 3 hely díjazott, és hárman holtversenyben elsők, a három díj összegét harmadolják, a következő tippelő (valójában 4.) már nem kap díjat.</li>
+</ul>'
+WHERE `id` = 23;

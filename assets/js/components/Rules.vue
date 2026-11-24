@@ -18,7 +18,7 @@
           <div class="panel-heading text-center">
             <strong>{{ rules.title.toUpperCase() }}</strong>
           </div>
-          <div style="padding: 20px;" v-html="rules.content"></div>
+          <div class="f1-prose" v-html="rules.content"></div>
         </div>
       </div>
       <div v-else class="text-center">
