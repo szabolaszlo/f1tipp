@@ -3,16 +3,25 @@
         <span class="f1-board__tag">Nyeremény</span>
         <span class="f1-board__title">Összesített helyezés</span>
     </div>
-    <div class="f1-board__colhead">
-        <span>Helyezés</span>
-        <span class="f1-nums"><span class="f1-num f1-num--wide">Összeg</span></span>
-    </div>
-    {% for place, amount in {1: '24,000', 2: '14,400', 3: '9,600'} %}
-        <div class="f1-row">
-            <div class="f1-pos f1-pos--p{{ place }}">{{ place }}</div>
-            <div class="f1-name"></div>
-            <div class="f1-nums"><span class="f1-num f1-num--wide f1-num--main">{{ amount }}</span></div>
-        </div>
-    {% endfor %}
-    <div class="f1-board__note">12 résztvevő X 5000 = 60000 - 12000(üzemeltetés) = 48000</div>
+    {% if prizeDraw.entryOpen %}
+        <div class="f1-board__note">Jelenleg {{ participantCount }} résztvevő van, a díjazás még nincs kiszámolva.</div>
+    {% else %}
+        {% set prizes = prizeDraw.prizesByPlace %}
+        {% if prizes is not empty %}
+            <div class="f1-board__colhead">
+                <span>Helyezés</span>
+                <span class="f1-nums"><span class="f1-num f1-num--wide">Összeg</span></span>
+            </div>
+        {% endif %}
+        {% for prize in prizes %}
+            <div class="f1-row">
+                <div class="f1-pos f1-pos--p{{ prize.place }}">{{ prize.place }}</div>
+                <div class="f1-name"></div>
+                <div class="f1-nums"><span class="f1-num f1-num--wide f1-num--main">{{ prize.amount|number_format(0, '.', ',') }}</span></div>
+            </div>
+        {% endfor %}
+        {% if prizeDraw.note|trim is not empty %}
+            <div class="f1-board__note">{{ prizeDraw.note }}</div>
+        {% endif %}
+    {% endif %}
 </div>

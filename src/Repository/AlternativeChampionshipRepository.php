@@ -49,6 +49,22 @@ class AlternativeChampionshipRepository extends ServiceEntityRepository
     }
 
     /**
+     * A már kiszámolt hétvégék futamai (amelyekhez van bajnoki sor), hétvége szerint növekvő sorrendben.
+     *
+     * @return Race[]
+     */
+    public function getCalculatedRaces(): array
+    {
+        return $this->getEntityManager()->createQueryBuilder()
+            ->select('race')
+            ->from(Race::class, 'race')
+            ->where('race IN (SELECT IDENTITY(ac.race) FROM ' . AlternativeChampionship::class . ' ac)')
+            ->orderBy('race.weekendOrder', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
      * @param $user
      * @return array
      */

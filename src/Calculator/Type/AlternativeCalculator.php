@@ -2,6 +2,7 @@
 
 namespace App\Calculator\Type;
 
+use App\Calculator\ChampionshipPointConverter;
 use App\Calculator\Provider\PointProvider;
 use App\Entity\AlternativeChampionship;
 use App\Entity\Bet;
@@ -25,15 +26,13 @@ class AlternativeCalculator extends ACalculator
      */
     protected $alternativePointsProvider;
 
-    /**
-     * AlternativeCalculator constructor.
-     * @param EntityManagerInterface $em
-     * @param PointProvider $alternativePointsProvider
-     */
-    public function __construct(EntityManagerInterface $em, PointProvider $alternativePointsProvider)
+    protected ChampionshipPointConverter $converter;
+
+    public function __construct(EntityManagerInterface $em, PointProvider $alternativePointsProvider, ChampionshipPointConverter $converter)
     {
         parent::__construct($em);
         $this->alternativePointsProvider = $alternativePointsProvider;
+        $this->converter = $converter;
     }
 
     /**
@@ -96,30 +95,21 @@ class AlternativeCalculator extends ACalculator
     }
 
     /**
-     * @param Race $race
-     * @return User[]|array|object[]
+     * A hétvége résztvevőinek bajnoki pontja a hétvégi összpont sorrendje és a pontozási tábla alapján.
+     * A ChampionshipPointRecalculator ugyanezt hívja, amikor az adminban megváltozik a tábla.
      */
-    protected function calculateUsersAlternativePoints(Race $race)
+    public function calculateUsersAlternativePoints(Race $race): void
     {
+        /** @var AlternativeChampionship[] $alterChamps */
         $alterChamps = $this->em->getRepository(\App\Entity\AlternativeChampionship::class)->getByRaceCollectedPointsOrdered($race);
 
-        $place = 1;
-        $lastPoint = 0;
-        $lastPlacePoint = 0;
+        $points = $this->converter->convert(
+            array_map(fn (AlternativeChampionship $ac) => $ac->getCollectedPoints(), $alterChamps),
+            $this->alternativePointsProvider->getPlacePoints()
+        );
 
-        /** @var AlternativeChampionship $ac */
-        foreach ($alterChamps as $ac) {
-            if ($ac->getCollectedPoints() == $lastPoint) {
-                $toSavePoint = $ac->getCollectedPoints() > 0 ? $lastPlacePoint : 0;
-                $ac->setPoints($toSavePoint);
-            } else {
-                $lastPlacePoint = $this->alternativePointsProvider->getPlacePoint($place);
-                $toSavePoint = $ac->getCollectedPoints() > 0 ? $lastPlacePoint : 0;
-                $ac->setPoints($toSavePoint);
-            }
-            $lastPoint = $ac->getCollectedPoints();
-            $place++;
-
+        foreach ($alterChamps as $index => $ac) {
+            $ac->setPoints($points[$index]);
             $this->em->persist($ac);
         }
     }

@@ -35,4 +35,17 @@ class UserRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * A bajnokság tagjainak száma, élőben (a Nyeremény modul nyitott nevezésnél). Skalár eredmény, így nem
+     * kerül a second-level query cache-be: a user mentése után rögtön a friss szám látszik.
+     */
+    public function countAlternativeChampionshipUsers(): int
+    {
+        return (int) $this->createQueryBuilder('user')
+            ->select('COUNT(user.id)')
+            ->where('user.isAlterChamps = 1')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 }

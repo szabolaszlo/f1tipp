@@ -66,4 +66,48 @@ module.exports = {
             };
         });
     },
+
+    /**
+     * A "Pontok" modul (templates/extension/point_calculating_info.html.twig): helyezés => bajnoki pont, és az összpont sora.
+     * @returns {Promise<{pairs: string, total: string}>} pl. {pairs: '1:15 2:11 …', total: 'Összpont = 60 pont'}
+     */
+    async pointTable() {
+        I.waitForElement(locate('.f1-aside .f1-board__tag').withText('Pontok'));
+        return I.executeScript(() => {
+            const board = Array.from(document.querySelectorAll('.f1-aside .f1-board'))
+                .find(b => b.querySelector('.f1-board__tag').textContent.trim() === 'Pontok');
+            const places = Array.from(board.querySelectorAll('thead th')).slice(1).map(th => th.textContent.trim().replace('.', ''));
+            const points = Array.from(board.querySelectorAll('tbody tr:first-child td')).slice(1).map(td => td.textContent.trim());
+            return {
+                pairs: places.map((place, i) => `${place}:${points[i]}`).join(' '),
+                total: board.querySelector('tbody tr:nth-child(2)').textContent.trim().replace(/\s+/g, ' '),
+            };
+        });
+    },
+
+    /**
+     * A "Nyeremény" modul (templates/extension/prize_draw.html.twig): helyezés => összeg, és a megjegyzés sora.
+     * Nyitott nevezésnél nincs sor, a megjegyzés helyén a résztvevők száma.
+     * @returns {Promise<{rows: string, note: string}>} pl. {rows: '1:24,000 2:14,400 3:9,600', note: '12 résztvevő X 5000 …'}
+     */
+    async prizeDraw() {
+        I.waitForElement(locate('.f1-aside .f1-board__tag').withText('Nyeremény'));
+        return I.executeScript(() => {
+            const board = Array.from(document.querySelectorAll('.f1-aside .f1-board'))
+                .find(b => b.querySelector('.f1-board__tag').textContent.trim() === 'Nyeremény');
+            const note = board.querySelector('.f1-board__note');
+            return {
+                rows: Array.from(board.querySelectorAll('.f1-row'))
+                    .map(row => `${row.querySelector('.f1-pos').textContent.trim()}:${row.querySelector('.f1-num--main').textContent.trim()}`)
+                    .join(' '),
+                note: note ? note.textContent.trim() : '',
+            };
+        });
+    },
+
+    /** a VB modul alatti második statisztika: "25 pont szerezhető még (1×25)" */
+    async remainingPoints() {
+        I.waitForElement('.f1-aside .f1-stats');
+        return I.executeScript(() => document.querySelectorAll('.f1-aside .f1-stat')[1].textContent.trim().replace(/\s+/g, ' '));
+    },
 };

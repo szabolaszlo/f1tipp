@@ -25,16 +25,18 @@ class UserChampionshipTableRuntimeExtension implements RuntimeExtensionInterface
 
     protected UserChampionshipOrderResolver $userChampionshipOrderResolver;
 
-    /**
-     * @param EntityManagerInterface $entityManager
-     * @param Environment $twig
-     * @param UserChampionshipOrderResolver $userChampionshipOrderResolver
-     */
-    public function __construct(EntityManagerInterface $entityManager, Environment $twig, UserChampionshipOrderResolver $userChampionshipOrderResolver)
-    {
+    protected PointProvider $pointProvider;
+
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        Environment $twig,
+        UserChampionshipOrderResolver $userChampionshipOrderResolver,
+        PointProvider $pointProvider
+    ) {
         $this->entityManager = $entityManager;
         $this->twig = $twig;
         $this->userChampionshipOrderResolver = $userChampionshipOrderResolver;
+        $this->pointProvider = $pointProvider;
     }
 
     /**
@@ -59,7 +61,7 @@ class UserChampionshipTableRuntimeExtension implements RuntimeExtensionInterface
                     'remaining_weekends' => $this->entityManager->getRepository(\App\Entity\Race::class)->getRemainEvents()
                 ],
                 'details_link' => '/#/results',
-                'pointProvider' => new PointProvider(),
+                'pointProvider' => $this->pointProvider,
                 'id' => 'userChampionship'
             ]
         );

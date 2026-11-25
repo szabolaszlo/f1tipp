@@ -1630,3 +1630,93 @@ hr {
         animation: none;
     }
 }
+
+/* ---------- adminban (CKEditor) szerkesztett szöveges tartalom, pl. Szabályzat ---------- */
+/* a szerkesztő fix szélességeket ír a tartalomba (pl. <table style="width:500px">): mobilon ne lógjon ki semmi */
+.f1-prose {
+    padding: 20px;
+    line-height: 1.55;
+    overflow-wrap: break-word;
+}
+
+.f1-prose h3 {
+    color: var(--f1-accent-text);
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    margin: 24px 0 8px;
+}
+
+.f1-prose > :first-child {
+    margin-top: 0;
+}
+
+.f1-prose ul,
+.f1-prose ol {
+    padding-left: 20px;
+}
+
+.f1-prose li {
+    margin-bottom: 4px;
+}
+
+.f1-prose a {
+    color: var(--f1-accent-text);
+    text-decoration: underline;
+}
+
+.f1-prose img {
+    max-width: 100%;
+    height: auto !important;
+}
+
+.f1-prose table {
+    width: auto !important;
+    max-width: 100%;
+    margin: 8px 0 14px;
+    border-collapse: collapse;
+}
+
+.f1-prose th,
+.f1-prose td {
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--f1-line);
+}
+
+.f1-prose th {
+    color: var(--f1-accent-text);
+    font-weight: 700;
+}
+
+.f1-prose th + th,
+.f1-prose td + td {
+    text-align: center;
+}
+
+@media (max-width: 480px) {
+    .f1-prose {
+        padding: 14px;
+    }
+
+    .f1-prose th,
+    .f1-prose td {
+        padding: 6px;
+    }
+}
+
+/* 360 px alatt (pl. 320 px-es telefon) a 4 oszlopos táblázat fejlécei épp nem férnének ki */
+@media (max-width: 359px) {
+    .f1-prose {
+        padding: 12px;
+    }
+
+    .f1-prose table {
+        font-size: 14px;
+    }
+
+    .f1-prose th,
+    .f1-prose td {
+        padding: 6px 4px;
+    }
+}

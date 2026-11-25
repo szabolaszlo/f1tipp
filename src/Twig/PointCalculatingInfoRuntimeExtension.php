@@ -16,12 +16,12 @@ class PointCalculatingInfoRuntimeExtension implements RuntimeExtensionInterface
      */
     protected Environment $twig;
 
-    /**
-     * @param Environment $twig
-     */
-    public function __construct(Environment $twig)
+    protected PointProvider $pointProvider;
+
+    public function __construct(Environment $twig, PointProvider $pointProvider)
     {
         $this->twig = $twig;
+        $this->pointProvider = $pointProvider;
     }
 
     /**
@@ -34,7 +34,7 @@ class PointCalculatingInfoRuntimeExtension implements RuntimeExtensionInterface
         return $isLoggedUser ? $this->twig->render(
             'extension/point_calculating_info.html.twig',
             [
-                'pointProvider' => new PointProvider(),
+                'pointProvider' => $this->pointProvider,
                 'userLogged' => (bool)$isLoggedUser,
                 'id' => 'pointCalculatingInfo'
             ]
