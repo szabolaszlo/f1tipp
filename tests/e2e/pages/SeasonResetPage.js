@@ -90,4 +90,20 @@ module.exports = {
         I.waitForElement(locate('#flash-messages .alert-success').withText(text), 10);
         I.dontSeeElement('#flash-messages .alert-danger');
     },
+
+    // --- az élő checklist: sorok a [data-check="<kulcs>"], állapotuk a [data-status]
+
+    checkSelector(key, status) {
+        return `[data-check="${key}"]` + (status ? `[data-status="${status}"]` : '');
+    },
+
+    /** a pont állapota, és ha van megadva szöveg, az is a soron belül (a link és a részlet is beleszámít) */
+    seeCheck(key, status, text) {
+        const row = locate(this.checkSelector(key, status));
+        I.waitForElement(text ? row.withText(text) : row, 10);
+    },
+
+    clickCheckLink(key) {
+        I.click(locate(this.checkSelector(key)).find('a'));
+    },
 };

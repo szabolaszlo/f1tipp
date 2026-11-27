@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Season\ConfirmationCode;
+use App\Season\SeasonChecklist;
 use App\Season\SeasonFactsProvider;
 use App\Season\SeasonReset;
 use App\Season\SeasonResetGuard;
@@ -26,6 +27,7 @@ class SeasonResetController extends AbstractController
     public function indexAction(
         SeasonFactsProvider $factsProvider,
         SeasonResetGuard $guard,
+        SeasonChecklist $checklist,
         ConfirmationCode $confirmationCode,
     ): Response {
         $now = new \DateTimeImmutable();
@@ -36,6 +38,7 @@ class SeasonResetController extends AbstractController
             'facts' => $facts,
             'blocks' => $blocks,
             'warnings' => $guard->warnings($facts),
+            'checklist' => $checklist->build($facts, $now),
             // kód csak akkor készül, ha a nullázás engedélyezett
             'code' => $blocks === [] ? $confirmationCode->issue() : null,
         ]);

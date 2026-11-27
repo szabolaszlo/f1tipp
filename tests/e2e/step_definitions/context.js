@@ -67,6 +67,12 @@ const seed = async (scenario, opts) => {
 /** a seed szerinti "most" éve (a szerver órája), eltolva: yearOf(-1) = tavaly */
 const yearOf = (offset = 0) => new Date(ctx.serverNow * 1000).getFullYear() + offset;
 
+/** az új szezon éve: az események legkésőbbi dátumának éve (a SeasonFactsProvider currentYear-je) */
+const currentSeasonYear = async () => {
+    const {events} = await I.dbCounts();
+    return Number(Object.values(events).sort().pop().slice(0, 4));
+};
+
 const entityCounts = () => I.executeScript(() => fetch('/module/entity_counts').then(r => r.json()));
 
-module.exports = {ctx, EVENTS, TROPHIES, DRIVER_IDS, eventOf, codes, list, rowsOf, usernameOf, userIdOf, loginAs, seed, yearOf, entityCounts};
+module.exports = {ctx, EVENTS, TROPHIES, DRIVER_IDS, eventOf, codes, list, rowsOf, usernameOf, userIdOf, loginAs, seed, yearOf, currentSeasonYear, entityCounts};

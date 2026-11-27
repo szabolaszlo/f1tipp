@@ -1,5 +1,7 @@
 const assert = require('assert');
-const {ctx, seed, yearOf, loginAs} = require('./context');
+const fs = require('fs');
+const path = require('path');
+const {ctx, seed, yearOf, currentSeasonYear, loginAs} = require('./context');
 
 // Szezonváltás: kiinduló állapotok (src/E2e/E2eScenarios.php) és az adatbázis állapotának összevetése
 const {I, adminPage, seasonResetPage, trophiesPage} = inject();
@@ -157,18 +159,32 @@ Given('a szuperadmin nullázza a szezont', async () => {
     seasonResetPage.seeSuccess('Szezon nullázva:');
 });
 
-// a seed tavalyi archív bejegyzése (slug = tavalyi év); az Információk listájában keresve, a sor menüjéből törölve
+// az Információ id-ja a slug alapján, az Információk listájában keresve
+const informationIdOf = async slug => {
+    adminPage.openIndex('Information', slug);
+    const id = await I.executeScript(slug => {
+        const row = Array.from(document.querySelectorAll('table.datagrid tbody tr[data-id]'))
+            .find(tr => Array.from(tr.querySelectorAll('td')).some(td => td.textContent.trim() === slug));
+        return row ? row.dataset.id : null;
+    }, slug);
+    assert.ok(id, `nincs "${slug}" slugú Információ`);
+    return id;
+};
+
+// a seed tavalyi archív bejegyzése (slug = tavalyi év); a sor menüjéből törölve
 When('a szuperadmin törli a tavalyi archív Információt', async () => {
     await loginAs(SUPERADMIN);
     const year = String(yearOf(-1));
-    adminPage.openIndex('Information', year);
-    const id = await I.executeScript(year => {
-        const row = Array.from(document.querySelectorAll('table.datagrid tbody tr[data-id]'))
-            .find(tr => Array.from(tr.querySelectorAll('td')).some(td => td.textContent.trim() === year));
-        return row ? row.dataset.id : null;
-    }, year);
-    assert.ok(id, `nincs "${year}" slugú Információ`);
-    adminPage.deleteRow('Information', id, year);
+    adminPage.deleteRow('Information', await informationIdOf(year), year);
+});
+
+When('a szuperadmin a tavalyi archív Információ tartalmát átírja erre: {string}', async html => {
+    await loginAs(SUPERADMIN);
+    adminPage.openEdit('Information', await informationIdOf(String(yearOf(-1))));
+    I.waitForFunction(() => window.CKEDITOR && window.CKEDITOR.instances.Information_content
+        && window.CKEDITOR.instances.Information_content.status === 'ready', 15);
+    await I.executeScript(html => window.CKEDITOR.instances.Information_content.setData(html), html);
+    adminPage.saveAndReturn();
 });
 
 // --- az eredmény
@@ -233,3 +249,53 @@ When('az Eredmények oldalon a tavalyi évre kattint', () => {
 
 Then('az oldalon látszik a tavalyi évre: {string}', text =>
     I.waitForElement(locate('#main-component').withText(withYear(text, yearOf(-1))), 15));
+
+// --- az élő checklist
+
+// a szövegben {Y} a lezárt (tavalyi) év, {C} az új szezon éve (az események legkésőbbi dátumának éve), {C-1} az előző
+const withCheckYears = async text => {
+    const current = await currentSeasonYear();
+    return withYear(text, yearOf(-1)).replace(/\{C-1\}/g, current - 1).replace(/\{C\}/g, current);
+};
+
+Then('az {string} ellenőrzés állapota: {string}', (key, status) => seasonResetPage.seeCheck(key, status));
+
+Then('az {string} ellenőrzés állapota: {string}, szövege: {string}', async (key, status, text) =>
+    seasonResetPage.seeCheck(key, status, await withCheckYears(text)));
+
+// a csapat nélküli aktív pilóták: a seedelt (és az adminban változtatott) aktív pilóták és a config/packages/f1tipp_teams.yaml
+// csapat-pilótalistái különbsége, így a yaml évi frissítése nem töri el a tesztet
+const teamDriverCodes = () => {
+    const yaml = fs.readFileSync(path.resolve(__dirname, '../../../config/packages/f1tipp_teams.yaml'), 'utf8')
+        .split('\n').filter(line => !line.trim().startsWith('#')).join('\n');
+    return Array.from(yaml.matchAll(/drivers:\s*\[([^\]]*)\]/g)).flatMap(m => m[1].match(/[A-Z]{3}/g) || []);
+};
+
+Then('a {string} ellenőrzés a yaml szerint a hiányzó aktív pilótákat jelzi', async key => {
+    const {drivers} = await I.dbCounts();
+    const listed = teamDriverCodes();
+    assert.ok(listed.length > 0, 'a f1tipp_teams.yaml-ben nem találtam pilótalistát');
+    const missing = Object.entries(drivers).filter(([code, d]) => d.status === true && !listed.includes(code))
+        .map(([code]) => code).sort();
+    if (missing.length) {
+        seasonResetPage.seeCheck(key, 'fail', `Aktív pilóta csapat nélkül a f1tipp_teams.yaml-ben: ${missing.join(', ')}`);
+    } else {
+        seasonResetPage.seeCheck(key, 'ok');
+    }
+});
+
+Then('a kézi emlékeztetők láthatók: {}', list => {
+    list.split(',').map(k => k.trim()).forEach(key => seasonResetPage.seeCheck(key, 'manual'));
+});
+
+Then('a checklistben nincs jelölőnégyzet', () => I.dontSeeElement('[data-check] input'));
+
+// a link az EasyAdmin CRUD URL-jére (crudControllerFqcn, crudAction) visz, és megjelenik a lista, a szerkesztő vagy az új űrlap
+Then('az {string} ellenőrzés linkje ide visz: {string} {string}', async (key, crud, action) => {
+    seasonResetPage.open();
+    seasonResetPage.clickCheckLink(key);
+    I.waitForElement(action === 'index' ? 'table.datagrid, .datagrid-empty, .no-results' : `form#${action}-${crud}-form`, 10);
+    const url = decodeURIComponent(await I.grabCurrentUrl());
+    assert.ok(url.includes(`crudControllerFqcn=App\\Controller\\Admin\\${crud}CrudController`), `rossz vezérlő: ${url}`);
+    assert.ok(url.includes(`crudAction=${action}`), `rossz művelet: ${url}`);
+});

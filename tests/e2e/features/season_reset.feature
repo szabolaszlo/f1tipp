@@ -214,3 +214,149 @@ Jellemző: Szezonváltás admin oldal
     Akkor az oldalon látszik a tavalyi évre: "E2E archív {Y}"
     És nem volt szerverhiba
     És nincs böngészőhiba
+
+  # --- az élő checklist (kulcsonként a [data-check] sor és a [data-status] állapota)
+
+  Forgatókönyv: Az archív bejegyzés pont: megvan, illetve hiányzik
+    Amennyiben a tavalyi szezon lezárult, az archív bejegyzés megvan
+    És "E2E Superadmin" belép
+    Ha megnyitja a Szezonváltás oldalt
+    Akkor az "archive" ellenőrzés állapota: "ok", szövege: "„{Y}” archív Információ-bejegyzés megvan"
+    Amennyiben a tavalyi szezon lezárult, de nincs archív bejegyzés
+    És "E2E Superadmin" belép
+    Ha megnyitja a Szezonváltás oldalt
+    Akkor az "archive" ellenőrzés állapota: "fail", szövege: "Hiányzik a „{Y}” archív Információ-bejegyzés"
+
+  Forgatókönyv: A hash-es kép-URL az archív bejegyzésben figyelmeztet, de nem tiltja a nullázást
+    Amennyiben a tavalyi szezon lezárult, az archív bejegyzés megvan
+    És "E2E Superadmin" belép
+    Ha megnyitja a Szezonváltás oldalt
+    Akkor az "hashed_images" ellenőrzés állapota: "ok"
+    Ha a szuperadmin a tavalyi archív Információ tartalmát átírja erre: '<p>archív</p><img src="/build/images/trophy_gold.c61f05af.png">'
+    És megnyitja a Szezonváltás oldalt
+    Akkor az "hashed_images" ellenőrzés állapota: "fail", szövege: "/build/images/trophy_gold.c61f05af.png"
+    És van nullázás gomb
+    Ha a szuperadmin a tavalyi archív Információ tartalmát átírja erre: '<p>archív</p><img src="/build/images/trophy/trophy_gold.svg">'
+    És megnyitja a Szezonváltás oldalt
+    Akkor az "hashed_images" ellenőrzés állapota: "ok"
+
+  Forgatókönyv: Az alter-bejegyzés pont csak tájékoztat, a hash-es képet abban is kiszúrja
+    Amennyiben a tavalyi szezon lezárult, az archív bejegyzés megvan
+    És "E2E Superadmin" belép
+    Ha megnyitja a Szezonváltás oldalt
+    Akkor az "alter_archive" ellenőrzés állapota: "info", szövege: "„alter-{Y}” bejegyzés: nincs"
+    Ha a szuperadmin felvesz egy új információs oldalt:
+      | cím      | E2E alter                                                  |
+      | slug     | alter-{tavalyi év}                                         |
+      | tartalom | <img src="/build/images/trophy_gold.c61f05af.png">         |
+    És megnyitja a Szezonváltás oldalt
+    Akkor az "alter_archive" ellenőrzés állapota: "info", szövege: "„alter-{Y}” bejegyzés: létezik"
+    És az "hashed_images" ellenőrzés állapota: "fail", szövege: "/build/images/trophy_gold.c61f05af.png"
+
+  Forgatókönyv: A régi dátumú, eredmény nélküli események a nullázás után jelennek meg
+    Amennyiben a tavalyi szezon lezárult, az archív bejegyzés megvan
+    És "E2E Superadmin" belép
+    Ha megnyitja a Szezonváltás oldalt
+    Akkor az "stale_events" ellenőrzés állapota: "ok"
+    Ha beírja a megerősítő kódot, és a Szezon nullázása gombra kattint
+    Akkor megjelenik a siker-üzenet
+    Ha megnyitja a Szezonváltás oldalt
+    Akkor az "stale_events" ellenőrzés állapota: "fail", szövege: "4 esemény régi dátummal, eredmény nélkül"
+    Ha a szuperadmin a 2. hétvége eseményeit 3 évvel későbbre teszi
+    És megnyitja a Szezonváltás oldalt
+    Akkor az "stale_events" ellenőrzés állapota: "fail", szövege: "2 esemény régi dátummal, eredmény nélkül"
+
+  Forgatókönyv: A bajnoki pontok sora követi az admin táblát
+    Amennyiben a tavalyi szezon lezárult, az archív bejegyzés megvan
+    És "E2E Superadmin" belép
+    Ha megnyitja a Szezonváltás oldalt
+    Akkor az "championship_points" ellenőrzés állapota: "info", szövege: "Bajnoki pontok: 15-11-9-7-6-5-4-2-1-0"
+    Ha a szuperadmin átírja a bajnoki pontokat:
+      | helyezés | pont |
+      | 1        | 25   |
+      | 10       | 3    |
+    És megnyitja a Szezonváltás oldalt
+    Akkor az "championship_points" ellenőrzés állapota: "info", szövege: "Bajnoki pontok: 25-11-9-7-6-5-4-2-1-3"
+
+  Forgatókönyv: A nyeremény pont a nevezés állapotát és a díjsorok számát mutatja
+    Amennyiben a tavalyi szezon lezárult, az archív bejegyzés megvan
+    És "E2E Superadmin" belép
+    Ha megnyitja a Szezonváltás oldalt
+    Akkor az "prize" ellenőrzés állapota: "info", szövege: "Nyeremény: lezárva, 3 díjsor"
+    Ha a szuperadmin megnyitja a nyeremény beállításait
+    És bepipálja: "Még nyitott a nevezés"
+    És elmenti a nyeremény beállításait
+    És megnyitja a Szezonváltás oldalt
+    Akkor az "prize" ellenőrzés állapota: "info", szövege: "Nyeremény: nevezés nyitva, 3 díjsor"
+
+  Forgatókönyv: A résztvevők száma követi a bajnokság tagjait
+    Amennyiben a tavalyi szezon lezárult, az archív bejegyzés megvan
+    És "E2E Superadmin" belép
+    Ha megnyitja a Szezonváltás oldalt
+    Akkor az "participants" ellenőrzés állapota: "info", szövege: "Résztvevők: 3 „bajnokság tagja”"
+    Ha a szuperadmin megnyitja az adminban a "E2E User1" felhasználót
+    És kiveszi a bajnokságból
+    És elmenti
+    És megnyitja a Szezonváltás oldalt
+    Akkor az "participants" ellenőrzés állapota: "info", szövege: "Résztvevők: 2 „bajnokság tagja”"
+
+  # a várt lista a seedelt aktív pilótákból és a config/packages/f1tipp_teams.yaml-ből számolódik (nem fix kódok),
+  # így a yaml évi frissítése nem töri el a tesztet
+  Forgatókönyv: A csapat nélküli aktív pilóták a f1tipp_teams.yaml szerint
+    Amennyiben a tavalyi szezon lezárult, az archív bejegyzés megvan
+    És "E2E Superadmin" belép
+    Ha megnyitja a Szezonváltás oldalt
+    Akkor a "drivers_without_team" ellenőrzés a yaml szerint a hiányzó aktív pilótákat jelzi
+    Ha a szuperadmin megnyitja az adminban a "TSU" pilótát
+    És kikapcsolja az aktív jelölést
+    És elmenti
+    És megnyitja a Szezonváltás oldalt
+    Akkor a "drivers_without_team" ellenőrzés a yaml szerint a hiányzó aktív pilótákat jelzi
+    Ha a szuperadmin felvesz egy új pilótát:
+      | név         | Teszt Pilóta |
+      | rövidítés   | ZZZ          |
+      | pont        | 0            |
+      | aktív       | igen         |
+    És megnyitja a Szezonváltás oldalt
+    Akkor az "drivers_without_team" ellenőrzés állapota: "fail", szövege: "ZZZ"
+    És a "drivers_without_team" ellenőrzés a yaml szerint a hiányzó aktív pilótákat jelzi
+
+  # {C} az új szezon éve: az események között a legkésőbbi dátum éve (késő decemberben a seedelt jövőbeli események már a következő évbe esnek)
+  Forgatókönyv: A szabályzat címének évszáma az új szezon éve
+    Amennyiben a tavalyi szezon lezárult, az archív bejegyzés megvan
+    És "E2E Superadmin" belép
+    Ha megnyitja a Szezonváltás oldalt
+    Akkor az "rules_title" ellenőrzés állapota: "fail", szövege: "címe nem tartalmazza: {C}"
+    Ha a szuperadmin a szabályok oldal címét átírja erre: "Szabályzat {C}"
+    És megnyitja a Szezonváltás oldalt
+    Akkor az "rules_title" ellenőrzés állapota: "ok", szövege: "címe tartalmazza: {C}"
+    Ha a szuperadmin a szabályok oldal címét átírja erre: "Szabályzat {C-1}"
+    És megnyitja a Szezonváltás oldalt
+    Akkor az "rules_title" ellenőrzés állapota: "fail", szövege: "címe nem tartalmazza: {C}"
+
+  Forgatókönyv: A RAPIDAPI_KEY be van állítva
+    Amennyiben a tavalyi szezon lezárult, az archív bejegyzés megvan
+    És "E2E Superadmin" belép
+    Ha megnyitja a Szezonváltás oldalt
+    Akkor az "rapidapi_key" ellenőrzés állapota: "ok"
+
+  Forgatókönyv: A kézi emlékeztetők mind ott vannak, nem pipálhatók
+    Amennyiben a tavalyi szezon lezárult, az archív bejegyzés megvan
+    És "E2E Superadmin" belép
+    Ha megnyitja a Szezonváltás oldalt
+    Akkor a kézi emlékeztetők láthatók: backup, deploy_code, after_deploy, driver_sync, championship_sidebar
+    És a checklistben nincs jelölőnégyzet
+
+  # minden link az EasyAdmin megfelelő oldalára visz (a Szezonváltás oldalról indulva); a lépés a link után visszalép az oldalra
+  Forgatókönyv: A checklist linkjei a megfelelő admin oldalra visznek
+    Amennyiben a tavalyi szezon lezárult, az archív bejegyzés megvan
+    És "E2E Superadmin" belép
+    Ha megnyitja a Szezonváltás oldalt
+    Akkor az "archive" ellenőrzés linkje ide visz: "Information" "new"
+    És az "stale_events" ellenőrzés linkje ide visz: "Event" "index"
+    És az "championship_points" ellenőrzés linkje ide visz: "ChampionshipPoint" "index"
+    És az "prize" ellenőrzés linkje ide visz: "PrizeDraw" "edit"
+    És az "participants" ellenőrzés linkje ide visz: "User" "index"
+    És az "drivers_without_team" ellenőrzés linkje ide visz: "Driver" "index"
+    És az "rules_title" ellenőrzés linkje ide visz: "Information" "edit"
+    És az "driver_sync" ellenőrzés linkje ide visz: "Driver" "index"

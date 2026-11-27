@@ -1,5 +1,5 @@
 const assert = require('assert');
-const {ctx, DRIVER_IDS, eventOf, codes, rowsOf, userIdOf, loginAs, yearOf} = require('./context');
+const {ctx, DRIVER_IDS, eventOf, codes, rowsOf, userIdOf, loginAs, yearOf, currentSeasonYear} = require('./context');
 
 // EasyAdmin (/admin): eredmények rögzítése / javítása / törlése (ROLE_ADMIN), és a ROLE_SUPER_ADMIN menüpontjai.
 // A "megnyitja az adminban ..." lépés megjegyzi a szerkesztett entitást, a következő mező-lépések arra vonatkoznak.
@@ -129,6 +129,26 @@ When('a szuperadmin a hétvége minden eseményét {int} nappal későbbre teszi
         await shiftEventTime(days * 24);
         adminPage.saveAndReturn();
     }
+});
+
+// a szezon szenáriókban az 1. hétvége eseménykulcsa "qualify" / "race", a többié "w2_qualify" stb. (src/E2e/E2eScenarios.php)
+When('a szuperadmin a {int}. hétvége eseményeit {int} évvel későbbre teszi', async (weekend, years) => {
+    const prefix = weekend === 1 ? '' : `w${weekend}_`;
+    for (const key of [`${prefix}qualify`, `${prefix}race`]) {
+        assert.ok(ctx.events[key], `nincs ${key} esemény a seedben`);
+        await openEdit('Event', ctx.events[key].id);
+        await shiftEventTime(years * 365 * 24);
+        adminPage.saveAndReturn();
+    }
+});
+
+// a szövegben {C} az új szezon éve (az események legkésőbbi dátumának éve), {C-1} az előző
+When('a szuperadmin a szabályok oldal címét átírja erre: {string}', async text => {
+    const year = await currentSeasonYear();
+    await openEdit('Information', RULES_INFORMATION_ID);
+    waitForEditor();
+    I.fillField('#Information_title', text.replace(/\{C-1\}/g, year - 1).replace(/\{C\}/g, year));
+    adminPage.saveAndReturn();
 });
 
 When('a szuperadmin törli a/az {int}. üzenetet', async id => {
