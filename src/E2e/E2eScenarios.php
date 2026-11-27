@@ -338,7 +338,7 @@ class E2eScenarios
             // január 1. első perceiben a forgatókönyv nem futtatható (a határidők max-szal a naptári év elejére állnak)
             $yearStart = new \DateTimeImmutable($now->format('Y') . '-01-01 00:00:00');
             $weekends = [[
-                'w1',
+                '',
                 self::WEEKEND_NAME,
                 max($now->modify('-2 minutes'), $yearStart),
                 max($now->modify('-1 minute'), $yearStart),
@@ -346,15 +346,17 @@ class E2eScenarios
         } else {
             $y = (int) $now->format('Y') - 1;
             $weekends = [
-                ['w1', self::SEASON_NAMES[0], new \DateTimeImmutable(sprintf('%d-06-06 14:00:00', $y)), new \DateTimeImmutable(sprintf('%d-06-07 14:00:00', $y))],
+                ['', self::SEASON_NAMES[0], new \DateTimeImmutable(sprintf('%d-06-06 14:00:00', $y)), new \DateTimeImmutable(sprintf('%d-06-07 14:00:00', $y))],
                 ['w2', self::SEASON_NAMES[1], new \DateTimeImmutable(sprintf('%d-07-04 14:00:00', $y)),
                     $name === 'previous-season-moved' ? $now->modify('+3 days') : new \DateTimeImmutable(sprintf('%d-07-05 14:00:00', $y))],
             ];
         }
 
+        // az 1. hétvége kulcsai "qualify" / "race" (a meglévő tipp- és eredménylépések ezt használják), a többié "w2_qualify" stb.
+        $key = static fn (string $w, string $type): string => $w === '' ? $type : $w . '_' . $type;
         foreach ($weekends as $i => [$w, $weekendName, $qualifyAt, $raceAt]) {
-            $events[$w . '_qualify'] = $this->event(new Qualify(), $i + 1, $qualifyAt, $weekendName);
-            $events[$w . '_race'] = $this->event(new Race(), $i + 1, $raceAt, $weekendName);
+            $events[$key($w, 'qualify')] = $this->event(new Qualify(), $i + 1, $qualifyAt, $weekendName);
+            $events[$key($w, 'race')] = $this->event(new Race(), $i + 1, $raceAt, $weekendName);
         }
         // a 3. hétvége az utolsó: az id-sorrend az időrendet követi
         $events['next_qualify'] = $this->event(new Qualify(), 3, $now->modify('+7 days'), self::NEXT_WEEKEND_NAME);
@@ -363,15 +365,15 @@ class E2eScenarios
         foreach ($weekends as $i => [$w]) {
             foreach (self::SEASON_BETS[$i] as $username => [$qualifyTip, $raceTip, $safetyCar]) {
                 $user = $this->user($username);
-                $this->bet($user, $events[$w . '_qualify'], $qualifyTip);
-                $this->bet($user, $events[$w . '_race'], $raceTip, $safetyCar);
+                $this->bet($user, $events[$key($w, 'qualify')], $qualifyTip);
+                $this->bet($user, $events[$key($w, 'race')], $raceTip, $safetyCar);
             }
             $this->em->flush();
 
             // időrendben, eseményenként számolva, ahogy az admin rögzítené
-            $results[$w . '_qualify'] = $this->result($events[$w . '_qualify'], self::Q)->getId();
+            $results[$key($w, 'qualify')] = $this->result($events[$key($w, 'qualify')], self::Q)->getId();
             $this->calculator->calculate();
-            $results[$w . '_race'] = $this->result($events[$w . '_race'], self::Q, self::RACE_SAFETY_CAR)->getId();
+            $results[$key($w, 'race')] = $this->result($events[$key($w, 'race')], self::Q, self::RACE_SAFETY_CAR)->getId();
             $this->calculator->calculate();
         }
 
