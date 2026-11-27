@@ -119,7 +119,9 @@ class E2eScenarios
     /**
      * Felépíti a szenáriót egy frissen resetelt adatbázison.
      *
-     * @return array{serverNow: int, events: array<string, array{id: int, deadline: int}>, results?: array<string, int>}
+     * year: a szerver (PHP) szerinti mostani év; a böngésző/host időzónája szilveszterkor mást adhatna
+     *
+     * @return array{serverNow: int, year: int, events: array<string, array{id: int, deadline: int}>, results?: array<string, int>}
      */
     public function build(string $name, int $deadlineIn): array
     {
@@ -222,6 +224,7 @@ class E2eScenarios
 
         $info = [
             'serverNow' => $now->getTimestamp(),
+            'year' => (int) $now->format('Y'),
             'events' => $this->eventInfo($events),
         ];
 
@@ -293,7 +296,7 @@ class E2eScenarios
         }
         $this->em->flush();
 
-        $info = ['serverNow' => $now->getTimestamp(), 'events' => $this->eventInfo($events), 'results' => []];
+        $info = ['serverNow' => $now->getTimestamp(), 'year' => (int) $now->format('Y'), 'events' => $this->eventInfo($events), 'results' => []];
 
         foreach (self::SEASON_BETS as $i => $bets) {
             $w = 'w' . ($i + 1);
@@ -401,7 +404,12 @@ class E2eScenarios
             $this->em->flush();
         }
 
-        return ['serverNow' => $now->getTimestamp(), 'events' => $this->eventInfo($events), 'results' => $results];
+        return [
+            'serverNow' => $now->getTimestamp(),
+            'year' => (int) $now->format('Y'),
+            'events' => $this->eventInfo($events),
+            'results' => $results,
+        ];
     }
 
     /** @param array<string, Event> $events */

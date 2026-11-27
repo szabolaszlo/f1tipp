@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 class SeasonChecklist
 {
     /** a Szabályzat Információ-bejegyzés id-ja (a Rules.vue fixen ezt kéri) */
-    private const RULES_INFORMATION_ID = 23;
+    public const RULES_INFORMATION_ID = 23;
 
     private const HASHED_IMAGE_PATTERN = '#/build/images/[^"\'\s]+\.[0-9a-f]{8}\.(png|svg|jpe?g|gif|webp)#';
 

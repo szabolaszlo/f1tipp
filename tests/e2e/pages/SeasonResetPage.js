@@ -39,6 +39,12 @@ module.exports = {
         I.waitForElement(locate('#season-reset-blocks li').withText(text), 10);
     },
 
+    /** a tiltások listájának sorai, sorrendben */
+    async grabBlocks() {
+        return I.executeScript(() => Array.from(document.querySelectorAll('#season-reset-blocks li'))
+            .map(li => li.textContent.replace(/\s+/g, ' ').trim()));
+    },
+
     dontSeeBlocks() {
         I.dontSeeElement('#season-reset-blocks');
     },

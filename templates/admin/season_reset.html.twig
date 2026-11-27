@@ -26,10 +26,10 @@
         archive: {label: 'Információk', url: ea_url().unsetAll().setController(admin ~ 'InformationCrudController').setAction('new').generateUrl()},
         stale_events: {label: 'Események', url: ea_url().unsetAll().setController(admin ~ 'EventCrudController').setAction('index').generateUrl()},
         championship_points: {label: 'Bajnoki pontok', url: ea_url().unsetAll().setController(admin ~ 'ChampionshipPointCrudController').setAction('index').generateUrl()},
-        prize: {label: 'Nyeremény', url: ea_url().unsetAll().setController(admin ~ 'PrizeDrawCrudController').setAction('edit').setEntityId(1).generateUrl()},
+        prize: {label: 'Nyeremény', url: ea_url().unsetAll().setController(admin ~ 'PrizeDrawCrudController').setAction('edit').setEntityId(constant('App\\Entity\\PrizeDraw::ID')).generateUrl()},
         participants: {label: 'Felhasználók', url: ea_url().unsetAll().setController(admin ~ 'UserCrudController').setAction('index').generateUrl()},
         drivers_without_team: {label: 'Pilóták', url: ea_url().unsetAll().setController(admin ~ 'DriverCrudController').setAction('index').generateUrl()},
-        rules_title: {label: 'Szabályzat', url: ea_url().unsetAll().setController(admin ~ 'InformationCrudController').setAction('edit').setEntityId(23).generateUrl()},
+        rules_title: {label: 'Szabályzat', url: ea_url().unsetAll().setController(admin ~ 'InformationCrudController').setAction('edit').setEntityId(constant('App\\Season\\SeasonChecklist::RULES_INFORMATION_ID')).generateUrl()},
         driver_sync: {label: 'Pilóták', url: ea_url().unsetAll().setController(admin ~ 'DriverCrudController').setAction('index').generateUrl()},
     } %}
 
@@ -72,7 +72,9 @@
                 {% endfor %}
             </ul>
         {% else %}
-            <form method="post" action="{{ execute_url }}" class="d-flex align-items-center gap-3">
+            {# a gomb a beküldéskor letiltódik: a dupla kattintás második POST-ja a már beváltott kóddal ellentmondó üzenetet adna #}
+            <form method="post" action="{{ execute_url }}" class="d-flex align-items-center gap-3"
+                  onsubmit="this.querySelector('#season-reset-submit').disabled = true">
                 <input type="hidden" name="_token" value="{{ csrf_token('season_reset') }}">
                 <span>Kód: <strong id="season-reset-code">{{ code }}</strong></span>
                 <input type="text" id="season-reset-code-input" name="code" class="form-control w-auto" inputmode="numeric"

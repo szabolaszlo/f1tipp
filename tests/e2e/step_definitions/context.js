@@ -58,14 +58,23 @@ const loginAs = async name => {
 const seed = async (scenario, opts) => {
     const info = await I.seedScenario(scenario, opts);
     ctx.serverNow = info.serverNow;
+    ctx.year = info.year;
     ctx.events = info.events;
     ctx.results = {...(info.results || {})};
     ctx.loggedIn = null;
     return info;
 };
 
-/** a seed szerinti "most" éve (a szerver órája), eltolva: yearOf(-1) = tavaly */
-const yearOf = (offset = 0) => new Date(ctx.serverNow * 1000).getFullYear() + offset;
+/**
+ * a seed szerinti "most" éve, ahogy a PHP látja (a seed adja vissza; a host időzónája szilveszterkor mást adhatna),
+ * eltolva: yearOf(-1) = tavaly
+ */
+const yearOf = (offset = 0) => {
+    if (!Number.isInteger(ctx.year)) {
+        throw new Error('a seed nem adta vissza az évet (year)');
+    }
+    return ctx.year + offset;
+};
 
 /** az új szezon éve: az események legkésőbbi dátumának éve (a SeasonFactsProvider currentYear-je) */
 const currentSeasonYear = async () => {

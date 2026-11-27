@@ -3,7 +3,9 @@
 Jellemző: Szezonváltás admin oldal
   Az admin "Karbantartás / Szezonváltás" oldala (ROLE_SUPER_ADMIN): megmutatja, mi törlődik, és csak akkor ad
   megerősítő kódot és gombot, ha a nullázás engedélyezett. A tiltások: nincs mit nullázni, hiányzik az archív
-  Információ-bejegyzés, a lezárandó szezon évében még nem nullázható, jövőbeli eseményhez tartozik eredmény.
+  Információ-bejegyzés, a lezárandó szezon évében még nem nullázható, jövőbeli eseményhez tartozik eredmény (ilyenkor csak
+  ez az ok látszik), nem InnoDB a nullázott táblák valamelyike (ez csak unit tesztben: e2e-ben MyISAM nem állítható elő;
+  az e2e a megengedő állapotot, a gombot nézi).
   A nullázás POST-ja a kódot mindig elsőként váltja be (egyszer használható), utána CSRF, majd a tiltások
   újraellenőrzése; minden elutasításnál az adatbázis változatlan.
   A seed: src/E2e/E2eScenarios.php (previous-season*, current-season). Y = tavalyi év.
@@ -66,11 +68,12 @@ Jellemző: Szezonváltás admin oldal
     Akkor a tiltások között látszik az idei évre: "A {Y}. évi szezon {Y+1}. január 1-jétől nullázható."
     És nincs nullázás gomb
 
+  # a jövőbe tett eredményes esemény miatt a lezárandó év megbízhatatlan: az archív- és évszám-tiltás nem látszik
   Forgatókönyv: Jövőbe tett eseményhez tartozó eredmény tiltja a nullázást
     Amennyiben a tavalyi szezon lezárult, de egy eredményes eseményt már jövőbe tettek
     És "E2E Superadmin" belép
     Ha megnyitja a Szezonváltás oldalt
-    Akkor a tiltások között látszik: "Eredmény tartozik jövőbeli dátumú eseményhez. Az eseményeket a nullázás után írd át."
+    Akkor a tiltások között csak ez látszik: "Eredmény tartozik jövőbeli dátumú eseményhez. Az eseményeket a nullázás után írd át."
     És nincs nullázás gomb
 
   Forgatókönyv: Ha nincs mit nullázni, nincs gomb
@@ -87,6 +90,18 @@ Jellemző: Szezonváltás admin oldal
     Akkor nincs tiltás
     És van nullázás gomb
     És látszik a 6 jegyű megerősítő kód
+
+  Forgatókönyv: Tippek eredmény nélkül: a nullázás a tippeket törli
+    Amennyiben mindhárom játékos tippelt, de még nincs eredmény
+    És "E2E Superadmin" belép
+    És megnyitja a Szezonváltás oldalt
+    És megjegyzi az adatbázis állapotát
+    Ha beírja a megerősítő kódot, és a Szezon nullázása gombra kattint
+    Akkor megjelenik a siker-üzenet a megjegyzett darabszámokkal
+    És az adatbázisban 0 tipp van
+    És a tippek, eredmények, kupák és alternatív pontok törlődtek, a userek pontjai nullázódtak
+    És nem volt szerverhiba
+    És nincs böngészőhiba
 
   Forgatókönyv: A jövőbeli eseményre leadott tippekre figyelmeztet, de nem tiltja a nullázást
     Amennyiben E2E User2 és E2E User3 már tippelt az időmérőre, E2E User1 még nem
@@ -114,6 +129,19 @@ Jellemző: Szezonváltás admin oldal
     És a böngészőből elküldi a megjegyzett kódot
     Akkor megjelenik a hibaüzenet: "Hibás vagy lejárt megerősítő kód, semmi nem törlődött."
     És az adatbázis nem változott
+
+  # a kód és a token az oldal megnyitásakor érvényes volt; közben egy eredményes eseményt jövőbe tettek
+  Forgatókönyv: Ha a megnyitás óta eredményes eseményt tettek jövőbe, a szerver a jó kóddal és tokennel is elutasítja
+    Amennyiben a tavalyi szezon lezárult, az archív bejegyzés megvan
+    És "E2E Superadmin" belép
+    És megnyitja a Szezonváltás oldalt
+    És megjegyzi a megerősítő kódot
+    Ha a szuperadmin az 1. hétvége eseményeit 2 évvel későbbre teszi
+    És megjegyzi az adatbázis állapotát
+    És a böngészőből elküldi a megjegyzett kódot
+    Akkor megjelenik a hibaüzenet: "A nullázás most nem engedélyezett, semmi nem törlődött."
+    És az adatbázis nem változott
+    És a tiltások között csak ez látszik: "Eredmény tartozik jövőbeli dátumú eseményhez. Az eseményeket a nullázás után írd át."
 
   # --- a megerősítő kód
 
@@ -162,6 +190,17 @@ Jellemző: Szezonváltás admin oldal
     És az adatbázis nem változott
     És az adatbázisban 1 tipp van
 
+  # a gomb a beküldéskor letiltódik: a második kattintás nem küld újabb POST-ot (ami a beváltott kód miatt hibaüzenetet adna)
+  Forgatókönyv: Dupla kattintásra egyszer nullázódik, csak a siker-üzenet látszik
+    Amennyiben a tavalyi szezon lezárult, az archív bejegyzés megvan
+    És "E2E Superadmin" belép
+    És megnyitja a Szezonváltás oldalt
+    És megjegyzi az adatbázis állapotát
+    Ha beírja a megerősítő kódot, és duplán kattint a Szezon nullázása gombra
+    Akkor egyetlen nullázó kérés ment el
+    És megjelenik a siker-üzenet a megjegyzett darabszámokkal
+    És a tippek, eredmények, kupák és alternatív pontok törlődtek, a userek pontjai nullázódtak
+
   Forgatókönyv: Hamis CSRF-tokennel a jó kód sem töröl
     Amennyiben a tavalyi szezon lezárult, az archív bejegyzés megvan
     És "E2E Superadmin" belép
@@ -196,19 +235,31 @@ Jellemző: Szezonváltás admin oldal
     És a tippek, eredmények, kupák és alternatív pontok törlődtek, a userek pontjai nullázódtak
     És minden más adat változatlan
     Ha megnyitja a Szezonváltás oldalt
-    Akkor a tiltások között látszik: "Nincs mit nullázni."
+    Akkor a tiltások között csak ez látszik: "Nincs mit nullázni."
     És nincs nullázás gomb
+    És nem volt szerverhiba
+    És nincs böngészőhiba
 
+  # a nullázás előtt a front betölti (és a 2LC, a result cache és a FileCache megjegyzi) a tavalyi pontokat és kupákat:
+  # ha a nullázás nem ürítené a cache-eket, utána is ezek látszanának
   Forgatókönyv: A nullázás után a front azonnal az üres szezont mutatja
     Amennyiben a tavalyi szezon lezárult, az archív bejegyzés megvan
-    És a szuperadmin nullázza a szezont
-    Ha "E2E User1" belép
+    És "E2E User1" belép
+    És a VB tabella, sorrendtől függetlenül:
+      | név       | pont | kupák            |
+      | E2E User1 | 26   | 1 arany, 1 ezüst |
+      | E2E User2 | 26   | 1 arany, 1 ezüst |
+      | E2E User3 | 18   | 2 bronz          |
+    És a Trófeák oldal nem üres
+    Ha a szuperadmin nullázza a szezont
+    És "E2E User1" belép
     Akkor a VB tabella, sorrendtől függetlenül:
       | név       | pont | kupa |
       | E2E User1 | 0    |      |
       | E2E User2 | 0    |      |
       | E2E User3 | 0    |      |
     És a Trófeák oldal üres
+    És az Aktuális oldalon nem látszik tipp és eredmény
     Ha megnyitja az Eredmények oldalt
     És az Eredmények oldalon a tavalyi évre kattint
     Akkor az oldalon látszik a tavalyi évre: "E2E archív {Y}"
@@ -222,6 +273,10 @@ Jellemző: Szezonváltás admin oldal
     Amennyiben a tavalyi szezon lezárult, az archív bejegyzés megvan
     És a szuperadmin nullázza a szezont
     És a szuperadmin az 1. hétvége időmérőjét 2 óra, futamát 1 nap múlvára teszi
+    # az Aktuális oldal most a tavaly tippelt és eredményes 1. hétvégét mutatja: a régi tippekből és eredményből semmi
+    Ha "E2E User1" belép
+    Akkor az Aktuális oldalon nem látszik tipp és eredmény
+    És az "IDŐMÉRŐ" táblán nincs tipp, csak ez a megjegyzés: "Még senki sem tippelt."
     Ha "E2E User1" leadja a tippjeit:
       | esemény | helyezések                              | safety car |
       | Időmérő | VER NOR LEC PIA HAM RUS SAI ALO GAS ALB |            |
@@ -230,6 +285,7 @@ Jellemző: Szezonváltás admin oldal
       | név       | IDŐMÉRŐ |
       | E2E User1 | 40      |
     És nem volt szerverhiba
+    És nincs böngészőhiba
 
   Forgatókönyv: A nullázás után az összes pont újraszámolása hibátlanul lefut, és nem hoz létre kupát
     Amennyiben a tavalyi szezon lezárult, az archív bejegyzés megvan
@@ -237,6 +293,7 @@ Jellemző: Szezonváltás admin oldal
     Ha az admin újraszámolja az összes pontot
     Akkor nincs kupa és alternatív pont az adatbázisban
     És nem volt szerverhiba
+    És nincs böngészőhiba
 
   # --- az élő checklist (kulcsonként a [data-check] sor és a [data-status] állapota)
 
@@ -288,6 +345,9 @@ Jellemző: Szezonváltás admin oldal
     Ha a szuperadmin a 2. hétvége eseményeit 3 évvel későbbre teszi
     És megnyitja a Szezonváltás oldalt
     Akkor az "stale_events" ellenőrzés állapota: "fail", szövege: "2 esemény régi dátummal, eredmény nélkül"
+    Ha a szuperadmin az 1. hétvége eseményeit 3 évvel későbbre teszi
+    És megnyitja a Szezonváltás oldalt
+    Akkor az "stale_events" ellenőrzés állapota: "ok", szövege: "Nincs régi dátumú, eredmény nélküli esemény"
 
   Forgatókönyv: A bajnoki pontok sora követi az admin táblát
     Amennyiben a tavalyi szezon lezárult, az archív bejegyzés megvan
@@ -378,8 +438,8 @@ Jellemző: Szezonváltás admin oldal
     Akkor az "archive" ellenőrzés linkje ide visz: "Information" "new"
     És az "stale_events" ellenőrzés linkje ide visz: "Event" "index"
     És az "championship_points" ellenőrzés linkje ide visz: "ChampionshipPoint" "index"
-    És az "prize" ellenőrzés linkje ide visz: "PrizeDraw" "edit"
+    És az "prize" ellenőrzés linkje ide visz: "PrizeDraw" "edit" #1
     És az "participants" ellenőrzés linkje ide visz: "User" "index"
     És az "drivers_without_team" ellenőrzés linkje ide visz: "Driver" "index"
-    És az "rules_title" ellenőrzés linkje ide visz: "Information" "edit"
+    És az "rules_title" ellenőrzés linkje ide visz: "Information" "edit" #23
     És az "driver_sync" ellenőrzés linkje ide visz: "Driver" "index"

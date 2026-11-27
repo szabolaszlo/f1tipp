@@ -132,7 +132,7 @@ When('a szuperadmin a hétvége minden eseményét {int} nappal későbbre teszi
 });
 
 // a szezon szenáriókban az 1. hétvége eseménykulcsa "qualify" / "race", a többié "w2_qualify" stb. (src/E2e/E2eScenarios.php)
-When('a szuperadmin a {int}. hétvége eseményeit {int} évvel későbbre teszi', async (weekend, years) => {
+When('a szuperadmin a/az {int}. hétvége eseményeit {int} évvel későbbre teszi', async (weekend, years) => {
     const prefix = weekend === 1 ? '' : `w${weekend}_`;
     for (const key of [`${prefix}qualify`, `${prefix}race`]) {
         assert.ok(ctx.events[key], `nincs ${key} esemény a seedben`);

@@ -4,7 +4,7 @@ const path = require('path');
 const {ctx, seed, yearOf, currentSeasonYear, loginAs} = require('./context');
 
 // Szezonváltás: kiinduló állapotok (src/E2e/E2eScenarios.php) és az adatbázis állapotának összevetése
-const {I, adminPage, seasonResetPage, trophiesPage} = inject();
+const {I, actualPage, adminPage, seasonResetPage, trophiesPage} = inject();
 
 // --- kiinduló állapotok
 
@@ -93,6 +93,12 @@ Then('a tiltások között látszik az idei évre: {string}', text => seasonRese
 
 Then('nincs tiltás', () => seasonResetPage.dontSeeBlocks());
 
+// a tiltások listája pontosan ez az egy sor (a többi ok, pl. az archív- és évszám-ok, nem látszik)
+Then('a tiltások között csak ez látszik: {string}', async text => {
+    seasonResetPage.seeBlock(text);
+    assert.deepStrictEqual(await seasonResetPage.grabBlocks(), [text]);
+});
+
 Then('látszik a figyelmeztetés: {string}', text => seasonResetPage.seeWarning(text));
 
 Then('van nullázás gomb', () => seasonResetPage.seeSubmit());
@@ -116,6 +122,46 @@ When('megjegyzi a megerősítő kódot', async () => {
 When('beírja a megerősítő kódot, és a Szezon nullázása gombra kattint', async () => {
     seasonResetPage.submitCode(await seasonResetPage.grabCode());
 });
+
+/**
+ * Emberi dupla kattintás: az első POST-ot a szerver feldolgozza, de a válaszát visszatartjuk, amíg a második (valódi
+ * egér-)kattintás meg nem történt; így a második kattintás még a régi oldalon éri a gombot. (A Playwright dblclick-je
+ * ugyanabban a taszkban kattint kétszer, amit a Chrome egyetlen beküldéssé von össze, ezért az nem bizonyítana semmit.)
+ * Hogy a második kattintás NEM küld kérést, csak korlátos várakozással látható: 2 mp-ig várunk a második kérésre.
+ * A nullázó kérések metódusát a ctx.resetPosts gyűjti.
+ */
+When('beírja a megerősítő kódot, és duplán kattint a Szezon nullázása gombra', async () => {
+    I.fillField('#season-reset-code-input', await seasonResetPage.grabCode());
+    ctx.resetPosts = [];
+    await I.usePlaywrightTo('dupla kattintás a nullázás gombra', async ({page}) => {
+        let release;
+        const gate = new Promise(resolve => { release = resolve; });
+        const seen = [];
+        const seenPromises = [0, 1].map(i => new Promise(resolve => { seen[i] = resolve; }));
+        const isExecute = url => url.searchParams.get('routeName') === 'season_reset_execute'
+            || url.pathname.endsWith('/season_reset/execute');
+        const handler = async route => {
+            const index = ctx.resetPosts.push(route.request().method()) - 1;
+            const response = await route.fetch({maxRedirects: 0});
+            (seen[index] || (() => {}))();
+            await gate;
+            // a második beküldés felváltja az első navigációt: annak a kérése már nem teljesíthető
+            await route.fulfill({response}).catch(() => {});
+        };
+        await page.route(isExecute, handler);
+        const box = await page.locator('#season-reset-submit').boundingBox();
+        const [x, y] = [box.x + box.width / 2, box.y + box.height / 2];
+        await page.mouse.click(x, y);
+        await seenPromises[0];
+        await page.mouse.click(x, y);
+        await Promise.race([seenPromises[1], new Promise(resolve => setTimeout(resolve, 2000))]);
+        release();
+        await page.waitForSelector('#flash-messages .alert', {timeout: 10000});
+        await page.unroute(isExecute, handler);
+    });
+});
+
+Then('egyetlen nullázó kérés ment el', () => assert.deepStrictEqual(ctx.resetPosts, ['POST']));
 
 When('rossz kódot ír be, és a Szezon nullázása gombra kattint', async () => {
     seasonResetPage.submitCode(await seasonResetPage.grabCode() === '000000' ? '111111' : '000000');
@@ -240,6 +286,23 @@ Then('nincs kupa és alternatív pont az adatbázisban', async () => {
     assert.deepStrictEqual([tables.trophy, tables.alternative_championship], [0, 0]);
 });
 
+// a nullázás előtti állapot: a front ezt betölti (és cache-eli), a nullázás után ennek el kell tűnnie
+Then('a Trófeák oldal nem üres', async () => {
+    trophiesPage.open();
+    const table = await trophiesPage.seasonTable();
+    assert.ok(table.some(row => row.point > 0 && row.trophies.length > 0), `a Trófeák oldalon nincs kupa: ${JSON.stringify(table)}`);
+});
+
+// az Aktuális oldal hétvégéjének egyetlen tábláján sincs tipp-sor, eredménysor vagy pilóta-chip
+Then('az Aktuális oldalon nem látszik tipp és eredmény', async () => {
+    actualPage.open();
+    const found = await I.executeScript(() => ({
+        rows: Array.from(document.querySelectorAll('#main-component .f1-tiprow:not(.f1-tiprow--head)')).map(r => r.textContent.trim()),
+        chips: Array.from(document.querySelectorAll('#main-component .f1-chip')).map(c => c.textContent.trim()),
+    }));
+    assert.deepStrictEqual(found, {rows: [], chips: []});
+});
+
 Then('a Trófeák oldal üres', async () => {
     trophiesPage.open();
     assert.deepStrictEqual(await trophiesPage.seasonTable(), []);
@@ -295,12 +358,20 @@ Then('a kézi emlékeztetők láthatók: {}', list => {
 
 Then('a checklistben nincs jelölőnégyzet', () => I.dontSeeElement('[data-check] input'));
 
-// a link az EasyAdmin CRUD URL-jére (crudControllerFqcn, crudAction) visz, és megjelenik a lista, a szerkesztő vagy az új űrlap
-Then('az {string} ellenőrzés linkje ide visz: {string} {string}', async (key, crud, action) => {
+// a link az EasyAdmin CRUD URL-jére (crudControllerFqcn, crudAction, szerkesztésnél entityId) visz, és megjelenik
+// a lista, a szerkesztő vagy az új űrlap
+const seeCheckLink = async (key, crud, action, entityId) => {
     seasonResetPage.open();
     seasonResetPage.clickCheckLink(key);
     I.waitForElement(action === 'index' ? 'table.datagrid, .datagrid-empty, .no-results' : `form#${action}-${crud}-form`, 10);
-    const url = decodeURIComponent(await I.grabCurrentUrl());
-    assert.ok(url.includes(`crudControllerFqcn=App\\Controller\\Admin\\${crud}CrudController`), `rossz vezérlő: ${url}`);
-    assert.ok(url.includes(`crudAction=${action}`), `rossz művelet: ${url}`);
-});
+    const url = new URL(await I.grabCurrentUrl());
+    assert.strictEqual(url.searchParams.get('crudControllerFqcn'), `App\\Controller\\Admin\\${crud}CrudController`, `rossz vezérlő: ${url}`);
+    assert.strictEqual(url.searchParams.get('crudAction'), action, `rossz művelet: ${url}`);
+    if (entityId !== undefined) {
+        assert.strictEqual(url.searchParams.get('entityId'), String(entityId), `rossz entitás: ${url}`);
+    }
+};
+
+Then('az {string} ellenőrzés linkje ide visz: {string} {string}', (key, crud, action) => seeCheckLink(key, crud, action));
+
+Then('az {string} ellenőrzés linkje ide visz: {string} {string} #{int}', (key, crud, action, id) => seeCheckLink(key, crud, action, id));

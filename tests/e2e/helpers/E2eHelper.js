@@ -86,7 +86,7 @@ class E2eHelper extends Helper {
 
     /**
      * Adatbázis nulláról + nevesített szenárió (lásd App\E2e\E2eScenarios).
-     * @returns {{serverNow: number, events: Object<string, {id: number, deadline: number}>, results?: Object<string, number>}}
+     * @returns {{serverNow: number, year: number, events: Object<string, {id: number, deadline: number}>, results?: Object<string, number>}}
      */
     async seedScenario(name, opts = {}) {
         const args = ['app:e2e:scenario', name];
