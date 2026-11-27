@@ -149,7 +149,7 @@ class SeasonChecklistTest extends TestCase
 
     private function facts(?int $closingYear = 2026, ?int $currentYear = 2027, bool $archive = true): SeasonFacts
     {
-        return new SeasonFacts(new SeasonCounts(1, 1, 1, 1, 1, 1, 1), $closingYear, $currentYear, $archive, false, 0, 0);
+        return new SeasonFacts(new SeasonCounts(1, 1, 1, 1, 1, 1, 1), $closingYear, $currentYear, $archive, false, 0, 0, []);
     }
 
     /** @param array<string, list<ChecklistItem>> $sections */

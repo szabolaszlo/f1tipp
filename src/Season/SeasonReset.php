@@ -49,7 +49,13 @@ class SeasonReset
 
             $connection->commit();
         } catch (\Throwable $e) {
-            $connection->rollBack();
+            // a rollback hibája (pl. megszakadt kapcsolat) nem takarhatja el az eredeti kivételt
+            if ($connection->isTransactionActive()) {
+                try {
+                    $connection->rollBack();
+                } catch (\Throwable) {
+                }
+            }
 
             throw $e;
         }

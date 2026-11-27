@@ -57,11 +57,12 @@ class ConfirmationCodeTest extends TestCase
         $this->assertFalse($this->code->consume($a));
     }
 
-    public function test_consume_rejects_empty(): void
+    public function test_consume_rejects_empty_and_invalidates(): void
     {
-        $this->code->issue();
+        $issued = $this->code->issue();
 
         $this->assertFalse($this->code->consume(''));
+        $this->assertFalse($this->code->consume($issued));
     }
 
     public function test_consume_without_issue_is_false(): void

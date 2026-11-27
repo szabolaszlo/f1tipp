@@ -15,6 +15,8 @@ final class SeasonFacts
         public readonly bool $alterArchiveExists,
         public readonly int $resultsOnFutureEvents,
         public readonly int $betsOnFutureEvents,
+        /** @var list<string> a nullázott táblák közül a nem InnoDB-k (azokon nincs tranzakció, a rollback nem állítaná vissza) */
+        public readonly array $nonTransactionalTables,
     ) {
     }
 }

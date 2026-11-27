@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 class SeasonResetGuardTest extends TestCase
 {
     private const FUTURE_RESULT = 'Eredmény tartozik jövőbeli dátumú eseményhez. Az eseményeket a nullázás után írd át.';
+    private const NOT_INNODB = 'Nem tranzakcióképes tábla (nem InnoDB): bet, trophy. A nullázás nem lenne visszavonható, ezért tiltva.';
 
     private SeasonResetGuard $guard;
 
@@ -45,6 +46,16 @@ class SeasonResetGuardTest extends TestCase
         );
     }
 
+    public function test_last_second_of_the_closing_year_still_blocks(): void
+    {
+        $facts = $this->facts(closingYear: 2026);
+
+        $this->assertSame(
+            ['A 2026. évi szezon 2027. január 1-jétől nullázható.'],
+            $this->guard->blockReasons($facts, new \DateTimeImmutable('2026-12-31 23:59:59'))
+        );
+    }
+
     public function test_new_year_allows(): void
     {
         $facts = $this->facts(closingYear: 2026);
@@ -59,18 +70,60 @@ class SeasonResetGuardTest extends TestCase
         $this->assertSame([self::FUTURE_RESULT], $this->guard->blockReasons($facts, new \DateTimeImmutable('2027-03-01')));
     }
 
-    public function test_reasons_come_in_archive_year_future_result_order(): void
+    // a jövőbe tett eredményes esemény miatt a closingYear megbízhatatlan: az archív- és évszám-ok félrevezető lenne
+    public function test_result_on_future_event_hides_archive_and_year_reasons(): void
     {
         $facts = $this->facts(closingYear: 2026, archiveExists: false, resultsOnFutureEvents: 2);
+
+        $this->assertSame([self::FUTURE_RESULT], $this->guard->blockReasons($facts, new \DateTimeImmutable('2026-12-15')));
+    }
+
+    public function test_archive_reason_comes_before_year_reason(): void
+    {
+        $facts = $this->facts(closingYear: 2026, archiveExists: false);
 
         $this->assertSame(
             [
                 'Hiányzik a „2026” archív Információ-bejegyzés. Amíg nincs meg, a nullázás tiltva.',
                 'A 2026. évi szezon 2027. január 1-jétől nullázható.',
-                self::FUTURE_RESULT,
             ],
             $this->guard->blockReasons($facts, new \DateTimeImmutable('2026-12-15'))
         );
+    }
+
+    public function test_non_innodb_table_blocks_an_otherwise_allowed_reset(): void
+    {
+        $facts = $this->facts(nonTransactionalTables: ['bet', 'trophy']);
+
+        $this->assertSame([self::NOT_INNODB], $this->guard->blockReasons($facts, new \DateTimeImmutable('2026-02-01')));
+    }
+
+    public function test_non_innodb_reason_comes_first(): void
+    {
+        $facts = $this->facts(closingYear: 2026, archiveExists: false, nonTransactionalTables: ['bet', 'trophy']);
+
+        $this->assertSame(
+            [
+                self::NOT_INNODB,
+                'Hiányzik a „2026” archív Információ-bejegyzés. Amíg nincs meg, a nullázás tiltva.',
+                'A 2026. évi szezon 2027. január 1-jétől nullázható.',
+            ],
+            $this->guard->blockReasons($facts, new \DateTimeImmutable('2026-12-15'))
+        );
+    }
+
+    public function test_non_innodb_reason_stays_next_to_future_result(): void
+    {
+        $facts = $this->facts(closingYear: 2026, archiveExists: false, resultsOnFutureEvents: 1, nonTransactionalTables: ['bet', 'trophy']);
+
+        $this->assertSame([self::NOT_INNODB, self::FUTURE_RESULT], $this->guard->blockReasons($facts, new \DateTimeImmutable('2026-12-15')));
+    }
+
+    public function test_non_innodb_reason_stays_next_to_nothing_to_reset(): void
+    {
+        $facts = $this->facts(counts: new SeasonCounts(0, 0, 0, 0, 0, 0, 12), nonTransactionalTables: ['bet', 'trophy']);
+
+        $this->assertSame([self::NOT_INNODB, 'Nincs mit nullázni.'], $this->guard->blockReasons($facts, new \DateTimeImmutable('2026-02-01')));
     }
 
     public function test_bets_only_needs_no_archive(): void
@@ -98,6 +151,7 @@ class SeasonResetGuardTest extends TestCase
         bool $archiveExists = true,
         int $resultsOnFutureEvents = 0,
         int $betsOnFutureEvents = 0,
+        array $nonTransactionalTables = [],
     ): SeasonFacts {
         return new SeasonFacts(
             $counts ?? new SeasonCounts(10, 20, 5, 10, 1, 1, 3),
@@ -107,6 +161,7 @@ class SeasonResetGuardTest extends TestCase
             true,
             $resultsOnFutureEvents,
             $betsOnFutureEvents,
+            $nonTransactionalTables,
         );
     }
 }

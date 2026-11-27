@@ -12,11 +12,23 @@ final class SeasonResetGuard
      */
     public function blockReasons(SeasonFacts $facts, \DateTimeImmutable $now): array
     {
-        if ($facts->counts->isEmpty()) {
-            return ['Nincs mit nullázni.'];
+        $reasons = [];
+
+        if ($facts->nonTransactionalTables !== []) {
+            $reasons[] = sprintf(
+                'Nem tranzakcióképes tábla (nem InnoDB): %s. A nullázás nem lenne visszavonható, ezért tiltva.',
+                implode(', ', $facts->nonTransactionalTables)
+            );
         }
 
-        $reasons = [];
+        if ($facts->counts->isEmpty()) {
+            return [...$reasons, 'Nincs mit nullázni.'];
+        }
+
+        // a jövőbe tett eredményes esemény miatt a closingYear megbízhatatlan: az archív- és évszám-ok félrevezető lenne
+        if ($facts->resultsOnFutureEvents > 0) {
+            return [...$reasons, 'Eredmény tartozik jövőbeli dátumú eseményhez. Az eseményeket a nullázás után írd át.'];
+        }
 
         if ($facts->closingYear !== null) {
             if (!$facts->archiveExists) {
@@ -33,10 +45,6 @@ final class SeasonResetGuard
                     $facts->closingYear + 1
                 );
             }
-        }
-
-        if ($facts->resultsOnFutureEvents > 0) {
-            $reasons[] = 'Eredmény tartozik jövőbeli dátumú eseményhez. Az eseményeket a nullázás után írd át.';
         }
 
         return $reasons;

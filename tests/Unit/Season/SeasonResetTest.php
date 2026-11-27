@@ -61,6 +61,7 @@ class SeasonResetTest extends TestCase
             return 1;
         });
 
+        $this->connection->method('isTransactionActive')->willReturn(true);
         $this->connection->expects($this->once())->method('beginTransaction');
         $this->connection->expects($this->once())->method('rollBack');
         $this->connection->expects($this->never())->method('commit');
@@ -69,6 +70,33 @@ class SeasonResetTest extends TestCase
         $this->resultCachePool->expects($this->never())->method('clear');
         $this->fileCache->expects($this->never())->method('clearAll');
         $this->fileCache->expects($this->never())->method('save');
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('DB hiba');
+
+        $this->reset()->reset();
+    }
+
+    // a rollback hibája (pl. megszakadt kapcsolat) nem takarhatja el az eredeti kivételt
+    public function test_failing_rollback_does_not_hide_the_original_exception(): void
+    {
+        $this->connection->method('executeStatement')->willThrowException(new \RuntimeException('DB hiba'));
+        $this->connection->method('isTransactionActive')->willReturn(true);
+        $this->connection->expects($this->once())->method('rollBack')->willThrowException(new \LogicException('rollback hiba'));
+        $this->fileCache->expects($this->never())->method('clearAll');
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('DB hiba');
+
+        $this->reset()->reset();
+    }
+
+    // ha a tranzakció már nem él (a szerver visszagörgette), nincs mit visszagörgetni: az eredeti kivétel megy tovább
+    public function test_inactive_transaction_is_not_rolled_back(): void
+    {
+        $this->connection->method('executeStatement')->willThrowException(new \RuntimeException('DB hiba'));
+        $this->connection->method('isTransactionActive')->willReturn(false);
+        $this->connection->expects($this->never())->method('rollBack');
 
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('DB hiba');

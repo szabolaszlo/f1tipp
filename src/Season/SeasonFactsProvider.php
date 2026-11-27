@@ -9,6 +9,9 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 class SeasonFactsProvider
 {
+    /** a nullázás által írt táblák: mind InnoDB kell legyen, különben a tranzakció nem „minden vagy semmi” */
+    public const RESET_TABLES = ['bet', 'bet_attribute', 'result', 'result_attribute', 'alternative_championship', 'trophy', 'user'];
+
     public function __construct(private readonly EntityManagerInterface $em)
     {
     }
@@ -37,7 +40,23 @@ class SeasonFactsProvider
                 'SELECT COUNT(*) FROM bet b INNER JOIN `event` e ON e.id = b.event_id WHERE e.date_time > ?',
                 [$nowParam]
             ),
+            $this->nonTransactionalTables(),
         );
+    }
+
+    /**
+     * @return list<string> a nullázott táblák közül a nem InnoDB motorúak, név szerint
+     */
+    private function nonTransactionalTables(): array
+    {
+        $placeholders = implode(', ', array_fill(0, count(self::RESET_TABLES), '?'));
+
+        return array_map('strval', $this->em->getConnection()->fetchFirstColumn(
+            "SELECT TABLE_NAME FROM information_schema.TABLES
+             WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME IN ($placeholders) AND ENGINE <> 'InnoDB'
+             ORDER BY TABLE_NAME",
+            self::RESET_TABLES
+        ));
     }
 
     /**
