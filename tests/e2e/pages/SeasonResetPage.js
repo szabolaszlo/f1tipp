@@ -62,4 +62,32 @@ module.exports = {
     async grabCode() {
         return (await I.grabTextFrom('#season-reset-code')).replace(/\s+/g, '');
     },
+
+    /** a nyitott oldal nullázó űrlapja: {code, token, action}, vagy null, ha nincs (tiltás, illetve nem ez az oldal) */
+    async grabForm() {
+        return I.executeScript(() => {
+            const form = document.querySelector('#season-reset form');
+            return form ? {
+                code: document.querySelector('#season-reset-code').textContent.replace(/\s+/g, ''),
+                token: form.querySelector('input[name="_token"]').value,
+                action: form.action,
+            } : null;
+        });
+    },
+
+    /** a kód beírása és a gomb megnyomása; a válasz oldalát a flash-ellenőrzés várja meg */
+    submitCode(code) {
+        I.fillField('#season-reset-code-input', code);
+        I.click('#season-reset-submit');
+    },
+
+    seeError(text) {
+        I.waitForElement(locate('#flash-messages .alert-danger').withText(text), 10);
+        I.dontSeeElement('#flash-messages .alert-success');
+    },
+
+    seeSuccess(text) {
+        I.waitForElement(locate('#flash-messages .alert-success').withText(text), 10);
+        I.dontSeeElement('#flash-messages .alert-danger');
+    },
 };
