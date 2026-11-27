@@ -98,6 +98,14 @@ class E2eHelper extends Helper {
         return this.lastScenario;
     }
 
+    /**
+     * Az adatbázis pillanatképe (app:e2e:counts): táblák sorszáma, felhasználók és pilóták pontjai, események időpontja.
+     * @returns {Promise<{tables: Object<string, number>, users: Object, drivers: Object, events: Object<string, string>}>}
+     */
+    async dbCounts() {
+        return this._console(['app:e2e:counts']);
+    }
+
     async resetDb() {
         this._console(['app:e2e:reset']);
     }
