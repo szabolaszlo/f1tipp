@@ -76,7 +76,9 @@ Minden egy DBAL-tranzakcióban fut, `DELETE`-tel (**nem `TRUNCATE`**: a MySQL-be
   - Üzenet: „A 2026-os szezon 2027. január 1-jétől nullázható.”
 - **Második tiltó feltétel (Claude döntése):** ha van olyan `result`, amelynek az eseménye jövőbeli dátumú, a nullázás tiltva. Üzenet: „Az eseményeket a nullázás után írd át.”
   - Ez a rossz sorrend ellen véd: ha a naptárt a nullázás előtt írnák át, a `closingYear` elcsúszna, és az archív-ellenőrzés rossz évet keresne, vagy átengedné a nullázást.
+  - Ilyenkor a `closingYear` megbízhatatlan, ezért az oldal **csak ezt az okot** mutatja (az archív- és az évszám-ok félrevezető évet írnának); kivétel a nem InnoDB tábla oka, az mellette is látszik.
   - Ha a jövőbeli eseményekre már van tipp, az oldal figyelmeztet, hogy ezek is törlődnek. Ez csak figyelmeztetés, nem tilt.
+- **Nem InnoDB tábla (tiltó):** ha a nullázott táblák (`bet`, `bet_attribute`, `result`, `result_attribute`, `alternative_championship`, `trophy`, `user`) bármelyike nem InnoDB (`information_schema.TABLES`, az aktuális sémában), a nullázás tiltva. Üzenet: „Nem tranzakcióképes tábla (nem InnoDB): {táblák}. A nullázás nem lenne visszavonható, ezért tiltva.” Ez az ok mindig az első, és a „Nincs mit nullázni” és a jövőbeli eredmény oka mellett is látszik.
 - A feltételeket a **POST-nál a szerver újra ellenőrzi**, nem csak a UI tiltja.
 
 ### Megerősítő kód
@@ -245,7 +247,7 @@ A darabszámokat a nullázási blokk is ugyanabból a service-ből kapja, mint a
 - **A pilótapontokat (`driver.point`) a nullázás nem nullázza** (eredetileg javasolt volt). A tippválasztó ezek szerint rendez és ezeket mutatja (`Repository/Driver::getDriverChoices`, `BettingFormPresenter`). A szinkron csak az első futam után ad idei pontot, így a nullázás után az első hétvégén minden pilóta 0 ponttal, ömlesztve jelenne meg. A tavalyi sorrend ennél jobb, az újoncok úgyis 0-val indulnak. A pilótapont-szinkron ezért kézi emlékeztető lett.
 - A jövőbeli eseményre eső eredmény tiltó feltétel (lásd fent).
 - A `ResultCache` ürítése is a nullázás része.
-- **Élesítés előtt egyszer ellenőrizni kell az éles DB-n**, hogy az érintett táblák InnoDB-k: `SHOW TABLE STATUS WHERE Name IN ('bet','bet_attribute','result','result_attribute','alternative_championship','trophy','user')`. MyISAM táblán nincs tranzakció, így a „minden vagy semmi” nem teljesülne. Lokálisan mind InnoDB.
+- **Az InnoDB-ellenőrzés élő tiltás** (lásd fent): MyISAM táblán nincs tranzakció, így a „minden vagy semmi” nem teljesülne. Az oldal ezt minden megnyitáskor és a POST-nál is ellenőrzi, kézi előzetes `SHOW TABLE STATUS` nem kell. Lokálisan mind InnoDB.
 
 ## Ami a megvalósítóra marad
 
@@ -274,3 +276,8 @@ A darabszámokat a nullázási blokk is ugyanabból a service-ből kapja, mint a
 | 2026-11-27 | A vendég a belépési oldalra irányítódik | A vendég 401-et kap az `/admin`-on | Az alkalmazásnak nincs belépési pontja (`security.yaml`), így nincs hová átirányítani |
 | 2026-11-27 | `SeasonChecklist::build()` paraméter nélkül | `build()` kapja a `$now`-t | Determinisztikusan tesztelhető, a „régi dátumú esemény” és az évszám-ellenőrzések a mostanihoz kötődnek |
 | 2026-11-27 | A csapat nélküli pilóta ellenőrzés e2e alapértéke ✓ | Az elvárt eredmény a `f1tipp_teams.yaml`-ból számolódik (a seedben csak a TSU hiányzik) | A seedelt aktív pilóták között van csapat nélküli, így a ✓ hamis lett volna; a yaml évi frissítése sem töri el a tesztet |
+| 2026-11-27 | Élesítés előtt kézzel ellenőrizni, hogy a nullázott táblák InnoDB-k | Élő tiltás: a `SeasonFactsProvider` az `information_schema`-ból olvassa, a `SeasonResetGuard` első okként tilt | A kézi lépés elfelejthető; MyISAM táblán a rollback nem állítaná vissza az adatot |
+| 2026-11-27 | Jövőbeli eredménynél minden tiltási ok együtt látszik | Csak a jövőbeli eredmény oka (és ha van, a nem InnoDB tábláé) | A jövőbe tett eredményes esemény miatt a `closingYear` megbízhatatlan, az archív- és évszám-ok rossz évet írnának |
+| 2026-11-27 | Minden tiltásnál e2e-ben a közvetlen POST is elutasítva (érvényes kóddal és CSRF-fel) | Az archív hiánya és a jövőbeli eredmény POST-ja e2e-ben; az évszám-tiltás és a „Nincs mit nullázni” POST-ja csak unit tesztben | Ezekhez a megnyitás és a POST között az órát vagy az adatot úgy kellene változtatni, ahogy e2e-ben nem lehet (nincs órakezelés). A POST mindegyiknél ugyanazon a `blockReasons()` úton megy, amit az e2e két esettel bizonyít, maguk az okok unit tesztben |
+| 2026-11-27 | 20. (új szezon): a pontok, a VB-tabella és a kupák helyesen számolódnak | Csak a tipp és az Aktuális oldali pont; a VB-tabellát és a kupákat nem nézzük | Az alternatív pont a futamhoz kötődik, a teljes hétvége-számolást a meglévő `@weekend` és `@season` feature-ök fedik |
+| 2026-11-27 | A nem InnoDB tábla tiltása e2e-ben is | Csak unit teszt (`SeasonResetGuardTest`, `SeasonFactsProviderTest`); az e2e a megengedő állapotot nézi (van gomb) | MyISAM-ra az idegen kulcsok miatt nem állítható át egy tábla az e2e DB-ben |
