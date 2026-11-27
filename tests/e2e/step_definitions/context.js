@@ -64,6 +64,9 @@ const seed = async (scenario, opts) => {
     return info;
 };
 
+/** a seed szerinti "most" éve (a szerver órája), eltolva: yearOf(-1) = tavaly */
+const yearOf = (offset = 0) => new Date(ctx.serverNow * 1000).getFullYear() + offset;
+
 const entityCounts = () => I.executeScript(() => fetch('/module/entity_counts').then(r => r.json()));
 
-module.exports = {ctx, EVENTS, TROPHIES, DRIVER_IDS, eventOf, codes, list, rowsOf, usernameOf, userIdOf, loginAs, seed, entityCounts};
+module.exports = {ctx, EVENTS, TROPHIES, DRIVER_IDS, eventOf, codes, list, rowsOf, usernameOf, userIdOf, loginAs, seed, yearOf, entityCounts};

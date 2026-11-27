@@ -1,5 +1,5 @@
 const assert = require('assert');
-const {ctx, DRIVER_IDS, eventOf, codes, rowsOf, userIdOf, loginAs} = require('./context');
+const {ctx, DRIVER_IDS, eventOf, codes, rowsOf, userIdOf, loginAs, yearOf} = require('./context');
 
 // EasyAdmin (/admin): eredmények rögzítése / javítása / törlése (ROLE_ADMIN), és a ROLE_SUPER_ADMIN menüpontjai.
 // A "megnyitja az adminban ..." lépés megjegyzi a szerkesztett entitást, a következő mező-lépések arra vonatkoznak.
@@ -170,7 +170,8 @@ When('a szuperadmin felvesz egy új információs oldalt:', async table => {
     await loginAs(SUPERADMIN);
     adminPage.openNew('Information');
     I.fillField('#Information_title', f['cím']);
-    I.fillField('#Information_slug', f['slug']);
+    // a {tavalyi év} a seed szerinti tavalyi évet jelenti (pl. a szezonváltás archív bejegyzése)
+    I.fillField('#Information_slug', f['slug'].replace('{tavalyi év}', yearOf(-1)));
     waitForEditor();
     await setEditor(f['tartalom']);
     adminPage.saveAndReturn();

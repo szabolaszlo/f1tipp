@@ -1,0 +1,47 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block content_title %}{{ 'admin_maintenance_season_reset'|trans }}{% endblock %}
+
+{% block main %}
+    <section id="season-reset" class="mb-4">
+        <h2 class="h4">Szezon nullázása{% if facts.closingYear is not null %} – {{ facts.closingYear }}{% endif %}</h2>
+
+        <p class="mb-1">Ezek törlődnek:</p>
+        <ul id="season-reset-counts">
+            <li data-count="bet">{{ facts.counts.bets }} tipp</li>
+            <li data-count="result">{{ facts.counts.results }} eredmény</li>
+            <li data-count="trophy">{{ facts.counts.trophies }} kupa</li>
+            <li data-count="alternative">{{ facts.counts.alternatives }} alternatív pont-sor</li>
+            <li data-count="user">{{ facts.counts.users }} felhasználó pontjai</li>
+        </ul>
+
+        <p id="season-reset-keeps">
+            <strong>Megmarad:</strong> események, felhasználók, „bajnokság tagja” jelölés, pilóták, bajnoki pontok,
+            nyeremény, információk, beállítások, üzenőfal
+        </p>
+
+        {% if warnings is not empty %}
+            <ul id="season-reset-warnings" class="text-warning">
+                {% for warning in warnings %}
+                    <li>{{ warning }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% if blocks is not empty %}
+            <ul id="season-reset-blocks" class="text-danger">
+                {% for block in blocks %}
+                    <li>{{ block }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <form method="post" action="{{ ea_url().setRoute('season_reset_execute') }}" class="d-flex align-items-center gap-3">
+                <input type="hidden" name="_token" value="{{ csrf_token('season_reset') }}">
+                <span>Kód: <strong id="season-reset-code">{{ code }}</strong></span>
+                <input type="text" id="season-reset-code-input" name="code" class="form-control w-auto" inputmode="numeric"
+                       autocomplete="off" maxlength="6" required>
+                <button type="submit" id="season-reset-submit" class="btn btn-danger">Szezon nullázása</button>
+            </form>
+        {% endif %}
+    </section>
+{% endblock %}
