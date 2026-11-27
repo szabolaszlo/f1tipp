@@ -1,6 +1,6 @@
 # Szezonváltás admin oldal (nullázás + élő checklist) – design
 
-Dátum: 2026-11-27 · Státusz: tervezet
+Dátum: 2026-11-27 · Státusz: megvalósítva
 
 ## Cél és miért
 
@@ -264,3 +264,13 @@ A darabszámokat a nullázási blokk is ugyanabból a service-ből kapja, mint a
 - A Szabályzat pontértékei a valós beállításokból generálódjanak.
 - Pilótaszinkron: ugyanaz a „még üres → tavalyi” visszaesés, mint a cronban.
 - Az Eredmények oldal évfülei az adatbázisból jöjjenek, ne a böngésző órájából.
+
+## Eltérések az eredeti tervtől
+
+| Dátum | Eredetileg | Most | Miért |
+|---|---|---|---|
+| 2026-11-27 | Új e2e forgatókönyvek a „csak tippek vannak” és az „üres” állapotra | A meglévő `bets-placed`, `open-weekend` és `others-bet` seedek újrahasznosítva | Ugyanazt az állapotot adják; nem kellett új seed a megosztott `E2eScenarios`-ba |
+| 2026-11-27 | A `FileCache::clearAll()` mindent töröl | A pilóta-VB cache kulcsát megőrzi | Nélküle az oldalsáv a RapidAPI-t hívná, ami e2e-ben (nincs kulcs, kimenő kapcsolat tiltva) 503-at adna |
+| 2026-11-27 | A vendég a belépési oldalra irányítódik | A vendég 401-et kap az `/admin`-on | Az alkalmazásnak nincs belépési pontja (`security.yaml`), így nincs hová átirányítani |
+| 2026-11-27 | `SeasonChecklist::build()` paraméter nélkül | `build()` kapja a `$now`-t | Determinisztikusan tesztelhető, a „régi dátumú esemény” és az évszám-ellenőrzések a mostanihoz kötődnek |
+| 2026-11-27 | A csapat nélküli pilóta ellenőrzés e2e alapértéke ✓ | Az elvárt eredmény a `f1tipp_teams.yaml`-ból számolódik (a seedben csak a TSU hiányzik) | A seedelt aktív pilóták között van csapat nélküli, így a ✓ hamis lett volna; a yaml évi frissítése sem töri el a tesztet |

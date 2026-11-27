@@ -142,6 +142,17 @@ When('a szuperadmin a {int}. hétvége eseményeit {int} évvel későbbre teszi
     }
 });
 
+// az 1. hétvége (seed: "qualify" / "race") eseményei a seed "mostjához" képest: az időmérő +hours óra, a futam +days nap
+When('a szuperadmin az 1. hétvége időmérőjét {int} óra, futamát {int} nap múlvára teszi', async (hours, days) => {
+    const targets = {qualify: hours * 3600, race: days * 24 * 3600};
+    for (const [key, offset] of Object.entries(targets)) {
+        assert.ok(ctx.events[key], `nincs ${key} esemény a seedben`);
+        await openEdit('Event', ctx.events[key].id);
+        await shiftEventTime((ctx.serverNow + offset - ctx.events[key].deadline) / 3600);
+        adminPage.saveAndReturn();
+    }
+});
+
 // a szövegben {C} az új szezon éve (az események legkésőbbi dátumának éve), {C-1} az előző
 When('a szuperadmin a szabályok oldal címét átírja erre: {string}', async text => {
     const year = await currentSeasonYear();

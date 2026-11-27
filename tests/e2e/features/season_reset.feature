@@ -215,6 +215,29 @@ Jellemző: Szezonváltás admin oldal
     És nem volt szerverhiba
     És nincs böngészőhiba
 
+  # a nullázás után a következő szezon ugyanúgy megy: az 1. hétvége jövőbe tett időmérőjére tippelünk, az admin
+  # rögzíti az eredményt, a pontok az Aktuális oldalon jelennek meg (a VB tabellát nem nézzük: az alternatív pont a
+  # futamhoz kötődik, a teljes hétvége-számolást a @weekend és @season feature-ök fedik)
+  Forgatókönyv: A nullázás után az új szezon első időmérőjére tippelni és pontot kapni lehet
+    Amennyiben a tavalyi szezon lezárult, az archív bejegyzés megvan
+    És a szuperadmin nullázza a szezont
+    És a szuperadmin az 1. hétvége időmérőjét 2 óra, futamát 1 nap múlvára teszi
+    Ha "E2E User1" leadja a tippjeit:
+      | esemény | helyezések                              | safety car |
+      | Időmérő | VER NOR LEC PIA HAM RUS SAI ALO GAS ALB |            |
+    És az admin rögzíti az "Időmérő" eredményét: "VER NOR LEC PIA HAM RUS SAI ALO GAS ALB"
+    Akkor a pontok az Aktuális oldalon:
+      | név       | IDŐMÉRŐ |
+      | E2E User1 | 40      |
+    És nem volt szerverhiba
+
+  Forgatókönyv: A nullázás után az összes pont újraszámolása hibátlanul lefut, és nem hoz létre kupát
+    Amennyiben a tavalyi szezon lezárult, az archív bejegyzés megvan
+    És a szuperadmin nullázza a szezont
+    Ha az admin újraszámolja az összes pontot
+    Akkor nincs kupa és alternatív pont az adatbázisban
+    És nem volt szerverhiba
+
   # --- az élő checklist (kulcsonként a [data-check] sor és a [data-status] állapota)
 
   Forgatókönyv: Az archív bejegyzés pont: megvan, illetve hiányzik

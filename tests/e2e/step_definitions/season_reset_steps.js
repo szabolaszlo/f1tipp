@@ -235,6 +235,11 @@ Then('minden más adat változatlan', async () => {
 
 // --- a front a nullázás után
 
+Then('nincs kupa és alternatív pont az adatbázisban', async () => {
+    const {tables} = await I.dbCounts();
+    assert.deepStrictEqual([tables.trophy, tables.alternative_championship], [0, 0]);
+});
+
 Then('a Trófeák oldal üres', async () => {
     trophiesPage.open();
     assert.deepStrictEqual(await trophiesPage.seasonTable(), []);
