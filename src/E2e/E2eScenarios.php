@@ -7,17 +7,20 @@ use App\Command\E2e\E2eGuard;
 use App\Entity\Bet;
 use App\Entity\BetAttribute;
 use App\Entity\Event;
+use App\Entity\Information;
+use App\Entity\Message;
 use App\Entity\Qualify;
 use App\Entity\Race;
 use App\Entity\Result;
 use App\Entity\ResultAttribute;
+use App\Entity\Setting;
 use App\Entity\SprintQualify;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
- * E2E szenárió-állapotok. Minden időpont a futás pillanatához relatív, mert a tippelési
- * határidőt a szerver a saját órájához méri. Az eseményeket időrendben szúrjuk be, ahogy élesben
+ * E2E szenárió-állapotok. Az időpontok a futás pillanatához relatívak, mert a tippelési
+ * határidőt a szerver a saját órájához méri (kivétel: a szezonváltás szenáriók tavalyi hétvégéi, fix naptári dátumon). Az eseményeket időrendben szúrjuk be, ahogy élesben
  * a naptár importja is (a kalkulátor és az admin eredmény-űrlapja is időrendre épít).
  */
 class E2eScenarios
@@ -94,8 +97,13 @@ class E2eScenarios
         'open-weekend', 'deadline-passed', 'about-to-close', 'bets-placed', 'results-entered',
         'others-bet', 'others-bet-closed', 'race-closer', 'recent-weekend', 'finished-weekend',
         'sprint-open-weekend', 'sprint-results-entered', 'season', 'sprint-season', 'results-without-user3',
-        'results-tie',
+        'results-tie', 'previous-season', 'previous-season-no-archive', 'previous-season-moved', 'current-season',
     ];
+
+    /** az üzenőfal-üzenet és a beállítás, amelynek a szezonváltás után is meg kell maradnia */
+    public const KEPT_MESSAGE = 'E2E üzenet, ami megmarad';
+    public const KEPT_SETTING_KEY = 'e2eKey';
+    public const KEPT_SETTING_VALUE = 'e2eValue';
 
     private EntityManagerInterface $em;
     private Calculator $calculator;
@@ -111,7 +119,9 @@ class E2eScenarios
     /**
      * Felépíti a szenáriót egy frissen resetelt adatbázison.
      *
-     * @return array{serverNow: int, events: array<string, array{id: int, deadline: int}>, results?: array<string, int>}
+     * year: a szerver (PHP) szerinti mostani év; a böngésző/host időzónája szilveszterkor mást adhatna
+     *
+     * @return array{serverNow: int, year: int, events: array<string, array{id: int, deadline: int}>, results?: array<string, int>}
      */
     public function build(string $name, int $deadlineIn): array
     {
@@ -130,6 +140,10 @@ class E2eScenarios
 
         if ($name === 'season' || $name === 'sprint-season') {
             return $this->buildSeason($now, $name === 'sprint-season');
+        }
+
+        if (in_array($name, ['previous-season', 'previous-season-no-archive', 'previous-season-moved', 'current-season'], true)) {
+            return $this->buildSeasonReset($now, $name);
         }
 
         switch ($name) {
@@ -210,6 +224,7 @@ class E2eScenarios
 
         $info = [
             'serverNow' => $now->getTimestamp(),
+            'year' => (int) $now->format('Y'),
             'events' => $this->eventInfo($events),
         ];
 
@@ -281,7 +296,7 @@ class E2eScenarios
         }
         $this->em->flush();
 
-        $info = ['serverNow' => $now->getTimestamp(), 'events' => $this->eventInfo($events), 'results' => []];
+        $info = ['serverNow' => $now->getTimestamp(), 'year' => (int) $now->format('Y'), 'events' => $this->eventInfo($events), 'results' => []];
 
         foreach (self::SEASON_BETS as $i => $bets) {
             $w = 'w' . ($i + 1);
@@ -308,6 +323,93 @@ class E2eScenarios
         }
 
         return $info;
+    }
+
+    /**
+     * Szezonváltás szenáriók. previous-season*: tavalyi (Y = idei év - 1) 2 lezajlott hétvége fix naptári
+     * dátummal, tippekkel, eredménnyel és számolt pontokkal; a 3. hétvége jövő héten. Plusz tavalyi
+     * archív Információ (slug = Y; a no-archive nélküle), egy üzenőfal-üzenet és egy beállítás.
+     * previous-season-moved: a 2. hétvége futama már a közeljövőbe tolva (eredménnyel).
+     * current-season: az idei szezon egyetlen, éppen lezajlott hétvégéje (eredménnyel), a 3. hétvége jövő héten.
+     */
+    private function buildSeasonReset(\DateTimeImmutable $now, string $name): array
+    {
+        $events = [];
+        $results = [];
+
+        if ($name === 'current-season') {
+            // január 1. első perceiben a forgatókönyv nem futtatható (a határidők max-szal a naptári év elejére állnak)
+            $yearStart = new \DateTimeImmutable($now->format('Y') . '-01-01 00:00:00');
+            $weekends = [[
+                '',
+                self::WEEKEND_NAME,
+                max($now->modify('-2 minutes'), $yearStart),
+                max($now->modify('-1 minute'), $yearStart),
+            ]];
+        } else {
+            $y = (int) $now->format('Y') - 1;
+            $weekends = [
+                ['', self::SEASON_NAMES[0], new \DateTimeImmutable(sprintf('%d-06-06 14:00:00', $y)), new \DateTimeImmutable(sprintf('%d-06-07 14:00:00', $y))],
+                ['w2', self::SEASON_NAMES[1], new \DateTimeImmutable(sprintf('%d-07-04 14:00:00', $y)),
+                    $name === 'previous-season-moved' ? $now->modify('+3 days') : new \DateTimeImmutable(sprintf('%d-07-05 14:00:00', $y))],
+            ];
+        }
+
+        // az 1. hétvége kulcsai "qualify" / "race" (a meglévő tipp- és eredménylépések ezt használják), a többié "w2_qualify" stb.
+        $key = static fn (string $w, string $type): string => $w === '' ? $type : $w . '_' . $type;
+        foreach ($weekends as $i => [$w, $weekendName, $qualifyAt, $raceAt]) {
+            $events[$key($w, 'qualify')] = $this->event(new Qualify(), $i + 1, $qualifyAt, $weekendName);
+            $events[$key($w, 'race')] = $this->event(new Race(), $i + 1, $raceAt, $weekendName);
+        }
+        // a 3. hétvége az utolsó: az id-sorrend az időrendet követi
+        $events['next_qualify'] = $this->event(new Qualify(), 3, $now->modify('+7 days'), self::NEXT_WEEKEND_NAME);
+        $events['next_race'] = $this->event(new Race(), 3, $now->modify('+8 days'), self::NEXT_WEEKEND_NAME);
+
+        foreach ($weekends as $i => [$w]) {
+            foreach (self::SEASON_BETS[$i] as $username => [$qualifyTip, $raceTip, $safetyCar]) {
+                $user = $this->user($username);
+                $this->bet($user, $events[$key($w, 'qualify')], $qualifyTip);
+                $this->bet($user, $events[$key($w, 'race')], $raceTip, $safetyCar);
+            }
+            $this->em->flush();
+
+            // időrendben, eseményenként számolva, ahogy az admin rögzítené
+            $results[$key($w, 'qualify')] = $this->result($events[$key($w, 'qualify')], self::Q)->getId();
+            $this->calculator->calculate();
+            $results[$key($w, 'race')] = $this->result($events[$key($w, 'race')], self::Q, self::RACE_SAFETY_CAR)->getId();
+            $this->calculator->calculate();
+        }
+
+        if ($name !== 'current-season') {
+            if ($name !== 'previous-season-no-archive') {
+                $year = (string) ((int) $now->format('Y') - 1);
+                $information = new Information();
+                $information->setSlug($year);
+                $information->setTitle($year);
+                $information->setContent('<p>E2E archív ' . $year . '</p><img src="/build/images/trophy/trophy_gold.svg">');
+                $information->setNews(false);
+                $this->em->persist($information);
+            }
+
+            $message = new Message();
+            $message->setUser($this->user('e2e_user'));
+            $message->setContent(self::KEPT_MESSAGE);
+            $message->setDateTime(new \DateTime());
+            $this->em->persist($message);
+
+            $setting = new Setting();
+            $setting->setKey(self::KEPT_SETTING_KEY);
+            $setting->setValue(self::KEPT_SETTING_VALUE);
+            $this->em->persist($setting);
+            $this->em->flush();
+        }
+
+        return [
+            'serverNow' => $now->getTimestamp(),
+            'year' => (int) $now->format('Y'),
+            'events' => $this->eventInfo($events),
+            'results' => $results,
+        ];
     }
 
     /** @param array<string, Event> $events */

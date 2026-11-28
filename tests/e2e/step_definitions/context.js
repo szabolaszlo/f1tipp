@@ -58,12 +58,30 @@ const loginAs = async name => {
 const seed = async (scenario, opts) => {
     const info = await I.seedScenario(scenario, opts);
     ctx.serverNow = info.serverNow;
+    ctx.year = info.year;
     ctx.events = info.events;
     ctx.results = {...(info.results || {})};
     ctx.loggedIn = null;
     return info;
 };
 
+/**
+ * a seed szerinti "most" éve, ahogy a PHP látja (a seed adja vissza; a host időzónája szilveszterkor mást adhatna),
+ * eltolva: yearOf(-1) = tavaly
+ */
+const yearOf = (offset = 0) => {
+    if (!Number.isInteger(ctx.year)) {
+        throw new Error('a seed nem adta vissza az évet (year)');
+    }
+    return ctx.year + offset;
+};
+
+/** az új szezon éve: az események legkésőbbi dátumának éve (a SeasonFactsProvider currentYear-je) */
+const currentSeasonYear = async () => {
+    const {events} = await I.dbCounts();
+    return Number(Object.values(events).sort().pop().slice(0, 4));
+};
+
 const entityCounts = () => I.executeScript(() => fetch('/module/entity_counts').then(r => r.json()));
 
-module.exports = {ctx, EVENTS, TROPHIES, DRIVER_IDS, eventOf, codes, list, rowsOf, usernameOf, userIdOf, loginAs, seed, entityCounts};
+module.exports = {ctx, EVENTS, TROPHIES, DRIVER_IDS, eventOf, codes, list, rowsOf, usernameOf, userIdOf, loginAs, seed, yearOf, currentSeasonYear, entityCounts};

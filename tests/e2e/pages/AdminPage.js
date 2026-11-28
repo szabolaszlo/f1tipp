@@ -9,8 +9,9 @@ const crudUrl = (crud, action, entityId) => '/admin?crudAction=' + action
 module.exports = {
     crudUrl,
 
-    openIndex(crud) {
-        I.amOnPage(crudUrl(crud, 'index'));
+    /** query: a lista keresőmezőjének szövege (lapozás nélkül megtalálni a sort) */
+    openIndex(crud, query) {
+        I.amOnPage(crudUrl(crud, 'index') + (query ? '&query=' + encodeURIComponent(query) : ''));
         I.waitForElement('table.datagrid, .datagrid-empty, .no-results');
     },
 
@@ -31,8 +32,8 @@ module.exports = {
     },
 
     /** index nézetből törlés a sor lenyíló menüjén és a megerősítő ablakon át */
-    deleteRow(crud, entityId) {
-        this.openIndex(crud);
+    deleteRow(crud, entityId, query) {
+        this.openIndex(crud, query);
         I.click(`tr[data-id="${entityId}"] .dropdown-toggle`);
         I.click(`tr[data-id="${entityId}"] a.action-delete`);
         I.waitForElement('#modal-action-confirmation-button', 5);

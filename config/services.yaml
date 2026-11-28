@@ -73,3 +73,6 @@ services:
   App\Command\E2e\E2eScenarioCommand:
     arguments:
       $kernelEnv: '%kernel.environment%'
+  App\Command\E2e\E2eCountsCommand:
+    arguments:
+      $kernelEnv: '%kernel.environment%'

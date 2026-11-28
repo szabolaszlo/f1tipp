@@ -13,6 +13,7 @@ exports.config = {
             './step_definitions/standings_steps.js',
             './step_definitions/admin_steps.js',
             './step_definitions/pages_steps.js',
+            './step_definitions/season_reset_steps.js',
         ],
     },
     output: './output',
@@ -43,6 +44,7 @@ exports.config = {
         trophiesPage: './pages/TrophiesPage.js',
         resultsPage: './pages/ResultsPage.js',
         adminPage: './pages/AdminPage.js',
+        seasonResetPage: './pages/SeasonResetPage.js',
     },
     plugins: {
         screenshotOnFail: {enabled: true},

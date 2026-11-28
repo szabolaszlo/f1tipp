@@ -53,6 +53,7 @@ class DashboardController extends AbstractDashboardController
         $submenu1 = [
             MenuItem::linkToRoute('admin_maintenance_recalculate_points', 'fas fa-calculator', 're_calculate_points'),
             MenuItem::linkToRoute('admin_maintenance_cache_clear', 'fas fa-trash-alt', 'cache_clear'),
+            MenuItem::linkToRoute('admin_maintenance_season_reset', 'fas fa-broom', 'season_reset')->setPermission('ROLE_SUPER_ADMIN'),
         ];
 
         yield MenuItem::linkTo(ResultCrudController::class, 'admin_result', 'fas fa-flag-checkered');
