@@ -112,7 +112,7 @@ Schema changes: every hand-written prod schema change not yet run on prod is col
 
 ## Production Cron Jobs
 
-- `/cron/collect_feeds` - Refresh f1vilag.hu news feed (every 15 min)
+- `/cron/collect_feeds` - Refresh f1vilag.hu news feed (every 15 min). Since 2026-11 the RSS carries no cover image: it comes from the WordPress REST API (`WordPressFeaturedImages`, post id from the RSS `guid`), with the description's `<img>` as fallback. Already stored rows get their title, lead and (non-empty) image refreshed. In e2e the feed and the API are read from `var/e2e-feed/` files written by the `feed*` scenarios (`E2eFeed`, `E2eFeedFetcher`)
 - `/cron/championship_result_cache_warmer` - Refresh championship results from RapidAPI into FileCache (every 15 min); lives in `src/Controller/Module/ResultsOfChampionshipController.php`, needs `RAPIDAPI_KEY` (not set locally), season = current year with fallback to the previous one before the first race
 
 ## Notes

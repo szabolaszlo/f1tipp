@@ -8,16 +8,18 @@
 
 namespace App\LegacyService\Feed\Collector;
 
+use App\LegacyService\Feed\Fetcher\HttpFetcher;
+use App\LegacyService\Feed\Fetcher\IFetcher;
+
 /**
  * Class XMLCollector
  * @package App\LegacyService\FeedController\Collector
  */
 class XMLCollector implements ICollector
 {
-    private const TIMEOUT_SECONDS = 15;
-
-    // a forrás WAF-ja bizonyos UA-kat (pl. „collector”) 403-mal tilt
-    private const USER_AGENT = 'Mozilla/5.0 (compatible; F1Tipp/1.0; +https://www.f1tipp.nhely.hu)';
+    public function __construct(private readonly IFetcher $fetcher = new HttpFetcher())
+    {
+    }
 
     /**
      * @param $source
@@ -26,16 +28,10 @@ class XMLCollector implements ICollector
     public function getData($source)
     {
         $previousUseErrors = libxml_use_internal_errors(true);
-        $context = stream_context_create([
-            'http' => [
-                'timeout' => self::TIMEOUT_SECONDS,
-                'user_agent' => self::USER_AGENT,
-            ],
-        ]);
 
         try {
-            $content = @file_get_contents($source, false, $context);
-            if ($content === false || $content === '') {
+            $content = $this->fetcher->fetch($source);
+            if ($content === null) {
                 return false;
             }
 

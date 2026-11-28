@@ -13,6 +13,7 @@ exports.config = {
             './step_definitions/standings_steps.js',
             './step_definitions/admin_steps.js',
             './step_definitions/pages_steps.js',
+            './step_definitions/feed_steps.js',
         ],
     },
     output: './output',

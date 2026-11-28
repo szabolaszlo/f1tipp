@@ -94,18 +94,20 @@ class E2eScenarios
         'open-weekend', 'deadline-passed', 'about-to-close', 'bets-placed', 'results-entered',
         'others-bet', 'others-bet-closed', 'race-closer', 'recent-weekend', 'finished-weekend',
         'sprint-open-weekend', 'sprint-results-entered', 'season', 'sprint-season', 'results-without-user3',
-        'results-tie',
+        'results-tie', ...E2eFeed::NAMES,
     ];
 
     private EntityManagerInterface $em;
     private Calculator $calculator;
     private string $kernelEnv;
+    private E2eFeed $feed;
 
-    public function __construct(EntityManagerInterface $em, Calculator $calculator, string $kernelEnv)
+    public function __construct(EntityManagerInterface $em, Calculator $calculator, string $kernelEnv, E2eFeed $feed)
     {
         $this->em = $em;
         $this->calculator = $calculator;
         $this->kernelEnv = $kernelEnv;
+        $this->feed = $feed;
     }
 
     /**
@@ -130,6 +132,14 @@ class E2eScenarios
 
         if ($name === 'season' || $name === 'sprint-season') {
             return $this->buildSeason($now, $name === 'sprint-season');
+        }
+
+        // hírgyűjtés (/cron/collect_feeds) egy nyitott hétvégén; a feed és a WordPress API fájlból jön (E2eFeed)
+        if (in_array($name, E2eFeed::NAMES, true)) {
+            $info = $this->build('open-weekend', $deadlineIn);
+            $this->feed->build($name, $now);
+
+            return $info;
         }
 
         switch ($name) {

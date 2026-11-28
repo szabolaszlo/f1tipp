@@ -60,6 +60,9 @@ services:
   App\Display\BetLegendProvider:
     public: true
 
+  # hírforrások letöltése (f1vilag.hu feed + WordPress REST); az e2e környezet a services_e2e.yaml-ben fájlra cseréli
+  App\LegacyService\Feed\Fetcher\IFetcher: '@App\LegacyService\Feed\Fetcher\HttpFetcher'
+
   # E2E (csak --env=e2e alatt futnak, lásd App\Command\E2e\E2eGuard)
   App\E2e\E2eFixtures:
     arguments:
@@ -73,3 +76,6 @@ services:
   App\Command\E2e\E2eScenarioCommand:
     arguments:
       $kernelEnv: '%kernel.environment%'
+  App\E2e\E2eFeedFetcher:
+    arguments:
+      $dir: '%kernel.project_dir%/var/e2e-feed'

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	>
+<channel>
+	<title>F1VILÁG.HU</title>
+	<link>https://f1vilag.hu/</link>
+	<item>
+		<title>Norris: A Mercedes más ligában van Katarban</title>
+		<link>https://f1vilag.hu/hirek/norris-a-mercedes-mas-ligaban-van-katarban/</link>
+		<dc:creator><![CDATA[devadm]]></dc:creator>
+		<pubDate>Fri, 27 Nov 2026 21:00:00 +0000</pubDate>
+		<category><![CDATA[Hírek]]></category>
+		<guid isPermaLink="false">https://f1vilag.hu/?p=1000577</guid>
+		<description><![CDATA[<p>A Forma-1-es Katari Nagydíj pénteki napján egyértelműen a Mercedes diktálta a tempót.</p>
+<p>A <a href="https://f1vilag.hu/hirek/norris-a-mercedes-mas-ligaban-van-katarban/">Norris: A Mercedes más ligában van Katarban</a> bejegyzés először <a href="https://f1vilag.hu">F1VILÁG.HU</a>-én jelent meg.</p>
+]]></description>
+		<content:encoded><![CDATA[<p class="wp-block-paragraph">A Forma-1-es Katari Nagydíj pénteki két szabadedzésén…</p>]]></content:encoded>
+	</item>
+	<item>
+		<title>Antonelli az élen, Hamilton alatt megállt a Ferrari Katarban</title>
+		<link>https://f1vilag.hu/hirek/antonelli-az-elen/</link>
+		<pubDate>Fri, 27 Nov 2026 18:13:09 +0000</pubDate>
+		<guid isPermaLink="false">https://f1vilag.hu/?p=1000540</guid>
+		<description><![CDATA[<p>Kimi Antonelli nyerte a második szabadedzést.</p>
+<p>A <a href="https://f1vilag.hu/hirek/antonelli-az-elen/">Antonelli az élen, Hamilton alatt megállt a Ferrari Katarban</a> bejegyzés először <a href="https://f1vilag.hu">F1VILÁG.HU</a>-én jelent meg.</p>
+]]></description>
+		<content:encoded><![CDATA[<p><img src="https://f1vilag.hu/wp-content/plugins/f1vilag-website/includes/../graphics%20elements/teamlogos/Mercedes-Logo.png" /> 1. Antonelli</p>]]></content:encoded>
+	</item>
+	<item>
+		<title>Kiemelt kép nélküli hír</title>
+		<link>https://f1vilag.hu/hirek/kiemelt-kep-nelkul/</link>
+		<pubDate>Fri, 27 Nov 2026 13:05:00 +0000</pubDate>
+		<guid isPermaLink="false">https://f1vilag.hu/?p=1000500</guid>
+		<description><![CDATA[<p>Rövid hír.</p>
+<p>A <a href="https://f1vilag.hu/hirek/kiemelt-kep-nelkul/">Kiemelt kép nélküli hír</a> bejegyzés először <a href="https://f1vilag.hu">F1VILÁG.HU</a>-én jelent meg.</p>
+]]></description>
+	</item>
+	<item>
+		<title>Permalinkes guid</title>
+		<link>https://f1vilag.hu/hirek/permalinkes-guid/</link>
+		<pubDate>Fri, 27 Nov 2026 12:00:00 +0000</pubDate>
+		<guid isPermaLink="true">https://f1vilag.hu/hirek/permalinkes-guid/</guid>
+		<description><![CDATA[<p>Itt a guid nem tartalmaz poszt-id-t.</p>]]></description>
+	</item>
+</channel>
+</rss>
