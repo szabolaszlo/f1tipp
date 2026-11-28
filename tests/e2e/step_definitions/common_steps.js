@@ -24,6 +24,12 @@ Given('a hétvége futama 4 napja volt', () => seed('finished-weekend'));
 Given('szezon közben vagyunk: 3 lezajlott hétvége eredménnyel, a 4. jövő héten', () => seed('season'));
 Given('szezon közben vagyunk: 3 lezajlott hétvége eredménnyel, az 1. sprintes, a 4. jövő héten', () => seed('sprint-season'));
 
+// hírgyűjtés: a feed és a WordPress API fájlból jön (src/E2e/E2eFeed.php), nyitott hétvége mellett
+Given('az f1vilag.hu feed és a WordPress API is elérhető', () => seed('feed'));
+Given('a/az {string} hír korábban kép nélkül, lábléccel mentődött', () => seed('feed-heal'));
+Given('az f1vilag.hu feed elérhető, a WordPress API nem, és {string} képpel már tárolva van', () => seed('feed-api-down'));
+Given('az f1vilag.hu feed nem érhető el', () => seed('feed-unreachable'));
+
 // --- belépés, kilépés
 
 Given('{string} belép', name => loginAs(name));

@@ -42,7 +42,16 @@ class Doctrine implements IStorage
             ->getRepository(Feed::class)
             ->find($item->getId());
 
+        // a már tárolt hír a feed szerint frissül (pl. egy parser-javítás után); az id, a link és a dátum marad,
+        // és üres képpel (pl. elérhetetlen WordPress API) nem írjuk felül a meglévőt
         if ($existFeed) {
+            $existFeed
+                ->setTitle($item->getTitle())
+                ->setDescription($item->getDescription());
+            if ($item->getImage() !== '') {
+                $existFeed->setImage($item->getImage());
+            }
+
             return;
         }
 

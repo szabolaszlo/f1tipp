@@ -1,3 +1,7 @@
 # Csak e2e környezet: saját FileCache mappa, hogy az e2e futás ne írja/törölje a dev cache-t.
 parameters:
   app.file_cache_dir: '%kernel.cache_dir%/file-cache'
+
+services:
+  # a hírgyűjtés nem megy ki a netre: a feed-szenáriók által írt var/e2e-feed/ fájlokat olvassa (App\E2e\E2eFeed)
+  App\LegacyService\Feed\Fetcher\IFetcher: '@App\E2e\E2eFeedFetcher'

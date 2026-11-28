@@ -10,7 +10,11 @@
         </service>
 
         <service class="App\LegacyService\Feed\Repository\F1VilagRepository"
-                 id="app.legacy_service.feed.repository.f1_vilag_repository"/>
+                 id="app.legacy_service.feed.repository.f1_vilag_repository">
+            <argument type="constant">App\LegacyService\Feed\Repository\F1VilagRepository::SOURCE</argument>
+            <argument id="App\LegacyService\Feed\Collector\XMLCollector" type="service"/>
+            <argument id="App\LegacyService\Feed\Image\WordPressFeaturedImages" type="service"/>
+        </service>
 
         <service class="App\LegacyService\Feed\Handler" id="App\LegacyService\Feed\Handler">
             <argument type="collection">
